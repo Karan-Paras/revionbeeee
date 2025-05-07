@@ -6,10 +6,7 @@ import Link from "next/link";
 export default function OtpVerification() {
   return (
     <>
-      <section className="mths_bg p-5 h-screen bg-no-repeat bg-cover ">
-        <div className="container mx-auto h-full">
-          <div className="grid h-full content-center">
-            <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+        <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
               <Link className="" href="/forget-password">
                 <button className="absolute top-4 left-5 flex gap-1 items-center text-sm">
                   <ArrowBack />
@@ -70,9 +67,6 @@ export default function OtpVerification() {
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

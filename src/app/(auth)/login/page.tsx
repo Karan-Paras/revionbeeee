@@ -4,10 +4,7 @@ import Link from "next/link";
 export default function Login() {
   return (
     <>
-      <section className="bg-[#F3F3F3] p-5">
-        <div className="grid grid-cols-2 h-[calc(100vh-50px)]">
-          <div className="col-span-1">
-            <div className="mx-auto max-w-md w-11/12 h-full content-center">
+      <div className="mx-auto max-w-md w-11/12 h-full content-center">
               <div className="icn flex justify-center">
                 <span>
                   <RevisionBee/>
@@ -98,14 +95,6 @@ export default function Login() {
                 </form>
               </div>
             </div>
-          </div>
-          <div className="col-span-1">
-            <div className="img relative rounded-xl border-2 border-white flex overflow-hidden log_bg h-full bg-no-repeat bg-cover bg-center">
-              {/* <Image className="object-cover w-full h-full" src={LogBg} alt="log in" />*/}
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
