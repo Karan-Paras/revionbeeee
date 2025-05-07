@@ -31,3 +31,9 @@ body {
   content: "";
   @apply absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/40;
 }
+/* Chrome, Safari, Edge, Opera */
+.inp_spc::-webkit-outer-spin-button,
+.inp_spc::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
