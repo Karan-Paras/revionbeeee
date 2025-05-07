@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             <div
               className={cn(
                 "img relative rounded-xl border-2 border-white flex overflow-hidden  h-full bg-no-repeat bg-cover bg-center",
-                pathname === "/login" ? "log_bg" : "sign_bg"
+                pathname === "/login" && "log_bg", pathname === "/signup" && "sign_bg", pathname === "/create-profile" && "crt_bg"
               )}
             />
           </div>
