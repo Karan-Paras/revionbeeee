@@ -6,10 +6,7 @@ import Link from "next/link";
 export default function ConfirmPassword() {
   return (
     <>
-      <section className="mths_bg p-5 h-[calc(100vh-50px)] bg-no-repeat bg-cover ">
-        <div className="container mx-auto h-full">
-          <div className="grid h-full content-center">
-            <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+     <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
               <Link className="" href="/login">
                 <button className="absolute top-4 left-5 flex gap-1 items-center text-sm">
                  <ArrowBack/>
@@ -68,16 +65,13 @@ export default function ConfirmPassword() {
                 </form>
               </div>
               <div className="btn mt-5">
-                <Link href="/OTP-verification">
+                <Link href="/otp-verification">
                   <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
                     Sign In
                   </button>
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
