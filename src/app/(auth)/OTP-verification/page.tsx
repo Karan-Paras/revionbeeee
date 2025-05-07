@@ -13,11 +13,11 @@ export default function OtpVerification() {
               <Link className="" href="/forget-password">
                 <button className="absolute top-4 left-5 flex gap-1 items-center text-sm">
                   <ArrowBack />
-                    back
+                  back
                 </button>
-              </Link>  
+              </Link>
               <div className="img flex justify-center">
-                <Image src={OTPVerify} alt=""></Image>
+                <Image src={OTPVerify} alt=""/>
               </div>
               <div className="desc text-center my-5">
                 <h3 className="text-[#0B0B0B] font-bold text-2xl mb-3">
@@ -30,26 +30,43 @@ export default function OtpVerification() {
               </div>
               <div className="frm grid grid-cols-4 gap-2.5 my-3 w-8/12 mx-auto">
                 <div className="col-span-1 bg-[#F2F2F2] rounded-lg">
-                  <input type="number" className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"  />
+                  <input
+                    type="number"
+                    className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"
+                  />
                 </div>
                 <div className="col-span-1 bg-[#F2F2F2] rounded-lg">
-                   <input type="number" className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"  />
+                  <input
+                    type="number"
+                    className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"
+                  />
                 </div>
                 <div className="col-span-1 bg-[#F2F2F2] rounded-lg">
-                   <input type="number" className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"  />
+                  <input
+                    type="number"
+                    className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"
+                  />
                 </div>
                 <div className="col-span-1 bg-[#F2F2F2] rounded-lg">
-                  <input type="number" className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"  />
+                  <input
+                    type="number"
+                    className="w-full h-full outline-0 p-2 min-h-14 text-center inp_spc"
+                  />
                 </div>
               </div>
               <div className="dec text-center mt-5">
-                  <p>Didn’t receive OTP?  <Link className="text-[#53A2EB]" href="">Resend OTP</Link></p>
+                <p>
+                  Didn’t receive OTP?{" "}
+                  <Link className="text-[#53A2EB]" href="">
+                    Resend OTP
+                  </Link>
+                </p>
               </div>
               <div className="btn mt-5">
                 <Link href="/confirm-password">
-                    <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
+                  <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
                     Verify
-                    </button>
+                  </button>
                 </Link>
               </div>
             </div>

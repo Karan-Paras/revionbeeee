@@ -11,7 +11,7 @@ export default function LandingHeader() {
             <div className="col-span-1">
               <div className="img size-28 relative">
                 <Link href="">
-                  <Image src={Logo} alt="" fill></Image>
+                  <Image src={Logo} alt="" fill/>
                 </Link>
               </div>
             </div>

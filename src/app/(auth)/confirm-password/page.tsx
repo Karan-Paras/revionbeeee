@@ -1,98 +1,83 @@
 import { PassIcn } from "@/lib/assets";
+import { ArrowBack, EyeClose } from "@/lib/icons";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function () {
-    return <>
-
-        <section className="mths_bg p-5 h-[calc(100vh-50px)] bg-no-repeat bg-cover ">
-            <div className="container mx-auto h-full">
-                <div className="grid h-full content-center">
-                    <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
-                        <Link className="" href="/login">
-                            <button className="absolute top-4 left-5 flex gap-1 items-center text-sm"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M5.32715 0.224609C5.71987 -0.0958594 6.29885 -0.0730529 6.66504 0.292969C7.03077 0.659001 7.05436 1.2382 6.73438 1.63086L6.66504 1.70703L3.41406 4.95703H10.917L11.0186 4.96191C11.523 5.01297 11.917 5.43915 11.917 5.95703C11.9169 6.47482 11.5229 6.90111 11.0186 6.95215L10.917 6.95703H3.41211L6.66504 10.21L6.73438 10.2852C7.0545 10.6779 7.03107 11.258 6.66504 11.624C6.29898 11.9896 5.71975 12.0124 5.32715 11.6924L5.25098 11.624L0.292969 6.66504C0.20373 6.57576 0.135359 6.47309 0.0869141 6.36426C0.0832893 6.35615 0.0795852 6.34807 0.0761719 6.33984C0.0460374 6.26694 0.0258271 6.19115 0.0136719 6.11426C0.00554986 6.06297 1.15479e-05 6.0106 0 5.95703C0 5.8016 0.0363367 5.65465 0.0996094 5.52344C0.118789 5.48366 0.140284 5.4447 0.165039 5.40723C0.20496 5.3467 0.250975 5.29061 0.302734 5.24023L5.25098 0.292969L5.32715 0.224609Z" fill="#373737" /></svg>back</button>
-                        </Link>
-                        <div className="img flex justify-center">
-                            <Image src={PassIcn} alt=""></Image>
-                        </div>
-                        <div className="desc text-center my-5">
-                            <h3 className="text-[#0B0B0B] font-bold text-2xl mb-3">
-                                Create new password
-                            </h3>
-                            <p className="text-[#6C6C6C] font-light text-sm">
-                                Your new password must be unique from those previously used
-                            </p>
-                        </div>
-                        <div className="spc_frm mt-9">
-                            <form action="">
-                                <div className="itm relative mb-5">
-                                    <label htmlFor="" className="w-full text-sm">
-                                        Password
-                                    </label>
-                                    <div className="pass_bg icn_bg  relative my-1.5">
-                                        <input
-                                            type="email"
-                                            className="bg-white py-5 ps-12 pe-12 w-full border border-[#D8DAE5] outline-0 rounded-xl "
-                                            placeholder="Enter password"
-                                        />
-                                        {/* password icon */}
-                                        <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
-                                            <span>
-                                                <svg
-                                                    width="22"
-                                                    height="22"
-                                                    viewBox="0 0 22 22"
-                                                    fill="none"
-                                                >
-                                                    <path
-                                                        d="M20.4688 0.469727C20.7616 0.176879 21.2364 0.17697 21.5293 0.469727C21.8219 0.76264 21.8221 1.23746 21.5293 1.53027L14.0732 8.98535L14.0605 9.00195L9 14.0625C8.9964 14.0661 8.99193 14.0688 8.98828 14.0723L1.53027 21.5312C1.23746 21.8241 0.76264 21.8239 0.469727 21.5312C0.17697 21.2383 0.176879 20.7636 0.469727 20.4707L3.84766 17.0918L3.71777 16.9756C2.81288 16.133 1.98865 15.1351 1.25781 13.9932V13.9922C0.712511 13.1378 0.464902 12.0432 0.464844 10.9941C0.464844 9.94491 0.712421 8.8496 1.25781 7.99512L1.49219 7.6377C2.68078 5.87304 4.11667 4.45984 5.73242 3.48633L5.80078 3.4502C6.14448 3.28814 6.56236 3.40967 6.7627 3.74219C6.97596 4.09689 6.86141 4.55784 6.50684 4.77148L6.22754 4.94531C4.84112 5.84412 3.5795 7.14466 2.52246 8.80176V8.80273C2.1679 9.35825 1.96484 10.1534 1.96484 10.9941C1.9649 11.8343 2.16728 12.6292 2.52148 13.1846L2.8125 13.624C3.40413 14.4839 4.05032 15.2355 4.74023 15.8779L4.91016 16.0293L7.45508 13.4844C6.96109 12.7818 6.66997 11.9279 6.66992 11.002C6.66992 8.60773 8.6058 6.67188 11 6.67188C11.9255 6.67191 12.7791 6.96254 13.4814 7.45605L15.9004 5.03711C14.3859 4.01983 12.7122 3.48049 11 3.48047C10.5858 3.48047 10.2501 3.14462 10.25 2.73047C10.25 2.31626 10.5858 1.98047 11 1.98047C13.1089 1.9805 15.1353 2.66927 16.918 3.91504L16.9785 3.95898L20.4688 0.469727ZM18.5801 6.3457C18.8826 6.10235 19.316 6.13182 19.583 6.40234L19.6348 6.45996L19.9209 6.82422C20.2048 7.19491 20.4817 7.58574 20.7422 7.99609L20.8408 8.15918C21.3173 8.98732 21.5352 10.0115 21.5352 10.9951C21.535 12.0435 21.2868 13.1372 20.7422 13.9912L20.7432 13.9922C18.3523 17.7506 14.848 20.0195 11 20.0195C9.83073 20.0195 8.6826 19.8031 7.59277 19.4033L7.12891 19.2207L7.05957 19.1875C6.72614 19.0054 6.57814 18.596 6.72852 18.2383C6.87926 17.8806 7.27532 17.7012 7.63867 17.8125L7.71094 17.8389L8.1084 17.9951C9.04272 18.338 10.0169 18.5195 11 18.5195C14.2117 18.5195 17.2885 16.6285 19.4775 13.1875V13.1865L19.6035 12.9668C19.8797 12.4312 20.035 11.7304 20.0352 10.9951C20.0352 10.1545 19.832 9.35822 19.4775 8.80273L19.4766 8.80176C19.2424 8.43279 18.9908 8.07757 18.7295 7.73633L18.4658 7.39941L18.4209 7.33789C18.2136 7.01923 18.2777 6.58925 18.5801 6.3457ZM14.6455 10.9619C15.0526 11.0372 15.322 11.4278 15.2471 11.835L15.1758 12.1533C14.7561 13.7207 13.4336 14.9602 11.8252 15.2568L11.749 15.2666C11.3704 15.2972 11.0227 15.0369 10.9521 14.6553C10.877 14.2479 11.1464 13.8564 11.5537 13.7812L11.7578 13.7354C12.7683 13.4636 13.5804 12.5984 13.7715 11.5635L13.79 11.4883C13.8965 11.1235 14.2637 10.8915 14.6455 10.9619ZM11 8.17188C9.4342 8.17188 8.16992 9.43618 8.16992 11.002C8.16996 11.5119 8.30496 11.9871 8.54102 12.3994L12.3975 8.54297C11.9851 8.30692 11.51 8.17191 11 8.17188Z"
-                                                        fill="#8F95B2"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="itm relative mb-5">
-                                    <label htmlFor="" className="w-full text-sm">
-                                    Confirm password
-                                    </label>
-                                    <div className="pass_bg icn_bg  relative my-1.5">
-                                        <input
-                                            type="email"
-                                            className="bg-white py-5 ps-12 pe-12 w-full border border-[#D8DAE5] outline-0 rounded-xl "
-                                            placeholder="Confirm password"
-                                        />
-                                        {/* password icon */}
-                                        <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
-                                            <span>
-                                                <svg
-                                                    width="22"
-                                                    height="22"
-                                                    viewBox="0 0 22 22"
-                                                    fill="none"
-                                                >
-                                                    <path
-                                                        d="M20.4688 0.469727C20.7616 0.176879 21.2364 0.17697 21.5293 0.469727C21.8219 0.76264 21.8221 1.23746 21.5293 1.53027L14.0732 8.98535L14.0605 9.00195L9 14.0625C8.9964 14.0661 8.99193 14.0688 8.98828 14.0723L1.53027 21.5312C1.23746 21.8241 0.76264 21.8239 0.469727 21.5312C0.17697 21.2383 0.176879 20.7636 0.469727 20.4707L3.84766 17.0918L3.71777 16.9756C2.81288 16.133 1.98865 15.1351 1.25781 13.9932V13.9922C0.712511 13.1378 0.464902 12.0432 0.464844 10.9941C0.464844 9.94491 0.712421 8.8496 1.25781 7.99512L1.49219 7.6377C2.68078 5.87304 4.11667 4.45984 5.73242 3.48633L5.80078 3.4502C6.14448 3.28814 6.56236 3.40967 6.7627 3.74219C6.97596 4.09689 6.86141 4.55784 6.50684 4.77148L6.22754 4.94531C4.84112 5.84412 3.5795 7.14466 2.52246 8.80176V8.80273C2.1679 9.35825 1.96484 10.1534 1.96484 10.9941C1.9649 11.8343 2.16728 12.6292 2.52148 13.1846L2.8125 13.624C3.40413 14.4839 4.05032 15.2355 4.74023 15.8779L4.91016 16.0293L7.45508 13.4844C6.96109 12.7818 6.66997 11.9279 6.66992 11.002C6.66992 8.60773 8.6058 6.67188 11 6.67188C11.9255 6.67191 12.7791 6.96254 13.4814 7.45605L15.9004 5.03711C14.3859 4.01983 12.7122 3.48049 11 3.48047C10.5858 3.48047 10.2501 3.14462 10.25 2.73047C10.25 2.31626 10.5858 1.98047 11 1.98047C13.1089 1.9805 15.1353 2.66927 16.918 3.91504L16.9785 3.95898L20.4688 0.469727ZM18.5801 6.3457C18.8826 6.10235 19.316 6.13182 19.583 6.40234L19.6348 6.45996L19.9209 6.82422C20.2048 7.19491 20.4817 7.58574 20.7422 7.99609L20.8408 8.15918C21.3173 8.98732 21.5352 10.0115 21.5352 10.9951C21.535 12.0435 21.2868 13.1372 20.7422 13.9912L20.7432 13.9922C18.3523 17.7506 14.848 20.0195 11 20.0195C9.83073 20.0195 8.6826 19.8031 7.59277 19.4033L7.12891 19.2207L7.05957 19.1875C6.72614 19.0054 6.57814 18.596 6.72852 18.2383C6.87926 17.8806 7.27532 17.7012 7.63867 17.8125L7.71094 17.8389L8.1084 17.9951C9.04272 18.338 10.0169 18.5195 11 18.5195C14.2117 18.5195 17.2885 16.6285 19.4775 13.1875V13.1865L19.6035 12.9668C19.8797 12.4312 20.035 11.7304 20.0352 10.9951C20.0352 10.1545 19.832 9.35822 19.4775 8.80273L19.4766 8.80176C19.2424 8.43279 18.9908 8.07757 18.7295 7.73633L18.4658 7.39941L18.4209 7.33789C18.2136 7.01923 18.2777 6.58925 18.5801 6.3457ZM14.6455 10.9619C15.0526 11.0372 15.322 11.4278 15.2471 11.835L15.1758 12.1533C14.7561 13.7207 13.4336 14.9602 11.8252 15.2568L11.749 15.2666C11.3704 15.2972 11.0227 15.0369 10.9521 14.6553C10.877 14.2479 11.1464 13.8564 11.5537 13.7812L11.7578 13.7354C12.7683 13.4636 13.5804 12.5984 13.7715 11.5635L13.79 11.4883C13.8965 11.1235 14.2637 10.8915 14.6455 10.9619ZM11 8.17188C9.4342 8.17188 8.16992 9.43618 8.16992 11.002C8.16996 11.5119 8.30496 11.9871 8.54102 12.3994L12.3975 8.54297C11.9851 8.30692 11.51 8.17191 11 8.17188Z"
-                                                        fill="#8F95B2"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="btn mt-5">
-                            <Link href="/OTP-verification">
-                              <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
-                                  Sign In
-                              </button>
-                            </Link>
-                         </div>
+export default function ConfirmPassword() {
+  return (
+    <>
+      <section className="mths_bg p-5 h-[calc(100vh-50px)] bg-no-repeat bg-cover ">
+        <div className="container mx-auto h-full">
+          <div className="grid h-full content-center">
+            <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+              <Link className="" href="/login">
+                <button className="absolute top-4 left-5 flex gap-1 items-center text-sm">
+                 <ArrowBack/>
+                  back
+                </button>
+              </Link>
+              <div className="img flex justify-center">
+                <Image src={PassIcn} alt=""/>
+              </div>
+              <div className="desc text-center my-5">
+                <h3 className="text-[#0B0B0B] font-bold text-2xl mb-3">
+                  Create new password
+                </h3>
+                <p className="text-[#6C6C6C] font-light text-sm">
+                  Your new password must be unique from those previously used
+                </p>
+              </div>
+              <div className="spc_frm mt-9">
+                <form action="">
+                  <div className="itm relative mb-5">
+                    <label htmlFor="" className="w-full text-sm">
+                      Password
+                    </label>
+                    <div className="pass_bg icn_bg  relative my-1.5">
+                      <input
+                        type="email"
+                        className="bg-white py-5 ps-12 pe-12 w-full border border-[#D8DAE5] outline-0 rounded-xl "
+                        placeholder="Enter password"
+                      />
+                      {/* password icon */}
+                      <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
+                        <span>
+                         <EyeClose/>
+                        </span>
+                      </button>
                     </div>
-                </div>
+                  </div>
+                  <div className="itm relative mb-5">
+                    <label htmlFor="" className="w-full text-sm">
+                      Confirm password
+                    </label>
+                    <div className="pass_bg icn_bg  relative my-1.5">
+                      <input
+                        type="email"
+                        className="bg-white py-5 ps-12 pe-12 w-full border border-[#D8DAE5] outline-0 rounded-xl "
+                        placeholder="Confirm password"
+                      />
+                      {/* password icon */}
+                      <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
+                        <span>
+                         <EyeClose/>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div className="btn mt-5">
+                <Link href="/OTP-verification">
+                  <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
+                    Sign In
+                  </button>
+                </Link>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
     </>
+  );
 }
