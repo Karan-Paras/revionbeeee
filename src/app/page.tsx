@@ -470,7 +470,7 @@ export default function LandingPage() {
                                 <span><svg width="42" height="2" viewBox="0 0 42 2" fill="none"><rect y="0.5" width="42" height="1" fill="#53A2EB" /></svg></span> <p className="text-[#53A2EB]">Contact us</p>
                         </div>
                         <div className="hed">
-                            <h3 className="font-bold text-5xl leading-16">We're Here To <br /> Provide 24X7 Support</h3>
+                            <h3 className="font-bold text-5xl leading-16">We&apos;re Here To <br /> Provide 24X7 Support</h3>
                             <p className="font-light leading-8">Sit amet dictum sit amet justo donec enim. Posuere lorem ipsum dolor sit amet consectetur. Tristique senectus et netus et malesuada fames ac.</p>
                         </div>
                         <div className="addrs">
