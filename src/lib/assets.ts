@@ -4,5 +4,10 @@ import EmailService from "public/images/Email_Service.svg";
 import OTPVerify from "public/images/OTP_verify.svg";
 import PassIcn from "public/images/pass_icn.svg";
 import PassChng from "public/images/pass_chng.svg";
+import HeroImg from "public/images/hero_img.jpg";
+import Lft from "public/images/lft.png";
 
-export { Logo, LogBg, EmailService, OTPVerify, PassIcn, PassChng };
+import Sub from "public/images/sub.png";
+import SubTwo from "public/images/sub_two.png";
+
+export { Logo, LogBg, EmailService, OTPVerify, PassIcn, PassChng, HeroImg, Lft, Sub , SubTwo };

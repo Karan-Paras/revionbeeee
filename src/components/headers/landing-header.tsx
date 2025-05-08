@@ -5,12 +5,12 @@ import Link from "next/link";
 export default function LandingHeader() {
   return (
     <>
-      <header>
+      <header className="fixed -top-0.5 left-0 right-0 z-[999] p-10 hed_bg">
         <div className="container mx-auto">
-          <div className="grid grid-cols-2 items-center">
+          <div className="grid grid-cols-2 items-center relative">
             <div className="col-span-1">
-              <div className="img size-28 relative">
-                <Link href="">
+              <div className="img size-32 absolute -left-[87px] flex items-center justify-center">
+                <Link className="" href="">
                   <Image src={Logo} alt="" fill/>
                 </Link>
               </div>

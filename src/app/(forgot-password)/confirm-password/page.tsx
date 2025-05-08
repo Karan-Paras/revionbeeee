@@ -65,7 +65,7 @@ export default function ConfirmPassword() {
                 </form>
               </div>
               <div className="btn mt-5">
-                <Link href="/otp-verification">
+                <Link href="/password-changed">
                   <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
                     Sign In
                   </button>
