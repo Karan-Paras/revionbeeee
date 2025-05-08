@@ -42,7 +42,27 @@ body {
   content: "";
   @apply absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/40;
 }
-/* Chrome, Safari, Edge, Opera */
+.hero_bg{
+  background-image: url("../../public/images/hero_img.jpg");
+}
+.hero_bg::before{
+  content: '';
+  @apply absolute top-0 right-0 left-0 bottom-0 ;
+  background: #000;
+  background: linear-gradient(120deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+.hed_bg{
+  background-image: url("../../public/images/hed_bg.png");
+  background-size: initial;
+  background-repeat: no-repeat;
+  background-position: inherit;
+  height: 94px;
+  background-color: transparent;
+}
+.hed_bg::before{
+  content: '';
+  @apply bg-cover bg-no-repeat bg-white absolute  left-auto right-0 bottom-0 w-6/12 h-full;
+}
 .inp_spc::-webkit-outer-spin-button,
 .inp_spc::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -50,4 +70,7 @@ body {
 }
 .skp_btn:hover svg path {
   stroke: #fff;
+}
+.tps_bg{
+  
 }
