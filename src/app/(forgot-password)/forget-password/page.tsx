@@ -21,8 +21,8 @@ export default function ForgetPassword() {
             Forgot password?
           </h3>
           <p className="text-[#6C6C6C] font-light text-sm">
-            Don&apos;t worry! Please enter the email address linked with
-            your account.
+            Don&apos;t worry! Please enter the email address linked with your
+            account.
           </p>
         </div>
         <div className="frm my-3">

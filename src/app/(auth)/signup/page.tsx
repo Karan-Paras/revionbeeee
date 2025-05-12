@@ -2,7 +2,6 @@ import { EyeClose, RevisionBee } from "@/lib/icons";
 import Link from "next/link";
 
 export default function Signup() {
-
   return (
     <>
       <div className="mx-auto max-w-md w-11/12 h-full content-center">
@@ -101,7 +100,10 @@ export default function Signup() {
               </div>
             </div>
             <div className="btn">
-              <Link href="/create-profile" className="bg-[#53A2EB] w-full rounded-md block text-center text-white p-4 font-medium cursor-pointer">
+              <Link
+                href="/create-profile"
+                className="bg-[#53A2EB] w-full rounded-md block text-center text-white p-4 font-medium cursor-pointer"
+              >
                 Sign Up
               </Link>
             </div>

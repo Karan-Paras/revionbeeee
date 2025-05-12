@@ -10,8 +10,8 @@ export default function LandingHeader() {
           <div className="grid grid-cols-2 items-center relative">
             <div className="col-span-1">
               <div className="img size-32 absolute -left-[87px] flex items-center justify-center">
-                <Link className="" href="">
-                  <Image src={Logo} alt="" fill/>
+                <Link className="" href="/">
+                  <Image src={Logo} alt="" fill />
                 </Link>
               </div>
             </div>
