@@ -1,3 +1,3 @@
-export default function Quiz(){
-    return <></>
+export default function Quiz() {
+  return <></>;
 }
