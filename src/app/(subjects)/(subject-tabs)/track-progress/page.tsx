@@ -11,7 +11,6 @@ export default function TrackProgress() {
           <div className="grid grid-cols-2 min-h-96 relative text-center items-end">
             <div className="col-span-2 pb-14">
               <h3 className="font-bold text-5xl text-white">Track Progress</h3>
-
               <div className="flex justify-center gap-3 text-white my-5 uppercase">
                 <div className="itm">
                   <Link className="text-white" href="">
@@ -36,13 +35,13 @@ export default function TrackProgress() {
               <div className="lvl">
                 <div className="p-6 border border-[#CECECE] rounded-2xl bg-white">
                   <h3 className="font-bold text-xl mb-3.5">
-                    Select From Level
+                  Select From Level 
                   </h3>
                   <ul className="trc_itm">
                     <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5 active">
                       AA SL
                     </li>
-                    <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5">
+                    {/* <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5">
                       AA SL
                     </li>
                     <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5">
@@ -50,14 +49,14 @@ export default function TrackProgress() {
                     </li>
                     <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg">
                       AA SL
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </div>
             </div>
             <div className="col-span-9">
               <div className="p-8 border border-[#CECECE] rounded-2xl bg-white">
-                <h3 className="font-bold text-xl mb-3.5">Select From Level</h3>
+                <h3 className="font-bold text-xl mb-3.5">Progress Tracker</h3>
                 <div className="itm border border-[#E0E0E0] p-5 rounded-xl mb-4">
                   <div className="grid grid-cols-12 gap-4 justify-between items-end">
                     <div className="col-span-10">

@@ -60,6 +60,7 @@ export default function AASL() {
         <div className="container mx-auto bg-[#F9F9F9] rounded-xl p-16">
           <div className="grid grid-cols-2 mx-auto w-9/12 gap-7">
             <div className="col-span-1">
+            <Link href="/quiz-steps" className="">
               <div className="grid grid-cols-12 bg-white px-4 py-10 rounded-xl border border-[#FBBE1B] items-center">
                 <div className="col-span-3">
                   <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
@@ -123,6 +124,7 @@ export default function AASL() {
                   </p>
                 </div>
               </div>
+             </Link> 
             </div>
             <div className="col-span-1">
               <Link href="/question-bank" className="">

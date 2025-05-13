@@ -9,6 +9,8 @@ import Lft from "public/images/lft.png";
 import Sub from "public/images/sub.png";
 import SubTwo from "public/images/sub_two.png";
 import Figure from "public/images/figure.png";
+import Proff from "public/images/proff.png";
+import OnlineQuiz from "public/images/online_quiz.gif";
 
 const Demo = "/video/demo.mp4";
 
@@ -26,4 +28,6 @@ export {
   Sub,
   SubTwo,
   Figure,
+  Proff,
+  OnlineQuiz,
 };
