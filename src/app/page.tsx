@@ -1,3 +1,5 @@
+"use client";
+
 import LandingHeader from "@/components/headers/landing-header";
 import LandingFooter from "@/components/footer/landing-footer";
 import LandingSlider from "@/components/landing-slider/page";
@@ -5,24 +7,67 @@ import { Lft, Sub, SubTwo } from "@/lib/assets";
 import { ListCheck } from "@/lib/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
+import { motion, useAnimationControls } from "framer-motion";
 
 export default function LandingPage() {
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    const sequence = async () => {
+      // Animate heading
+      await controls.start({
+        y: 0,
+        opacity: 1,
+        transition: { duration: 0.8, ease: "easeOut" },
+      });
+
+      // Animate shine
+      await controls.start({
+        x: "0%",
+        transition: { duration: 1.2, ease: "easeOut" },
+      });
+
+      // Animate paragraph
+      await controls.start({
+        opacity: 1,
+        scale: 1,
+        transition: { duration: 0.6, ease: "easeOut" },
+      });
+    };
+
+    sequence();
+  }, [controls]);
+
   return (
     <>
       <LandingHeader />
 
       {/* hero section */}
-      <section className="relative hero_bg bg-no-repeat bg-cover bg-top ">
+      <section
+        id="home"
+        className="relative hero_bg bg-no-repeat bg-cover bg-top 2xl:px-0 lg:px-20"
+      >
         <div className="container mx-auto">
           <div className="grid grid-cols-2 content-center min-h-screen">
             <div className="col-span-2 text-center w-6/12 mx-auto relative">
-              <h1 className="font-bold text-white text-5xl mb-5">
+              <motion.h1
+                initial={{ y: 50, opacity: 0, x: 1 }}
+                animate={controls}
+                className="font-bold text-white text-5xl mb-5"
+              >
                 Buzzing with Knowledge
-              </h1>
-              <p className="font-normal text-lg text-white mb-5">
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, scale: 0.95 }}
+                custom="paragraph"
+                animate={controls}
+                className="font-normal text-lg text-white mb-5"
+              >
                 Empowering curious minds through engaging quizzes, smart study
                 tools, and interactive learning experiences daily
-              </p>
+              </motion.p>
+
               <button className="flex gap-2 items-center mx-auto text-[#FBBE1B] py-4 px-8 rounded-2xl border-[#FBBE1B] border  cursor-pointer group hover:bg-[#FBBE1B] hover:text-black">
                 Get Started{" "}
                 <span>
@@ -41,7 +86,7 @@ export default function LandingPage() {
       </section>
 
       {/* interactive quiz */}
-      <section className="py-20 relative">
+      <section id="about" className="py-20 relative 2xl:px-0 lg:px-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1">
@@ -316,7 +361,7 @@ export default function LandingPage() {
       </section>
 
       {/* select topics */}
-      <section className="py-20 mths_bg relative">
+      <section id="topics" className="py-20 mths_bg relative 2xl:px-0 lg:px-20">
         <div className="container mx-auto relative">
           <div className="flex mb-8 justify-between">
             <div className="hed">
@@ -721,8 +766,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      <section className="relative py-20">
+      {/* pricing */}
+      <section id="pricing" className="relative py-20 2xl:px-0 lg:px-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-3 gap-7">
             <div className="col-span-3">
@@ -928,8 +973,11 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      <section className="bg-[#F6F6F6] relative py-20">
+      {/* contact us */}
+      <section
+        id="contact"
+        className="bg-[#F6F6F6] relative py-20 2xl:px-0 lg:px-20"
+      >
         <div className="container mx-auto">
           <div className="grid grid-cols-6 gap-8">
             <div className="col-span-3">
@@ -1072,7 +1120,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-20 2xl:px-0 lg:px-20">
         <div className="container mx-auto">
           <div className="gird-cols-2">
             <div className="col-span-2">

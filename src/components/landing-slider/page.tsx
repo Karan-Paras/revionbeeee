@@ -7,17 +7,49 @@ import Image from "next/image";
 
 export default function LandingSlider() {
   const settings = {
-    // dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1920, // screen width <= 1024px
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 1440, // screen width <= 1024px
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 1024, // screen width <= 1024px
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 990, // screen width <= 768px
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
   return (
     <>
-      <div className="w-full ml-[10%] ">
+      <div className="w-full xl:ml-[10%] ">
         <Slider {...settings}>
           <div className="item p-3">
             <div className="border border-[#E2E2E2] grid-cols-7 grid gap-5 rounded-2xl p-4 items-center relative">

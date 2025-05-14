@@ -5,24 +5,24 @@ import Link from "next/link";
 export default function LandingHeader() {
   return (
     <>
-      <header className="fixed -top-0.5 left-0 right-0 z-[999] p-10 hed_bg">
+      <header className="relative left-0 right-0 z-[999] p-10 hed_bg">
         <div className="container mx-auto">
-          <div className="grid grid-cols-2 items-center relative">
+          <div className="grid grid-cols-2 items-center">
             <div className="col-span-1">
-              <div className="img size-32 absolute -left-[87px] flex items-center justify-center">
+              <div className="img size-32 absolute left-[100px] flex items-center justify-center">
                 <Link className="" href="/">
                   <Image src={Logo} alt="" fill />
                 </Link>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="col-span-1 relative">
               <div className="flex justify-end w-full gap-5 items-center">
                 <div className="links ">
                   <ul className="flex gap-7">
                     <li>
                       <Link
                         className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                        href=""
+                        href="#home"
                       >
                         Home
                       </Link>
@@ -30,7 +30,7 @@ export default function LandingHeader() {
                     <li>
                       <Link
                         className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                        href=""
+                        href="#about"
                       >
                         About
                       </Link>
@@ -38,7 +38,7 @@ export default function LandingHeader() {
                     <li>
                       <Link
                         className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                        href=""
+                        href="#topics"
                       >
                         Topics
                       </Link>
@@ -46,7 +46,7 @@ export default function LandingHeader() {
                     <li>
                       <Link
                         className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                        href=""
+                        href="#pricing"
                       >
                         Pricing
                       </Link>
@@ -54,7 +54,7 @@ export default function LandingHeader() {
                     <li>
                       <Link
                         className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                        href=""
+                        href="#contact"
                       >
                         Contact us
                       </Link>

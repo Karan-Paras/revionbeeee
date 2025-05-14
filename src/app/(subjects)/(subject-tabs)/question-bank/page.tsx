@@ -258,11 +258,7 @@ export default function QuestionBank() {
                 {isVisible2 && (
                   <>
                     <div className="img_blk overflow-hidden rounded-xl relative">
-                      <Image
-                        className="object-cover"
-                        src={Proff}
-                        alt=""
-                      />
+                      <Image className="object-cover" src={Proff} alt="" />
                     </div>
                   </>
                 )}
@@ -270,15 +266,15 @@ export default function QuestionBank() {
             </div>
           </div>
 
-
-
           {/* question */}
           <div className="item mb-5">
             {/* question head */}
             <h2 className="mb-5 font-bold text-2xl">Question 4</h2>
             <div className="itm_blk p-7 bg-white rounded-xl">
               <h3 className="font-semibold text-xl">
-                Consider two consecutive positive integers , k and k+1 Show that the difference of their squares is equal to the sum of the two integers.
+                Consider two consecutive positive integers , k and k+1 Show that
+                the difference of their squares is equal to the sum of the two
+                integers.
               </h3>
               {/* button */}
               <button
@@ -308,11 +304,7 @@ export default function QuestionBank() {
                 {isVisible && (
                   <>
                     <div className="img_blk overflow-hidden rounded-xl relative">
-                      <Image
-                        className="object-cover"
-                        src={Proff}
-                        alt=""
-                      />
+                      <Image className="object-cover" src={Proff} alt="" />
                     </div>
                   </>
                 )}
@@ -320,14 +312,14 @@ export default function QuestionBank() {
             </div>
           </div>
 
-
           {/* question */}
           <div className="item mb-5">
             {/* question head */}
             <h2 className="mb-5 font-bold text-2xl">Question 5</h2>
             <div className="itm_blk p-7 bg-white rounded-xl">
               <h3 className="font-semibold text-xl">
-              The product of three consecutive integers is increased by the middle integer.  <br /> Prove that the result is a perfect cube.
+                The product of three consecutive integers is increased by the
+                middle integer. <br /> Prove that the result is a perfect cube.
               </h3>
               {/* button */}
               <button
@@ -356,13 +348,17 @@ export default function QuestionBank() {
               <div className="py-5">
                 {isVisible4 && (
                   <>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo quas maiores id officia nemo dolore nihil nesciunt reprehenderit numquam nisi nobis expedita minus, fugit delectus illum corporis ut tenetur temporibus?</p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Quo quas maiores id officia nemo dolore nihil nesciunt
+                      reprehenderit numquam nisi nobis expedita minus, fugit
+                      delectus illum corporis ut tenetur temporibus?
+                    </p>
                   </>
                 )}
               </div>
             </div>
           </div>
-
 
           {/* question */}
           <div className="item mb-5">
@@ -370,7 +366,7 @@ export default function QuestionBank() {
             <h2 className="mb-5 font-bold text-2xl">Question 6</h2>
             <div className="itm_blk p-7 bg-white rounded-xl">
               <h3 className="font-semibold text-xl">
-              Solve the following equation for a
+                Solve the following equation for a
               </h3>
               {/* button */}
               <button
@@ -399,12 +395,8 @@ export default function QuestionBank() {
               <div className="py-5">
                 {isVisible5 && (
                   <>
-                   <div className="img_blk overflow-hidden rounded-xl relative">
-                      <Image
-                        className="object-cover"
-                        src={Proff}
-                        alt=""
-                      />
+                    <div className="img_blk overflow-hidden rounded-xl relative">
+                      <Image className="object-cover" src={Proff} alt="" />
                     </div>
                   </>
                 )}

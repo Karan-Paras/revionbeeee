@@ -1,4 +1,5 @@
 import { RevisionBee } from "@/lib/icons";
+import Link from "next/link";
 
 export default function LandingFooter() {
   return (
@@ -133,12 +134,14 @@ export default function LandingFooter() {
                 <h3 className="text-2xl font-bold text-white mb-5">Support</h3>
                 <ul>
                   <li className="text-lg font-normal text-white mb-5">
-                    Privacy Policy
+                    <Link href="/privacy-policy"> Privacy Policy</Link>
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
-                    Terms & Conditions{" "}
+                    <Link href="/terms-and-conditions">Terms & Conditions</Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">FAQ</li>
+                  <li className="text-lg font-normal text-white mb-5">
+                    <Link href="/FAQ">FAQ</Link>
+                  </li>
                   <li className="text-lg font-normal text-white mb-5">
                     Contact
                   </li>
