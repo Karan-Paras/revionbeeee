@@ -35,7 +35,7 @@ export default function TrackProgress() {
               <div className="lvl">
                 <div className="p-6 border border-[#CECECE] rounded-2xl bg-white">
                   <h3 className="font-bold text-xl mb-3.5">
-                  Select From Level 
+                    Select From Level
                   </h3>
                   <ul className="trc_itm">
                     <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5 active">

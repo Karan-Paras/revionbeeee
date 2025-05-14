@@ -1,3 +1,3 @@
-export default function AAHL(){
-    return <></>
+export default function AAHL() {
+  return <></>;
 }

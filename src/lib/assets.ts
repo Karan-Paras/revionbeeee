@@ -10,6 +10,8 @@ import Sub from "public/images/sub.png";
 import SubTwo from "public/images/sub_two.png";
 import Figure from "public/images/figure.png";
 import Proff from "public/images/proff.png";
+import Faq from "public/images/faq.jpg";
+import Faq2 from "public/images/faq2.png";
 import OnlineQuiz from "public/images/online_quiz.gif";
 
 const Demo = "/video/demo.mp4";
@@ -30,4 +32,6 @@ export {
   Figure,
   Proff,
   OnlineQuiz,
+  Faq,
+  Faq2,
 };
