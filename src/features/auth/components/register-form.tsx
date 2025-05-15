@@ -1,0 +1,109 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ErrorBlock } from "@/components/ui/error-block";
+import { FormLabel } from "@/components/ui/form-label";
+import { Input } from "@/components/ui/input";
+import { register } from "@/features/auth/actions/register";
+import Link from "next/link";
+import { startTransition, useActionState } from "react";
+
+export function RegisterForm() {
+  const [formState, action, isPending] = useActionState(register, {
+    errors: {},
+  });
+
+  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    startTransition(() => {
+      action(formData);
+    });
+  }
+
+  return (
+    <div className="spc_frm mt-9">
+      <form onSubmit={handleFormSubmit}>
+        <div className="itm relative mb-3.5">
+          <FormLabel htmlFor="email">Email address</FormLabel>
+          <Input
+            id="email"
+            name="email"
+            iconClassName="mail_bg"
+            type="email"
+            placeholder="john@example.com"
+            disabled={isPending}
+            errors={formState.errors.email}
+            autoComplete="email"
+          />
+        </div>
+        <div className="itm relative mb-5">
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <Input
+            id="password"
+            name="password"
+            iconClassName="pass_bg"
+            type="password"
+            placeholder="Enter password"
+            disabled={isPending}
+            errors={formState.errors.password}
+            autoComplete="new-password"
+          />
+        </div>
+        <div className="itm relative mb-5">
+          <FormLabel htmlFor="confirm-password">Confirm Password</FormLabel>
+          <Input
+            id="confirm-password"
+            name="confirmPassword"
+            iconClassName="pass_bg"
+            type="password"
+            placeholder="Confirm password"
+            disabled={isPending}
+            errors={formState.errors.confirmPassword}
+            autoComplete="new-password"
+          />
+        </div>
+        <div className="flex justify-between items-center mb-8">
+          <div className="chk flex gap-1.5 items-start flex-wrap">
+            <Checkbox required />
+            <label
+              htmlFor="vehicle1"
+              className="text-[#0B0B0B] font-light text-sm w-8/12"
+            >
+              By signing up, you are agreeing to our&nbsp;
+              <Link
+                className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+                href="/signup"
+              >
+                Terms & Conditions&nbsp;
+              </Link>
+              &nbsp; and&nbsp;
+              <Link
+                className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+                href="/signup"
+              >
+                &nbsp; Privacy Policy.
+              </Link>
+            </label>
+          </div>
+        </div>
+        <div className="btn">
+          <Button>Sign Up</Button>
+        </div>
+        <ErrorBlock errors={formState.errors._form} />
+        <div className="lnk my-10">
+          <p className="text-center text-[#505050]">
+            Not registered yet?&nbsp;
+            <Link
+              className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+              href="/login"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </form>
+    </div>
+  );
+}

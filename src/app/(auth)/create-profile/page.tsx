@@ -3,11 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 
 export default function CreateProfile() {
-  const { control } = useForm();
-
   const [profilePicture, setProfilePicture] = useState("");
 
   return (
@@ -52,32 +49,18 @@ export default function CreateProfile() {
                       fill="white"
                     />
                   </svg>
-                  <Controller
-                    name="profilePicture"
-                    control={control}
-                    render={({ field: { value, onChange, ...field } }) => (
-                      <input
-                        {...field}
-                        className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0]) {
-                            onChange(e.target.files[0]);
-                            setProfilePicture(
-                              URL.createObjectURL(e.target.files[0])
-                            );
-                          }
-                        }}
-                        value={
-                          typeof value === "object" &&
-                          "fileName" in value &&
-                          typeof value.fileName === "string"
-                            ? value.fileName
-                            : ""
-                        }
-                      />
-                    )}
+                  <input
+                    className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (e.target.files?.[0]) {
+                        setProfilePicture(
+                          URL.createObjectURL(e.target.files[0])
+                        );
+                      }
+                    }}
+                    value={profilePicture}
                   />
                 </span>
               </div>
