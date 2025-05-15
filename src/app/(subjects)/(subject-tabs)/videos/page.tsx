@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/footer";
-import LandingHeader from "@/components/headers/landing-header";
+import { LandingHeader } from "@/components/headers/landing-header";
 import { Lft } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";

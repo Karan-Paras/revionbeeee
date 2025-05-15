@@ -1,4 +1,4 @@
-import LandingHeader from "@/components/headers/landing-header";
+import { LandingHeader } from "@/components/headers/landing-header";
 
 export default function Dashboard() {
   return (
