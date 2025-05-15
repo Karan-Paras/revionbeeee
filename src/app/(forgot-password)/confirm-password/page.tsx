@@ -1,5 +1,5 @@
 import { PassIcn } from "@/lib/assets";
-import { ArrowBack, EyeClose } from "@/lib/icons";
+import { ArrowBack, EyeOff } from "@/lib/icons";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -39,7 +39,7 @@ export default function ConfirmPassword() {
                 {/* password icon */}
                 <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
                   <span>
-                    <EyeClose />
+                    <EyeOff />
                   </span>
                 </button>
               </div>
@@ -57,7 +57,7 @@ export default function ConfirmPassword() {
                 {/* password icon */}
                 <button className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer">
                   <span>
-                    <EyeClose />
+                    <EyeOff />
                   </span>
                 </button>
               </div>
