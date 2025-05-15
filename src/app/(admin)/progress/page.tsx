@@ -1,20 +1,26 @@
 import Footer from "@/components/footer/footer";
-import { LandingHeader } from "@/components/headers/landing-header";
+import LandingHeader from "@/components/headers/landing-header";
 import Link from "next/link";
 
-export default function TrackProgress() {
+export default function Progress() {
   return (
     <>
       <LandingHeader />
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
-            <div className="col-span-2 pb-20">
+            <div className="col-span-2 pt-20">
               <h3 className="font-bold text-5xl text-white">Track Progress</h3>
               <div className="flex justify-center gap-3 text-white my-5 uppercase">
                 <div className="itm">
                   <Link className="text-white" href="">
                     Home
+                  </Link>
+                </div>
+                /
+                <div className="itm">
+                  <Link className="text-white" href="">
+                    AA SL
                   </Link>
                 </div>
                 /

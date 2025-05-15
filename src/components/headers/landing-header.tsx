@@ -3,89 +3,142 @@ import { auth } from "@/auth";
 import { Logo } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
+import ProfileDropdown from "../dropdowns/profile-dropdown";
 export async function LandingHeader() {
   const session = await auth();
 
+
   return (
-    <header className="relative left-0 right-0 z-[999] p-10 hed_bg">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-2 items-center">
-          <div className="col-span-1">
-            <div className="img size-32 absolute left-[100px] flex items-center justify-center">
-              <Link className="" href="/">
-                <Image src={Logo} alt="logo" fill />
-              </Link>
-            </div>
-          </div>
-          <div className="col-span-1 relative">
-            <div className="flex justify-end w-full gap-5 items-center">
-              <div className="links ">
-                <ul className="flex gap-7">
-                  <li>
-                    <Link
-                      className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                      href="#home"
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                      href="#about"
-                    >
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                      href="#topics"
-                    >
-                      Topics
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                      href="#pricing"
-                    >
-                      Pricing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="font-medium text-[#505050] hover:text-[#53A2EB]"
-                      href="#contact"
-                    >
-                      Contact us
-                    </Link>
-                  </li>
-                </ul>
+    <>
+      <header className="relative left-0 right-0 z-[999] p-10 hed_bg">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 items-center">
+            <div className="col-span-1">
+              <div className="img size-32 absolute left-[100px] flex items-center justify-center">
+                <Link className="" href="/">
+                  <Image src={Logo} alt="" fill />
+                </Link>
               </div>
-              {session ? (
-                <form className="btn" action={logout}>
-                  <button
-                    type="submit"
-                    className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
-                  >
-                    Logout
-                  </button>
-                </form>
-              ) : (
-                <div className="btn">
-                  <Link
-                    href="/login"
-                    className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
-                  >
-                    Login Now
-                  </Link>
+            </div>
+            <div className="col-span-1 relative">
+              <div className="flex justify-end w-full gap-5 items-center">
+                {/* logout links */}
+                <div className="links ">
+                  <ul className="flex gap-7">
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="#home"
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="#about"
+                      >
+                        About
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="#topics"
+                      >
+                        Topics
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="#pricing"
+                      >
+                        Pricing
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="#contact"
+                      >
+                        Contact us
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
-              )}
+                {/* login links */}
+                <div className="links hidden">
+                  <ul className="flex gap-7">
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="/dashboard"
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="/progress"
+                      >
+                        Progress
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="/question"
+                      >
+                        Questions Bank
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="/quiz"
+                      >
+                        Quiz
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="font-medium text-[#505050] hover:text-[#53A2EB]"
+                        href="/accounts"
+                      >
+                        Accounts
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                {session ? (
+                  <form className="btn" action={logout}>
+                    <button
+                      type="submit"
+                      className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+                    >
+                      Logout
+                    </button>
+                  </form>
+                ) : (
+                  <div className="btn">
+                    <Link
+                      href="/login"
+                      className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+                    >
+                      Login Now
+                    </Link>
+                  </div>
+                )}
+                <div className="btn hidden">
+                  <ProfileDropdown />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
