@@ -1,5 +1,6 @@
 "use client";
 
+import { InputError } from "@/components/ui/input-error";
 import { Eye, EyeOff } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -11,7 +12,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errors?: string[];
 }
 
-export function Input({ className, iconClassName, errors, ...props }: InputProps) {
+export function Input({
+  className,
+  iconClassName,
+  errors,
+  ...props
+}: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handlePasswordToggle = () => {
@@ -45,9 +51,7 @@ export function Input({ className, iconClassName, errors, ...props }: InputProps
           </button>
         )}
       </div>
-      {!!errors && (
-        <p className="text-red-600 mt-1 text-sm ">{errors?.join(", ")}</p>
-      )}
+      {!!errors && <InputError error={errors?.join(", ")} />}
     </>
   );
 }

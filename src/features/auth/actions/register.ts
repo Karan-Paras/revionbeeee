@@ -3,8 +3,9 @@
 import { RegisterSchema } from "@/features/auth/schemas";
 import { register as registerApi } from "@/features/auth/api/register";
 import { redirect } from "next/navigation";
-import { paths } from "@/paths";
+import { paths } from "@/routes";
 import { ApiErrorResponse } from "@/types/api";
+import { signIn } from "@/auth";
 
 type RegisterFormState = {
   errors: {
@@ -19,18 +20,18 @@ export const register = async (
   _formState: RegisterFormState,
   formData: FormData
 ): Promise<RegisterFormState> => {
-  const result = RegisterSchema.safeParse({
+  const validatedFields = RegisterSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
   });
 
-  if (!result.success) {
-    return { errors: result.error.flatten().fieldErrors };
+  if (!validatedFields.success) {
+    return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
   try {
-    await registerApi(result.data);
+    await registerApi(validatedFields.data);
   } catch (error: unknown) {
     if ((error as ApiErrorResponse)?.message) {
       return {
@@ -39,6 +40,17 @@ export const register = async (
         },
       };
     }
+  }
+
+  const { email, password } = validatedFields.data;
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+    });
+  } catch (error) {
+    console.error(error);
   }
 
   redirect(paths.createProfile());

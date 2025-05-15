@@ -1,29 +1,55 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
+import { login } from "@/features/auth/actions/login";
 import Link from "next/link";
+import { startTransition, useActionState } from "react";
 
 export function LoginForm() {
+  const [formState, action, isPending] = useActionState(login, {
+    errors: {},
+  });
+
+  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    startTransition(() => {
+      action(formData);
+    });
+  }
+
   return (
     <div className="spc_frm mt-9">
-      <form action="">
+      <form onSubmit={handleFormSubmit}>
         <div className="itm relative mb-3.5">
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
+            id="email"
+            name="email"
             type="email"
             iconClassName="mail_bg"
             placeholder="john@example.com"
-            id="email"
+            disabled={isPending}
+            errors={formState.errors.email}
+            autoComplete="email"
           />
         </div>
         <div className="itm relative mb-5">
           <FormLabel htmlFor="password">Password</FormLabel>
           <div className="pass_bg icn_bg relative my-1.5">
             <Input
+              id="password"
+              name="password"
               type="password"
               iconClassName="pass_bg"
               placeholder="Enter password"
-              id="password"
+              disabled={isPending}
+              errors={formState.errors.password}
+              autoComplete="current-password"
             />
           </div>
         </div>
@@ -47,10 +73,9 @@ export function LoginForm() {
           </div>
         </div>
         <div className="btn">
-          <button className="bg-[#53A2EB] w-full rounded-md text-white p-4 font-medium cursor-pointer">
-            Sign In
-          </button>
+          <Button>Sign In</Button>
         </div>
+        <ErrorBlock errors={formState.errors._form} />
         <div className="lnk my-10">
           <p className="text-center text-[#505050]">
             Not registered yet?&nbsp;

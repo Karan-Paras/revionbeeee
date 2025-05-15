@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/footer";
-import LandingHeader from "@/components/headers/landing-header";
+import { LandingHeader } from "@/components/headers/landing-header";
 import Link from "next/link";
 
 export default function PrivacyPolicy() {

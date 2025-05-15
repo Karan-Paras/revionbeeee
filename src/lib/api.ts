@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/auth";
 // import { auth } from "@/auth";
 import { API_URL } from "@/lib/constants";
 import { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
@@ -7,16 +8,15 @@ import { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
 export default async function api<T>(
   url: string,
   method: Method,
-  body: object,
+  body: object | FormData,
   next?: RequestInit["next"],
   headers?: RequestInit["headers"]
 ): Promise<ApiResponse<T>> {
   const api = `${API_URL}${url}`;
 
-  // const session = await auth();
+  const session = await auth();
 
-  // const token = session?.user?.token;
-  const token = "";
+  const token = session?.user?.token;
 
   const isFormData = body instanceof FormData;
 
@@ -43,6 +43,7 @@ export default async function api<T>(
     });
 
     const json: ApiResponse<T> = await response.json();
+    console.log(url, body, json);
 
     if (json.status != 200) {
       throw new Error(json.message);
@@ -50,7 +51,8 @@ export default async function api<T>(
 
     return json as ApiSuccessResponse<T>;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "An error occurred!";
+    const message =
+      error instanceof Error ? error.message : "An error occurred!";
     throw new Error(message);
   }
 }

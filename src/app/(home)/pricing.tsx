@@ -1,20 +1,25 @@
-import { ChevronRight, ListCheck } from "@/lib/icons";
-import { paths } from "@/routes";
-import Link from "next/link";
+import { ListCheck } from "@/lib/icons";
 
-export default function SubscriptionPlans() {
+export function Pricing() {
   return (
-    <section className="mths_bg p-5 h-screen bg-no-repeat bg-cover ">
-      <div className="container mx-auto h-full">
-        <div className="grid grid-cols-3 h-full content-center gap-8">
+    <section id="pricing" className="relative py-20 2xl:px-0 lg:px-20">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-3 gap-7">
           <div className="col-span-3">
-            <div className="hed my-3.5 mb-10 text-center relative">
-              <h1 className="text-3xl font-bold text-center mb-2 text-[#000000]">
-                Subscription Plans
-              </h1>
-              <p className="text-[#505050] text-sm">
-                Select a subscription plan that best suits your needs.
-              </p>
+            <div className="lay w-6/12 mx-auto text-center">
+              <div className="itm mb-5 flex items-center justify-center gap-1.5">
+                <span>
+                  <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
+                    <rect y="0.5" width="42" height="1" fill="#53A2EB" />
+                  </svg>
+                </span>
+                <p className="text-[#53A2EB]">Select your Subject</p>
+              </div>
+              <div className="hed">
+                <h3 className="text-5xl font-bold leading-normal">
+                  Choose Your <br /> Subscription plan
+                </h3>
+              </div>
             </div>
           </div>
           <div className="col-span-1">
@@ -62,7 +67,7 @@ export default function SubscriptionPlans() {
                 </div>
                 <div className="btn mt-14">
                   <button className="bg-[#53A2EB] w-full rounded-xl text-white p-4 font-medium cursor-pointer">
-                    <Link href={paths.paymentMethod()}>Choose This Plan</Link>
+                    Create Profile
                   </button>
                 </div>
               </div>
@@ -99,21 +104,23 @@ export default function SubscriptionPlans() {
                     </li>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">Proving helpings tips </p>
                     </li>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">Cover 10 topic in a day</p>
                     </li>
                   </ul>
                 </div>
                 <div className="btn mt-14">
                   <button className="bg-[#53A2EB] w-full rounded-xl text-white p-4 font-medium cursor-pointer">
-                    <Link href={paths.paymentMethod()}>Choose This Plan</Link>
+                    Create Profile
                   </button>
                 </div>
               </div>
@@ -136,47 +143,42 @@ export default function SubscriptionPlans() {
                   <ul>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">Unlock 10 questions</p>
                     </li>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">
-                        Real time suggest answers
+                        Real time suggest answers{" "}
                       </p>
                     </li>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">Proving helpings tips </p>
                     </li>
                     <li className="flex gap-1.5 my-5 items-center">
                       <span>
+                        {" "}
                         <ListCheck />
-                      </span>
+                      </span>{" "}
                       <p className="text-[#505050] ">Cover 10 topic in a day</p>
                     </li>
                   </ul>
                 </div>
                 <div className="btn mt-14">
                   <button className="bg-[#53A2EB] w-full rounded-xl text-white p-4 font-medium cursor-pointer">
-                    <Link href={paths.paymentMethod()}>Choose This Plan</Link>
+                    Create Profile
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="col-span-3">
-            <div className="flex justify-center relative">
-              <Link href={paths.home()}>
-                <button className="bg-white ps-10 pe-7 py-4 border border-[#53A2EB] text-[#53A2EB] hover:bg-[#53A2EB] hover:text-[#fff] group font-semibold rounded-xl flex items-center skp_btn cursor-pointer">
-                  Skip <ChevronRight />
-                </button>
-              </Link>
             </div>
           </div>
         </div>

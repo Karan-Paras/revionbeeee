@@ -1,5 +1,5 @@
 import FAQAccordion from "@/components/accordians/FAQ-accordion";
-import LandingHeader from "@/components/headers/landing-header";
+import { LandingHeader } from "@/components/headers/landing-header";
 import { Faq, Faq2 } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
