@@ -12,6 +12,7 @@ import Figure from "public/images/figure.png";
 import Proff from "public/images/proff.png";
 import Faq from "public/images/faq.jpg";
 import Faq2 from "public/images/faq2.png";
+import User from "public/images/user.png";
 import OnlineQuiz from "public/images/online_quiz.gif";
 
 const Demo = "/video/demo.mp4";
@@ -34,4 +35,5 @@ export {
   OnlineQuiz,
   Faq,
   Faq2,
+  User,
 };

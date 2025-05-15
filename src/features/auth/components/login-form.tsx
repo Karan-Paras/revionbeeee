@@ -40,18 +40,16 @@ export function LoginForm() {
         </div>
         <div className="itm relative mb-5">
           <FormLabel htmlFor="password">Password</FormLabel>
-          <div className="pass_bg icn_bg relative my-1.5">
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              iconClassName="pass_bg"
-              placeholder="Enter password"
-              disabled={isPending}
-              errors={formState.errors.password}
-              autoComplete="current-password"
-            />
-          </div>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            iconClassName="pass_bg"
+            placeholder="Enter password"
+            disabled={isPending}
+            errors={formState.errors.password}
+            autoComplete="current-password"
+          />
         </div>
         <div className="flex justify-between items-center mb-8">
           <div className="chk flex gap-1.5">
