@@ -89,7 +89,7 @@ export function RegisterForm() {
           </div>
         </div>
         <div className="btn">
-          <Button>Sign Up</Button>
+          <Button disabled={isPending}>Sign Up</Button>
         </div>
         <ErrorBlock errors={formState.errors._form} />
         <div className="lnk my-10">

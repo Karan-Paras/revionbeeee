@@ -172,7 +172,7 @@ export default function SubscriptionPlans() {
           </div>
           <div className="col-span-3">
             <div className="flex justify-center relative">
-              <Link href={paths.home()}>
+              <Link href={paths.dashboard()}>
                 <button className="bg-white ps-10 pe-7 py-4 border border-[#53A2EB] text-[#53A2EB] hover:bg-[#53A2EB] hover:text-[#fff] group font-semibold rounded-xl flex items-center skp_btn cursor-pointer">
                   Skip <ChevronRight />
                 </button>

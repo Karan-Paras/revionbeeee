@@ -1,4 +1,4 @@
-import { LandingHeader } from "@/components/headers/landing-header";
+import { Header } from "@/components/common/header";
 import { LandingFooter } from "@/components/footer/landing-footer";
 
 import { HeroSection } from "@/app/(home)/hero-section";
@@ -11,7 +11,7 @@ import { Testimonials } from "@/app/(home)/testimonials";
 export default function LandingPage() {
   return (
     <>
-      <LandingHeader />
+      <Header variant="home" />
       <HeroSection />
       <InteractiveQuiz />
       <SelectTopics />

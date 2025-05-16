@@ -36,6 +36,8 @@ export default {
               return {
                 ...user,
                 id: user.id.toString(),
+                image: user.profilePicture,
+                name: `${user.firstName} ${user.lastName}`,
                 token,
               };
             }

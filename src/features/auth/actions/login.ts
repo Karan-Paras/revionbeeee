@@ -42,5 +42,5 @@ export const login = async (
     }
   }
 
-  redirect(paths.home());
+  redirect(paths.dashboard());
 };
