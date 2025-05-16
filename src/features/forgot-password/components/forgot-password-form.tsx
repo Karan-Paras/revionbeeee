@@ -22,7 +22,9 @@ export function ForgotPasswordForm() {
 
   return (
     <form className="frm my-3" onSubmit={handleFormSubmit}>
-      <FormLabel htmlFor="email" variant="light">Email address</FormLabel>
+      <FormLabel htmlFor="email" variant="light">
+        Email address
+      </FormLabel>
       <Input
         id="email"
         name="email"

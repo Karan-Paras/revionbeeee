@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/footer";
-import {Header} from "@/components/common/header";
+import { Header } from "@/components/common/header";
 import Link from "next/link";
 
 export default function Question() {
