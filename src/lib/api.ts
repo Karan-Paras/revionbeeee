@@ -11,7 +11,7 @@ export default async function api<T>(
   body: object | FormData,
   next?: RequestInit["next"],
   headers?: RequestInit["headers"]
-): Promise<ApiResponse<T>> {
+): Promise<ApiSuccessResponse<T>> {
   const api = `${API_URL}${url}`;
 
   const session = await auth();
@@ -43,7 +43,7 @@ export default async function api<T>(
     });
 
     const json: ApiResponse<T> = await response.json();
-    // console.log(url, body, json);
+    console.log(url, body, json);
 
     if (json.status != 200) {
       throw new Error(json.message);

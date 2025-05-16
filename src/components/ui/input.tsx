@@ -3,9 +3,27 @@
 import { InputError } from "@/components/ui/input-error";
 import { Eye, EyeOff } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 import { useState } from "react";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+const inputLabelVariants = cva(
+  "bg-white py-5 ps-12 pe-5 w-full outline-0 rounded-xl",
+  {
+    variants: {
+      variant: {
+        default: "",
+        bordered: "border border-[#D8DAE5]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof inputLabelVariants> {
   className?: string;
   iconClassName?: string;
   showPassword?: boolean;
@@ -16,6 +34,7 @@ export function Input({
   className,
   iconClassName,
   errors,
+  variant,
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,10 +55,7 @@ export function Input({
                 : "password"
               : props.type || "text"
           }
-          className={cn(
-            "bg-white py-5 ps-12 pe-5 w-full outline-0 rounded-xl",
-            className
-          )}
+          className={cn(inputLabelVariants({ variant }), className)}
         />
         {props.type === "password" && (
           <button

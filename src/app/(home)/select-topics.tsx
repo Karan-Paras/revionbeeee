@@ -39,7 +39,7 @@ export function SelectTopics() {
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
                   <Link
                     className="w-full flex items-center justify-between"
-                    href="/Number-and-Algebra/AASL"
+                    href="/number-and-algebra/AASL"
                   >
                     <p className="font-semibold uppercase">AA SL</p>
                     <span>

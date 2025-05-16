@@ -6,6 +6,7 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
+import { paths } from "@/routes";
 import Link from "next/link";
 import { startTransition, useActionState } from "react";
 
@@ -63,7 +64,7 @@ export function LoginForm() {
           </div>
           <div className="lnk">
             <Link
-              href="/forget-password"
+            href={paths.forgotPassword()}
               className="text-[#53A2EB] font-medium"
             >
               Forgot password?
@@ -71,15 +72,15 @@ export function LoginForm() {
           </div>
         </div>
         <div className="btn">
-          <Button>Sign In</Button>
+          <Button disabled={isPending}>Sign In</Button>
         </div>
         <ErrorBlock errors={formState.errors._form} />
         <div className="lnk my-10">
           <p className="text-center text-[#505050]">
             Not registered yet?&nbsp;
             <Link
+              href={paths.signup()}
               className="text-[#53A2EB] underline underline-offset-5 font-semibold"
-              href="/signup"
             >
               Sign Up
             </Link>

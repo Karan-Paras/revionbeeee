@@ -6,14 +6,19 @@ export const {
   auth,
   signIn,
   signOut,
+  unstable_update,
 } = NextAuth({
   pages: {
     signIn: "/login",
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
       if (user) {
         token.token = user.token;
+      }
+      if (trigger === "update" && session) {
+        token.name = session.user.name;
+        token.picture = session.user.image;
       }
       return token;
     },

@@ -17,6 +17,30 @@ export const paths = {
   paymentMethod() {
     return "/payment-method";
   },
+  paymentComplete() {
+    return "/payment-complete";
+  },
+  forgotPassword() {
+    return "/forgot-password";
+  },
+  emailSent() {
+    return "/email-sent";
+  },
+  dashboard() {
+    return "/dashboard";
+  },
+  progress() {
+    return "/progress";
+  },
+  questionsBank() {
+    return "/question";
+  },
+  quiz() {
+    return "/quiz";
+  },
+  accounts() {
+    return "/accounts";
+  },
 };
 
 /**
@@ -31,7 +55,12 @@ export const publicRoutes = [paths.home()];
  * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
-export const authRoutes = [paths.login(), paths.signup()];
+export const authRoutes = [
+  paths.login(),
+  paths.signup(),
+  paths.forgotPassword(),
+  paths.emailSent(),
+];
 
 /**
  * The prefix for API authentication routes

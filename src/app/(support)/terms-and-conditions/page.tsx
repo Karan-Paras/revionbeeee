@@ -1,11 +1,11 @@
 import Footer from "@/components/footer/footer";
-import { LandingHeader } from "@/components/headers/landing-header";
+import { Header } from "@/components/common/header";
 import Link from "next/link";
 
 export default function TermsAndConditions() {
   return (
     <>
-      <LandingHeader />
+      <Header />
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-80 relative text-center items-end">
