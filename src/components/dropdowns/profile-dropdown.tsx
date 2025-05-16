@@ -80,7 +80,7 @@ export default function ProfileDropdown() {
             >
               Sign out
             </button>
-        </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

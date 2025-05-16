@@ -64,7 +64,7 @@ export function LoginForm() {
           </div>
           <div className="lnk">
             <Link
-            href={paths.forgotPassword()}
+              href={paths.forgotPassword()}
               className="text-[#53A2EB] font-medium"
             >
               Forgot password?

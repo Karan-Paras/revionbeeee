@@ -1,4 +1,4 @@
-import {Header} from "@/components/common/header";
+import { Header } from "@/components/common/header";
 import Link from "next/link";
 import { ProfileSidebar } from "@/app/(app)/accounts/profile-sidebar";
 

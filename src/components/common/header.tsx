@@ -65,14 +65,14 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
                         {session.user.image ? (
                           <Link
                             href={paths.dashboard()}
-                            className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+                            className="flex border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
                           >
                             Go to Dashboard
                           </Link>
                         ) : (
                           <Link
                             href={paths.createProfile()}
-                            className="border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+                            className="flex border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
                           >
                             Complete Profile
                           </Link>
