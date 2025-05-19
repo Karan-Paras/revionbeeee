@@ -5,7 +5,7 @@ import { z } from "zod";
 export async function forgotPassword(
   data: z.infer<typeof ForgotPasswordSchema>
 ) {
-  const apiUrl = "/forgot/password";
+  const apiUrl = "/user/forgot/password";
   return await api(apiUrl, "POST", {
     email: data.email,
   });

@@ -4,7 +4,7 @@ import { RegisterSchema } from "@/features/auth/schemas";
 import { register as registerApi } from "@/features/auth/api/register";
 import { redirect } from "next/navigation";
 import { paths } from "@/routes";
-import { ApiErrorResponse } from "@/types/api";
+import type { ApiErrorResponse } from "@/types/api";
 import { signIn } from "@/auth";
 
 type RegisterFormState = {

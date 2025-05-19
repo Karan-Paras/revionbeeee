@@ -32,6 +32,12 @@ export const paths = {
   emailSent() {
     return "/email-sent";
   },
+  resetPassword() {
+    return "/reset-password";
+  },
+  passwordChanged() {
+    return "/password-changed";
+  },
   dashboard() {
     return "/dashboard";
   },
@@ -68,6 +74,8 @@ export const authRoutes = [
   paths.signup(),
   paths.forgotPassword(),
   paths.emailSent(),
+  paths.resetPassword(),
+  paths.passwordChanged(),
 ];
 
 /**

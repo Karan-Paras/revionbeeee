@@ -1,5 +1,5 @@
 import { Header } from "@/components/common/header";
-import { Footer } from "@/components/footer/footer";
+import { Footer } from "@/components/common/footer";
 
 import { HeroSection } from "@/app/(home)/hero-section";
 import { InteractiveQuiz } from "@/app/(home)/interactive-quiz";

@@ -1,6 +1,6 @@
 "use client";
 
-import { UpgradeSubscriptionModal } from "@/components/modals/upgrade-subscription/page";
+import { UpgradeSubscriptionModal } from "@/components/modals/upgrade-subscription";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
