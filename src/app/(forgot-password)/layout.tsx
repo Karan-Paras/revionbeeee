@@ -2,7 +2,7 @@ interface ForgotPasswordLayoutProps {
   children: React.ReactNode;
 }
 
-export default function forgotPasswordLayout({
+export default function ForgotPasswordLayout({
   children,
 }: ForgotPasswordLayoutProps) {
   return (

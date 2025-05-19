@@ -1,5 +1,4 @@
 import FAQAccordion from "@/components/accordians/FAQ-accordion";
-import { Header } from "@/components/common/header";
 import { Faq, Faq2 } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +6,6 @@ import Link from "next/link";
 export default function FAQ() {
   return (
     <>
-      <Header />
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-80 relative text-center items-end">

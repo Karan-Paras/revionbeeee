@@ -1,5 +1,3 @@
-import Footer from "@/components/footer/footer";
-import { Header } from "@/components/common/header";
 import { Lft } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +5,6 @@ import Link from "next/link";
 export default function Videos() {
   return (
     <>
-      <Header />
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-end">
@@ -549,7 +546,6 @@ export default function Videos() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

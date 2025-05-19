@@ -20,7 +20,7 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
           { name: "Progress", path: paths.progress() },
           { name: "Questions Bank", path: paths.questionsBank() },
           { name: "Quiz", path: paths.quiz() },
-          { name: "Accounts", path: paths.accounts() },
+          { name: "Accounts", path: paths.accounts.myProfile() },
         ]
       : [
           { name: "Home", path: "#home" },

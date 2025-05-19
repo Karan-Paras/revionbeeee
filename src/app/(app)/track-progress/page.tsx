@@ -1,11 +1,8 @@
-import Footer from "@/components/footer/footer";
-import { Header } from "@/components/common/header";
 import Link from "next/link";
 
 export default function TrackProgress() {
   return (
     <>
-      <Header />
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
@@ -126,8 +123,8 @@ export default function TrackProgress() {
                     <div className="col-span-10">
                       <h2>Calculus</h2>
                       <div className="prog relative">
-                        <div className="absolute w-[12%] bg-[#FBBE1B] top-0 left-0 right-0 bottom-0 z-10 rounded-xl h-full"></div>
-                        <div className="w-full relative bg-[#F4F4F4] h-2 mt-3.5 rounded-xl"></div>
+                        <div className="absolute w-[12%] bg-[#FBBE1B] top-0 left-0 right-0 bottom-0 z-10 rounded-xl h-full" />
+                        <div className="w-full relative bg-[#F4F4F4] h-2 mt-3.5 rounded-xl" />
                       </div>
                     </div>
                     <div className="col-span-2">
@@ -142,7 +139,6 @@ export default function TrackProgress() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 }
