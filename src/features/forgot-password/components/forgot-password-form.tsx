@@ -36,7 +36,7 @@ export function ForgotPasswordForm() {
         errors={formState.errors.email}
         autoComplete="email"
       />
-      <Button variant="rounded" className="mt-5">
+      <Button variant="rounded" className="mt-5" disabled={isPending}>
         Submit
       </Button>
       <ErrorBlock errors={formState.errors._form} />

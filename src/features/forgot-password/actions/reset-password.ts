@@ -1,3 +1,5 @@
+"use server";
+
 import { ResetPasswordSchema } from "@/features/forgot-password/schemas";
 import { paths } from "@/routes";
 import { redirect } from "next/navigation";
