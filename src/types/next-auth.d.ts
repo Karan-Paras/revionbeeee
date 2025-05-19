@@ -1,7 +1,6 @@
-import { User as UserTypes } from "@/types/user";
-
+import { type DefaultSession } from "next-auth";
 declare module "next-auth" {
-  interface User extends UserTypes {
+  export interface User extends DefaultSession.user {
     token: string;
   }
 

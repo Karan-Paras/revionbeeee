@@ -62,7 +62,7 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
                   <>
                     {
                       <div className="btn">
-                        {session.user.image ? (
+                        {session.user.name && session.user.image ? (
                           <Link
                             href={paths.dashboard()}
                             className="flex border-2 rounded-xl border-[#53A2EB text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
@@ -99,9 +99,11 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
                   </div>
                 )
               ) : (
-                <div className="btn">
-                  <ProfileDropdown />
-                </div>
+                session?.user && (
+                  <div className="btn">
+                    <ProfileDropdown user={session.user} />
+                  </div>
+                )
               )}
             </div>
           </div>
