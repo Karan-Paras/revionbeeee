@@ -1,5 +1,5 @@
 import { Header } from "@/components/common/header";
-import { LandingFooter } from "@/components/footer/landing-footer";
+import { Footer } from "@/components/footer/footer";
 
 import { HeroSection } from "@/app/(home)/hero-section";
 import { InteractiveQuiz } from "@/app/(home)/interactive-quiz";
@@ -18,7 +18,7 @@ export default function LandingPage() {
       <Pricing />
       <ContactUs />
       <Testimonials />
-      <LandingFooter />
+      <Footer variant="extended" />
     </>
   );
 }

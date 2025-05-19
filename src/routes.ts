@@ -1,3 +1,9 @@
+const withPrefix = (prefix: string, paths: Record<string, () => string>) => {
+  return Object.fromEntries(
+    Object.entries(paths).map(([key, fn]) => [key, () => `${prefix}${fn()}`])
+  );
+};
+
 export const paths = {
   home() {
     return "/";
@@ -38,9 +44,11 @@ export const paths = {
   quiz() {
     return "/quiz";
   },
-  accounts() {
-    return "/accounts";
-  },
+  accounts: withPrefix("/accounts", {
+    myProfile() {
+      return "/my-profile";
+    },
+  }),
 };
 
 /**
