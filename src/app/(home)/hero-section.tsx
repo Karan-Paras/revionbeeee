@@ -39,7 +39,7 @@ export function HeroSection() {
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-2 content-center min-h-screen">
-          <div className="col-span-2 text-center w-6/12 mx-auto relative">
+          <div className="col-span-2 text-center lg:w-6/12 w-10/12 mx-auto relative">
             <motion.h1
               initial={{ y: 50, opacity: 0, x: 1 }}
               animate={controls}

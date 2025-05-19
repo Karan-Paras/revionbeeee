@@ -52,7 +52,7 @@ export function LandingSlider() {
       <Slider {...settings}>
         <div className="item p-3">
           <div className="border border-[#E2E2E2] grid-cols-7 grid gap-5 rounded-2xl p-4 items-center relative">
-            <div className="img col-span-3">
+            <div className="img lg:col-span-3 col-span-7">
               <div className="img_blk size-44 rounded-full mx-auto overflow-hidden">
                 <Image src={SubTwo} alt="Slide 1" />
               </div>
@@ -61,15 +61,17 @@ export function LandingSlider() {
                 <p className="text-[#787878] text-sm">Student</p>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="lg:col-span-4 col-span-7">
               <div className="itm">
-                <h3 className="font-bold text-2xl">Loved the Quiz !</h3>
-                <p className="text-[#505050] text-sm">
+                <h3 className="font-bold text-2xl md:text-left text-center">
+                  Loved the Quiz !
+                </h3>
+                <p className="text-[#505050] text-sm md:text-left text-center">
                   Discover how our fun and challenging quizzes are helping
                   students boost their confidence, sharpen their skills, and
                   fall in love with math!
                 </p>
-                <div className="itm mt-3">
+                <div className="itm mt-3 flex md:justify-start justify-center">
                   <svg width="133" height="24" viewBox="0 0 133 24" fill="none">
                     <path
                       d="M11.8554 0.755859C12.0403 0.427829 12.5126 0.427829 12.6975 0.75586L15.8499 6.34876C15.9189 6.47114 16.0377 6.55745 16.1754 6.58524L22.4687 7.85504C22.8378 7.92951 22.9838 8.37877 22.7289 8.65598L18.3839 13.3824C18.2889 13.4858 18.2435 13.6255 18.2596 13.765L18.9967 20.1427C19.0399 20.5168 18.6578 20.7944 18.3154 20.6377L12.4776 17.9659C12.3499 17.9074 12.203 17.9074 12.0753 17.9659L6.23752 20.6377C5.89513 20.7944 5.51297 20.5168 5.5562 20.1427L6.29329 13.765C6.30942 13.6255 6.26404 13.4858 6.16897 13.3824L1.82394 8.65598C1.5691 8.37877 1.71508 7.92951 2.08419 7.85504L8.37749 6.58524C8.5152 6.55745 8.634 6.47114 8.70297 6.34876L11.8554 0.755859Z"
@@ -114,7 +116,7 @@ export function LandingSlider() {
         </div>
         <div className="item p-3">
           <div className="border border-[#E2E2E2] grid-cols-7 grid gap-5 rounded-2xl p-4 items-center relative">
-            <div className="img col-span-3">
+            <div className="img lg:col-span-3 col-span-7">
               <div className="img_blk size-44 rounded-full mx-auto overflow-hidden">
                 <Image src={SubTwo} alt="Slide 1" />
               </div>
@@ -123,15 +125,17 @@ export function LandingSlider() {
                 <p className="text-[#787878] text-sm">Student</p>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="lg:col-span-4 col-span-7">
               <div className="itm">
-                <h3 className="font-bold text-2xl">Loved the Quiz !</h3>
-                <p className="text-[#505050] text-sm">
+                <h3 className="font-bold text-2xl md:text-left text-center">
+                  Loved the Quiz !
+                </h3>
+                <p className="text-[#505050] text-sm md:text-left text-center">
                   Discover how our fun and challenging quizzes are helping
                   students boost their confidence, sharpen their skills, and
                   fall in love with math!
                 </p>
-                <div className="itm mt-3">
+                <div className="itm mt-3 md:justify-start justify-center flex">
                   <svg width="133" height="24" viewBox="0 0 133 24" fill="none">
                     <path
                       d="M11.8554 0.755859C12.0403 0.427829 12.5126 0.427829 12.6975 0.75586L15.8499 6.34876C15.9189 6.47114 16.0377 6.55745 16.1754 6.58524L22.4687 7.85504C22.8378 7.92951 22.9838 8.37877 22.7289 8.65598L18.3839 13.3824C18.2889 13.4858 18.2435 13.6255 18.2596 13.765L18.9967 20.1427C19.0399 20.5168 18.6578 20.7944 18.3154 20.6377L12.4776 17.9659C12.3499 17.9074 12.203 17.9074 12.0753 17.9659L6.23752 20.6377C5.89513 20.7944 5.51297 20.5168 5.5562 20.1427L6.29329 13.765C6.30942 13.6255 6.26404 13.4858 6.16897 13.3824L1.82394 8.65598C1.5691 8.37877 1.71508 7.92951 2.08419 7.85504L8.37749 6.58524C8.5152 6.55745 8.634 6.47114 8.70297 6.34876L11.8554 0.755859Z"
@@ -176,7 +180,7 @@ export function LandingSlider() {
         </div>
         <div className="item p-3">
           <div className="border border-[#E2E2E2] grid-cols-7 grid gap-5 rounded-2xl p-4 items-center relative">
-            <div className="img col-span-3">
+            <div className="img lg:col-span-3 col-span-7">
               <div className="img_blk size-44 rounded-full mx-auto overflow-hidden">
                 <Image src={SubTwo} alt="Slide 1" />
               </div>
@@ -185,15 +189,17 @@ export function LandingSlider() {
                 <p className="text-[#787878] text-sm">Student</p>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="lg:col-span-4 col-span-7">
               <div className="itm">
-                <h3 className="font-bold text-2xl">Loved the Quiz !</h3>
-                <p className="text-[#505050] text-sm">
+                <h3 className="font-bold text-2xl md:text-left text-center">
+                  Loved the Quiz !
+                </h3>
+                <p className="text-[#505050] text-sm md:text-left text-center">
                   Discover how our fun and challenging quizzes are helping
                   students boost their confidence, sharpen their skills, and
                   fall in love with math!
                 </p>
-                <div className="itm mt-3">
+                <div className="itm mt-3 flex md:justify-start justify-center">
                   <svg width="133" height="24" viewBox="0 0 133 24" fill="none">
                     <path
                       d="M11.8554 0.755859C12.0403 0.427829 12.5126 0.427829 12.6975 0.75586L15.8499 6.34876C15.9189 6.47114 16.0377 6.55745 16.1754 6.58524L22.4687 7.85504C22.8378 7.92951 22.9838 8.37877 22.7289 8.65598L18.3839 13.3824C18.2889 13.4858 18.2435 13.6255 18.2596 13.765L18.9967 20.1427C19.0399 20.5168 18.6578 20.7944 18.3154 20.6377L12.4776 17.9659C12.3499 17.9074 12.203 17.9074 12.0753 17.9659L6.23752 20.6377C5.89513 20.7944 5.51297 20.5168 5.5562 20.1427L6.29329 13.765C6.30942 13.6255 6.26404 13.4858 6.16897 13.3824L1.82394 8.65598C1.5691 8.37877 1.71508 7.92951 2.08419 7.85504L8.37749 6.58524C8.5152 6.55745 8.634 6.47114 8.70297 6.34876L11.8554 0.755859Z"

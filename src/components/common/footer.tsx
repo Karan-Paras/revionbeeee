@@ -7,11 +7,11 @@ interface FooterProps {
 
 export function Footer({ variant = "compact" }: FooterProps) {
   return (
-    <footer className="bg-[#126DC2] foot_bg bg-no-repeat bg-blend-multiply bg-cover py-10">
+    <footer className="bg-[#126DC2] foot_bg bg-no-repeat bg-blend-multiply bg-cover py-10 lg:px-0 px-10">
       <div className="container mx-auto">
         {variant === "extended" ? (
           <div className="grid-cols-4 grid gap-5">
-            <div className="col-span-2">
+            <div className="col-span-4 md:col-span-2">
               <div className="mb-5">
                 <RevisionBee />
               </div>
@@ -109,8 +109,8 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
-              <div className="w-8/12 mx-auto">
+            <div className="col-span-4 md:col-span-1">
+              <div className="md:w-8/12 w-full mx-auto">
                 <h3 className="text-2xl font-bold text-white mb-5">
                   Main Menu
                 </h3>
@@ -133,8 +133,8 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 </ul>
               </div>
             </div>
-            <div className="col-span-1">
-              <div className="w-8/12 ms-auto">
+            <div className="col-span-4 md:col-span-1">
+              <div className="md:w-8/12 w-full ms-auto">
                 <h3 className="text-2xl font-bold text-white mb-5">Support</h3>
                 <ul>
                   <li className="text-lg font-normal text-white mb-5">
@@ -153,9 +153,9 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 </ul>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-4 md:col-span-4">
               <div className="border-t border-[#5D98CF]">
-                <p className="text-white text-center mt-8 font-light text-lg">
+                <p className="text-white text-center mt-8 font-light md:text-lg text-sm">
                   © 2025 Revision Bee All rights reserved
                 </p>
               </div>
@@ -163,7 +163,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
           </div>
         ) : (
           <div>
-            <p className="text-white text-center font-light text-lg">
+            <p className="text-white text-center font-light md:text-lg text-sm">
               © 2025 Revision Bee All rights reserved
             </p>
           </div>

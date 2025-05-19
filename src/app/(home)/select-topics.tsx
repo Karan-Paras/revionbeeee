@@ -2,9 +2,12 @@ import Link from "next/link";
 
 export function SelectTopics() {
   return (
-    <section id="topics" className="py-20 mths_bg relative 2xl:px-0 lg:px-20">
+    <section
+      id="topics"
+      className="py-20 mths_bg relative 2xl:px-0 lg:px-20 px-10"
+    >
       <div className="container mx-auto relative">
-        <div className="flex mb-8 justify-between">
+        <div className="flex mb:mb-8 mb-5 lg:gap-4 gap-7 justify-between md:flex-nowrap flex-wrap">
           <div className="hed">
             <div className="itm mb-5 flex items-center gap-1.5 uppercase">
               <span>
@@ -30,10 +33,12 @@ export function SelectTopics() {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-7">
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold text-2xl">Number & Algebra</h3>
+                <h3 className="font-bold lg:text-2xl text-xl">
+                  Number & Algebra
+                </h3>
               </div>
               <ul>
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -93,10 +98,10 @@ export function SelectTopics() {
               </ul>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold text-2xl">Functions</h3>
+                <h3 className="font-bold lg:text-2xl text-xl">Functions</h3>
               </div>
               <ul>
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -146,10 +151,12 @@ export function SelectTopics() {
               </ul>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold text-2xl">Geometry & Trigonometry</h3>
+                <h3 className="font-bold lg:text-2xl text-xl">
+                  Geometry & Trigonometry
+                </h3>
               </div>
               <ul>
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -199,10 +206,12 @@ export function SelectTopics() {
               </ul>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold text-2xl">Statistics & Probability</h3>
+                <h3 className="font-bold lg:text-2xl text-xl">
+                  Statistics & Probability
+                </h3>
               </div>
               <ul>
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -252,10 +261,10 @@ export function SelectTopics() {
               </ul>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold text-2xl">Calculus</h3>
+                <h3 className="font-bold lg:text-2xl text-xl">Calculus</h3>
               </div>
               <ul>
                 <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">

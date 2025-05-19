@@ -2,11 +2,11 @@ import { ListCheck } from "@/lib/icons";
 
 export function Pricing() {
   return (
-    <section id="pricing" className="relative py-20 2xl:px-0 lg:px-20">
+    <section id="pricing" className="relative py-20 2xl:px-0 lg:px-20 px-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-7">
           <div className="col-span-3">
-            <div className="lay w-6/12 mx-auto text-center">
+            <div className="lay md:w-6/12 w-full mx-auto text-center">
               <div className="itm mb-5 flex items-center justify-center gap-1.5">
                 <span>
                   <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
@@ -16,13 +16,13 @@ export function Pricing() {
                 <p className="text-[#53A2EB]">Select your Subject</p>
               </div>
               <div className="hed">
-                <h3 className="text-5xl font-bold leading-normal">
+                <h3 className="md:text-5xl text-3xl font-bold leading-normal">
                   Choose Your <br /> Subscription plan
                 </h3>
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">
@@ -73,7 +73,7 @@ export function Pricing() {
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">
@@ -126,7 +126,7 @@ export function Pricing() {
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-3">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">

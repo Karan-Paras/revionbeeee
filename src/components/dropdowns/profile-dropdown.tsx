@@ -6,12 +6,13 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { getUserImageUrl } from "@/lib/media-urls";
+import Link from "next/link";
 
 interface ProfileDropdownProps {
   user: User;
 }
 
-export default function ProfileDropdown({ user }: ProfileDropdownProps) {
+export function ProfileDropdown({ user }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +35,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 focus:outline-none"
+        className="flex items-center gap-2 cursor-pointer focus:outline-none md:w-auto w-full md:justify-start justify-between"
       >
         {user.image && (
           <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200">
@@ -47,7 +48,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             />
           </div>
         )}
-        <span className="hidden md:inline text-[#505050]">{user.name}</span>
+        <span className="md:inline text-[#505050]">{user.name}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
@@ -73,23 +74,29 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border-b border-[#858080] pt-2  z-50"
+            className="absolute right-0 mt-2 w-48 bg-white rounded-xl md:shadow-2xl shadow-2xl/5 md:border-b border-b-0 border-[#858080] pt-2  z-50 "
           >
-            <a
-              href="#"
+            <Link
+              href="/accounts/my-profile"
               className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
             >
-              Your Profile
-            </a>
-            <a
-              href="#"
+              Profile
+            </Link>
+            <Link
+              href="/accounts/subscription"
               className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
             >
               Settings
-            </a>
+            </Link>
+            <Link
+              href="/accounts/subscription"
+              className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
+            >
+              Contact
+            </Link>
             <button
               onClick={() => signOut()}
-              className="block px-4 py-2 text-sm pb-2 mb-2 text-gray-700 cursor-pointer"
+              className="block w-full text-left px-4 py-2 text-sm pb-2 mb-2 text-gray-700 cursor-pointer"
             >
               Sign out
             </button>
