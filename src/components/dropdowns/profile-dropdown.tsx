@@ -1,12 +1,17 @@
-"use client"; // This is required for Framer Motion to work in Next.js
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { User } from "@/lib/assets";
 import { signOut } from "next-auth/react";
+import { User } from "next-auth";
+import { getUserImageUrl } from "@/lib/media-urls";
 
-export default function ProfileDropdown() {
+interface ProfileDropdownProps {
+  user: User;
+}
+
+export default function ProfileDropdown({ user }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -31,10 +36,18 @@ export default function ProfileDropdown() {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2 focus:outline-none"
       >
-        <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200">
-          <Image src={User} alt="Profile" className="object-cover" />
-        </div>
-        <span className="hidden md:inline text-[#505050]">Wade Warren</span>
+        {user.image && (
+          <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200">
+            <Image
+              src={getUserImageUrl(user.image)}
+              alt="User Profile Picture"
+              className="object-cover"
+              width={56}
+              height={56}
+            />
+          </div>
+        )}
+        <span className="hidden md:inline text-[#505050]">{user.name}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
