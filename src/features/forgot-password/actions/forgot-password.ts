@@ -3,6 +3,8 @@
 import { ForgotPasswordSchema } from "@/features/forgot-password/schemas";
 import { paths } from "@/routes";
 import { redirect } from "next/navigation";
+import { forgotPassword as forgotPasswordApi } from "@/features/forgot-password/api/forgot-password";
+import type { ApiErrorResponse } from "@/types/api";
 
 type ForgotPasswordFormState = {
   errors: {
@@ -21,6 +23,18 @@ export const forgotPassword = async (
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  try {
+    await forgotPasswordApi(validatedFields.data);
+  } catch (error: unknown) {
+    if ((error as ApiErrorResponse)?.message) {
+      return {
+        errors: {
+          _form: [(error as ApiErrorResponse)?.message || "An error occurred!"],
+        },
+      };
+    }
   }
 
   redirect(paths.emailSent());

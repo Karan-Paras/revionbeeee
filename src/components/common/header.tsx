@@ -36,7 +36,9 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
         <div className="grid grid-cols-2 items-center">
           <div className="col-span-1">
             <div className="img size-32 absolute left-[100px] flex items-center justify-center">
-              <Link className="" href="/">
+              <Link
+                href={variant === "home" ? paths.home() : paths.dashboard()}
+              >
                 <Image src={Logo} alt="" fill />
               </Link>
             </div>

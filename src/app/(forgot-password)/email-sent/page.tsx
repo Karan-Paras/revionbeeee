@@ -1,7 +1,7 @@
 import { PassChng } from "@/lib/assets";
 import Image from "next/image";
 
-export default function EmailSentSuccessfully() {
+export default function EmailSent() {
   return (
     <section className="mths_bg p-5 h-[calc(100vh-50px)] bg-no-repeat bg-cover ">
       <div className="container mx-auto h-full">

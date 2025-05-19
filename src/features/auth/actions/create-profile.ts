@@ -1,7 +1,7 @@
 "use server";
 
 import { createProfile as createProfileApi } from "@/features/auth/api/create-profile";
-import { ApiErrorResponse } from "@/types/api";
+import type { ApiErrorResponse } from "@/types/api";
 import { redirect } from "next/navigation";
 import { paths } from "@/routes";
 import { unstable_update } from "@/auth";
