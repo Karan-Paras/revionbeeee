@@ -3,12 +3,12 @@ import Image from "next/image";
 
 export function InteractiveQuiz() {
   return (
-    <section id="about" className="py-20 relative 2xl:px-0 lg:px-20">
+    <section id="about" className="py-20 px-10 relative 2xl:px-0 lg:px-20">
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-10">
-          <div className="col-span-1">
-            <div className="flex justify-center gap-4">
-              <div className="lft w-6/12 gap-5 flex flex-col justify-center">
+          <div className="lg:col-lg-1 md:col-span-2 col-span-2">
+            <div className="flex justify-center gap-4 flex-wrap">
+              <div className="lft md:w-6/12 w-full gap-5 flex flex-col justify-center">
                 <div className="img h-80 overflow-hidden rounded-xl">
                   <Image
                     className="w-full h-full object-cover"
@@ -18,7 +18,7 @@ export function InteractiveQuiz() {
                 </div>
                 <div className="border rounded-xl border-[#DFDFDF] p-4 px-7">
                   <div className="grid grid-cols-2">
-                    <div className="col-span-1 ">
+                    <div className="md:col-span-1 col-span-2 md:text-left text-center ">
                       <div className="itm size-12 rounded-full overflow-hidden inline-flex -ms-3 border-4 border-[#fff]">
                         <Image src={Lft} alt="" />
                       </div>
@@ -32,14 +32,14 @@ export function InteractiveQuiz() {
                         <Image src={Lft} alt="" />
                       </div>
                     </div>
-                    <div className="col-span-1">
+                    <div className="md:col-span-1 col-span-2 md:text-left text-center">
                       <h3 className="text-xl font-bold">Top -Students</h3>
                       <p>All Over the words</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="rft w-6/12 gap-4 flex flex-col">
+              <div className="rft md:w-6/12 w-full gap-4 flex flex-col">
                 <div className="img h-80 overflow-hidden rounded-xl">
                   <Image
                     className="w-full h-full object-cover"
@@ -57,7 +57,7 @@ export function InteractiveQuiz() {
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-lg-1 md:col-span-2 col-span-2">
             <div className="itm flex items-center gap-1.5">
               <span>
                 <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
@@ -67,17 +67,17 @@ export function InteractiveQuiz() {
               <p className="text-[#53A2EB]">Flexible supported learning</p>
             </div>
             <div className="hed">
-              <h3 className="text-6xl font-bold leading-normal mb-3">
+              <h3 className="md:text-6xl text-3xl font-bold leading-normal mb-3">
                 Interactive Quizzes for Curious Young Minds
               </h3>
-              <p className="text-[#505050] leading-10 text-lg font-light">
+              <p className="text-[#505050] leading-10 md:text-lg text-base font-light">
                 Engage students with fun, educational quizzes designed to spark
                 curiosity, reinforce learning, and build confidence across a
                 wide range of subjects and grade levels.
               </p>
             </div>
             <div className="grid grid-cols-2 my-7 gap-7">
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <div className="flex gap-4">
                   <div className="itm">
                     <svg width="45" height="41" viewBox="0 0 45 41" fill="none">
@@ -116,7 +116,7 @@ export function InteractiveQuiz() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <div className="flex gap-4">
                   <div className="itm">
                     <svg
@@ -157,7 +157,7 @@ export function InteractiveQuiz() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <div className="flex gap-4">
                   <div className="itm">
                     <svg
@@ -210,7 +210,7 @@ export function InteractiveQuiz() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <div className="flex gap-4">
                   <div className="itm">
                     <svg

@@ -1,5 +1,6 @@
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface UpgradeSubscriptionModalProps {
   onClose: () => void;
@@ -59,7 +60,7 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Real time suggest answers </p>
               </div>
               <div className="lst flex gap-2 mb-5">
                 <span>
@@ -74,7 +75,7 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Proving helpings tips </p>
               </div>
               <div className="lst flex gap-2 ">
                 <span>
@@ -89,7 +90,7 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Cover 10 topic in a day</p>
               </div>
             </div>
           </div>
@@ -138,7 +139,7 @@ export function UpgradeSubscriptionModal({
                       />
                     </svg>
                   </span>
-                  <p className="text-[#505050]">Unlock 10 questions </p>
+                  <p className="text-[#505050]">Real time suggest answers </p>
                 </div>
                 <div className="lst flex gap-2 mb-5">
                   <span>
@@ -153,7 +154,7 @@ export function UpgradeSubscriptionModal({
                       />
                     </svg>
                   </span>
-                  <p className="text-[#505050]">Unlock 10 questions </p>
+                  <p className="text-[#505050]">Proving helpings tips </p>
                 </div>
                 <div className="lst flex gap-2 ">
                   <span>
@@ -168,7 +169,7 @@ export function UpgradeSubscriptionModal({
                       />
                     </svg>
                   </span>
-                  <p className="text-[#505050]">Unlock 10 questions </p>
+                  <p className="text-[#505050]">Cover 10 topic in a day</p>
                 </div>
               </div>
             </div>
@@ -213,7 +214,7 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Real time suggest answers </p>
               </div>
               <div className="lst flex gap-2 mb-5">
                 <span>
@@ -228,7 +229,7 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Proving helpings tips </p>
               </div>
               <div className="lst flex gap-2 ">
                 <span>
@@ -243,13 +244,17 @@ export function UpgradeSubscriptionModal({
                     />
                   </svg>
                 </span>
-                <p className="text-[#505050]">Unlock 10 questions </p>
+                <p className="text-[#505050]">Cover 10 topic in a day</p>
               </div>
             </div>
           </div>
           <div className="col-span-3">
             <div className="btn w-3/12 mx-auto my-5">
-              <Button type="button">Upgrade Plan</Button>
+              <Link href="">
+                <Button className="shadow-xl/10 " type="button">
+                  Upgrade Plan
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

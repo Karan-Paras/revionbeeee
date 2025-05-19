@@ -248,12 +248,12 @@ export default function QuizSteps() {
 
                 {questions[displayQuestionIdx].options.map((option, index) => (
                   <motion.div
-                    key={index}
+                    key={index + 6}
                     onClick={() => handleSelectedOption(index)}
                     initial={{ opacity: 0, y: 5, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{
-                      delay: 0.3 + index * 0.06, // Staggered delay
+                      delay: 0.3 + index * 0.1, // Staggered delay
                       duration: 0.4,
                       ease: "easeOut",
                     }}

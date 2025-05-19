@@ -2,11 +2,11 @@ export function ContactUs() {
   return (
     <section
       id="contact"
-      className="bg-[#F6F6F6] relative py-20 2xl:px-0 lg:px-20"
+      className="bg-[#F6F6F6] relative py-20 2xl:px-0 lg:px-20 px-10"
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-6 gap-8">
-          <div className="col-span-3">
+          <div className="md:col-span-3 col-span-6">
             <div className="itm mb-5 flex items-center gap-1.5 uppercase">
               <span>
                 <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
@@ -16,7 +16,7 @@ export function ContactUs() {
               <p className="text-[#53A2EB]">Contact us</p>
             </div>
             <div className="hed">
-              <h3 className="font-bold text-5xl leading-16">
+              <h3 className="font-bold md:text-5xl text-3xl md:leading-16 leading-normal">
                 We&apos;re Here To <br /> Provide 24X7 Support
               </h3>
               <p className="font-light leading-8 my-4">
@@ -26,7 +26,7 @@ export function ContactUs() {
               </p>
             </div>
             <div className="addrs my-5">
-              <div className="flex items-center gap-2.5 mb-10">
+              <div className="flex items-center gap-2.5 mb-10  md:flex-nowrap flex-wrap">
                 <h3 className="font-bold text-lg">Our Address</h3>{" "}
                 <span>
                   <svg width="227" height="1" viewBox="0 0 227 1" fill="none">
@@ -89,31 +89,31 @@ export function ContactUs() {
               </div>
             </div>
           </div>
-          <div className="col-span-3">
-            <div className="crd bg-white px-4 py-10 rounded-xl shadow-md">
+          <div className="md:col-span-3 col-span-6">
+            <div className="crd bg-white px-4 lg:py-10 py-5 rounded-xl shadow-md">
               <div className="grid grid-cols-2 gap-6">
-                <div className="col-span-1">
+                <div className="md:col-span-1 col-span-2">
                   <input
                     className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
                     type="text"
                     placeholder="First Name*"
                   />
                 </div>
-                <div className="col-span-1">
+                <div className="md:col-span-1 col-span-2">
                   <input
                     className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
                     type="text"
                     placeholder="Last Name*"
                   />
                 </div>
-                <div className="col-span-1">
+                <div className="md:col-span-1 col-span-2">
                   <input
                     className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
                     type="email"
                     placeholder="Your Email*"
                   />
                 </div>
-                <div className="col-span-1">
+                <div className="md:col-span-1 col-span-2">
                   <input
                     className="placeholder-[#22281E] w-full p-4 outline-0 inp_spc  border-[#DEDFDD]  border-b"
                     type="number"

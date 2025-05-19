@@ -139,7 +139,7 @@ export const ChevronRight = ({
   </svg>
 );
 
-export const Camera = ({ width = 17, height = 14 }) => (
+export const Camera = ({ width = 17, height = 14 }: IconProps) => (
   <svg
     width={width}
     height={height}

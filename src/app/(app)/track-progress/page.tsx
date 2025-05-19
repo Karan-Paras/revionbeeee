@@ -3,11 +3,13 @@ import Link from "next/link";
 export default function TrackProgress() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
+      <section className="act_bg relative bg-cover bg-no-repeat min-h-96 md:px-0 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
             <div className="col-span-2 pb-20">
-              <h3 className="font-bold text-5xl text-white">Track Progress</h3>
+              <h3 className="font-bold md:text-5xl text-4xl text-white">
+                Track Progress
+              </h3>
               <div className="flex justify-center gap-3 text-white my-5 uppercase">
                 <div className="itm">
                   <Link className="text-white" href="">
@@ -25,7 +27,7 @@ export default function TrackProgress() {
           </div>
         </div>
       </section>
-      <section className="bg-[#F6F6F6] py-16">
+      <section className="bg-[#F6F6F6] py-16 md:px-0 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-12 gap-10">
             <div className="col-span-3">
