@@ -69,7 +69,7 @@ export function RegisterForm() {
             <Checkbox required />
             <label
               htmlFor="vehicle1"
-              className="text-[#0B0B0B] font-light text-sm w-8/12"
+              className="text-[#0B0B0B] font-light text-sm md:w-8/12 w-10/12"
             >
               By signing up, you are agreeing to our&nbsp;
               <Link

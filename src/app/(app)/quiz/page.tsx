@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Quiz() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
+      <section className="act_bg relative bg-cover bg-no-repeat min-h-96 2xl:px-0 lg:px-20 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
             <div className="col-span-2 pt-20">
@@ -25,11 +25,11 @@ export default function Quiz() {
           </div>
         </div>
       </section>
-      <section className="bg-[#F6F6F6] py-20">
+      <section className="bg-[#F6F6F6] py-20 2xl:px-0 lg:px-20 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 bg-white rounded-xl py-5 px-7">
             <div className="col-span-2">
-              <h3 className="font-bold text-xl mb-4 pb-4 border-b border-[#D9D9D9] text-[#505050]">
+              <h3 className="font-bold lg:text-xl text-lg mb-4 pb-4 border-b border-[#D9D9D9] text-[#505050]">
                 Number & Algebra/AA SL
               </h3>
               <h5 className="font-semibold text-base pb-4 text-[#505050]">

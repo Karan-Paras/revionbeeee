@@ -15,7 +15,7 @@ export default async function ResetPassword({ params }: ResetPasswordProps) {
   await verifyToken(token);
 
   return (
-    <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+    <div className="max-w-lg md:w-11/12 w-full m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
       <div className="img flex justify-center">
         <Image src={PassIcn} alt="" />
       </div>

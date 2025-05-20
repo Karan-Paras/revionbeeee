@@ -26,13 +26,13 @@ export default function AASL() {
           </div>
         </div>
       </section>
-      <section className="py-16">
+      <section className="py-16 xl:px-0 md:px-10 px-10">
         <div className="container mx-auto">
           <div className="grid">
-            <h3 className="font-bold text-3xl mb-4">
+            <h3 className="font-bold md:text-3xl text-2xl mb-4">
               Mathematics Analysis & Approaches SL
             </h3>
-            <p className="text-xl text-[#505050] mb-3 font-normal">
+            <p className="md:text-xl text-base text-[#505050] mb-3 font-normal">
               Analysis and Approaches – Standard Level (AA SL) is designed for
               students who enjoy exploring mathematical concepts through
               analytical thinking and problem-solving. This course focuses on
@@ -42,7 +42,7 @@ export default function AASL() {
               arguments and apply mathematical techniques to real and abstract
               scenarios.
             </p>
-            <p className="text-xl text-[#505050] mb-3 font-normal">
+            <p className="md:text-xl text-base  text-[#505050] mb-3 font-normal">
               AA SL is ideal for learners who are interested in mathematics as a
               subject of study or for future careers in science, engineering,
               technology, or mathematics-based fields. The course encourages
@@ -54,12 +54,12 @@ export default function AASL() {
       </section>
 
       <section className="">
-        <div className="container mx-auto bg-[#F9F9F9] rounded-xl p-16">
-          <div className="grid grid-cols-2 mx-auto w-9/12 gap-7">
-            <div className="col-span-1">
+        <div className="container mx-auto bg-[#F9F9F9] rounded-xl py-16 xl:px-0 md:px-10 px-10">
+          <div className="grid grid-cols-2 mx-auto md:w-9/12 w-full gap-7">
+            <div className="md:col-span-1 col-span-2">
               <Link href="/quiz-steps" className="">
-                <div className="grid grid-cols-12 bg-white px-4 py-10 rounded-xl border border-[#FBBE1B] items-center">
-                  <div className="col-span-3">
+                <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FBBE1B] items-center">
+                  <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                       <svg
                         width="43"
@@ -113,9 +113,11 @@ export default function AASL() {
                       </svg>
                     </div>
                   </div>
-                  <div className="col-span-9">
-                    <h3 className="text-2xl font-bold mb-2">Take a Quiz</h3>
-                    <p className="text-lg font-normal">
+                  <div className="md:col-span-9 col-span-12">
+                    <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
+                      Take a Quiz
+                    </h3>
+                    <p className="md:text-lg text-base md:text-left text-center font-normal">
                       Test your knowledge and track your progress with fun
                       quizzes.
                     </p>
@@ -123,10 +125,10 @@ export default function AASL() {
                 </div>
               </Link>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-2">
               <Link href="/question-bank" className="">
-                <div className="grid grid-cols-12 bg-white px-4 py-10 rounded-xl border border-[#53A2EB] items-center">
-                  <div className="col-span-3">
+                <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#53A2EB] items-center">
+                  <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                       <svg
                         width="40"
@@ -162,9 +164,11 @@ export default function AASL() {
                       </svg>
                     </div>
                   </div>
-                  <div className="col-span-9">
-                    <h3 className="text-2xl font-bold mb-2">Question Bank</h3>
-                    <p className="text-lg font-normal">
+                  <div className="md:col-span-9 col-span-12">
+                    <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
+                      Question Bank
+                    </h3>
+                    <p className="md:text-lg text-base md:text-left text-center font-normal">
                       Practice math skills with organized, topic-based
                       questions.
                     </p>
@@ -172,10 +176,10 @@ export default function AASL() {
                 </div>
               </Link>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-2">
               <Link href="/videos" className="">
-                <div className="grid grid-cols-12 bg-white px-4 py-10 rounded-xl border border-[#FAB89B] items-center">
-                  <div className="col-span-3">
+                <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FAB89B] items-center">
+                  <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                       <svg
                         width="35"
@@ -191,19 +195,21 @@ export default function AASL() {
                       </svg>
                     </div>
                   </div>
-                  <div className="col-span-9">
-                    <h3 className="text-2xl font-bold mb-2">Videos</h3>
-                    <p className="text-lg font-normal">
+                  <div className="md:col-span-9 col-span-12">
+                    <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
+                      Videos
+                    </h3>
+                    <p className="md:text-lg text-base md:text-left text-center font-normal">
                       Watch, learn, and understand concepts with visual clarity
                     </p>
                   </div>
                 </div>
               </Link>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-2">
               <Link href="/track-progress" className="">
-                <div className="grid grid-cols-12 bg-white px-4 py-10 rounded-xl border border-[#9F9BFD] items-center">
-                  <div className="col-span-3">
+                <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#9F9BFD] items-center">
+                  <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                       <svg
                         width="38"
@@ -221,9 +227,11 @@ export default function AASL() {
                       </svg>
                     </div>
                   </div>
-                  <div className="col-span-9">
-                    <h3 className="text-2xl font-bold mb-2">Track Progress</h3>
-                    <p className="text-lg font-normal">
+                  <div className="md:col-span-9 col-span-12">
+                    <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
+                      Track Progress
+                    </h3>
+                    <p className="md:text-lg text-base md:text-left text-center font-normal">
                       Monitor your quiz scores and improve over time
                     </p>
                   </div>

@@ -12,9 +12,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
   return (
     <section className="bg-[#F3F3F3] p-5">
-      <div className="grid grid-cols-2 h-[calc(100vh-50px)]">
-        <div className="col-span-1">{children}</div>
-        <div className="col-span-1">
+      <div className="grid grid-cols-2 md:h-[calc(100vh-50px)] min-h-screen">
+        <div className="md:col-span-1 col-span-2  ">{children}</div>
+        <div className="md:col-span-1 col-span-2 md:block hidden ">
           <div
             className={cn(
               "img relative rounded-xl border-2 border-white flex overflow-hidden  h-full bg-no-repeat bg-cover bg-center",
