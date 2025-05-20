@@ -3,12 +3,14 @@ import Link from "next/link";
 export default function Question() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
+      <section className="act_bg relative bg-cover bg-no-repeat md:px-0 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
             <div className="col-span-2 pt-20">
-              <h3 className="font-bold text-5xl text-white">Question Bank</h3>
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
+              <h3 className="font-bold md:text-5xl text-4xl text-white">
+                Question Bank
+              </h3>
+              <div className="flex justify-center gap-3 text-white my-5 uppercase md:text-lg text-sm">
                 <div className="itm">
                   <Link className="text-white" href="">
                     Home
@@ -27,13 +29,18 @@ export default function Question() {
       </section>
 
       {/* select topics */}
-      <section id="topics" className="py-20 mths_bg relative 2xl:px-0 lg:px-20">
+      <section
+        id="topics"
+        className="py-20 md:px-0 px-10 mths_bg relative 2xl:px-0 lg:px-20"
+      >
         <div className="container mx-auto relative">
           <div className="grid grid-cols-3 gap-7">
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                  <h3 className="font-bold text-2xl">Number & Algebra</h3>
+                  <h3 className="font-bold md:text-2xl text-xl">
+                    Number & Algebra
+                  </h3>
                 </div>
                 <ul>
                   <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -108,10 +115,10 @@ export default function Question() {
                 </ul>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                  <h3 className="font-bold text-2xl">Functions</h3>
+                  <h3 className="font-bold md:text-2xl text-xl">Functions</h3>
                 </div>
                 <ul>
                   <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">
@@ -181,10 +188,10 @@ export default function Question() {
                 </ul>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                  <h3 className="font-bold text-2xl">
+                  <h3 className="font-bold md:text-2xl text-xl">
                     Geometry & Trigonometry
                   </h3>
                 </div>
@@ -256,10 +263,10 @@ export default function Question() {
                 </ul>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                  <h3 className="font-bold text-2xl">
+                  <h3 className="font-bold md:text-2xl text-xl">
                     Statistics & Probability
                   </h3>
                 </div>
@@ -331,10 +338,10 @@ export default function Question() {
                 </ul>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                  <h3 className="font-bold text-2xl">Calculus</h3>
+                  <h3 className="font-bold md:text-2xl text-xl">Calculus</h3>
                 </div>
                 <ul>
                   <li className="flex justify-between border-b border-[#DEDEDE] p-5 items-center">

@@ -3,10 +3,10 @@ import Image from "next/image";
 
 export default function EmailSent() {
   return (
-    <section className="mths_bg p-5 h-[calc(100vh-50px)] bg-no-repeat bg-cover ">
+    <section className="mths_bg p-5 md:h-[calc(100vh-50px)] min-h-screen bg-no-repeat bg-cover ">
       <div className="container mx-auto h-full">
         <div className="grid h-full content-center">
-          <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+          <div className="max-w-lg md:w-11/12 w-full m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
             <div className="img flex justify-center">
               <Image src={PassChng} alt="" />
             </div>

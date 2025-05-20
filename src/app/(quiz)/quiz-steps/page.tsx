@@ -168,10 +168,10 @@ export default function QuizSteps() {
   };
 
   return (
-    <section className="py-5">
+    <section className="py-5 xl:px-0 px-5">
       <div className="container mx-auto">
         <div className="grid grid-cols-6 ">
-          <div className="col-span-1">
+          <div className="md:col-span-1 col-span-6 md:order-1 order-2 md:mb-0 mb-5">
             <div className="flex justify-between items-center">
               <div className="hed">
                 <h3 className="font-semibold text-2xl">Questions</h3>
@@ -198,13 +198,13 @@ export default function QuizSteps() {
               <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl"></div>
             </div>
           </div>
-          <div className="col-span-4 relative bg_shp">
+          <div className="col-span-4 relative bg_shp md:order-2 md:block hidden">
             <div className="lgo size-[160px] mx-auto bg-white shadow-xl border border-[#f7f7f7] rounded-full flex justify-center items-center relative">
               <RevisionBee />
             </div>
           </div>
-          <div className="col-span-1">
-            <button className="flex justify-end items-center gap-2 cursor-pointer ms-auto">
+          <div className="md:col-span-1 col-span-6 md:order-3 order-1">
+            <button className="flex justify-end md:mb-0 mb-4 items-center gap-2 cursor-pointer ms-auto">
               <span className="text-[#F15642] text-xl font-semibold">Exit</span>
               <svg width="32" height="33" viewBox="0 0 32 33" fill="none">
                 <path
@@ -217,8 +217,8 @@ export default function QuizSteps() {
             </button>
           </div>
           {/* quiz block */}
-          <div className="col-span-6 bg-[#F6F6F6] p-4 rounded-xl grid justify-items-center -mt-[50px] min-h-[75vh]">
-            <div className="w-6/12 max-w-lg mt-5 mb-10 relative">
+          <div className="order-4 col-span-6 bg-[#F6F6F6] p-4 rounded-xl grid justify-items-center md:-mt-[50px] md:min-h-[75vh]">
+            <div className="md:w-6/12 w-full max-w-lg mt-5 md:mb-10 mb-5 relative">
               {/* question */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -231,7 +231,7 @@ export default function QuizSteps() {
                     ease: "easeInOut",
                   }}
                 ></motion.div>
-                <div className="question_blk flex items-center gap-2.5 pt-32 mb-5 flex-wrap">
+                <div className="question_blk flex items-center gap-2.5 md:pt-32 mb-5 flex-wrap">
                   <div className="size-10 bg-white flex justify-center items-center rounded-full font-semibold">
                     {displayQuestionIdx + 1}
                   </div>
@@ -273,8 +273,8 @@ export default function QuizSteps() {
               </AnimatePresence>
             </div>
           </div>
-          <div className="col-span-6">
-            <div className="flex justify-center mt-7 gap-3">
+          <div className="order-5 col-span-6">
+            <div className="flex justify-center mt-7 gap-3 md:flex-nowrap flex-wrap">
               {displayQuestionIdx > 0 && (
                 <motion.button
                   whileTap={{ scale: 0.95 }}

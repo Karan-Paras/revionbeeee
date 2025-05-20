@@ -40,7 +40,7 @@ export default function QuestionBank() {
   };
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
+      <section className="act_bg relative bg-cover bg-no-repeat min-h-96 md:px-0 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 min-h-96 relative text-center items-end">
             <div className="col-span-2 pb-14 ">
@@ -68,7 +68,7 @@ export default function QuestionBank() {
           </div>
         </div>
       </section>
-      <section className="bg-[#F6F6F6] py-16 ">
+      <section className="bg-[#F6F6F6] py-16 md:px-0 px-10">
         <div className="container mx-auto">
           {/* question */}
           <div className="item mb-5">

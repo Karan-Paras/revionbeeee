@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function ForgetPassword() {
   return (
-    <div className="max-w-lg w-11/12 m-auto rounded-xl border border-gray-100 shadow-2xl p-8 relative bg-white">
+    <div className="max-w-lg md:w-11/12 w-full m-auto rounded-xl border border-gray-100 shadow-2xl md:p-8 p-5 md:mt-0 mt-10 relative bg-white">
       <Link href={paths.login()}>
         <button className="absolute top-4 left-5 flex gap-1 items-center text-sm cursor-pointer">
           <ArrowBack />

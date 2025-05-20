@@ -6,8 +6,8 @@ export function InteractiveQuiz() {
     <section id="about" className="py-20 px-10 relative 2xl:px-0 lg:px-20">
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-10">
-          <div className="lg:col-lg-1 md:col-span-2 col-span-2">
-            <div className="flex justify-center gap-4 flex-wrap">
+          <div className="lg:col-span-1 md:col-span-2 col-span-2">
+            <div className="flex justify-center gap-4 md:flex-nowrap flex-wrap">
               <div className="lft md:w-6/12 w-full gap-5 flex flex-col justify-center">
                 <div className="img h-80 overflow-hidden rounded-xl">
                   <Image
@@ -57,7 +57,7 @@ export function InteractiveQuiz() {
               </div>
             </div>
           </div>
-          <div className="lg:col-lg-1 md:col-span-2 col-span-2">
+          <div className="lg:col-span-1 md:col-span-2 col-span-2">
             <div className="itm flex items-center gap-1.5">
               <span>
                 <svg width="42" height="2" viewBox="0 0 42 2" fill="none">

@@ -33,13 +33,13 @@ export default function Videos() {
           </div>
         </div>
       </section>
-      <section className="py-16">
+      <section className="py-16 md:px-0 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-4 gap-10">
             <div className="col-span-4">
               <h3 className="font-bold text-3xl">All Videos</h3>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -102,7 +102,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src={Demo} ></video> */}
@@ -165,7 +165,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -228,7 +228,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -291,7 +291,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -354,7 +354,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -417,7 +417,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
@@ -480,7 +480,7 @@ export default function Videos() {
                 </div>
               </div>
             </div>
-            <div className="col-span-1">
+            <div className="md:col-span-1 col-span-4">
               <div className="vid rounded-2xl relative min-h-80 overflow-hidden">
                 <Image className="object-cover" src={Lft} alt="" fill></Image>
                 {/* <video src=""></video> */}
