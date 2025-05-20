@@ -29,13 +29,12 @@ export async function UserProfileCard() {
     <div className="frm">
       <div className="profile flex justify-center gap-3.5 flex-col text-center my-10">
         {profilePicture ? (
-          <div className="size-40 border-2 border-white rounded-full mx-auto overflow-hidden">
+          <div className="size-40 border-2 border-white rounded-full mx-auto overflow-hidden relative">
             <Image
               src={getUserImageUrl(profilePicture)}
               alt="ProfilePicture"
               className="object-cover"
-              width={160}
-              height={160}
+              fill
             />
           </div>
         ) : (

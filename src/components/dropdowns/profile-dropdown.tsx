@@ -38,13 +38,12 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
         className="flex items-center gap-2 cursor-pointer focus:outline-none md:w-auto w-full md:justify-start justify-between"
       >
         {user.image && (
-          <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200">
+          <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200 relative">
             <Image
               src={getUserImageUrl(user.image)}
               alt="User Profile Picture"
               className="object-cover"
-              width={56}
-              height={56}
+              fill
             />
           </div>
         )}
