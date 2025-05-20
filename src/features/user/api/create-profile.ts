@@ -1,4 +1,4 @@
-import { CreateProfileSchema } from "@/features/auth/schemas";
+import { CreateProfileSchema } from "@/features/user/schemas";
 import api from "@/lib/api";
 import { User } from "@/types/user";
 import { z } from "zod";

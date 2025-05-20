@@ -1,11 +1,11 @@
 "use server";
 
-import { createProfile as createProfileApi } from "@/features/auth/api/create-profile";
+import { createProfile as createProfileApi } from "@/features/user/api/create-profile";
 import type { ApiErrorResponse } from "@/types/api";
 import { redirect } from "next/navigation";
 import { paths } from "@/routes";
 import { unstable_update } from "@/auth";
-import { CreateProfileSchema } from "@/features/auth/schemas";
+import { CreateProfileSchema } from "@/features/user/schemas";
 
 type CreateProfileFormState = {
   errors: {
@@ -51,14 +51,12 @@ export const createProfile = async (
     return { errors: { _form: ["An error occurred!"] } };
   }
 
-  const session = await unstable_update({
+  await unstable_update({
     user: {
       name: `${user.firstName} ${user.lastName}`,
       image: user.profilePicture,
     },
   });
-
-  console.log({ session });
 
   redirect(paths.subscriptionPlans());
 };

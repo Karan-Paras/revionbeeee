@@ -5,7 +5,7 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { InputError } from "@/components/ui/input-error";
-import { createProfile } from "@/features/auth/actions/create-profile";
+import { createProfile } from "@/features/user/actions/create-profile";
 import { Camera } from "@/lib/icons";
 import Image from "next/image";
 import { startTransition, useActionState, useState } from "react";

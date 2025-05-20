@@ -1,10 +1,10 @@
 "use server";
 
-import { ForgotPasswordSchema } from "@/features/forgot-password/schemas";
 import { paths } from "@/routes";
 import { redirect } from "next/navigation";
-import { forgotPassword as forgotPasswordApi } from "@/features/forgot-password/api/forgot-password";
+import { forgotPassword as forgotPasswordApi } from "@/features/auth/api/forgot-password";
 import type { ApiErrorResponse } from "@/types/api";
+import { ForgotPasswordSchema } from "@/features/auth/schemas";
 
 type ForgotPasswordFormState = {
   errors: {

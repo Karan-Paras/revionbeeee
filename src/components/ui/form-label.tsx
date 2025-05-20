@@ -7,6 +7,7 @@ const formLabelVariants = cva("w-full", {
     variant: {
       default: "text-sm",
       light: "text-[#0B0B0B] font-light",
+      bold: "",
     },
   },
   defaultVariants: {

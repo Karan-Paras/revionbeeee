@@ -12,7 +12,7 @@ export function ContactUs() {
                 <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
                   <rect y="0.5" width="42" height="1" fill="#53A2EB" />
                 </svg>
-              </span>{" "}
+              </span>
               <p className="text-[#53A2EB]">Contact us</p>
             </div>
             <div className="hed">
@@ -27,7 +27,7 @@ export function ContactUs() {
             </div>
             <div className="addrs my-5">
               <div className="flex items-center gap-2.5 mb-10  md:flex-nowrap flex-wrap">
-                <h3 className="font-bold text-lg">Our Address</h3>{" "}
+                <h3 className="font-bold text-lg">Our Address</h3>
                 <span>
                   <svg width="227" height="1" viewBox="0 0 227 1" fill="none">
                     <rect width="227" height="1" fill="#505050" />

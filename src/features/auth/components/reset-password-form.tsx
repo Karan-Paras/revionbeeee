@@ -3,7 +3,7 @@
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { startTransition, useActionState } from "react";
-import { resetPassword } from "@/features/forgot-password/actions/reset-password";
+import { resetPassword } from "@/features/auth/actions/reset-password";
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/ui/error-block";
 

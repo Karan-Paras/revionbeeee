@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { forgotPassword } from "@/features/forgot-password/actions/forgot-password";
+import { forgotPassword } from "@/features/auth/actions/forgot-password";
 import { startTransition, useActionState } from "react";
 
 export function ForgotPasswordForm() {

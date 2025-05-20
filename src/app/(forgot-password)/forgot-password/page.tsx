@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from "@/features/forgot-password/components/forgot-password-form";
+import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-form";
 import { EmailService } from "@/lib/assets";
 import { ArrowBack } from "@/lib/icons";
 import { paths } from "@/routes";

@@ -1,10 +1,10 @@
 "use server";
 
-import { ResetPasswordSchema } from "@/features/forgot-password/schemas";
 import { paths } from "@/routes";
 import { redirect } from "next/navigation";
-import { resetPassword as resetPasswordApi } from "@/features/forgot-password/api/reset-password";
+import { resetPassword as resetPasswordApi } from "@/features/auth/api/reset-password";
 import type { ApiErrorResponse } from "@/types/api";
+import { ResetPasswordSchema } from "@/features/auth/schemas";
 
 type ResetPasswordFormState = {
   errors: {

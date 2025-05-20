@@ -54,6 +54,9 @@ export const paths = {
     myProfile() {
       return "/my-profile";
     },
+    editProfile() {
+      return "/my-profile/edit";
+    },
   }),
 };
 

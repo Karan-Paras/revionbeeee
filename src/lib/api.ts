@@ -8,7 +8,7 @@ import { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
 export default async function api<T>(
   url: string,
   method: Method,
-  body: object | FormData,
+  body?: object | FormData,
   next?: RequestInit["next"],
   headers?: RequestInit["headers"]
 ): Promise<ApiSuccessResponse<T>> {
@@ -39,7 +39,6 @@ export default async function api<T>(
         ...headers,
       },
       ...(next ? { next } : {}),
-      cache: "no-cache",
     });
 
     const json: ApiResponse<T> = await response.json();
