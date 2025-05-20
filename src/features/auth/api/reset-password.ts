@@ -1,6 +1,6 @@
-import { ResetPasswordSchema } from "@/features/forgot-password/schemas";
-import api from "@/lib/api";
 import { z } from "zod";
+import api from "@/lib/api";
+import { ResetPasswordSchema } from "@/features/auth/schemas";
 
 export async function resetPassword(
   data: z.infer<typeof ResetPasswordSchema>,

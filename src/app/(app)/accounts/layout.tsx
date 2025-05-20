@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ProfileSidebar } from "@/app/(app)/accounts/profile-sidebar";
 
-interface ProfileLayout {
+interface AccountsLayoutProps {
   children: React.ReactNode;
 }
 
-export default function ProfileLayout({ children }: ProfileLayout) {
+export default function AccountsLayout({ children }: AccountsLayoutProps) {
   return (
     <>
       <section className="act_bg relative bg-cover bg-no-repeat min-h-96">

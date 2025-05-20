@@ -6,20 +6,22 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { useState } from "react";
 
-const inputLabelVariants = cva(
-  "bg-white py-5 ps-12 pe-5 w-full outline-0 rounded-xl",
-  {
-    variants: {
-      variant: {
-        default: "",
-        bordered: "border border-[#D8DAE5]",
-      },
+const inputLabelVariants = cva("bg-white py-5 w-full outline-0 rounded-xl", {
+  variants: {
+    variant: {
+      default: "",
+      bordered: "border border-[#D8DAE5]",
     },
-    defaultVariants: {
-      variant: "default",
+    hasIcon: {
+      true: "ps-12 pe-5",
+      false: "px-5",
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "default",
+    hasIcon: false,
+  },
+});
 
 interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
@@ -43,30 +45,40 @@ export function Input({
     setShowPassword((prev) => !prev);
   };
 
+  const hasIcon = !!iconClassName;
+
+  const inputElement = (
+    <input
+      {...props}
+      type={
+        props.type === "password"
+          ? showPassword
+            ? "text"
+            : "password"
+          : props.type || "text"
+      }
+      className={cn(inputLabelVariants({ variant, hasIcon }), className)}
+    />
+  );
+
   return (
     <>
-      <div className={cn("relative my-1.5 icn_bg", iconClassName)}>
-        <input
-          {...props}
-          type={
-            props.type === "password"
-              ? showPassword
-                ? "text"
-                : "password"
-              : props.type || "text"
-          }
-          className={cn(inputLabelVariants({ variant }), className)}
-        />
-        {props.type === "password" && (
-          <button
-            type="button"
-            onClick={handlePasswordToggle}
-            className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer"
-          >
-            <span>{showPassword ? <Eye /> : <EyeOff />}</span>
-          </button>
-        )}
-      </div>
+      {hasIcon ? (
+        <div className={cn("relative my-1.5 icn_bg", iconClassName)}>
+          {inputElement}
+          {props.type === "password" && (
+            <button
+              type="button"
+              onClick={handlePasswordToggle}
+              className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer"
+            >
+              <span>{showPassword ? <Eye /> : <EyeOff />}</span>
+            </button>
+          )}
+        </div>
+      ) : (
+        <>{inputElement}</>
+      )}
       {!!errors && <InputError error={errors?.join(", ")} />}
     </>
   );

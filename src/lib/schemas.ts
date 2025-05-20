@@ -2,6 +2,11 @@ import { z } from "zod";
 
 export const email = z.string().email({ message: "Invalid email address" });
 
+export const password = z
+  .string()
+  .trim()
+  .min(1, { message: "Password is required" });
+
 // new password validation
 export const newPassword = z
   .string()

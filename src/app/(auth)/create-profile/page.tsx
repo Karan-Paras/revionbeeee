@@ -1,4 +1,4 @@
-import { CreateProfileForm } from "@/features/auth/components/create-profile-form";
+import { CreateProfileForm } from "@/features/user/components/create-profile-form";
 
 export default function CreateProfile() {
   return (

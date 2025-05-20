@@ -1,5 +1,5 @@
-import { verifyToken } from "@/features/forgot-password/api/verify-token";
-import { ResetPasswordForm } from "@/features/forgot-password/components/reset-password-form";
+import { verifyToken } from "@/features/auth/api/verify-token";
+import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
 import { PassIcn } from "@/lib/assets";
 import Image from "next/image";
 
