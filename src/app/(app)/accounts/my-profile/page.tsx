@@ -1,10 +1,9 @@
 import { auth } from "@/auth";
-import { DataLoader } from "@/components/loaders/data-loader";
 import { getProfile } from "@/features/user/api/get-profile";
 import { UserProfileCard } from "@/features/user/components/user-profile-card";
 import { Suspense } from "react";
 
-export default async function Page() {
+async function MyProfileContent() {
   const session = await auth();
 
   if (!session) {
@@ -15,8 +14,16 @@ export default async function Page() {
 
   const initialData = await getProfile(session?.user.token);
   return (
-    <Suspense fallback={<DataLoader />}>
+    <Suspense fallback={<p>content loading....</p>}>
       <UserProfileCard initialData={initialData} token={token} />
+    </Suspense>
+  );
+}
+
+export default function MyProfilePage() {
+  return (
+    <Suspense fallback={<p>page loading....</p>}>
+      <MyProfileContent />
     </Suspense>
   );
 }
