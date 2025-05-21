@@ -1,7 +1,8 @@
-import api from "@/lib/api";
+import fetcher from "@/lib/fetcher";
 import { User } from "@/types/user";
 
-export async function getProfile() {
+export async function getProfile(token: string) {
   const apiUrl = "/user/profile";
-  return await api<User>(apiUrl, "GET", undefined, { tags: ["user"] });
+
+  return await fetcher<User>(apiUrl, "GET", token);
 }

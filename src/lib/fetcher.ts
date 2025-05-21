@@ -1,20 +1,16 @@
-"use server";
-
-import { auth } from "@/auth";
 import { API_URL } from "@/lib/constants";
 import { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
 
-export default async function api<T>(
+export default async function fetcher<T>(
   url: string,
   method: Method,
+  token?: string,
   body?: object | FormData,
   next?: RequestInit["next"],
   headers?: RequestInit["headers"]
 ): Promise<ApiSuccessResponse<T>> {
   const api = `${API_URL}${url}`;
 
-  const session = await auth();
-  const token = session?.user?.token;
   const isFormData = body instanceof FormData;
 
   try {

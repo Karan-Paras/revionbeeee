@@ -1,5 +1,6 @@
 "use client";
 
+import { DataLoader } from "@/components/loaders/data-loader";
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
@@ -7,18 +8,20 @@ import { Input } from "@/components/ui/input";
 import { InputError } from "@/components/ui/input-error";
 import { Textarea } from "@/components/ui/textarea";
 import { updateProfile } from "@/features/user/actions/update-profile";
+import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Camera, Mars, Venus } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
+import { ApiSuccessResponse } from "@/types/api";
 import { User } from "@/types/user";
 import Image from "next/image";
 import { startTransition, useActionState, useState } from "react";
 
-interface UpdateProfileFormProps {
+interface UpdateProfileProps {
   userData: User;
 }
 
-export function UpdateProfileForm({ userData }: UpdateProfileFormProps) {
+function UpdateProfile({ userData }: UpdateProfileProps) {
   const {
     profilePicture: userProfilePicture,
     firstName,
@@ -271,5 +274,25 @@ export function UpdateProfileForm({ userData }: UpdateProfileFormProps) {
         </div>
       </div>
     </form>
+  );
+}
+
+interface UpdateProfileFormProps {
+  initialData: ApiSuccessResponse<User>;
+  token: string;
+}
+
+export function UpdateProfileForm({
+  initialData,
+  token,
+}: UpdateProfileFormProps) {
+  const { data, isPending } = useGetProfile(initialData, token);
+  const user = data.data;
+
+  return (
+    <>
+      {isPending && <DataLoader />}
+      <UpdateProfile userData={user} />
+    </>
   );
 }

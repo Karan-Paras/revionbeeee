@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import Providers from "@/app/providers";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -21,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body className={sora.className}>
-        <Toaster />
-        {children}
+        <Providers>
+          <Toaster />
+          {children}
+        </Providers>
       </body>
     </html>
   );
