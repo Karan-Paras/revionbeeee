@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { DataLoader } from "@/components/loaders/data-loader";
 import { getProfile } from "@/features/user/api/get-profile";
 import { UpdateProfileForm } from "@/features/user/components/update-profile-form";
 import { Suspense } from "react";
@@ -14,7 +15,7 @@ async function EditProfileContent() {
 
   const initialData = await getProfile(session?.user.token);
   return (
-    <Suspense fallback={<p>content loading....</p>}>
+    <Suspense fallback={<DataLoader />}>
       <UpdateProfileForm initialData={initialData} token={token} />
     </Suspense>
   );
@@ -22,7 +23,7 @@ async function EditProfileContent() {
 
 export default function EditProfilePage() {
   return (
-    <Suspense fallback={<p>page loading....</p>}>
+    <Suspense fallback={<DataLoader />}>
       <EditProfileContent />
     </Suspense>
   );
