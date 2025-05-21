@@ -6,7 +6,6 @@ import { UpdateProfileSchema } from "@/features/user/schemas";
 import { updateProfile as updateProfileApi } from "@/features/user/api/update-profile";
 import type { ApiErrorResponse } from "@/types/api";
 import { auth, unstable_update } from "@/auth";
-import { revalidateTag } from "next/cache";
 
 type UpdateProfileFormState = {
   errors: {
@@ -100,6 +99,5 @@ export const updateProfile = async (
     });
   }
 
-  revalidateTag("user");
   redirect(paths.accounts.myProfile());
 };
