@@ -4,7 +4,7 @@ import { getProfile } from "@/features/user/api/get-profile";
 import { UpdateProfileForm } from "@/features/user/components/update-profile-form";
 import { Suspense } from "react";
 
-export default async function Page() {
+async function EditProfileContent() {
   const session = await auth();
 
   if (!session) {
@@ -17,6 +17,14 @@ export default async function Page() {
   return (
     <Suspense fallback={<DataLoader />}>
       <UpdateProfileForm initialData={initialData} token={token} />
+    </Suspense>
+  );
+}
+
+export default function EditProfilePage() {
+  return (
+    <Suspense fallback={<DataLoader />}>
+      <EditProfileContent />
     </Suspense>
   );
 }
