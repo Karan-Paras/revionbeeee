@@ -54,6 +54,12 @@ export const paths = {
     myProfile() {
       return "/my-profile";
     },
+    subscription() {
+      return "/subscription";
+    },
+    settings() {
+      return "/settings";
+    },
     editProfile() {
       return "/my-profile/edit";
     },

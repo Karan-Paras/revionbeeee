@@ -7,6 +7,8 @@ import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { getUserImageUrl } from "@/lib/media-urls";
 import Link from "next/link";
+import { ChevronDown } from "@/lib/icons";
+import { paths } from "@/routes";
 
 interface ProfileDropdownProps {
   user: User;
@@ -31,13 +33,14 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2 cursor-pointer focus:outline-none md:w-auto w-full md:justify-start justify-between"
       >
-        {user.image && (
+        {user.image ? (
           <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200 relative">
             <Image
               src={getUserImageUrl(user.image)}
@@ -46,23 +49,19 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
               fill
             />
           </div>
+        ) : (
+          <div className="size-14 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
+            <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold w-full h-full">
+              {user.name?.charAt(0).toUpperCase()}
+            </div>
+          </div>
         )}
         <span className="md:inline text-[#505050]">{user.name}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <svg
-            className="size-8 fill-[#FBBE1B]"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <ChevronDown />
         </motion.div>
       </button>
 
@@ -76,13 +75,13 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             className="absolute right-0 mt-2 w-48 bg-white rounded-xl md:shadow-2xl shadow-2xl/5 md:border-b border-b-0 border-[#858080] pt-2  z-50 "
           >
             <Link
-              href="/accounts/my-profile"
+              href={paths.accounts.myProfile()}
               className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
             >
               Profile
             </Link>
             <Link
-              href="/accounts/subscription"
+              href={paths.accounts.settings()}
               className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
             >
               Settings

@@ -2,6 +2,7 @@ import { logout } from "@/actions/logout";
 import { auth } from "@/auth";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
+import NavLink from "@/components/ui/navlink";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
 import Image from "next/image";
@@ -21,7 +22,6 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
           { name: "Progress", path: paths.progress() },
           { name: "Questions Bank", path: paths.questionsBank() },
           { name: "Quiz", path: paths.quiz() },
-          // { name: "Accounts", path: paths.accounts.myProfile() },
         ]
       : [
           { name: "Home", path: "#home" },
@@ -50,12 +50,13 @@ export async function Header({ variant = "dashboard" }: HeaderProps) {
                 <ul className="flex gap-5">
                   {NavLinks.map((navLink) => (
                     <li key={navLink.name}>
-                      <Link
-                        className="font-medium text-[#505050] hover:text-[#53A2EB] 2xl:text-base md:text-sm"
+                      <NavLink
                         href={navLink.path}
+                        activeClassName="text-[#53A2EB]"
+                        className="font-medium text-[#505050] hover:text-[#53A2EB] 2xl:text-base md:text-sm"
                       >
                         {navLink.name}
-                      </Link>
+                      </NavLink>
                     </li>
                   ))}
                 </ul>

@@ -1,20 +1,22 @@
+import { auth } from "@/auth";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { getProfile } from "@/features/user/api/get-profile";
 import { UpdateProfileForm } from "@/features/user/components/update-profile-form";
 import { Suspense } from "react";
 
-async function UpdateProfileContent() {
-  const json = await getProfile();
+export default async function Page() {
+  const session = await auth();
 
-  const user = json.data;
+  if (!session) {
+    return null;
+  }
 
-  return <UpdateProfileForm userData={user} />;
-}
+  const token = session?.user.token;
 
-export default function UpdateProfile() {
+  const initialData = await getProfile(session?.user.token);
   return (
     <Suspense fallback={<DataLoader />}>
-      <UpdateProfileContent />
+      <UpdateProfileForm initialData={initialData} token={token} />
     </Suspense>
   );
 }
