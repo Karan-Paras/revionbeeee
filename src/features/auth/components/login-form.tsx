@@ -7,13 +7,23 @@ import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
 import { paths } from "@/routes";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
-import { startTransition, useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect } from "react";
 
 export function LoginForm() {
+  const router = useRouter();
+
   const [formState, action, isPending] = useActionState(login, {
     errors: {},
   });
+
+  useEffect(() => {
+    if (formState.success) {
+      getSession().then(() => router.replace(paths.home()));
+    }
+  }, [formState, router]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
