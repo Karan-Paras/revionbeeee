@@ -1,10 +1,8 @@
 "use server";
 
 import { LoginSchema } from "@/features/auth/schemas";
-import { paths } from "@/routes";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
 type LoginFormState = {
   errors: {
@@ -12,6 +10,7 @@ type LoginFormState = {
     password?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const login = async (
@@ -42,5 +41,5 @@ export const login = async (
     }
   }
 
-  redirect(paths.dashboard());
+  return { errors: {}, success: true };
 };

@@ -1,17 +1,16 @@
-// app/providers.jsx
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode, useState } from "react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryProvider } from "@/components/providers/query-provider";
+import { SessionProvider } from "@/components/providers/session-provider";
 
-export default function Providers({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+interface ProvidersProps {
+  children: React.ReactNode;
+}
 
+export default function Providers({ children }: ProvidersProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      {children}
-    </QueryClientProvider>
+    <SessionProvider>
+      <QueryProvider>{children}</QueryProvider>
+    </SessionProvider>
   );
 }
