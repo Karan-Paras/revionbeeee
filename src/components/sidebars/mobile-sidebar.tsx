@@ -10,6 +10,7 @@ import { paths } from "@/routes";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { Logo } from "@/lib/assets";
+import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 
 interface MobileSidebarProps {
   NavLinks: Array<{
@@ -26,6 +27,8 @@ export function MobileSidebar({
   session,
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data } = useGetProfile();
 
   return (
     <>
@@ -105,7 +108,7 @@ export function MobileSidebar({
                     </Link>
                   )
                 ) : (
-                  session?.user && <ProfileDropdown user={session?.user} />
+                  data && <ProfileDropdown user={data.data} />
                 )}
               </div>
             </motion.div>

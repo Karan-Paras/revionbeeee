@@ -13,7 +13,6 @@ import { Camera, Mars, Venus } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { ApiSuccessResponse } from "@/types/api";
 import { User } from "@/types/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
@@ -300,22 +299,15 @@ function Form({ userData }: FormProps) {
   );
 }
 
-interface UpdateProfileFormProps {
-  initialData: ApiSuccessResponse<User>;
-  token: string;
-}
+export function UpdateProfileForm() {
+  const { data, isPending } = useGetProfile();
 
-export function UpdateProfileForm({
-  initialData,
-  token,
-}: UpdateProfileFormProps) {
-  const { data, isPending } = useGetProfile(initialData, token);
-  const user = data.data;
+  if (isPending) {
+    return <DataLoader />;
+  }
 
-  return (
-    <>
-      {isPending && <DataLoader />}
-      <Form userData={user} />
-    </>
-  );
+  if (data) {
+    const user = data.data;
+    return <Form userData={user} />;
+  }
 }

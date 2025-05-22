@@ -3,6 +3,7 @@
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
+import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
 import { signOut, useSession } from "next-auth/react";
@@ -15,6 +16,8 @@ interface HeaderProps {
 
 export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
+
+  const { data } = useGetProfile();
 
   const navLinks =
     variant === "dashboard"
@@ -72,7 +75,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       );
     }
 
-    return session?.user && <ProfileDropdown user={session.user} />;
+    return data && <ProfileDropdown user={data.data} />;
   };
 
   return (
