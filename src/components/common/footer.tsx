@@ -1,4 +1,5 @@
 import { RevisionBee } from "@/lib/icons";
+import { paths } from "@/routes";
 import Link from "next/link";
 
 interface FooterProps {
@@ -119,7 +120,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     About Us
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
-                    Topics{" "}
+                    Topics
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
                     Questions
@@ -138,13 +139,15 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 <h3 className="text-2xl font-bold text-white mb-5">Support</h3>
                 <ul>
                   <li className="text-lg font-normal text-white mb-5">
-                    <Link href="/privacy-policy"> Privacy Policy</Link>
+                    <Link href={paths.privacyPolicy()}> Privacy Policy</Link>
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
-                    <Link href="/terms-and-conditions">Terms & Conditions</Link>
+                    <Link href={paths.termsAndConditions()}>
+                      Terms & Conditions
+                    </Link>
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
-                    <Link href="/FAQ">FAQ</Link>
+                    <Link href={paths.faq()}>FAQ</Link>
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
                     Contact
