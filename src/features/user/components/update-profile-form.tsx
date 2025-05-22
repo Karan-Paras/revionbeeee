@@ -16,15 +16,16 @@ import { paths } from "@/routes";
 import { ApiSuccessResponse } from "@/types/api";
 import { User } from "@/types/user";
 import { useQueryClient } from "@tanstack/react-query";
+import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
 
-interface UpdateProfileProps {
+interface FormProps {
   userData: User;
 }
 
-function UpdateProfile({ userData }: UpdateProfileProps) {
+function Form({ userData }: FormProps) {
   const {
     profilePicture: userProfilePicture,
     firstName,
@@ -53,7 +54,7 @@ function UpdateProfile({ userData }: UpdateProfileProps) {
       queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
-      router.replace(paths.accounts.myProfile());
+      getSession().then(() => router.replace(paths.accounts.myProfile()));
     }
   }, [formState, queryClient, router]);
 
@@ -314,7 +315,7 @@ export function UpdateProfileForm({
   return (
     <>
       {isPending && <DataLoader />}
-      <UpdateProfile userData={user} />
+      <Form userData={user} />
     </>
   );
 }
