@@ -17,7 +17,7 @@ interface HeaderProps {
 export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
 
-  const { data } = useGetProfile();
+  const { data, isPending } = useGetProfile();
 
   const navLinks =
     variant === "dashboard"
@@ -75,7 +75,13 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       );
     }
 
-    return data && <ProfileDropdown user={data.data} />;
+    if (isPending) {
+      return <p>Loading...</p>;
+    }
+
+    if (data) {
+      return <ProfileDropdown user={data.data} />;
+    }
   };
 
   return (
