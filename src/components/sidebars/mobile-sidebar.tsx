@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Logo } from "@/lib/assets";
 
 interface MobileSidebarProps {
-  Navlinks: Array<{
+  NavLinks: Array<{
     name: string;
     path: string;
   }>;
@@ -21,7 +21,7 @@ interface MobileSidebarProps {
 }
 
 export function MobileSidebar({
-  Navlinks,
+  NavLinks,
   variant,
   session,
 }: MobileSidebarProps) {
@@ -57,7 +57,7 @@ export function MobileSidebar({
                 </button>
               </div>
               <ul className="flex flex-col gap-4">
-                {Navlinks.map((link) => (
+                {NavLinks.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.path}
