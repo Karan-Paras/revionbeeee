@@ -1,11 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { paths } from "@/routes";
 import { UpdateProfileSchema } from "@/features/user/schemas";
 import { updateProfile as updateProfileApi } from "@/features/user/api/update-profile";
 import type { ApiErrorResponse } from "@/types/api";
 import { auth, unstable_update } from "@/auth";
+import { revalidateTag } from "next/cache";
 
 type UpdateProfileFormState = {
   errors: {
@@ -19,6 +18,7 @@ type UpdateProfileFormState = {
     address?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const updateProfile = async (
@@ -99,5 +99,6 @@ export const updateProfile = async (
     });
   }
 
-  redirect(paths.accounts.myProfile());
+  revalidateTag("profile");
+  return { errors: {}, success: true };
 };

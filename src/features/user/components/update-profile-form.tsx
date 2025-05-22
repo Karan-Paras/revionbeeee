@@ -12,10 +12,13 @@ import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Camera, Mars, Venus } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
+import { paths } from "@/routes";
 import { ApiSuccessResponse } from "@/types/api";
 import { User } from "@/types/user";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { startTransition, useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect, useState } from "react";
 
 interface UpdateProfileProps {
   userData: User;
@@ -40,6 +43,19 @@ function UpdateProfile({ userData }: UpdateProfileProps) {
   const [profilePicture, setProfilePicture] = useState(userProfilePicture);
 
   const [genderValue, setGenderValue] = useState(gender);
+
+  const queryClient = useQueryClient();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (formState.success) {
+      queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
+      router.replace(paths.accounts.myProfile());
+    }
+  }, [formState, queryClient, router]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
