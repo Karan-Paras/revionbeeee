@@ -10,9 +10,10 @@ import { paths } from "@/routes";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { Logo } from "@/lib/assets";
+import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 
 interface MobileSidebarProps {
-  Navlinks: Array<{
+  NavLinks: Array<{
     name: string;
     path: string;
   }>;
@@ -21,11 +22,13 @@ interface MobileSidebarProps {
 }
 
 export function MobileSidebar({
-  Navlinks,
+  NavLinks,
   variant,
   session,
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data } = useGetProfile();
 
   return (
     <>
@@ -57,7 +60,7 @@ export function MobileSidebar({
                 </button>
               </div>
               <ul className="flex flex-col gap-4">
-                {Navlinks.map((link) => (
+                {NavLinks.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.path}
@@ -105,7 +108,7 @@ export function MobileSidebar({
                     </Link>
                   )
                 ) : (
-                  session?.user && <ProfileDropdown user={session?.user} />
+                  data && <ProfileDropdown user={data.data} />
                 )}
               </div>
             </motion.div>

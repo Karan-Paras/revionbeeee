@@ -4,11 +4,12 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { User } from "next-auth";
+
 import { getUserImageUrl } from "@/lib/media-urls";
 import Link from "next/link";
 import { ChevronDown } from "@/lib/icons";
 import { paths } from "@/routes";
+import { User } from "@/types/user";
 
 interface ProfileDropdownProps {
   user: User;
@@ -34,16 +35,17 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
     };
   }, []);
 
+  const { firstName, lastName, profilePicture } = user;
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2 cursor-pointer focus:outline-none md:w-auto w-full md:justify-start justify-between"
       >
-        {user.image ? (
+        {profilePicture ? (
           <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200 relative">
             <Image
-              src={getUserImageUrl(user.image)}
+              src={getUserImageUrl(profilePicture)}
               alt="User Profile Picture"
               className="object-cover"
               fill
@@ -52,11 +54,13 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
         ) : (
           <div className="size-14 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
             <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold w-full h-full">
-              {user.name?.charAt(0).toUpperCase()}
+              {user.firstName?.charAt(0).toUpperCase()}
             </div>
           </div>
         )}
-        <span className="md:inline text-[#505050]">{user.name}</span>
+        <span className="md:inline text-[#505050]">
+          {firstName}&nbsp;{lastName}
+        </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}

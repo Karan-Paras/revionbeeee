@@ -12,7 +12,7 @@ interface NavLinkProps {
   active?: boolean;
 }
 
-export default function NavLink({
+export function NavLink({
   active,
   href,
   activeClassName,

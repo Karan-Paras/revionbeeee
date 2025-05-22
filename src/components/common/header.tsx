@@ -2,7 +2,8 @@
 
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
-import NavLink from "@/components/ui/navlink";
+import { NavLink } from "@/components/ui/nav-link";
+import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
 import { signOut, useSession } from "next-auth/react";
@@ -14,7 +15,9 @@ interface HeaderProps {
 }
 
 export function Header({ variant = "dashboard" }: HeaderProps) {
-  const { data: userSession, status } = useSession();
+  const { data: session, status } = useSession();
+
+  const { data } = useGetProfile();
 
   const navLinks =
     variant === "dashboard"
@@ -38,8 +41,8 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     }
 
     if (variant === "home") {
-      if (userSession) {
-        const { user } = userSession;
+      if (session) {
+        const { user } = session;
         const isProfileComplete = user.name && user.image;
 
         return (
@@ -72,7 +75,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       );
     }
 
-    return userSession?.user && <ProfileDropdown user={userSession.user} />;
+    return data && <ProfileDropdown user={data.data} />;
   };
 
   return (
@@ -111,9 +114,9 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
         </div>
 
         <MobileSidebar
-          Navlinks={navLinks}
+          NavLinks={navLinks}
           variant={variant}
-          session={userSession}
+          session={session}
         />
       </div>
     </header>
