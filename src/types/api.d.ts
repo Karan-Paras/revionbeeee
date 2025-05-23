@@ -3,6 +3,7 @@ export type Method = "POST" | "GET";
 export interface ApiSuccessResponse<T> {
   token?: string;
   status: 200;
+  code?: number;
   message: string;
   data: T;
   totalCount?: number;
@@ -10,6 +11,7 @@ export interface ApiSuccessResponse<T> {
 
 export interface ApiErrorResponse {
   status: number;
+  code?: number;
   message: string;
 }
 

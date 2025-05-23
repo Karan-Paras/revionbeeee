@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
-import { signOut } from "next-auth/react";
 import { paths } from "@/routes";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { Logo } from "@/lib/assets";
 import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { useLogout } from "@/features/hooks/use-logout";
 
 interface MobileSidebarProps {
   NavLinks: Array<{
@@ -27,6 +27,8 @@ export function MobileSidebar({
   session,
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const logout = useLogout();
 
   const { data } = useGetProfile();
 
@@ -93,7 +95,7 @@ export function MobileSidebar({
                         </Link>
                       )}
                       <button
-                        onClick={() => signOut()}
+                        onClick={() => logout()}
                         className="w-full border-2 mb-3 lg:mb-0 rounded-xl border-[#53A2EB] text-[#53A2EB] px-4 py-2 font-semibold hover:bg-[#53A2EB] hover:text-white transition"
                       >
                         Logout

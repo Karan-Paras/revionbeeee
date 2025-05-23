@@ -3,13 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { signOut } from "next-auth/react";
 
 import { getUserImageUrl } from "@/lib/media-urls";
 import Link from "next/link";
 import { ChevronDown } from "@/lib/icons";
 import { paths } from "@/routes";
 import { User } from "@/types/user";
+import { useLogout } from "@/features/hooks/use-logout";
 
 interface ProfileDropdownProps {
   user: User;
@@ -17,6 +17,9 @@ interface ProfileDropdownProps {
 
 export function ProfileDropdown({ user }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const logout = useLogout();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -97,7 +100,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
               Contact
             </Link>
             <button
-              onClick={() => signOut()}
+              onClick={() => logout()}
               className="block w-full text-left px-4 py-2 text-sm pb-2 mb-2 text-gray-700 cursor-pointer"
             >
               Sign out

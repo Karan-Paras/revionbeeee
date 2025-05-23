@@ -8,12 +8,17 @@ import { paths } from "@/routes";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { toast } from "sonner";
 
 export function UserProfileCard() {
-  const { data, isPending } = useGetProfile();
+  const { data, isPending, error } = useGetProfile();
 
   if (isPending) {
     return <DataLoader />;
+  }
+
+  if (error) {
+    toast.error(error.message);
   }
 
   if (data) {
