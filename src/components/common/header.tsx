@@ -3,10 +3,11 @@
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
+import { useLogout } from "@/features/hooks/use-logout";
 import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,6 +17,8 @@ interface HeaderProps {
 
 export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
+
+  const logout = useLogout();
 
   const { data, isPending } = useGetProfile();
 
@@ -56,7 +59,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
               {isProfileComplete ? "Go to Dashboard" : "Complete Profile"}
             </Link>
             <button
-              onClick={() => signOut()}
+              onClick={() => logout()}
               className="border-2 rounded-xl border-[#53A2EB] text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
             >
               Logout

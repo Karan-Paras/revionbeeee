@@ -50,52 +50,50 @@ const MinusIcon = () => (
     <rect y="0.763428" width="24" height="4" fill="#53A2EB" />
   </svg>
 );
-export default function FAQAccordion() {
+export function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
   return (
-    <>
-      <div className="w-full my-4">
-        {items.map((item, index) => (
-          <div key={item.id} className="rounded-xl bg-white mb-5">
-            <button
-              className="flex items-center justify-between w-full cursor-pointer px-4 py-5 text-left rounded-xl font-medium text-[#000000] text-xl"
-              onClick={() => toggle(index)}
+    <div className="w-full my-4">
+      {items.map((item, index) => (
+        <div key={item.id} className="rounded-xl bg-white mb-5">
+          <button
+            className="flex items-center justify-between w-full cursor-pointer px-4 py-5 text-left rounded-xl font-medium text-[#000000] text-xl"
+            onClick={() => toggle(index)}
+          >
+            <span>{item.title}</span>
+            <motion.div
+              initial={false}
+              animate={{ rotate: openIndex === index ? 0 : 0 }}
+              transition={{ duration: 0.3 }}
             >
-              <span>{item.title}</span>
-              <motion.div
-                initial={false}
-                animate={{ rotate: openIndex === index ? 0 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {openIndex === index ? <MinusIcon /> : <PlusIcon />}
-              </motion.div>
-            </button>
+              {openIndex === index ? <MinusIcon /> : <PlusIcon />}
+            </motion.div>
+          </button>
 
-            <AnimatePresence initial={false}>
-              {openIndex === index && (
-                <motion.div
-                  key="content"
-                  initial="collapsed"
-                  animate="open"
-                  exit="collapsed"
-                  variants={{
-                    open: { height: "auto", opacity: 1 },
-                    collapsed: { height: 0, opacity: 0 },
-                  }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-5 py-5 font-light">{item.content}</div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </div>
-    </>
+          <AnimatePresence initial={false}>
+            {openIndex === index && (
+              <motion.div
+                key="content"
+                initial="collapsed"
+                animate="open"
+                exit="collapsed"
+                variants={{
+                  open: { height: "auto", opacity: 1 },
+                  collapsed: { height: 0, opacity: 0 },
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="px-5 py-5 font-light">{item.content}</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
+    </div>
   );
 }

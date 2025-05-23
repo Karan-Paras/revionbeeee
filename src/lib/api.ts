@@ -42,7 +42,7 @@ export default async function api<T>(
     const json: ApiResponse<T> = await response.json();
     console.log(url, body, json);
 
-    if (json.status !== 200) {
+    if (json.status != 200) {
       throw new Error(json.message);
     }
 

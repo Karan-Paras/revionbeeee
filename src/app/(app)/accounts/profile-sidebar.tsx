@@ -3,9 +3,9 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { signOut } from "next-auth/react";
 import { CircleUser, LogOut, Settings, Video } from "@/lib/icons";
 import { paths } from "@/routes";
+import { useLogout } from "@/features/hooks/use-logout";
 
 const sidebarItems = [
   {
@@ -26,6 +26,8 @@ const sidebarItems = [
 ];
 
 export function ProfileSidebar() {
+  const logout = useLogout();
+
   const pathname = usePathname();
   return (
     <div className="itm bg-white rounded-xl grad_colr">
@@ -47,7 +49,7 @@ export function ProfileSidebar() {
             </Link>
           </li>
         ))}
-        <li onClick={() => signOut()} className="rounded-xl  flex gap-2  ">
+        <li onClick={() => logout()} className="rounded-xl  flex gap-2  ">
           <div className="flex gap-2 cursor-pointer p-4 w-full">
             <span>
               <LogOut />
