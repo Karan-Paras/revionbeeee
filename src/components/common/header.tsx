@@ -54,7 +54,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
               href={
                 isProfileComplete ? paths.dashboard() : paths.createProfile()
               }
-              className="flex border-2 mb-4 rounded-xl border-[#53A2EB] text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+              className="flex border-2  rounded-xl border-[#53A2EB] text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
             >
               {isProfileComplete ? "Go to Dashboard" : "Complete Profile"}
             </Link>
