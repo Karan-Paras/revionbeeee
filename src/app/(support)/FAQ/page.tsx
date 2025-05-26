@@ -1,4 +1,4 @@
-import { FaqAccordion } from "@/components/accordians/FAQ-accordion";
+import { FaqAccordion } from "@/components/accordions/faq-accordion";
 import { Faq, Faq2 } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";

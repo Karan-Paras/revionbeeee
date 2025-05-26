@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { CircleUser, LogOut, Settings, Video } from "@/lib/icons";
 import { paths } from "@/routes";
-import { useLogout } from "@/features/hooks/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 const sidebarItems = [
   {
