@@ -3,7 +3,7 @@
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
-import { useLogout } from "@/features/hooks/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useGetProfile } from "@/features/user/hooks/use-get-profile";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
