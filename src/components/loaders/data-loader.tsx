@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import React from "react";
+import * as motion from "motion/react-client";
 
 const Cube = ({ size }: { size: number }) => {
   const faceCommon: React.CSSProperties = {
