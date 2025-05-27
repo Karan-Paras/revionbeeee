@@ -1,7 +1,7 @@
 "use client";
 
 import { DataLoader } from "@/components/loaders/data-loader";
-import { useGetTopics } from "@/features/questions/hooks/use-get-topics";
+import { useGetTopics } from "@/features/questions/queries/use-get-topics";
 import { ChevronRight } from "@/lib/icons";
 import Link from "next/link";
 import { toast } from "sonner";

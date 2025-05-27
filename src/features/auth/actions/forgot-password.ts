@@ -1,7 +1,5 @@
 "use server";
 
-import { paths } from "@/routes";
-import { redirect } from "next/navigation";
 import { forgotPassword as forgotPasswordApi } from "@/features/auth/api/forgot-password";
 import type { ApiErrorResponse } from "@/types/api";
 import { ForgotPasswordSchema } from "@/features/auth/schemas";
@@ -11,6 +9,7 @@ type ForgotPasswordFormState = {
     email?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const forgotPassword = async (
@@ -37,5 +36,5 @@ export const forgotPassword = async (
     }
   }
 
-  redirect(paths.emailSent());
+  return { errors: {}, success: true };
 };

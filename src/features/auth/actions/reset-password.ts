@@ -1,7 +1,5 @@
 "use server";
 
-import { paths } from "@/routes";
-import { redirect } from "next/navigation";
 import { resetPassword as resetPasswordApi } from "@/features/auth/api/reset-password";
 import type { ApiErrorResponse } from "@/types/api";
 import { ResetPasswordSchema } from "@/features/auth/schemas";
@@ -12,6 +10,7 @@ type ResetPasswordFormState = {
     confirmPassword?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const resetPassword = async (
@@ -40,5 +39,5 @@ export const resetPassword = async (
     }
   }
 
-  redirect(paths.passwordChanged());
+  return { errors: {}, success: true };
 };

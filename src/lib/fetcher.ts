@@ -41,9 +41,7 @@ export default async function fetcher<T>(
     const json: ApiResponse<T> = await response.json();
     console.log(url, body, json);
 
-    if (json.status == 401 || json?.code == 401) {
-      Promise.reject("Unauthorized");
-    } else if (json.status != 200) {
+    if (json.status != 200) {
       throw new Error(json.message);
     }
 

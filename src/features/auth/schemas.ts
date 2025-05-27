@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-const email = z.string().email({ message: "Invalid email address" });
+import { email } from "@/lib/schemas";
 
 const password = z.string().trim().min(1, { message: "Password is required" });
 
