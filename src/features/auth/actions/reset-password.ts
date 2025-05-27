@@ -20,7 +20,7 @@ export const resetPassword = async (
 ): Promise<ResetPasswordFormState> => {
   const validatedFields = ResetPasswordSchema.safeParse({
     password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    confirmPassword: formData.get("confirm-password"),
   });
 
   if (!validatedFields.success) {

@@ -23,11 +23,23 @@ export const register = async (
   const validatedFields = RegisterSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    confirmPassword: formData.get("confirm-password"),
   });
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  const termsAndConditions = formData.get("terms-and-conditions");
+
+  if (termsAndConditions !== "on") {
+    return {
+      errors: {
+        _form: [
+          "You must agree to the Terms & Conditions and Privacy Policy before registering.",
+        ],
+      },
+    };
   }
 
   try {

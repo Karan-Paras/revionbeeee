@@ -19,9 +19,9 @@ export const changePassword = async (
   formData: FormData
 ): Promise<ChangePasswordFormState> => {
   const validatedFields = ChangePasswordSchema.safeParse({
-    currentPassword: formData.get("currentPassword"),
-    newPassword: formData.get("newPassword"),
-    confirmPassword: formData.get("confirmPassword"),
+    currentPassword: formData.get("current-password"),
+    newPassword: formData.get("new-password"),
+    confirmPassword: formData.get("confirm-password"),
   });
 
   if (!validatedFields.success) {
