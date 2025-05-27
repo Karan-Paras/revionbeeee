@@ -2,10 +2,13 @@
 
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { resetPassword } from "@/features/auth/actions/reset-password";
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/ui/error-block";
+import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password";
+import { useRouter } from "next/navigation";
+import { paths } from "@/routes";
 
 interface ResetPasswordFormProps {
   token: string;
@@ -18,6 +21,17 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       errors: {},
     }
   );
+
+  const router = useRouter();
+
+  const { setHasChangedPassword } = useForgotPasswordStore();
+
+  useEffect(() => {
+    if (formState.success) {
+      setHasChangedPassword(true);
+      router.push(paths.passwordChanged());
+    }
+  }, [formState, router, setHasChangedPassword]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

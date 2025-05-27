@@ -5,12 +5,26 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { forgotPassword } from "@/features/auth/actions/forgot-password";
-import { startTransition, useActionState } from "react";
+import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password";
+import { paths } from "@/routes";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect } from "react";
 
 export function ForgotPasswordForm() {
   const [formState, action, isPending] = useActionState(forgotPassword, {
     errors: {},
   });
+
+  const router = useRouter();
+
+  const { setHasFilledEmail } = useForgotPasswordStore();
+
+  useEffect(() => {
+    if (formState.success) {
+      setHasFilledEmail(true);
+      router.push(paths.emailSent());
+    }
+  }, [formState, router, setHasFilledEmail]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

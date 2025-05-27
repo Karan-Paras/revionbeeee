@@ -1,6 +1,6 @@
 "use client";
 
-import { useLogout } from "@/features/auth/hooks/use-logout";
+import { useLogout } from "@/features/auth/queries/use-logout";
 import { useEffect } from "react";
 
 export default function Error() {

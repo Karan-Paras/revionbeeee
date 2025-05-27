@@ -1,5 +1,5 @@
-import { email } from "@/lib/schemas";
 import { z } from "zod";
+import { email } from "@/lib/schemas";
 
 export const ContactUsSchema = z.object({
   attachment: z.instanceof(File).optional(),

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
+    "test": "vitest",
     "prepare": "husky"
   },
   "dependencies": {
@@ -25,22 +26,29 @@
     "slick-carousel": "^1.8.1",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
-    "zod": "^3.24.4"
+    "zod": "^3.24.4",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-slick": "^0.23.13",
+    "@vitejs/plugin-react": "^4.5.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^16.0.0",
     "prettier": "3.5.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

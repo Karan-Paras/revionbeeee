@@ -3,17 +3,31 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
 import { getUserImageUrl } from "@/lib/media-urls";
 import Link from "next/link";
 import { ChevronDown } from "@/lib/icons";
 import { paths } from "@/routes";
 import { User } from "@/types/user";
-import { useLogout } from "@/features/auth/hooks/use-logout";
+import { useLogout } from "@/features/auth/queries/use-logout";
 
 interface ProfileDropdownProps {
   user: User;
 }
+
+const LINKS = [
+  {
+    name: "Profile",
+    href: paths.accounts.myProfile(),
+  },
+  {
+    name: "Subscription",
+    href: paths.accounts.subscription(),
+  },
+  {
+    name: "Settings",
+    href: paths.accounts.settings(),
+  },
+];
 
 export function ProfileDropdown({ user }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +35,10 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
   const logout = useLogout();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,24 +99,16 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             transition={{ duration: 0.2 }}
             className="absolute right-0 mt-2 w-48 bg-white rounded-xl md:shadow-2xl shadow-2xl/5 md:border-b border-b-0 border-[#858080] pt-2  z-50 "
           >
-            <Link
-              href={paths.accounts.myProfile()}
-              className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
-            >
-              Profile
-            </Link>
-            <Link
-              href={paths.accounts.settings()}
-              className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
-            >
-              Settings
-            </Link>
-            <Link
-              href="/accounts/subscription"
-              className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700 "
-            >
-              Contact
-            </Link>
+            {LINKS.map(({ name, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700"
+                onClick={closeDropdown}
+              >
+                {name}
+              </Link>
+            ))}
             <button
               onClick={() => logout()}
               className="block w-full text-left px-4 py-2 text-sm pb-2 mb-2 text-gray-700 cursor-pointer"
