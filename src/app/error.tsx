@@ -1,14 +1,14 @@
 "use client";
 
-import { useLogout } from "@/features/auth/queries/use-logout";
-import { useEffect } from "react";
+// import { useLogout } from "@/features/auth/queries/use-logout";
+// import { useEffect } from "react";
 
 export default function Error() {
-  const logout = useLogout();
+  // const logout = useLogout();
 
-  useEffect(() => {
-    logout();
-  }, [logout]);
+  // useEffect(() => {
+  //   logout();
+  // }, [logout]);
 
   return (
     <div className="text-black flex items-center min-h-screen justify-center flex-col">

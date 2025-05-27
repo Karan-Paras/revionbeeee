@@ -6,6 +6,7 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { register } from "@/features/auth/actions/register";
+import { paths } from "@/routes";
 import Link from "next/link";
 import { startTransition, useActionState } from "react";
 
@@ -17,6 +18,7 @@ export function RegisterForm() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
     startTransition(() => {
       action(formData);
     });
@@ -55,7 +57,7 @@ export function RegisterForm() {
           <FormLabel htmlFor="confirm-password">Confirm Password</FormLabel>
           <Input
             id="confirm-password"
-            name="confirmPassword"
+            name="confirm-password"
             iconClassName="pass_bg"
             type="password"
             placeholder="Confirm password"
@@ -66,22 +68,27 @@ export function RegisterForm() {
         </div>
         <div className="flex justify-between items-center mb-8">
           <div className="chk flex gap-1.5 items-start flex-wrap">
-            <Checkbox required />
+            <Checkbox
+              id="terms-and-conditions"
+              disabled={isPending}
+              name="terms-and-conditions"
+            />
             <label
-              htmlFor="vehicle1"
+              htmlFor="
+                terms-and-conditions"
               className="text-[#0B0B0B] font-light text-sm md:w-8/12 w-10/12"
             >
               By signing up, you are agreeing to our&nbsp;
               <Link
                 className="text-[#53A2EB] underline underline-offset-5 font-semibold"
-                href="/signup"
+                href={paths.termsAndConditions()}
               >
                 Terms & Conditions&nbsp;
               </Link>
               &nbsp; and&nbsp;
               <Link
                 className="text-[#53A2EB] underline underline-offset-5 font-semibold"
-                href="/signup"
+                href={paths.privacyPolicy()}
               >
                 &nbsp; Privacy Policy.
               </Link>

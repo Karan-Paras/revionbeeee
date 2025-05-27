@@ -36,7 +36,7 @@ export function ChangePasswordForm() {
           placeholder="Enter Current password"
           variant="bordered"
           id="current-password"
-          name="currentPassword"
+          name="current-password"
           type="password"
           disabled={isPending}
           errors={formState.errors.currentPassword}
@@ -49,7 +49,7 @@ export function ChangePasswordForm() {
           placeholder="Enter New password"
           variant="bordered"
           id="new-password"
-          name="newPassword"
+          name="new-password"
           type="password"
           disabled={isPending}
           errors={formState.errors.newPassword}
@@ -62,7 +62,7 @@ export function ChangePasswordForm() {
           placeholder="Enter Re-Type New Password "
           variant="bordered"
           id="confirm-password"
-          name="confirmPassword"
+          name="confirm-password"
           type="password"
           disabled={isPending}
           errors={formState.errors.confirmPassword}

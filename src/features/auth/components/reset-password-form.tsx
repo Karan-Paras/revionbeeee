@@ -62,7 +62,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             <FormLabel htmlFor="confirm-password">Confirm Password</FormLabel>
             <Input
               id="confirm-password"
-              name="confirmPassword"
+              name="confirm-password"
               iconClassName="pass_bg"
               type="password"
               placeholder="Confirm password"
