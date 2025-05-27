@@ -5,6 +5,7 @@ import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
 import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { isUserProfileComplete } from "@/features/user/utils";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
 import { useSession } from "next-auth/react";
@@ -46,7 +47,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     if (variant === "home") {
       if (session) {
         const { user } = session;
-        const isProfileComplete = user.name && user.image;
+        const isProfileComplete = isUserProfileComplete(user);
 
         return (
           <div className="flex gap-5">

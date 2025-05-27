@@ -6,6 +6,7 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
+import { isUserProfileComplete } from "@/features/user/utils";
 import { paths } from "@/routes";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
@@ -21,7 +22,19 @@ export function LoginForm() {
 
   useEffect(() => {
     if (formState.success) {
-      getSession().then(() => router.replace(paths.home()));
+      getSession().then((data) => {
+        if (!data?.user) {
+          return router.replace(paths.login());
+        }
+
+        const isProfileComplete = isUserProfileComplete(data?.user);
+
+        const redirectPath = isProfileComplete
+          ? paths.dashboard()
+          : paths.createProfile();
+
+        router.replace(redirectPath);
+      });
     }
   }, [formState, router]);
 
