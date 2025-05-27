@@ -4,6 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetTopics = () => {
   return useQuery({
     queryKey: ["topics"],
-    queryFn: () => getTopics(),
+    queryFn: getTopics,
   });
 };
