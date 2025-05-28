@@ -13,7 +13,7 @@ export function Pricing() {
                     <rect y="0.5" width="42" height="1" fill="#53A2EB" />
                   </svg>
                 </span>
-                <p className="text-[#53A2EB]">Select your Subject</p>
+                <p className="text-[#53A2EB]">Pricing Plan</p>
               </div>
               <div className="hed">
                 <h3 className="md:text-5xl text-3xl font-bold leading-normal">

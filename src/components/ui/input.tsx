@@ -77,7 +77,18 @@ export function Input({
           )}
         </div>
       ) : (
-        <>{inputElement}</>
+        <div className="relative">
+          {inputElement}
+          {props.type === "password" && (
+            <button
+              type="button"
+              onClick={handlePasswordToggle}
+              className="pass_icon absolute right-5 top-0 bottom-0  content-center cursor-pointer"
+            >
+              <span>{showPassword ? <Eye /> : <EyeOff />}</span>
+            </button>
+          )}
+        </div>
       )}
       {!!errors && <InputError error={errors?.join(", ")} />}
     </>

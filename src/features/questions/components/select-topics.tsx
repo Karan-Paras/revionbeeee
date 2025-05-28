@@ -28,7 +28,7 @@ export function SelectTopics() {
               <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
                 <h3 className="font-bold md:text-2xl text-xl">{topicName}</h3>
               </div>
-              <ul>
+              <ul className="overflow-y-auto max-h-[410px] min-h-[400px]">
                 {subjects.map(({ id, subjectName }) => (
                   <li
                     key={id}
