@@ -262,6 +262,9 @@ function Form({ userData }: FormProps) {
                 disabled={isPending}
                 errors={formState.errors.phoneNumber}
                 autoComplete="tel"
+                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
               />
             </div>
           </div>
