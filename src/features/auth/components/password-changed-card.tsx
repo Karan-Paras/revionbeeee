@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password";
 import { PassChng } from "@/lib/assets";
@@ -11,12 +12,16 @@ import { useRouter } from "next/navigation";
 export function PasswordChangedCard() {
   const { hasChangedPassword, setHasChangedPassword } =
     useForgotPasswordStore();
-
   const router = useRouter();
 
+  useEffect(() => {
+    if (!hasChangedPassword) {
+      setHasChangedPassword(false);
+      router.push(paths.forgotPassword());
+    }
+  }, [hasChangedPassword, router, setHasChangedPassword]);
+
   if (!hasChangedPassword) {
-    setHasChangedPassword(false);
-    router.push(paths.forgotPassword());
     return null;
   }
 

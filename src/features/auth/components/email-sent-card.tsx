@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password";
 import { PassChng } from "@/lib/assets";
 import { paths } from "@/routes";
@@ -8,12 +9,16 @@ import { useRouter } from "next/navigation";
 
 export function EmailSentCard() {
   const { hasFilledEmail, setHasFilledEmail } = useForgotPasswordStore();
-
   const router = useRouter();
 
+  useEffect(() => {
+    if (!hasFilledEmail) {
+      setHasFilledEmail(false);
+      router.push(paths.forgotPassword());
+    }
+  }, [hasFilledEmail, router, setHasFilledEmail]);
+
   if (!hasFilledEmail) {
-    setHasFilledEmail(false);
-    router.push(paths.forgotPassword());
     return null;
   }
 
