@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function SubscriptionPlans() {
   return (
-    <section className="mths_bg p-5 h-screen bg-no-repeat bg-cover ">
+    <section className="mths_bg p-5 2xl:h-screen md:min-h-screen bg-no-repeat bg-cover ">
       <div className="container mx-auto h-full">
         <div className="grid grid-cols-3 h-full content-center gap-8">
           <div className="col-span-3">
@@ -17,7 +17,7 @@ export default function SubscriptionPlans() {
               </p>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="col-span-3 2xl:col-span-1 xl:col-span-1 lg:col-span-1   ">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">
@@ -68,7 +68,7 @@ export default function SubscriptionPlans() {
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="col-span-3 2xl:col-span-1 xl:col-span-1 lg:col-span-1   ">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">
@@ -119,7 +119,7 @@ export default function SubscriptionPlans() {
               </div>
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="col-span-3 2xl:col-span-1 xl:col-span-1 lg:col-span-1   ">
             <div className="crd border rounded-3xl relative bg-white border-[#D5D5D5] shadow-lg">
               <div className="upr p-6 border-b border-[#D5D5D5]">
                 <h3 className="text-2xl text-black font-semibold pb-3.5">
