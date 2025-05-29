@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { InputError } from "@/components/ui/input-error";
 import { createProfile } from "@/features/user/actions/create-profile";
 import { Camera } from "@/lib/icons";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { startTransition, useActionState, useState } from "react";
 
@@ -31,7 +32,12 @@ export function CreateProfileForm() {
         <div className="grid grid-cols-2">
           <div className="col-span-2">
             <div className="w-28 h-28 mb-4 relative mx-auto  flex items-center justify-center mt-5 border-dotted border rounded-full">
-              <div className="size-[6.6rem] rounded-full overflow-hidden blk bg-cover bg-no-repeat flex items-center justify-center">
+              <div
+                className={cn(
+                  "size-[6.6rem] rounded-full overflow-hidden bg-cover bg-no-repeat flex items-center justify-center",
+                  !profilePicture && "blk"
+                )}
+              >
                 {profilePicture && (
                   <Image
                     className="object-cover rounded-full w-full h-full "
