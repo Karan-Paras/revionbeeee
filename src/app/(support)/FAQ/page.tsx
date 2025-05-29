@@ -1,5 +1,6 @@
 import { FaqAccordion } from "@/components/accordions/faq-accordion";
 import { Faq, Faq2 } from "@/lib/assets";
+import { Minus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,9 +36,7 @@ export default function FAQ() {
             <div className="col-span-2">
               <div className="itm flex items-center gap-1.5 uppercase">
                 <span>
-                  <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
-                    <rect y="0.5" width="42" height="1" fill="#53A2EB" />
-                  </svg>
+                  <Minus width={42} height={2} color="#53A2EB" />
                 </span>
                 <p className="text-[#53A2EB]">Select your Subject</p>
               </div>
@@ -55,20 +54,18 @@ export default function FAQ() {
             </div>
             <div className="col-span-1">
               <div className="img border-4 border-white rounded-xl overflow-hidden shadow-xl/5">
-                <Image src={Faq} alt=""></Image>
+                <Image src={Faq} alt="Faq" />
               </div>
             </div>
             <div className="col-span-1">
               <div className="img border-4 border-white rounded-xl overflow-hidden shadow-xl/5">
-                <Image src={Faq2} alt=""></Image>
+                <Image src={Faq2} alt="Faq2" />
               </div>
             </div>
             <div className="col-span-2">
               <div className="itm flex items-center gap-1.5 uppercase">
                 <span>
-                  <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
-                    <rect y="0.5" width="42" height="1" fill="#53A2EB" />
-                  </svg>
+                  <Minus width={42} height={2} color="#53A2EB" />
                 </span>
                 <p className="text-[#53A2EB]">Select your Subject</p>
               </div>

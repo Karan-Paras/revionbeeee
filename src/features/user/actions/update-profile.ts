@@ -25,13 +25,13 @@ export const updateProfile = async (
   formData: FormData
 ): Promise<UpdateProfileFormState> => {
   const validatedFields = UpdateProfileSchema.safeParse({
-    profilePicture: formData.get("profilePicture"),
-    firstName: formData.get("firstName")?.toString() || "",
-    lastName: formData.get("lastName")?.toString() || "",
+    profilePicture: formData.get("profile-picture"),
+    firstName: formData.get("first-name")?.toString() || "",
+    lastName: formData.get("last-name")?.toString() || "",
     city: formData.get("city")?.toString() || "",
     state: formData.get("state")?.toString() || "",
     gender: formData.get("gender")?.toString() || "",
-    phoneNumber: formData.get("phoneNumber")?.toString() || "",
+    phoneNumber: formData.get("phone-number")?.toString() || "",
     address: formData.get("address")?.toString() || "",
   });
 

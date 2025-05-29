@@ -22,10 +22,10 @@ export const createProfile = async (
   formData: FormData
 ): Promise<CreateProfileFormState> => {
   const validatedFields = CreateProfileSchema.safeParse({
-    profilePicture: formData.get("profilePicture"),
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    phoneNumber: formData.get("phoneNumber"),
+    profilePicture: formData.get("profile-picture"),
+    firstName: formData.get("first-name"),
+    lastName: formData.get("last-name"),
+    phoneNumber: formData.get("phone-number"),
   });
 
   if (!validatedFields.success) {

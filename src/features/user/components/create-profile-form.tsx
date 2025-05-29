@@ -53,7 +53,7 @@ export function CreateProfileForm() {
                 <Camera color="white" />
                 <input
                   id="profile-picture"
-                  name="profilePicture"
+                  name="profile-picture"
                   className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
                   type="file"
                   accept="image/*"
@@ -80,7 +80,7 @@ export function CreateProfileForm() {
               <FormLabel htmlFor="first-name">First name</FormLabel>
               <Input
                 id="first-name"
-                name="firstName"
+                name="first-name"
                 iconClassName="user_bg"
                 placeholder="Enter your First Name"
                 disabled={isPending}
@@ -94,7 +94,7 @@ export function CreateProfileForm() {
               <FormLabel htmlFor="last-name">Last name</FormLabel>
               <Input
                 id="last-name"
-                name="lastName"
+                name="last-name"
                 iconClassName="user_bg"
                 placeholder="Enter your Last Name"
                 disabled={isPending}
@@ -108,7 +108,7 @@ export function CreateProfileForm() {
               <FormLabel htmlFor="phone-number">Mobile Number</FormLabel>
               <Input
                 id="phone-number"
-                name="phoneNumber"
+                name="phone-number"
                 iconClassName="mob_bg"
                 type="tel"
                 placeholder="Enter Mobile Number"

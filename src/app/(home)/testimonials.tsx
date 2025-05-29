@@ -1,4 +1,5 @@
 import { LandingSlider } from "@/components/sliders/landing-slider";
+import { Minus } from "@/lib/icons";
 
 export function Testimonials() {
   return (
@@ -8,10 +9,8 @@ export function Testimonials() {
           <div className="col-span-2">
             <div className="itm mb-8 flex items-center gap-1.5 uppercase justify-center">
               <span>
-                <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
-                  <rect y="0.5" width="42" height="1" fill="#53A2EB" />
-                </svg>
-              </span>{" "}
+                <Minus width={42} height={2} color="#53A2EB" />
+              </span>
               <p className="text-[#53A2EB]">Testimonials</p>
             </div>
             <h2 className="font-bold md:text-6xl text-4xl text-center md:leading-20 leading-normal mb-8">
