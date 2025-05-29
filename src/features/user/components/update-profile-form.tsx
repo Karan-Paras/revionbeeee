@@ -95,7 +95,7 @@ function Form({ userData }: FormProps) {
           </div>
 
           <span className="absolute bottom-2 right-0 rounded-full flex items-center justify-center size-10 bg-[#53A2EB]   border border-white  ">
-            <Camera />
+            <Camera color="white" />
             <input
               id="profile-picture"
               name="profilePicture"

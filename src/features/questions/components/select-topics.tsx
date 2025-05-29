@@ -40,7 +40,7 @@ export function SelectTopics() {
                     >
                       <p className="font-semibold uppercase">{subjectName}</p>
                       <span>
-                        <ChevronRight color="black" />
+                        <ChevronRight />
                       </span>
                     </Link>
                   </li>

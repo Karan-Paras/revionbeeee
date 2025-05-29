@@ -86,7 +86,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown />
+          <ChevronDown className="size-8 fill-[#FBBE1B]" />
         </motion.div>
       </button>
 
