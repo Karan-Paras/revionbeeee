@@ -1,3 +1,4 @@
+import { Play } from "@/lib/icons";
 import Link from "next/link";
 
 export default function Quiz() {
@@ -60,14 +61,9 @@ export default function Quiz() {
             <div className="flex justify-center col-span-2">
               <button className="inline-flex gap-2 font-medium rounded-xl items-center bg-[#53A2EB] px-10 py-4 my-5  text-white mx-auto">
                 <span>
-                  <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
-                    <path
-                      d="M2.73747 17.015C1.22567 17.8822 0 17.1718 0 15.4295V2.57242C0 0.828419 1.22567 0.118927 2.73747 0.985298L13.9752 7.43008C15.4876 8.29758 15.4876 9.70305 13.9752 10.5703L2.73747 17.015Z"
-                      fill="white"
-                    />
-                  </svg>
-                </span>{" "}
-                Start Quiz{" "}
+                  <Play color="white" />
+                </span>
+                Start Quiz
               </button>
             </div>
           </div>

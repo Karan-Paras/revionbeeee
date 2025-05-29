@@ -50,7 +50,7 @@ export function CreateProfileForm() {
               </div>
 
               <span className="absolute bottom-0 right-0 rounded-full flex items-center justify-center w-8 h-8 bg-[#53A2EB]   border border-white  ">
-                <Camera />
+                <Camera color="white" />
                 <input
                   id="profile-picture"
                   name="profilePicture"

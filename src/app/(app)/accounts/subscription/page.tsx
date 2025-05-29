@@ -18,7 +18,7 @@ export default function Subscriptions() {
       )}
       <div className="subs bg-white px-7 py-8 rounded-xl">
         <h3 className="text-[#505050] font-bold border-b text-2xl pb-3 border-[#D9D9D9]">
-          Subscription{" "}
+          Subscription
         </h3>
         <div className="frm py-5">
           <div className=" border border-[#D5D5D5] rounded-2xl max-w-lg w-10/12 mx-auto">
@@ -47,7 +47,7 @@ export default function Subscriptions() {
               ].map((content) => (
                 <div key={content} className="itm flex gap-4 px-6 mb-5  ">
                   <div className="icn">
-                    <BadgeCheck />
+                    <BadgeCheck width={23} height={23} color="#FFCC00" />
                   </div>
                   <div className="desc">
                     <p>{content}</p>
