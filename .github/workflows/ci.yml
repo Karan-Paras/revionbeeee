@@ -1,4 +1,4 @@
-name: CI - Next.js (App Router + TypeScript + Vitest)
+name: CI
 
 on:
   push:

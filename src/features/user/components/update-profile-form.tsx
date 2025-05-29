@@ -73,7 +73,12 @@ function Form({ userData }: FormProps) {
 
       <form className="frm" onSubmit={handleFormSubmit}>
         <div className="size-40 mb-4 relative mx-auto  flex items-center justify-center mt-5 border border-white shadow-sm/30 rounded-full">
-          <div className="size-full rounded-full overflow-hidden blk bg-cover bg-no-repeat flex items-center justify-center">
+          <div
+            className={cn(
+              "size-full rounded-full overflow-hidden bg-cover bg-no-repeat flex items-center justify-center",
+              !profilePicture && "blk"
+            )}
+          >
             {profilePicture && (
               <Image
                 className="object-cover rounded-full w-full h-full "
