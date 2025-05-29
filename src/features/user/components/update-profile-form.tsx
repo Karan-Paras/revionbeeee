@@ -98,7 +98,7 @@ function Form({ userData }: FormProps) {
             <Camera color="white" />
             <input
               id="profile-picture"
-              name="profilePicture"
+              name="profile-picture"
               className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
               type="file"
               accept="image/*"
@@ -122,7 +122,7 @@ function Form({ userData }: FormProps) {
               </FormLabel>
               <Input
                 id="first-name"
-                name="firstName"
+                name="first-name"
                 placeholder="Enter your First Name"
                 variant="bordered"
                 defaultValue={firstName}
@@ -139,7 +139,7 @@ function Form({ userData }: FormProps) {
               </FormLabel>
               <Input
                 id="last-name"
-                name="lastName"
+                name="last-name"
                 placeholder="Enter your Last Name"
                 variant="bordered"
                 defaultValue={lastName}
@@ -259,7 +259,7 @@ function Form({ userData }: FormProps) {
               </FormLabel>
               <Input
                 id="phone-number"
-                name="phoneNumber"
+                name="phone-number"
                 type="tel"
                 placeholder="Enter Mobile Number"
                 variant="bordered"

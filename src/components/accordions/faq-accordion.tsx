@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Plus } from "@/lib/icons";
 
 type AccordionItem = {
   id: number;
@@ -36,20 +37,12 @@ const items: AccordionItem[] = [
   },
 ];
 
-const PlusIcon = () => (
-  <svg width="15" height="23" viewBox="0 0 23 23" fill="none">
-    <path
-      d="M13.9643 9.44643C13.7375 9.44643 13.5536 9.26253 13.5536 9.03572V0H9.44643V9.03572C9.44643 9.26253 9.26253 9.44643 9.03572 9.44643H0V13.5536H9.03572C9.26253 13.5536 9.44643 13.7375 9.44643 13.9643V23H13.5536V13.9643C13.5536 13.7375 13.7375 13.5536 13.9643 13.5536H23V9.44643H13.9643Z"
-      fill="#53A2EB"
-    />
-  </svg>
-);
-
 const MinusIcon = () => (
   <svg width="15" height="5" viewBox="0 0 24 5" fill="none">
     <rect y="0.763428" width="24" height="4" fill="#53A2EB" />
   </svg>
 );
+
 export function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -67,10 +60,10 @@ export function FaqAccordion() {
             <span>{item.title}</span>
             <motion.div
               initial={false}
-              animate={{ rotate: openIndex === index ? 0 : 0 }}
+              animate={{ rotate: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {openIndex === index ? <MinusIcon /> : <PlusIcon />}
+              {openIndex === index ? <MinusIcon /> : <Plus color="#53A2EB" />}
             </motion.div>
           </button>
 

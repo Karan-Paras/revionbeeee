@@ -1,6 +1,6 @@
 "use client";
 
-import { RevisionBee } from "@/lib/icons";
+import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -194,8 +194,8 @@ export default function QuizSteps() {
                 style={{
                   width: `${((displayQuestionIdx + 1) / questions.length) * 100}%`,
                 }}
-              ></motion.div>
-              <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl"></div>
+              />
+              <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl" />
             </div>
           </div>
           <div className="col-span-4 relative bg_shp md:order-2 md:block hidden">
@@ -206,14 +206,7 @@ export default function QuizSteps() {
           <div className="md:col-span-1 col-span-6 md:order-3 order-1">
             <button className="flex justify-end md:mb-0 mb-4 items-center gap-2 cursor-pointer ms-auto">
               <span className="text-[#F15642] text-xl font-semibold">Exit</span>
-              <svg width="32" height="33" viewBox="0 0 32 33" fill="none">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.1582 22.8357V25.9939C3.1582 29.4837 5.98637 32.3103 9.47461 32.3103H25.2656C28.7554 32.3103 31.582 29.4837 31.582 25.9939C31.582 20.7371 31.582 12.3031 31.582 7.04468C31.582 3.55644 28.7554 0.728271 25.2656 0.728271C20.751 0.728271 13.9908 0.728271 9.47461 0.728271C5.98637 0.728271 3.1582 3.55644 3.1582 7.04468V10.2029C3.1582 11.0745 3.86564 11.782 4.7373 11.782C5.60897 11.782 6.31641 11.0745 6.31641 10.2029C6.31641 10.2029 6.31641 8.72326 6.31641 7.04468C6.31641 5.30135 7.73128 3.88647 9.47461 3.88647H25.2656C27.0105 3.88647 28.4238 5.30135 28.4238 7.04468V25.9939C28.4238 27.7388 27.0105 29.1521 25.2656 29.1521C20.751 29.1521 13.9908 29.1521 9.47461 29.1521C7.73128 29.1521 6.31641 27.7388 6.31641 25.9939C6.31641 24.3169 6.31641 22.8357 6.31641 22.8357C6.31641 21.9656 5.60897 21.2566 4.7373 21.2566C3.86564 21.2566 3.1582 21.9656 3.1582 22.8357ZM15.1373 14.9402L13.0955 12.9C12.4796 12.2825 12.4796 11.283 13.0955 10.6656C13.7129 10.0497 14.7125 10.0497 15.3283 10.6656L20.0656 15.4029C20.6831 16.0203 20.6831 17.0198 20.0656 17.6373L15.3283 22.3746C14.7125 22.9904 13.7129 22.9904 13.0955 22.3746C12.4796 21.7572 12.4796 20.7576 13.0955 20.1402L15.1373 18.0984H1.5791C0.707438 18.0984 0 17.391 0 16.5193C0 15.6492 0.707438 14.9402 1.5791 14.9402H15.1373Z"
-                  fill="#F15642"
-                />
-              </svg>
+              <Exit color="#F15642" />
             </button>
           </div>
           {/* quiz block */}
@@ -230,7 +223,7 @@ export default function QuizSteps() {
                     duration: 0.4,
                     ease: "easeInOut",
                   }}
-                ></motion.div>
+                />
                 <div className="question_blk flex items-center gap-2.5 md:pt-32 mb-5 flex-wrap">
                   <div className="size-10 bg-white flex justify-center items-center rounded-full font-semibold">
                     {displayQuestionIdx + 1}
@@ -283,19 +276,7 @@ export default function QuizSteps() {
                   className="bg-white border-[#505050] text-[#505050] border p-4 rounded-xl flex gap-2 items-center justify-center  min-w-48 font-medium cursor-pointer hover:shadow-lg hover:bg-[#505050] hover:text-white duration-150 ease-in-out group"
                 >
                   <span>
-                    <svg
-                      className="rotate-180"
-                      width="17"
-                      height=" 11"
-                      viewBox="0 0 17 11"
-                      fill="none"
-                    >
-                      <path
-                        className="group-hover:fill-white"
-                        d="M16.9362 5.81429C16.8511 5.89286 16.8511 5.97143 16.766 6.05L11.6596 10.7643C11.3191 11.0786 10.8085 11.0786 10.4681 10.7643C10.1277 10.45 10.1277 9.97857 10.4681 9.66429L14.1277 6.28571H0.851064C0.340425 6.28571 0 5.97143 0 5.5C0 5.02857 0.340425 4.71429 0.851064 4.71429H14.1277L10.4681 1.33572C10.1277 1.02143 10.1277 0.549999 10.4681 0.235714C10.6383 0.0785713 10.8936 0 11.0638 0C11.234 0 11.4894 0.0785713 11.6596 0.235714L16.766 4.95C16.8511 5.02857 16.9362 5.10714 16.9362 5.18571C17.0213 5.42143 17.0213 5.57857 16.9362 5.81429Z"
-                        fill="#505050"
-                      />
-                    </svg>
+                    <ArrowLeft color="#505050" />
                   </span>
                   Previous
                 </motion.button>
@@ -309,18 +290,10 @@ export default function QuizSteps() {
                 >
                   Next
                   <span>
-                    <svg
-                      width="17"
-                      height=" 11"
-                      viewBox="0 0 17 11"
-                      fill="none"
-                    >
-                      <path
-                        className="group-hover:fill-[#53A2EB]"
-                        d="M16.9362 5.81429C16.8511 5.89286 16.8511 5.97143 16.766 6.05L11.6596 10.7643C11.3191 11.0786 10.8085 11.0786 10.4681 10.7643C10.1277 10.45 10.1277 9.97857 10.4681 9.66429L14.1277 6.28571H0.851064C0.340425 6.28571 0 5.97143 0 5.5C0 5.02857 0.340425 4.71429 0.851064 4.71429H14.1277L10.4681 1.33572C10.1277 1.02143 10.1277 0.549999 10.4681 0.235714C10.6383 0.0785713 10.8936 0 11.0638 0C11.234 0 11.4894 0.0785713 11.6596 0.235714L16.766 4.95C16.8511 5.02857 16.9362 5.10714 16.9362 5.18571C17.0213 5.42143 17.0213 5.57857 16.9362 5.81429Z"
-                        fill="white"
-                      />
-                    </svg>
+                    <ArrowRight
+                      className="group-hover:fill-[#53A2EB]"
+                      color="white"
+                    />
                   </span>
                 </motion.button>
               )}

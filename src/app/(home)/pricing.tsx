@@ -1,4 +1,5 @@
 import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
+import { Minus } from "@/lib/icons";
 
 export function Pricing() {
   return (
@@ -9,9 +10,7 @@ export function Pricing() {
             <div className="lay md:w-6/12 w-full mx-auto text-center">
               <div className="itm mb-5 flex items-center justify-center gap-1.5">
                 <span>
-                  <svg width="42" height="2" viewBox="0 0 42 2" fill="none">
-                    <rect y="0.5" width="42" height="1" fill="#53A2EB" />
-                  </svg>
+                  <Minus width={42} height={2} color="#53A2EB" />
                 </span>
                 <p className="text-[#53A2EB]">Pricing Plan</p>
               </div>

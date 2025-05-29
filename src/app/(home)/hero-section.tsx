@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
+import { MoveUpRight } from "@/lib/icons";
 
 export function HeroSection() {
   const controls = useAnimationControls();
@@ -58,15 +59,12 @@ export function HeroSection() {
             </motion.p>
 
             <button className="flex gap-2 items-center mx-auto text-[#FBBE1B] py-4 px-8 rounded-2xl border-[#FBBE1B] border  cursor-pointer group hover:bg-[#FBBE1B] hover:text-black">
-              Get Started{" "}
+              Get Started
               <span>
-                <svg width="13" height="14" viewBox="0 0 13 14" fill="none">
-                  <path
-                    className="group-hover:fill-[#000]"
-                    d="M10.8371 4.19204L1.52916 13.5L0 11.9708L9.30688 2.66288H1.10415V0.5H13V12.3958H10.8371V4.19204Z"
-                    fill="#FBBE1B"
-                  />
-                </svg>
+                <MoveUpRight
+                  className="group-hover:fill-[#000]"
+                  color="#FBBE1B"
+                />
               </span>
             </button>
           </div>
