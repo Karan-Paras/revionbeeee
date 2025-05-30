@@ -84,19 +84,10 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
               }}
             >
               {/* Modal Content */}
-              <div
-                className={`flex justify-between items-center p-4 border-b border-[#ffffff26] ${className}`}
-              >
+              <div className="flex items-center p-4 border-b border-[#ffffff26]  justify-center txt_hed mt-5">
                 <h2 className="text-lg font-semibold text-[#232323]">
                   {title}
                 </h2>
-                <button
-                  onClick={onClose}
-                  className="text-gray-400 hover:text-black transition-colors cursor-pointer"
-                  aria-label="Close modal"
-                >
-                  {/* <X className="h-6 w-6" /> */}
-                </button>
               </div>
               {children}
             </motion.div>

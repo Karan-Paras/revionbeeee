@@ -13,7 +13,7 @@ import { Camera, Mars, Venus } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { User } from "@/types/user";
+import { User } from "@/features/user/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
 import Image from "next/image";

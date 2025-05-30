@@ -1,6 +1,6 @@
 import { LoginSchema } from "@/features/auth/schemas";
 import { API_URL } from "@/lib/constants";
-import { User } from "@/types/user";
+import { User } from "@/features/user/types";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 

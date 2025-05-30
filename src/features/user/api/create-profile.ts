@@ -1,6 +1,6 @@
 import { CreateProfileSchema } from "@/features/user/schemas";
 import api from "@/lib/api";
-import { User } from "@/types/user";
+import { User } from "@/features/user/types";
 import { z } from "zod";
 
 type CreateProfileInput = z.infer<typeof CreateProfileSchema>;

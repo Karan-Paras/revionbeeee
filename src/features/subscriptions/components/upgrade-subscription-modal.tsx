@@ -12,11 +12,7 @@ export function UpgradeSubscriptionModal({
   onClose,
 }: UpgradeSubscriptionModalProps) {
   return (
-    <Modal
-      className="justify-center txt_hed mt-5"
-      title="Upgrade your Plan"
-      onClose={onClose}
-    >
+    <Modal title="Upgrade your Plan" onClose={onClose}>
       <div className="px-6 pb-5">
         <div className="hed mb-4 text-center">
           <p>Unlock more features with premium access.</p>
