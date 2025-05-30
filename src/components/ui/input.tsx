@@ -6,11 +6,14 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { useState } from "react";
 
-const inputLabelVariants = cva("bg-white py-5 w-full outline-0 rounded-xl", {
+const inputLabelVariants = cva("w-full", {
   variants: {
     variant: {
-      default: "",
-      bordered: "border border-[#D8DAE5]",
+      default: "bg-white py-5 w-full outline-0 rounded-xl",
+      bordered:
+        "bg-white py-5 w-full outline-0 rounded-xl border border-[#D8DAE5]",
+      transparent:
+        "placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD] border-b",
     },
     hasIcon: {
       true: "ps-12 pe-5",
