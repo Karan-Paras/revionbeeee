@@ -1,6 +1,7 @@
+import { SupportForm } from "@/features/support/components/support-form";
 import { Mail, MapPin, Minus, Phone } from "@/lib/icons";
 
-export function ContactUs() {
+export function Support() {
   return (
     <section
       id="contact"
@@ -56,59 +57,7 @@ export function ContactUs() {
               </div>
             </div>
           </div>
-          <div className="md:col-span-3 col-span-6">
-            <div className="crd bg-white px-4 lg:py-10 py-5 rounded-xl shadow-md">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="md:col-span-1 col-span-2">
-                  <input
-                    className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
-                    type="text"
-                    placeholder="First Name*"
-                  />
-                </div>
-                <div className="md:col-span-1 col-span-2">
-                  <input
-                    className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
-                    type="text"
-                    placeholder="Last Name*"
-                  />
-                </div>
-                <div className="md:col-span-1 col-span-2">
-                  <input
-                    className="placeholder-[#22281E] w-full p-4 outline-0 border-[#DEDFDD]  border-b"
-                    type="email"
-                    placeholder="Your Email*"
-                  />
-                </div>
-                <div className="md:col-span-1 col-span-2">
-                  <input
-                    className="placeholder-[#22281E] w-full p-4 outline-0 inp_spc  border-[#DEDFDD]  border-b"
-                    type="number"
-                    placeholder="Mobile Number*"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <div className="px-4">
-                    <label htmlFor="" className="font-medium text-[#394630]">
-                      Tell us about you
-                    </label>
-                    <textarea
-                      name=""
-                      id=""
-                      className="min-h-40 border-b w-full pt-2.5 px-4 border-b-[#dedfdd] outline-0"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="col-span-2">
-                  <div className="text-center">
-                    <button className="btn bg-[#53A2EB] text-white py-5 px-8 rounded-xl font-semibold ">
-                      Submit a Query
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SupportForm />
         </div>
       </div>
     </section>

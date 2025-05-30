@@ -5,7 +5,7 @@ import { HeroSection } from "@/app/(home)/hero-section";
 import { InteractiveQuiz } from "@/app/(home)/interactive-quiz";
 import { SelectTopics } from "@/app/(home)/select-topics";
 import { Pricing } from "@/app/(home)/pricing";
-import { ContactUs } from "@/app/(home)/contact-us";
+import { Support } from "@/app/(home)/support";
 import { Testimonials } from "@/app/(home)/testimonials";
 
 export default function LandingPage() {
@@ -16,7 +16,7 @@ export default function LandingPage() {
       <InteractiveQuiz />
       <SelectTopics />
       <Pricing />
-      <ContactUs />
+      <Support />
       <Testimonials />
       <Footer variant="extended" />
     </>
