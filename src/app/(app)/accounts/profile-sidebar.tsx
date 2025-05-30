@@ -5,7 +5,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { CircleUser, LogOut, Settings, Video } from "@/lib/icons";
 import { paths } from "@/routes";
-import { useLogout } from "@/features/auth/queries/use-logout";
+import { useState } from "react";
+import { LogoutModal } from "@/features/auth/components/logout-modal";
 
 const sidebarItems = [
   {
@@ -26,38 +27,47 @@ const sidebarItems = [
 ];
 
 export function ProfileSidebar() {
-  const logout = useLogout();
-
   const pathname = usePathname();
+
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   return (
-    <div className="itm bg-white rounded-xl grad_colr">
-      <ul className="p-4">
-        {sidebarItems.map(({ href, icon, title }) => (
-          <li
-            key={href}
-            className={cn(
-              "flex gap-2 border-b border-[#D9D9D9] mb-3.5",
-              pathname.startsWith(href) && "text-[#53A2EB] act_lst"
-            )}
-          >
-            <Link
-              className="flex items-center gap-2 cursor-pointer w-full p-4"
-              href={href}
+    <>
+      {showLogoutModal && (
+        <LogoutModal onClose={() => setShowLogoutModal(false)} />
+      )}
+      <div className="itm bg-white rounded-xl grad_colr">
+        <ul className="p-4">
+          {sidebarItems.map(({ href, icon, title }) => (
+            <li
+              key={href}
+              className={cn(
+                "flex gap-2 border-b border-[#D9D9D9] mb-3.5",
+                pathname.startsWith(href) && "text-[#53A2EB] act_lst"
+              )}
             >
-              <span>{icon}</span>
-              <h3>{title}</h3>
-            </Link>
+              <Link
+                className="flex items-center gap-2 cursor-pointer w-full p-4"
+                href={href}
+              >
+                <span>{icon}</span>
+                <h3>{title}</h3>
+              </Link>
+            </li>
+          ))}
+          <li
+            onClick={() => setShowLogoutModal(true)}
+            className="rounded-xl  flex gap-2  "
+          >
+            <div className="flex gap-2 cursor-pointer p-4 w-full">
+              <span>
+                <LogOut />
+              </span>
+              <h3>Logout</h3>
+            </div>
           </li>
-        ))}
-        <li onClick={() => logout()} className="rounded-xl  flex gap-2  ">
-          <div className="flex gap-2 cursor-pointer p-4 w-full">
-            <span>
-              <LogOut />
-            </span>
-            <h3>Logout</h3>
-          </div>
-        </li>
-      </ul>
-    </div>
+        </ul>
+      </div>
+    </>
   );
 }

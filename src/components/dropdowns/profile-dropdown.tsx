@@ -7,7 +7,7 @@ import { getUserImageUrl } from "@/lib/media-urls";
 import Link from "next/link";
 import { ChevronDown } from "@/lib/icons";
 import { paths } from "@/routes";
-import { User } from "@/types/user";
+import { User } from "@/features/user/types";
 import { useLogout } from "@/features/auth/queries/use-logout";
 
 interface ProfileDropdownProps {

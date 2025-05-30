@@ -1,6 +1,6 @@
 import { RegisterSchema } from "@/features/auth/schemas";
 import api from "@/lib/api";
-import { User } from "@/types/user";
+import { User } from "@/features/user/types";
 import { z } from "zod";
 
 export async function register(data: z.infer<typeof RegisterSchema>) {

@@ -8,6 +8,8 @@ const buttonLabelVariants = cva(
       variant: {
         default: "",
         rounded: "rounded-xl",
+        secondary:
+          "bg-white border border-[#D8DAE5] text-[#22281E] hover:bg-[#F3F4F6] hover:text-[#22281E] duration-500 ease-in-out rounded-xl",
       },
     },
     defaultVariants: {
