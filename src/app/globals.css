@@ -125,3 +125,12 @@ body {
     display: none;
   }
 }
+.desc_blk img {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  margin: 15px 0;
+  border-radius: 10px;
+  object-fit: cover;
+}
