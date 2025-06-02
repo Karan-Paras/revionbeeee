@@ -1,4 +1,4 @@
-import { SelectTopics } from "@/features/questions/components/select-topics";
+import { SelectTopics } from "@/features/subjects/components/select-topics";
 import Link from "next/link";
 
 export default function Question() {

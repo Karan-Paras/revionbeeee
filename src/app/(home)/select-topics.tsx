@@ -1,4 +1,4 @@
-import { SelectTopics as SelectTopicsComponent } from "@/features/questions/components/select-topics";
+import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
 import { Minus, MoveUpRight } from "@/lib/icons";
 
 export function SelectTopics() {

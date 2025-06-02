@@ -1,13 +1,29 @@
 "use client";
 
 import { DataLoader } from "@/components/loaders/data-loader";
-import { useGetTopics } from "@/features/questions/queries/use-get-topics";
+import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
+import useActiveSubjectStore from "@/features/subjects/stores/use-active-subject-store";
 import { ChevronRight } from "@/lib/icons";
-import Link from "next/link";
+import { paths } from "@/routes";
+import { ID } from "@/types/globals";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export function SelectTopics() {
   const { data, isPending, error } = useGetTopics();
+
+  const { setActiveSubject } = useActiveSubjectStore();
+
+  const router = useRouter();
+
+  const onSubjectClick = (
+    topicId: ID,
+    topicName: string,
+    subjectName: string
+  ) => {
+    setActiveSubject(topicName, subjectName);
+    router.push(paths.subjectDetails(topicId));
+  };
 
   if (isPending) {
     return <DataLoader />;
@@ -34,15 +50,15 @@ export function SelectTopics() {
                     key={id}
                     className="flex justify-between border-b border-[#DEDEDE] p-5 items-center"
                   >
-                    <Link
-                      className="w-full flex items-center justify-between"
-                      href="/number-and-algebra/AASL"
+                    <button
+                      className="w-full flex items-center justify-between cursor-pointer"
+                      onClick={() => onSubjectClick(id, topicName, subjectName)}
                     >
                       <p className="font-semibold uppercase">{subjectName}</p>
                       <span>
                         <ChevronRight />
                       </span>
-                    </Link>
+                    </button>
                   </li>
                 ))}
               </ul>
