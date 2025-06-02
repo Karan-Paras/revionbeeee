@@ -1,33 +1,22 @@
-import Link from "next/link";
+import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { paths } from "@/routes";
 
 export default function TermsAndConditions() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 min-h-80 relative text-center items-end">
-            <div className="col-span-2 pb-14">
-              <h3 className="font-bold text-5xl text-white">
-                Terms & Conditions
-              </h3>
-
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Home
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Terms & Conditions
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title="Terms & Conditions"
+        breadcrumbs={[
+          {
+            label: "Home",
+            href: paths.home(),
+          },
+          {
+            label: "Terms & Conditions",
+            href: paths.termsAndConditions(),
+          },
+        ]}
+      />
       <section className="py-10">
         <div className="container mx-auto">
           <div className="rw mb-8">

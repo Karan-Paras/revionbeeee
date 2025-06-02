@@ -1,35 +1,26 @@
 import { FaqAccordion } from "@/components/accordions/faq-accordion";
+import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { Faq, Faq2 } from "@/lib/assets";
+import { paths } from "@/routes";
 import { Minus } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function FAQ() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 min-h-80 relative text-center items-end">
-            <div className="col-span-2 pb-14">
-              <h3 className="font-bold text-5xl text-white">FAQ</h3>
-
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Home
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    FAQ
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title="FAQ"
+        breadcrumbs={[
+          {
+            label: "Home",
+            href: paths.home(),
+          },
+          {
+            label: "FAQ",
+            href: paths.faq(),
+          },
+        ]}
+      />
       <section className="py-20 bg-[#F6F6F6]">
         <div className="container mx-auto">
           <div className="grid grid-cols-3 gap-7">

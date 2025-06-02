@@ -1,31 +1,23 @@
+import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { Play } from "@/lib/icons";
-import Link from "next/link";
+import { paths } from "@/routes";
 
 export default function Quiz() {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96 2xl:px-0 lg:px-20 px-10">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
-            <div className="col-span-2 pt-20">
-              <h3 className="font-bold text-5xl text-white">Quiz</h3>
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Home
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Quiz
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title="Quiz"
+        breadcrumbs={[
+          {
+            label: "Home",
+            href: paths.dashboard(),
+          },
+          {
+            label: "Quiz",
+            href: paths.quiz(),
+          },
+        ]}
+      />
       <section className="bg-[#F6F6F6] py-20 2xl:px-0 lg:px-20 px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 bg-white rounded-xl py-5 px-7">
