@@ -73,9 +73,9 @@ const DataLoader = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
-        perspective: "1000px",
-        overflow: "hidden",
+        height: "400px",
+        // perspective: "1000px",
+        // overflow: "hidden",
       }}
     >
       <div

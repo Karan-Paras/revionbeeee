@@ -67,10 +67,16 @@ export function SubjectDetails() {
                       {title}
                     </h3>
                     {video && (
-                      <video src={getSubjectVideoUrl(video)} controls />
+                      <div className="max-h-[400px] min-h-[300px] w-full rounded-xl overflow-hidden border-gray-100 border">
+                        <video
+                          className="h-full w-full"
+                          src={getSubjectVideoUrl(video)}
+                          controls
+                        />
+                      </div>
                     )}
                     <article
-                      className="md:text-xl text-base text-[#505050] mb-3 font-normal"
+                      className="md:text-xl text-base text-[#505050] mb-3 font-normal my-5 desc_blk"
                       dangerouslySetInnerHTML={{ __html: description }}
                     />
                   </div>
