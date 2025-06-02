@@ -17,4 +17,4 @@ const useForgotPasswordStore = create<state & action>((set) => ({
   setHasChangedPassword: (value) => set({ hasChangedPassword: value }),
 }));
 
-export default useForgotPasswordStore;
+export { useForgotPasswordStore };

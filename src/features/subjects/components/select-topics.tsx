@@ -2,7 +2,7 @@
 
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
-import useActiveSubjectStore from "@/features/subjects/stores/use-active-subject-store";
+import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import { ChevronRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import { ID } from "@/types/globals";

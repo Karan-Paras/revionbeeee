@@ -1,8 +1,9 @@
 "use client";
 
+import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
-import useActiveSubjectStore from "@/features/subjects/stores/use-active-subject-store";
+import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import {
   CircleCheckFading,
   HelpLightBulb,
@@ -10,6 +11,7 @@ import {
   Video,
 } from "@/lib/icons";
 import { getSubjectVideoUrl } from "@/lib/media-urls";
+import { paths } from "@/routes";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -22,39 +24,23 @@ export function SubjectDetails() {
 
   const { activeSubject } = useActiveSubjectStore();
 
+  const subject =
+    activeSubject.subject || data?.data[0].subjectName || "Loading...";
+
+  const breadcrumbs = [
+    {
+      label: "Subjects",
+      href: paths.subjects(),
+    },
+    {
+      label: subject,
+      href: paths.subjectDetails(subjectId?.toString() || "#"),
+    },
+  ];
+
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 min-h-96 relative text-center items-end">
-            <div className="col-span-2 pb-14">
-              <h3 className="font-bold text-5xl text-white">
-                {activeSubject.subject || data?.data[0].subjectName}
-              </h3>
-
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Home
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    {activeSubject.topic || data?.data[0].topic.topicName}
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    {activeSubject.subject || data?.data[0].subjectName}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner title={subject} breadcrumbs={breadcrumbs} />
 
       {(() => {
         if (isPending) {

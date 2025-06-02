@@ -1,7 +1,7 @@
 import { SelectTopics } from "@/features/subjects/components/select-topics";
 import Link from "next/link";
 
-export default function Question() {
+export default function Subjects() {
   return (
     <>
       <section className="act_bg relative bg-cover bg-no-repeat md:px-0 px-10">
