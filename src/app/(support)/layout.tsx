@@ -8,7 +8,7 @@ interface AppLayoutProps {
 export default function SupportLayout({ children }: AppLayoutProps) {
   return (
     <>
-      <Header variant="dashboard" />
+      <Header variant="home" />
       {children}
       <Footer variant="compact" />
     </>
