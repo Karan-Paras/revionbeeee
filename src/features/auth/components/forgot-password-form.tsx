@@ -5,7 +5,7 @@ import { ErrorBlock } from "@/components/ui/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { forgotPassword } from "@/features/auth/actions/forgot-password";
-import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password-store";
+import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
 import { paths } from "@/routes";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect } from "react";

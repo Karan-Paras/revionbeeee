@@ -26,4 +26,4 @@ const useActiveSubjectStore = create<state & action>((set) => ({
     })),
 }));
 
-export default useActiveSubjectStore;
+export { useActiveSubjectStore };

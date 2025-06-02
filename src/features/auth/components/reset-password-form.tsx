@@ -6,7 +6,7 @@ import { startTransition, useActionState, useEffect } from "react";
 import { resetPassword } from "@/features/auth/actions/reset-password";
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/ui/error-block";
-import useForgotPasswordStore from "@/features/auth/stores/use-forgot-password-store";
+import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes";
 
