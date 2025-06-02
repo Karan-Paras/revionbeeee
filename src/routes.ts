@@ -1,3 +1,5 @@
+import { ID } from "@/types/globals";
+
 const withPrefix = (prefix: string, paths: Record<string, () => string>) => {
   return Object.fromEntries(
     Object.entries(paths).map(([key, fn]) => [key, () => `${prefix}${fn()}`])
@@ -44,9 +46,6 @@ export const paths = {
   progress() {
     return "/progress";
   },
-  questionsBank() {
-    return "/question";
-  },
   quiz() {
     return "/quiz";
   },
@@ -72,6 +71,12 @@ export const paths = {
   },
   faq() {
     return "/faq";
+  },
+  subjects() {
+    return "/subjects";
+  },
+  subjectDetails(subjectId: ID) {
+    return `/subjects/${subjectId}`;
   },
 };
 

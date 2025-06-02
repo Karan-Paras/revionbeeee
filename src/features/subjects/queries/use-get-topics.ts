@@ -1,9 +1,9 @@
-import { getTopics } from "@/features/questions/api/get-topics";
+import { getTopics } from "@/features/subjects/api/get-topics";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetTopics = () => {
   return useQuery({
-    queryKey: ["topics"],
+    queryKey: ["topic"],
     queryFn: getTopics,
   });
 };
