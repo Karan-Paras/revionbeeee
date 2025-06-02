@@ -58,9 +58,9 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
                 scale: 1,
                 transition: {
                   type: "spring",
-                  stiffness: 180, // Softer spring for longer duration
-                  damping: 28, // Slightly more damping
-                  mass: 0.8, // Heavier mass slows movement
+                  stiffness: 180,
+                  damping: 28,
+                  mass: 0.8,
                   restDelta: 0.001,
                   restSpeed: 0.001,
                 },

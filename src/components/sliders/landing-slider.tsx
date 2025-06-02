@@ -16,7 +16,7 @@ export function LandingSlider() {
     autoplaySpeed: 3000,
     responsive: [
       {
-        breakpoint: 1920, // screen width <= 1024px
+        breakpoint: 1920,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -24,7 +24,7 @@ export function LandingSlider() {
         },
       },
       {
-        breakpoint: 1440, // screen width <= 1024px
+        breakpoint: 1440,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -32,7 +32,7 @@ export function LandingSlider() {
         },
       },
       {
-        breakpoint: 1024, // screen width <= 1024px
+        breakpoint: 1024,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -40,7 +40,7 @@ export function LandingSlider() {
         },
       },
       {
-        breakpoint: 990, // screen width <= 768px
+        breakpoint: 990,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -99,7 +99,7 @@ export function LandingSlider() {
                       <path
                         d="M123.701 6.58594C123.822 6.80016 124.019 6.95962 124.251 7.0332L124.353 7.05859L130.646 8.3291L126.301 13.0557C126.135 13.2366 126.044 13.4727 126.046 13.7158L126.052 13.8203L126.789 20.1982L120.951 17.5264C120.728 17.4241 120.475 17.4116 120.244 17.4883L120.146 17.5264L114.309 20.1982L115.046 13.8203C115.074 13.5762 115.009 13.3315 114.864 13.1357L114.797 13.0557L110.452 8.3291L116.745 7.05859C116.986 7.01001 117.198 6.87233 117.34 6.6748L117.396 6.58594L120.549 0.993164L123.701 6.58594Z"
                         stroke="#D4D3D3"
-                        stroke-width="0.966722"
+                        strokeWidth="0.966722"
                       />
                     </svg>
                   </div>

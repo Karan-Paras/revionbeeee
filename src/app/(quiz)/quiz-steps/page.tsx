@@ -216,9 +216,9 @@ export default function QuizSteps() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={displayQuestionIdx}
-                  initial={{ opacity: 0, y: 10 }} // Fade out + slight downward start
-                  animate={{ opacity: 1, y: 0 }} // Fade in + settle to natural position
-                  exit={{ opacity: 0, y: -10 }} // Fade out + slight upward exit
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
                   transition={{
                     duration: 0.4,
                     ease: "easeInOut",
@@ -246,7 +246,7 @@ export default function QuizSteps() {
                     initial={{ opacity: 0, y: 5, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{
-                      delay: 0.3 + index * 0.1, // Staggered delay
+                      delay: 0.3 + index * 0.1,
                       duration: 0.4,
                       ease: "easeOut",
                     }}
