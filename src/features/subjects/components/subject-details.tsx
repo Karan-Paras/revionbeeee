@@ -29,6 +29,10 @@ export function SubjectDetails() {
 
   const breadcrumbs = [
     {
+      label: "Home",
+      href: paths.dashboard(),
+    },
+    {
       label: "Subjects",
       href: paths.subjects(),
     },

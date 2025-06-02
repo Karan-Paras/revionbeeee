@@ -5,6 +5,10 @@ import { paths } from "@/routes";
 export default function SubjectDetailsLoading() {
   const breadcrumbs = [
     {
+      label: "Home",
+      href: paths.dashboard(),
+    },
+    {
       label: "Subjects",
       href: paths.subjects(),
     },

@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { ProfileSidebar } from "@/app/(app)/accounts/profile-sidebar";
+import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { paths } from "@/routes";
 
 interface AccountsLayoutProps {
   children: React.ReactNode;
@@ -8,28 +9,19 @@ interface AccountsLayoutProps {
 export default function AccountsLayout({ children }: AccountsLayoutProps) {
   return (
     <>
-      <section className="act_bg relative bg-cover bg-no-repeat min-h-96">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 min-h-96 relative text-center items-center">
-            <div className="col-span-2 pt-20">
-              <h3 className="font-bold text-5xl text-white">Account</h3>
-              <div className="flex justify-center gap-3 text-white my-5 uppercase">
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Home
-                  </Link>
-                </div>
-                /
-                <div className="itm">
-                  <Link className="text-white" href="">
-                    Settings
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title="Account"
+        breadcrumbs={[
+          {
+            label: "Home",
+            href: paths.dashboard(),
+          },
+          {
+            label: "Settings",
+            href: paths.accounts.myProfile(),
+          },
+        ]}
+      />
 
       <section className="bg-[#F6F6F6] py-20">
         <div className="container mx-auto">
