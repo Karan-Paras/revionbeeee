@@ -20,7 +20,7 @@ export default function SubjectDetailsLoading() {
 
   return (
     <>
-      <BreadcrumbBanner title="Subjects" breadcrumbs={breadcrumbs} />
+      <BreadcrumbBanner title="Loading..." breadcrumbs={breadcrumbs} />
       <DataLoader />
     </>
   );
