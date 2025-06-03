@@ -10,3 +10,10 @@ export async function forgotPassword(
     email: data.email,
   });
 }
+
+export async function verifyToken(token: string) {
+  const apiUrl = "/verify/token";
+  return await api(apiUrl, "POST", {
+    token,
+  });
+}

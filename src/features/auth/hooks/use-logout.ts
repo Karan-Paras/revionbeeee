@@ -1,3 +1,4 @@
+import { logout } from "@/features/auth/api/logout";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
@@ -7,6 +8,8 @@ export const useLogout = () => {
 
   return () => {
     queryClient.clear();
+
+    logout();
 
     signOut({
       redirectTo: paths.login(),
