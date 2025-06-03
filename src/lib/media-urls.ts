@@ -6,7 +6,12 @@ export function getUserImageUrl(image: string): string {
   return `${url}${image}`;
 }
 
-export function getVideoUrl(video: string): string {
+export function getSubjectVideoUrl(video: string): string {
   const url = `${MEDIA_URL}/video/`;
+  return `${url}${video}`;
+}
+
+export function getQuestionBankVideoUrl(video: string): string {
+  const url = `${MEDIA_URL}/questionBank/video/`;
   return `${url}${video}`;
 }

@@ -11,7 +11,7 @@ import {
   MessageCircleQuestion,
   Video,
 } from "@/lib/icons";
-import { getVideoUrl } from "@/lib/media-urls";
+import { getSubjectVideoUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -66,7 +66,7 @@ export function SubjectDetails() {
                   <h3 className="font-bold md:text-3xl text-2xl mb-4">
                     {title}
                   </h3>
-                  {video && <VideoPlayer src={getVideoUrl(video)} />}
+                  {video && <VideoPlayer src={getSubjectVideoUrl(video)} />}
                   <article
                     className="md:text-xl text-base text-[#505050] mb-3 font-normal my-5 desc_blk"
                     dangerouslySetInnerHTML={{ __html: description }}
