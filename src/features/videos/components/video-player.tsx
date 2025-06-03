@@ -13,9 +13,9 @@ interface VideoPlayerProps {
 
 export function VideoPlayer({ src }: VideoPlayerProps) {
   return (
-    <MediaPlayer src={src}>
+    <MediaPlayer src={src} className="h-96" playsInline>
       <MediaProvider />
-      <DefaultVideoLayout icons={defaultLayoutIcons} />
+      <DefaultVideoLayout icons={defaultLayoutIcons} noAudioGain />
     </MediaPlayer>
   );
 }

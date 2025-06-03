@@ -11,17 +11,17 @@ import {
   MessageCircleQuestion,
   Video,
 } from "@/lib/icons";
-import { getSubjectVideoUrl } from "@/lib/media-urls";
+import { getVideoUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export function SubjectDetails() {
-  const { subjectId } = useParams();
-  const { data, isPending, error } = useGetSubjectDetails(
-    subjectId?.toString?.() ?? ""
-  );
+  let { subjectId } = useParams();
+  subjectId = subjectId?.toString?.() ?? "";
+
+  const { data, isPending, error } = useGetSubjectDetails(subjectId);
 
   const { activeSubject } = useActiveSubjectStore();
 
@@ -39,7 +39,7 @@ export function SubjectDetails() {
     },
     {
       label: subject,
-      href: paths.subjectDetails(subjectId?.toString() || "#"),
+      href: paths.subjectDetails(subjectId),
     },
   ];
 
@@ -66,11 +66,7 @@ export function SubjectDetails() {
                   <h3 className="font-bold md:text-3xl text-2xl mb-4">
                     {title}
                   </h3>
-                  {video && (
-                    <div className="min-h-[300px] w-full rounded-xl overflow-hidden border-gray-100 border">
-                      <VideoPlayer src={getSubjectVideoUrl(video)} />
-                    </div>
-                  )}
+                  {video && <VideoPlayer src={getVideoUrl(video)} />}
                   <article
                     className="md:text-xl text-base text-[#505050] mb-3 font-normal my-5 desc_blk"
                     dangerouslySetInnerHTML={{ __html: description }}
@@ -81,11 +77,11 @@ export function SubjectDetails() {
           );
         }
       })()}
-      <section className="">
+      <section>
         <div className="container mx-auto bg-[#F9F9F9] rounded-xl py-16 xl:px-0 md:px-10 px-10">
           <div className="grid grid-cols-2 mx-auto md:w-9/12 w-full gap-7">
             <div className="md:col-span-1 col-span-2">
-              <Link href="/quiz-steps" className="">
+              <Link href="/quiz-steps">
                 <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FBBE1B] items-center">
                   <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
@@ -105,7 +101,7 @@ export function SubjectDetails() {
               </Link>
             </div>
             <div className="md:col-span-1 col-span-2">
-              <Link href="/question-bank" className="">
+              <Link href={paths.questionBank(subjectId)}>
                 <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#53A2EB] items-center">
                   <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
