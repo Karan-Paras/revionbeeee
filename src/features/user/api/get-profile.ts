@@ -2,7 +2,7 @@ import fetcher from "@/lib/fetcher";
 import { User } from "@/features/user/types";
 
 export async function getProfile() {
-  const apiUrl = "/user/profile";
+  const apiUrl = "/profile";
 
   return await fetcher<User>(apiUrl, "GET");
 }

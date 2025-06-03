@@ -5,7 +5,7 @@ import { ContactUsSchema } from "@/features/support/schemas";
 type ContactUsInput = z.infer<typeof ContactUsSchema>;
 
 export async function contactUs(data: ContactUsInput) {
-  const apiUrl = "/user/contact/us";
+  const apiUrl = "/contact/us";
 
   if (data.attachment instanceof File) {
     const formData = new FormData();

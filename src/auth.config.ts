@@ -14,7 +14,7 @@ export default {
           if (validatedFields.success) {
             const { email, password } = validatedFields.data;
 
-            const res = await fetch(`${API_URL}/user/login`, {
+            const res = await fetch(`${API_URL}/login`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

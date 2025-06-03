@@ -6,7 +6,7 @@ import { z } from "zod";
 type UpdateProfileInput = z.infer<typeof UpdateProfileSchema>;
 
 export async function updateProfile(data: UpdateProfileInput) {
-  const apiUrl = "/user/update/profile";
+  const apiUrl = "/update/profile";
 
   const formData = new FormData();
 

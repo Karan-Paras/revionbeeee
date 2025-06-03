@@ -6,7 +6,7 @@ import { z } from "zod";
 type CreateProfileInput = z.infer<typeof CreateProfileSchema>;
 
 export async function createProfile(data: CreateProfileInput) {
-  const apiUrl = "/user/profile/create";
+  const apiUrl = "/profile/create";
 
   const formData = new FormData();
 

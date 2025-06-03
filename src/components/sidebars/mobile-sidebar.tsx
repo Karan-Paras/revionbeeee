@@ -9,7 +9,7 @@ import { paths } from "@/routes";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { Logo } from "@/lib/assets";
-import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { useLogout } from "@/features/auth/queries/use-logout";
 
 interface MobileSidebarProps {

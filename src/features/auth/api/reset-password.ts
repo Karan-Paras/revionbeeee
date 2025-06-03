@@ -6,7 +6,7 @@ export async function resetPassword(
   data: z.infer<typeof ResetPasswordSchema>,
   token: string
 ) {
-  const apiUrl = "/user/reset/password";
+  const apiUrl = "/reset/password";
   return await api(apiUrl, "POST", {
     token,
     password: data.password,
