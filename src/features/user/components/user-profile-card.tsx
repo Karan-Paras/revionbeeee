@@ -7,7 +7,7 @@ import Link from "next/link";
 import { paths } from "@/routes";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { DataLoader } from "@/components/loaders/data-loader";
-import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { toast } from "sonner";
 
 export function UserProfileCard() {

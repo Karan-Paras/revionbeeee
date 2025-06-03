@@ -4,7 +4,7 @@ import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
 import { useLogout } from "@/features/auth/queries/use-logout";
-import { useGetProfile } from "@/features/user/hooks/use-get-profile";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { isUserProfileComplete } from "@/features/user/utils";
 import { Logo } from "@/lib/assets";
 import { paths } from "@/routes";
