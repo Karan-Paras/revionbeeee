@@ -24,7 +24,7 @@ export default function QuestionBankLoading() {
 
   return (
     <>
-      <BreadcrumbBanner title="Subjects" breadcrumbs={breadcrumbs} />
+      <BreadcrumbBanner title="Question Bank" breadcrumbs={breadcrumbs} />
       <DataLoader />
     </>
   );
