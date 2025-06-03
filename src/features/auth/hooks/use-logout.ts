@@ -9,10 +9,10 @@ export const useLogout = () => {
   return () => {
     queryClient.clear();
 
-    logout();
-
-    signOut({
-      redirectTo: paths.login(),
-    });
+    logout().then(() =>
+      signOut({
+        redirectTo: paths.login(),
+      })
+    );
   };
 };
