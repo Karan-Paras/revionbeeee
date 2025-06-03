@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { BadgeCheck } from "@/lib/icons";
 import { useState } from "react";
 import { UpgradeSubscriptionModal } from "@/features/subscriptions/components/upgrade-subscription-modal";
-import { STARTER_PLAN } from "@/features/types";
+import { STARTER_PLAN } from "@/features/subscriptions/types";
 
 export function CurrentPlan() {
   const [showUpgradeSubscriptionModal, setShowUpgradeSubscriptionModal] =

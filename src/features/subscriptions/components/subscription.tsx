@@ -1,4 +1,4 @@
-import { Plan } from "@/features/types";
+import { Plan } from "@/features/subscriptions/types";
 import { BadgeCheck } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";

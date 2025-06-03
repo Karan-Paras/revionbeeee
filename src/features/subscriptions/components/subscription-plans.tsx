@@ -1,5 +1,5 @@
 import { Subscription } from "@/features/subscriptions/components/subscription";
-import { PLANS } from "@/features/types";
+import { PLANS } from "@/features/subscriptions/types";
 import { paths } from "@/routes";
 
 export function SubscriptionPlans() {

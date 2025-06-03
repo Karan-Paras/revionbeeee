@@ -1,7 +1,11 @@
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
 import { Subscription } from "@/features/subscriptions/components/subscription";
-import { ADVANCED_PLAN, BASIC_PLAN, STARTER_PLAN } from "@/features/types";
+import {
+  ADVANCED_PLAN,
+  BASIC_PLAN,
+  STARTER_PLAN,
+} from "@/features/subscriptions/types";
 import Link from "next/link";
 
 interface UpgradeSubscriptionModalProps {

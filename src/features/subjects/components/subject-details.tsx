@@ -4,6 +4,7 @@ import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
+import { VideoPlayer } from "@/features/videos/components/video-player";
 import {
   CircleCheckFading,
   HelpLightBulb,
@@ -67,12 +68,8 @@ export function SubjectDetails() {
                       {title}
                     </h3>
                     {video && (
-                      <div className="max-h-[400px] min-h-[300px] w-full rounded-xl overflow-hidden border-gray-100 border">
-                        <video
-                          className="h-full w-full"
-                          src={getSubjectVideoUrl(video)}
-                          controls
-                        />
+                      <div className="min-h-[300px] w-full rounded-xl overflow-hidden border-gray-100 border">
+                        <VideoPlayer src={getSubjectVideoUrl(video)} />
                       </div>
                     )}
                     <article
