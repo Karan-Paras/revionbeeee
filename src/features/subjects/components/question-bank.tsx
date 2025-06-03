@@ -7,7 +7,7 @@ import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subjec
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import { VideoPlayer } from "@/features/videos/components/video-player";
 import { ChevronUp } from "@/lib/icons";
-import { getVideoUrl } from "@/lib/media-urls";
+import { getQuestionBankVideoUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import { useParams } from "next/navigation";
@@ -99,7 +99,9 @@ export function QuestionBank() {
                           />
                         </div>
                         {questionVideo && (
-                          <VideoPlayer src="https://files.vidstack.io/sprite-fight/720p.mp4" />
+                          <VideoPlayer
+                            src={getQuestionBankVideoUrl(questionVideo)}
+                          />
                         )}
                         <button
                           className="bg-[#F0F8FF] text-[#53A2EB] flex items-center rounded-xl font-semibold gap-2.5 py-3 px-5 mt-5"
@@ -122,9 +124,7 @@ export function QuestionBank() {
                               <p dangerouslySetInnerHTML={{ __html: answer }} />
                               {answerVideo && (
                                 <VideoPlayer
-                                  src={getVideoUrl(
-                                    "1748864784_C6qg7niGYJBeSeb9wo6a.mp4"
-                                  )}
+                                  src={getQuestionBankVideoUrl(answerVideo)}
                                 />
                               )}
                             </div>
