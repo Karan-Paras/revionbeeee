@@ -52,11 +52,11 @@ export function QuestionBank() {
     },
     {
       label: subject,
-      href: paths.subjectDetails(subjectId?.toString() || "#"),
+      href: paths.subjectDetails(subjectId),
     },
     {
       label: "Question Bank",
-      href: paths.questionBank(subjectId?.toString() || "#"),
+      href: paths.questionBank(subjectId),
     },
   ];
 
