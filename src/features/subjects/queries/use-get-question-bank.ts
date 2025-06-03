@@ -6,5 +6,6 @@ export const useGetQuestionBank = (subjectId: ID) => {
   return useQuery({
     queryKey: ["subject", "question-bank", { subjectId }],
     queryFn: () => getQuestionBank(subjectId),
+    retry: false,
   });
 };
