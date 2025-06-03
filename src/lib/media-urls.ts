@@ -6,7 +6,7 @@ export function getUserImageUrl(image: string): string {
   return `${url}${image}`;
 }
 
-export function getSubjectVideoUrl(video: string): string {
+export function getVideoUrl(video: string): string {
   const url = `${MEDIA_URL}/video/`;
   return `${url}${video}`;
 }

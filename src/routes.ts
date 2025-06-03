@@ -78,6 +78,9 @@ export const paths = {
   subjectDetails(subjectId: ID) {
     return `/subjects/${subjectId}`;
   },
+  questionBank(subjectId: ID) {
+    return `/question-bank/${subjectId}`;
+  },
 };
 
 /**
