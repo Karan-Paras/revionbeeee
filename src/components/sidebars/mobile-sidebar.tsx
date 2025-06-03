@@ -10,7 +10,7 @@ import { Session } from "next-auth";
 import Image from "next/image";
 import { Logo } from "@/lib/assets";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { useLogout } from "@/features/auth/queries/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 interface MobileSidebarProps {
   NavLinks: Array<{
