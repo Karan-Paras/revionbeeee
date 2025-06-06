@@ -57,12 +57,7 @@ export function SubjectDetails() {
         }
 
         if (data) {
-          const {
-            description,
-            title,
-            video,
-            quizzes: { title: quizTitle, description: quizDescription },
-          } = data.data[0];
+          const [{ description, title, video }] = data.data;
 
           return (
             <>
@@ -97,11 +92,11 @@ export function SubjectDetails() {
                           </div>
                           <div className="md:col-span-9 col-span-12">
                             <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
-                              {quizTitle || "Take a Quiz"}
+                              Take a Quiz
                             </h3>
                             <p className="md:text-lg text-base md:text-left text-center font-normal">
-                              {quizDescription ||
-                                "Test your knowledge and track your progress with fun quizzes."}
+                              Test your knowledge and track your progress with
+                              fun quizzes.
                             </p>
                           </div>
                         </div>

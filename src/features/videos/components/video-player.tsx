@@ -13,7 +13,7 @@ interface VideoPlayerProps {
 
 export function VideoPlayer({ src }: VideoPlayerProps) {
   return (
-    <MediaPlayer src={src} className="vid_icn" playsInline>
+    <MediaPlayer src={src} className="vid_icn my-3" playsInline>
       <MediaProvider />
       <DefaultVideoLayout icons={defaultLayoutIcons} noAudioGain />
     </MediaPlayer>
