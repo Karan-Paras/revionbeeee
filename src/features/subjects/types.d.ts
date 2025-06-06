@@ -18,13 +18,15 @@ export interface Subject extends SubjectBase {
   description: string;
   video: Video;
   topic: TopicBase;
-  quizzes: {
-    id: ID;
-    topicID: ID;
-    subjectID: ID;
-    title: string;
-    description: string;
-  };
+  quizzes?: [
+    {
+      id: ID;
+      topicID: ID;
+      subjectID: ID;
+      title: string;
+      description: string;
+    },
+  ];
 }
 
 export interface Topic extends TopicBase {
