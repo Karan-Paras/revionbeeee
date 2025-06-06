@@ -2,8 +2,6 @@
 
 import { RegisterSchema } from "@/features/auth/schemas";
 import { register as registerApi } from "@/features/auth/api/register";
-import { redirect } from "next/navigation";
-import { paths } from "@/routes";
 import type { ApiErrorResponse } from "@/types/api";
 import { signIn } from "@/auth";
 
@@ -14,6 +12,7 @@ type RegisterFormState = {
     confirmPassword?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const register = async (
@@ -65,5 +64,5 @@ export const register = async (
     console.error(error);
   }
 
-  redirect(paths.createProfile());
+  return { errors: {}, success: true };
 };

@@ -141,3 +141,10 @@ body {
   aspect-ratio: 1/1;
   object-fit: cover;
 }
+.question_blk .vid_icn {
+  margin: 10px 0;
+}
+.img_spc img {
+  border-radius: 10px;
+  margin: 10px 0;
+}

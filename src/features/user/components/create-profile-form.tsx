@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorBlock } from "@/components/ui/error-block";
+import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { InputError } from "@/components/ui/input-error";
+import { InputError } from "@/components/errors/input-error";
 import { createProfile } from "@/features/user/actions/create-profile";
 import { Camera } from "@/lib/icons";
 import { cn } from "@/lib/utils";

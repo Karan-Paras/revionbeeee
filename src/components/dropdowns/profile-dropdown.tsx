@@ -75,7 +75,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
         ) : (
           <div className="size-14 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
             <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold w-full h-full">
-              {user.firstName?.charAt(0).toUpperCase()}
+              {user.firstName?.charAt(0).toUpperCase() || "R"}
             </div>
           </div>
         )}

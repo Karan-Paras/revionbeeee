@@ -1,6 +1,7 @@
 "use client";
 
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetQuestionBank } from "@/features/subjects/queries/use-get-question-bank";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
@@ -69,13 +70,9 @@ export function QuestionBank() {
         }
 
         if (error) {
-          return (
-            <div className="container mx-auto py-16 text-center md:px-0 px-10 bg-white rounded-xl shadow-lg min-h-[400px] flex flex-col items-center justify-center">
-              <h2 className="text-2xl font-bold mb-4">Error</h2>
-              <p className="text-lg text-gray-600">{error.message}</p>
-            </div>
-          );
+          return <ApiError error={error.message} />;
         }
+
         if (data) {
           const questions = data.data;
 

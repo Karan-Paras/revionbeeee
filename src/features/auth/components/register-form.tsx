@@ -2,18 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ErrorBlock } from "@/components/ui/error-block";
+import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { register } from "@/features/auth/actions/register";
 import { paths } from "@/routes";
 import Link from "next/link";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
+  const router = useRouter();
+
   const [formState, action, isPending] = useActionState(register, {
     errors: {},
   });
+
+  useEffect(() => {
+    if (formState.success) {
+      getSession().then(() => router.replace(paths.createProfile()));
+    }
+  }, [formState, router]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

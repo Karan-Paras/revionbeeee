@@ -1,6 +1,6 @@
 "use client";
 
-import { InputError } from "@/components/ui/input-error";
+import { InputError } from "@/components/errors/input-error";
 import { Eye, EyeOff } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";

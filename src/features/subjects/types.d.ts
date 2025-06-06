@@ -1,6 +1,4 @@
-import { ID } from "@/types/globals";
-
-type Video = string | null;
+import type { ID, Video } from "@/types/globals";
 
 interface SubjectBase {
   id: ID;
@@ -20,6 +18,13 @@ export interface Subject extends SubjectBase {
   description: string;
   video: Video;
   topic: TopicBase;
+  quizzes: {
+    id: ID;
+    topicID: ID;
+    subjectID: ID;
+    title: string;
+    description: string;
+  };
 }
 
 export interface Topic extends TopicBase {
