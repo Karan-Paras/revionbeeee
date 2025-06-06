@@ -2,10 +2,10 @@
 
 import { DataLoader } from "@/components/loaders/data-loader";
 import { Button } from "@/components/ui/button";
-import { ErrorBlock } from "@/components/ui/error-block";
+import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { InputError } from "@/components/ui/input-error";
+import { InputError } from "@/components/errors/input-error";
 import { Textarea } from "@/components/ui/textarea";
 import { updateProfile } from "@/features/user/actions/update-profile";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";

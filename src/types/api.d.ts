@@ -6,7 +6,7 @@ export interface ApiSuccessResponse<T> {
   code?: number;
   message: string;
   data: T;
-  totalCount?: number;
+  totalQuestions?: number;
 }
 
 export interface ApiErrorResponse {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ErrorBlock } from "@/components/ui/error-block";
+import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { register } from "@/features/auth/actions/register";

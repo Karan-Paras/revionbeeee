@@ -81,7 +81,7 @@ export function SubjectDetails() {
         <div className="container mx-auto bg-[#F9F9F9] rounded-xl py-16 xl:px-0 md:px-10 px-10">
           <div className="grid grid-cols-2 mx-auto md:w-9/12 w-full gap-7">
             <div className="md:col-span-1 col-span-2">
-              <Link href="/quiz-steps">
+              <Link href={paths.quizBank(subjectId)}>
                 <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FBBE1B] items-center">
                   <div className="md:col-span-3 col-span-12">
                     <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">

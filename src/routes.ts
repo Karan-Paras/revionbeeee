@@ -81,6 +81,9 @@ export const paths = {
   questionBank(subjectId: ID) {
     return `/question-bank/${subjectId}`;
   },
+  quizBank(subjectId: ID) {
+    return `/quiz-bank/${subjectId}`;
+  },
 };
 
 /**

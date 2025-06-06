@@ -1,4 +1,5 @@
 import { ID } from "@/types/globals";
+import { PhPBoolean } from "@/types/globals";
 
 type Video = string | null;
 
@@ -34,4 +35,16 @@ export interface QuestionBank {
   questionVideo: Video;
   subjectID: ID;
   topicID: ID;
+}
+
+interface Option {
+  answer: string;
+  answerVideo: Video;
+  isCorrect: PhPBoolean;
+}
+
+export interface Quiz {
+  answer: Option[];
+  question: string;
+  questionVideo: Video;
 }
