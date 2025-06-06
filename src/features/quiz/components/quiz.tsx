@@ -8,9 +8,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { DataLoader } from "@/components/loaders/data-loader";
-import { Link } from "lucide-react";
+import Link from "next/link";
 import { paths } from "@/routes";
 import { VideoPlayer } from "@/features/videos/components/video-player";
+import {
+  getQuizAnswerVideoUrl,
+  getQuizQuestionVideoUrl,
+} from "@/lib/media-urls";
 
 type Option = 0 | 1 | 2 | 3;
 
@@ -20,11 +24,9 @@ type Result = {
 };
 
 export function Quiz() {
-  const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
+  const [displayQuestionIdx, setDisplayQuestionIdx] = useState(11);
 
   const [options, setOptions] = useState<Result[]>([]);
-
-  console.log(options);
 
   const router = useRouter();
 
@@ -50,7 +52,6 @@ export function Quiz() {
     if (pending || !data || data.length === 0) {
       return;
     }
-    console.log("Quiz data loaded:", data);
     const correctOptions: Result[] = data?.map((item) => ({
       selectedOption: -1,
       correctOption: item?.data[0].answer.findIndex(
@@ -69,6 +70,7 @@ export function Quiz() {
     if (!currentQuestion) {
       return <DataLoader />;
     }
+
     const { question, answer, questionVideo } = currentQuestion;
 
     const onNextQuestion = () => {
@@ -127,10 +129,12 @@ export function Quiz() {
                 href={paths.subjectDetails(subjectId)}
                 className="flex justify-end md:mb-0 mb-4 items-center gap-2 cursor-pointer ms-auto"
               >
-                <span className="text-[#F15642] text-xl font-semibold">
-                  Exit
-                </span>
-                <Exit color="#F15642" />
+                <button className="flex gap-2 cursor-pointer items-center">
+                  <span className="text-[#F15642] text-xl font-semibold">
+                    Exit
+                  </span>
+                  <Exit color="#F15642" />
+                </button>
               </Link>
             </div>
             <div className="order-4 col-span-6 bg-[#F6F6F6] p-4 rounded-xl grid justify-items-center md:-mt-[50px] md:min-h-[75vh]">
@@ -146,18 +150,25 @@ export function Quiz() {
                       ease: "easeInOut",
                     }}
                   />
-                  <div className="question_blk flex items-center gap-2.5 md:pt-32 mb-5 flex-wrap">
+                  <div className="question_blk flex items-start gap-2.5 md:pt-32 mb-5 flex-wrap">
                     <div className="size-10 bg-white flex justify-center items-center rounded-full font-semibold">
                       {displayQuestionIdx + 1}
                     </div>
                     <div className="hed w-10/12">
-                      <h3
-                        className="font-semibold text-xl"
-                        dangerouslySetInnerHTML={{
-                          __html: question,
-                        }}
-                      />
-                      {questionVideo && <VideoPlayer src={questionVideo} />}
+                      <h3 className="font-semibold text-xl">
+                        <span
+                          className="img_spc"
+                          dangerouslySetInnerHTML={{
+                            __html: question,
+                          }}
+                        />
+                      </h3>
+
+                      {questionVideo && (
+                        <VideoPlayer
+                          src={getQuizQuestionVideoUrl(questionVideo)}
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -179,16 +190,23 @@ export function Quiz() {
                           : "bg-white"
                       )}
                     >
-                      <div className="flex gap-1 text-lg">
+                      <div className="flex gap-1 text-lg flex-wrap">
                         <p className="font-bold">
                           {String.fromCharCode(65 + index)}.
                         </p>
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: answer,
-                          }}
-                        />
-                        {answerVideo && <VideoPlayer src={answerVideo} />}
+                        <p>
+                          <span
+                            className="img_spc"
+                            dangerouslySetInnerHTML={{
+                              __html: answer,
+                            }}
+                          />
+                        </p>
+                        {answerVideo && (
+                          <VideoPlayer
+                            src={getQuizAnswerVideoUrl(answerVideo)}
+                          />
+                        )}
                       </div>
                     </motion.div>
                   ))}

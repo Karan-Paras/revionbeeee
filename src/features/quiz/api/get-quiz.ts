@@ -1,4 +1,4 @@
-import { Quiz } from "@/features/subjects/types";
+import type { Quiz } from "@/features/quiz/types";
 import fetcher from "@/lib/fetcher";
 import { ID } from "@/types/globals";
 

@@ -1,7 +1,4 @@
-import { ID } from "@/types/globals";
-import { PhPBoolean } from "@/types/globals";
-
-type Video = string | null;
+import type { ID, Video } from "@/types/globals";
 
 interface SubjectBase {
   id: ID;
@@ -21,6 +18,13 @@ export interface Subject extends SubjectBase {
   description: string;
   video: Video;
   topic: TopicBase;
+  quizzes: {
+    id: ID;
+    topicID: ID;
+    subjectID: ID;
+    title: string;
+    description: string;
+  };
 }
 
 export interface Topic extends TopicBase {
@@ -35,16 +39,4 @@ export interface QuestionBank {
   questionVideo: Video;
   subjectID: ID;
   topicID: ID;
-}
-
-interface Option {
-  answer: string;
-  answerVideo: Video;
-  isCorrect: PhPBoolean;
-}
-
-export interface Quiz {
-  answer: Option[];
-  question: string;
-  questionVideo: Video;
 }

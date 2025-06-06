@@ -15,3 +15,13 @@ export function getQuestionBankVideoUrl(video: string): string {
   const url = `${MEDIA_URL}/questionBank/video/`;
   return `${url}${video}`;
 }
+
+export function getQuizQuestionVideoUrl(video: string): string {
+  const url = `${MEDIA_URL}/quizQuestion/questionVideo/`;
+  return `${url}${video}`;
+}
+
+export function getQuizAnswerVideoUrl(video: string): string {
+  const url = `${MEDIA_URL}/quizQuestion/answerVideo/`;
+  return `${url}${video}`;
+}
