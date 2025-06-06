@@ -1,5 +1,7 @@
 import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
 import { Minus, MoveUpRight } from "@/lib/icons";
+import { paths } from "@/routes";
+import Link from "next/link";
 
 export function SelectTopics() {
   return (
@@ -19,7 +21,10 @@ export function SelectTopics() {
             <h2 className="text-4xl font-bold">Select Your Topics!</h2>
           </div>
           <div className="btn">
-            <button className="border-[#53A2EB] text-[#53A2EB] font-semibold flex gap-2 items-center rounded-xl border-2 px-6 py-4 cursor-pointer hover:bg-[#53A2EB] hover:text-white group">
+            <Link
+              href={paths.subjects()}
+              className="border-[#53A2EB] text-[#53A2EB] font-semibold flex gap-2 items-center rounded-xl border-2 px-6 py-4 cursor-pointer hover:bg-[#53A2EB] hover:text-white group"
+            >
               Browse all Subjects
               <MoveUpRight
                 width={14}
@@ -27,10 +32,10 @@ export function SelectTopics() {
                 color="#53A2EB"
                 className="group-hover:fill-[#fff]"
               />
-            </button>
+            </Link>
           </div>
         </div>
-        <SelectTopicsComponent />
+        <SelectTopicsComponent maxLength={6} />
       </div>
     </section>
   );
