@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
@@ -12,12 +12,19 @@ import { Link } from "lucide-react";
 import { paths } from "@/routes";
 import { VideoPlayer } from "@/features/videos/components/video-player";
 
-type Options = 0 | 1 | 2 | 3;
+type Option = 0 | 1 | 2 | 3;
+
+type Result = {
+  selectedOption: Option | -1;
+  correctOption: Option;
+};
 
 export function Quiz() {
   const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
 
-  const [selectedOption, setSelectedOption] = useState<Options | null>(null);
+  const [options, setOptions] = useState<Result[]>([]);
+
+  console.log(options);
 
   const router = useRouter();
 
@@ -26,13 +33,32 @@ export function Quiz() {
 
   const handleSelectedOption = (option: number) => {
     if (option === 0 || option === 1 || option === 2 || option === 3) {
-      setSelectedOption(option);
+      setOptions((prev) => {
+        const newOptions = [...prev];
+        newOptions[displayQuestionIdx] = {
+          ...newOptions[displayQuestionIdx],
+          selectedOption: option,
+        };
+        return newOptions;
+      });
     }
   };
 
   const { data, pending, totalQuestions } = useGetQuiz(subjectId);
 
-  console.log(pending);
+  useEffect(() => {
+    if (pending || !data || data.length === 0) {
+      return;
+    }
+    console.log("Quiz data loaded:", data);
+    const correctOptions: Result[] = data?.map((item) => ({
+      selectedOption: -1,
+      correctOption: item?.data[0].answer.findIndex(
+        (ans) => ans.isCorrect
+      ) as Option,
+    }));
+    setOptions(correctOptions);
+  }, [data, pending]);
 
   if (pending || !data || data.length === 0) {
     return <DataLoader />;
@@ -49,14 +75,12 @@ export function Quiz() {
       setDisplayQuestionIdx((val) => {
         return val < totalQuestions ? val + 1 : val;
       });
-      setSelectedOption(null);
     };
 
     const onPreviousQuestion = () => {
       setDisplayQuestionIdx((val) => {
         return val > 0 ? val - 1 : val;
       });
-      setSelectedOption(null);
     };
 
     return (
@@ -150,7 +174,9 @@ export function Quiz() {
                       }}
                       className={cn(
                         "itm px-5 py-6 rounded-xl mb-5 cursor-pointer hover:shadow-xl/5 duration-150 ease-in-out",
-                        selectedOption === index ? "bg-[#FBBE1B]" : "bg-white"
+                        options[displayQuestionIdx]?.selectedOption === index
+                          ? "bg-[#FBBE1B]"
+                          : "bg-white"
                       )}
                     >
                       <div className="flex gap-1 text-lg">
