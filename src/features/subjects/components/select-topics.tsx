@@ -9,7 +9,11 @@ import { ID } from "@/types/globals";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export function SelectTopics() {
+interface SelectTopicsProps {
+  maxLength?: number;
+}
+
+export function SelectTopics({ maxLength }: SelectTopicsProps) {
   const { data, isPending, error } = useGetTopics();
 
   const { setActiveSubject } = useActiveSubjectStore();
@@ -34,7 +38,11 @@ export function SelectTopics() {
   }
 
   if (data) {
-    const topics = data.data;
+    let topics = data.data;
+
+    if (maxLength && topics.length > maxLength) {
+      topics = topics.slice(0, maxLength);
+    }
 
     return (
       <div className="grid grid-cols-3 gap-7">
