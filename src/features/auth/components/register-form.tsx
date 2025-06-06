@@ -92,6 +92,7 @@ export function RegisterForm() {
               <Link
                 className="text-[#53A2EB] underline underline-offset-5 font-semibold"
                 href={paths.termsAndConditions()}
+                target="_blank"
               >
                 Terms & Conditions&nbsp;
               </Link>
@@ -99,6 +100,7 @@ export function RegisterForm() {
               <Link
                 className="text-[#53A2EB] underline underline-offset-5 font-semibold"
                 href={paths.privacyPolicy()}
+                target="_blank"
               >
                 &nbsp; Privacy Policy.
               </Link>
