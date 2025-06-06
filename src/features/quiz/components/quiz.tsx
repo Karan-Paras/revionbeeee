@@ -3,7 +3,6 @@
 import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
@@ -15,6 +14,9 @@ import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,
 } from "@/lib/media-urls";
+import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
+import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
+import { ApiError } from "@/components/errors/api-error";
 
 type Option = 0 | 1 | 2 | 3;
 
@@ -24,7 +26,7 @@ type Result = {
 };
 
 export function Quiz() {
-  const [displayQuestionIdx, setDisplayQuestionIdx] = useState(11);
+  const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
 
   const [options, setOptions] = useState<Result[]>([]);
 
@@ -33,20 +35,11 @@ export function Quiz() {
   let { subjectId } = useParams();
   subjectId = subjectId?.toString?.() ?? "";
 
-  const handleSelectedOption = (option: number) => {
-    if (option === 0 || option === 1 || option === 2 || option === 3) {
-      setOptions((prev) => {
-        const newOptions = [...prev];
-        newOptions[displayQuestionIdx] = {
-          ...newOptions[displayQuestionIdx],
-          selectedOption: option,
-        };
-        return newOptions;
-      });
-    }
-  };
+  const { data, pending, totalQuestions, error } = useGetQuiz(subjectId);
 
-  const { data, pending, totalQuestions } = useGetQuiz(subjectId);
+  const mutation = useSubmitQuiz();
+
+  const { setQuizResult } = useQuizResult();
 
   useEffect(() => {
     if (pending || !data || data.length === 0) {
@@ -61,7 +54,24 @@ export function Quiz() {
     setOptions(correctOptions);
   }, [data, pending]);
 
-  if (pending || !data || data.length === 0) {
+  const handleSelectedOption = (option: number) => {
+    if (option === 0 || option === 1 || option === 2 || option === 3) {
+      setOptions((prev) => {
+        const newOptions = [...prev];
+        newOptions[displayQuestionIdx] = {
+          ...newOptions[displayQuestionIdx],
+          selectedOption: option,
+        };
+        return newOptions;
+      });
+    }
+  };
+
+  if (error) {
+    return <ApiError error={error.message} />;
+  }
+
+  if (pending || !data || data.length <= 0 || totalQuestions <= 0) {
     return <DataLoader />;
   }
 
@@ -71,7 +81,7 @@ export function Quiz() {
       return <DataLoader />;
     }
 
-    const { question, answer, questionVideo } = currentQuestion;
+    const { id, quizID, question, answer, questionVideo } = currentQuestion;
 
     const onNextQuestion = () => {
       setDisplayQuestionIdx((val) => {
@@ -83,6 +93,28 @@ export function Quiz() {
       setDisplayQuestionIdx((val) => {
         return val > 0 ? val - 1 : val;
       });
+    };
+
+    const onSubmit = () => {
+      const totalAttempted = options.filter(
+        (option) => option.selectedOption !== -1
+      ).length;
+
+      const totalCorrect = options.filter(
+        (option) => option.selectedOption === option.correctOption
+      ).length;
+
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+      setQuizResult(subjectId, totalAttempted, totalQuestions, percentage);
+
+      mutation
+        .mutateAsync({
+          quizId: quizID,
+          totalAttempts: totalAttempted,
+          progress: percentage,
+        })
+        .then(() => router.replace(paths.quizResult(subjectId)));
     };
 
     return (
@@ -100,7 +132,6 @@ export function Quiz() {
                   </p>
                 </div>
               </div>
-
               <div className="load w-full relative mt-2.5">
                 <motion.div
                   initial={{ width: 0 }}
@@ -141,7 +172,7 @@ export function Quiz() {
               <div className="md:w-6/12 w-full max-w-lg mt-5 md:mb-10 mb-5 relative">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={displayQuestionIdx}
+                    key={id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -174,7 +205,7 @@ export function Quiz() {
 
                   {answer.map(({ answer, answerVideo }, index) => (
                     <motion.div
-                      key={index + 6}
+                      key={index + 1000}
                       onClick={() => handleSelectedOption(index)}
                       initial={{ opacity: 0, y: 5, scale: 0.98 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -217,6 +248,7 @@ export function Quiz() {
               <div className="flex justify-center mt-7 gap-3 md:flex-nowrap flex-wrap">
                 {displayQuestionIdx > 0 && (
                   <motion.button
+                    disabled={mutation.isPending}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
                     onClick={onPreviousQuestion}
@@ -230,6 +262,7 @@ export function Quiz() {
                 )}
                 {displayQuestionIdx < totalQuestions - 1 && (
                   <motion.button
+                    disabled={mutation.isPending}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
                     onClick={onNextQuestion}
@@ -246,7 +279,8 @@ export function Quiz() {
                 )}
                 {displayQuestionIdx === totalQuestions - 1 && (
                   <motion.button
-                    onClick={() => router.push("/quiz-result")}
+                    disabled={mutation.isPending}
+                    onClick={onSubmit}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
                     className="bg-[#53A2EB] border-transparent border p-4 rounded-xl flex gap-2 items-center justify-center text-white min-w-48 font-medium cursor-pointer hover:shadow-lg hover:border-[#53A2EB] hover:text-[#53A2EB] hover:bg-transparent duration-150 ease-in-out group"

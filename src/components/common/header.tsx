@@ -11,12 +11,15 @@ import { paths } from "@/routes";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   variant?: "home" | "dashboard";
 }
 
 export function Header({ variant = "dashboard" }: HeaderProps) {
+  const router = useRouter();
+
   const { data: session, status } = useSession();
 
   const logout = useLogout();
@@ -79,12 +82,27 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       );
     }
 
-    if (isPending) {
-      return <p>Loading...</p>;
-    }
+    if (variant === "dashboard") {
+      if (session) {
+        const { user } = session;
+        const isProfileComplete = isUserProfileComplete(user);
 
-    if (data) {
-      return <ProfileDropdown user={data.data} />;
+        if (isProfileComplete) {
+          if (isPending) {
+            return <p>Loading...</p>;
+          }
+
+          if (data) {
+            return <ProfileDropdown user={data.data} />;
+          }
+        } else {
+          router.replace(paths.createProfile());
+          return null;
+        }
+      } else {
+        router.replace(paths.login());
+        return null;
+      }
     }
   };
 
