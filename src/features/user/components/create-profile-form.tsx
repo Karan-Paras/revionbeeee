@@ -14,6 +14,7 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes";
 import { isUserProfileComplete } from "@/features/user/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");
@@ -24,8 +25,13 @@ export function CreateProfileForm() {
 
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (formState.success) {
+      queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
       getSession().then(() => router.replace(paths.subscriptionPlans()));
     } else {
       getSession().then((data) => {
