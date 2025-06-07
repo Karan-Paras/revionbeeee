@@ -18,7 +18,7 @@ export default function SubscriptionPlans() {
               </p>
             </div>
           </div>
-          <SubscriptionPlansComponent />
+          <SubscriptionPlansComponent href={paths.paymentMethod()} />
           <div className="col-span-3">
             <div className="flex justify-center relative">
               <Link href={paths.dashboard()}>

@@ -1,4 +1,5 @@
 import { PassChng } from "@/lib/assets";
+import { paths } from "@/routes";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,7 +22,7 @@ export default function PaymentComplete() {
               <p className="text-[#6C6C6C] font-bold text-xl mt-5">$130 </p>
             </div>
             <div className="btn">
-              <Link href="/">
+              <Link href={paths.dashboard()}>
                 <button className="bg-[#53A2EB] w-full rounded-xl  text-white p-4 font-medium cursor-pointer">
                   Continue
                 </button>
