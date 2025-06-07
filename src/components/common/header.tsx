@@ -18,11 +18,11 @@ interface HeaderProps {
 }
 
 export function Header({ variant = "dashboard" }: HeaderProps) {
-  const router = useRouter();
-
   const { data: session, status } = useSession();
 
   const logout = useLogout();
+
+  const router = useRouter();
 
   const { data, isPending } = useGetProfile();
 
@@ -82,27 +82,18 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       );
     }
 
-    if (variant === "dashboard") {
-      if (session) {
-        const { user } = session;
-        const isProfileComplete = isUserProfileComplete(user);
+    if (isPending) {
+      return <p>Loading...</p>;
+    }
 
-        if (isProfileComplete) {
-          if (isPending) {
-            return <p>Loading...</p>;
-          }
+    if (data) {
+      const { firstName, lastName, profilePicture } = data.data;
 
-          if (data) {
-            return <ProfileDropdown user={data.data} />;
-          }
-        } else {
-          router.replace(paths.createProfile());
-          return null;
-        }
-      } else {
-        router.replace(paths.login());
-        return null;
+      if (firstName && lastName && profilePicture) {
+        return <ProfileDropdown user={data.data} />;
       }
+      router.replace(paths.createProfile());
+      return null;
     }
   };
 
