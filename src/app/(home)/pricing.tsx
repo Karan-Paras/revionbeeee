@@ -21,7 +21,7 @@ export function Pricing() {
               </div>
             </div>
           </div>
-          <SubscriptionPlans />
+          <SubscriptionPlans href="#" />
         </div>
       </div>
     </section>

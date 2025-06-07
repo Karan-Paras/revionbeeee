@@ -13,6 +13,7 @@ import { startTransition, useActionState, useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes";
+import { isUserProfileComplete } from "@/features/user/utils";
 
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");
@@ -26,6 +27,20 @@ export function CreateProfileForm() {
   useEffect(() => {
     if (formState.success) {
       getSession().then(() => router.replace(paths.subscriptionPlans()));
+    } else {
+      getSession().then((data) => {
+        const user = data?.user;
+
+        if (!user) {
+          return router.replace(paths.login());
+        }
+
+        const isProfileComplete = isUserProfileComplete(user);
+
+        if (isProfileComplete) {
+          router.replace(paths.dashboard());
+        }
+      });
     }
   }, [formState, router]);
 
