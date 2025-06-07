@@ -55,7 +55,7 @@ export function UserProfileCard() {
             ) : (
               <div className="size-40 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
                 <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold text-4xl w-full h-full">
-                  {firstName?.charAt(0).toUpperCase()}
+                  {firstName?.charAt(0).toUpperCase() || "R"}
                 </div>
               </div>
             )}
