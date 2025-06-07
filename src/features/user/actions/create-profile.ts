@@ -2,8 +2,6 @@
 
 import { createProfile as createProfileApi } from "@/features/user/api/create-profile";
 import type { ApiErrorResponse } from "@/types/api";
-import { redirect } from "next/navigation";
-import { paths } from "@/routes";
 import { unstable_update } from "@/auth";
 import { CreateProfileSchema } from "@/features/user/schemas";
 
@@ -15,6 +13,7 @@ type CreateProfileFormState = {
     phoneNumber?: string[];
     _form?: string[];
   };
+  success?: boolean;
 };
 
 export const createProfile = async (
@@ -58,5 +57,5 @@ export const createProfile = async (
     },
   });
 
-  redirect(paths.subscriptionPlans());
+  return { errors: {}, success: true };
 };

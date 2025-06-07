@@ -9,7 +9,10 @@ import { createProfile } from "@/features/user/actions/create-profile";
 import { Camera } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { startTransition, useActionState, useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { paths } from "@/routes";
 
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");
@@ -17,6 +20,14 @@ export function CreateProfileForm() {
   const [formState, action, isPending] = useActionState(createProfile, {
     errors: {},
   });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (formState.success) {
+      getSession().then(() => router.replace(paths.subscriptionPlans()));
+    }
+  }, [formState, router]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
