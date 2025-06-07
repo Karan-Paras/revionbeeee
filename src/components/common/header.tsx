@@ -11,7 +11,6 @@ import { paths } from "@/routes";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   variant?: "home" | "dashboard";
@@ -21,8 +20,6 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
 
   const logout = useLogout();
-
-  const router = useRouter();
 
   const { data, isPending } = useGetProfile();
 
@@ -87,13 +84,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     }
 
     if (data) {
-      const { firstName, lastName, profilePicture } = data.data;
-
-      if (firstName && lastName && profilePicture) {
-        return <ProfileDropdown user={data.data} />;
-      }
-      router.replace(paths.createProfile());
-      return null;
+      return <ProfileDropdown user={data.data} />;
     }
   };
 
