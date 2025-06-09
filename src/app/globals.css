@@ -155,3 +155,8 @@ body {
   aspect-ratio: 1/1;
   object-fit: contain;
 }
+
+#home::before {
+  @apply absolute top-0 right-0 left-0 bottom-0 bg-black/75;
+  content: "";
+}

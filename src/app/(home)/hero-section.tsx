@@ -33,8 +33,16 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative hero_bg bg-no-repeat bg-cover bg-top 2xl:px-0 lg:px-20"
+      className="relative min-h-screen overflow-hidden bg-top 2xl:px-0 lg:px-20 "
     >
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+        autoPlay
+        muted
+        loop
+        playsInline
+        src="/videos/3591398943-preview.mp4"
+      ></video>
       <div className="container mx-auto">
         <div className="grid grid-cols-2 content-center min-h-screen">
           <div className="col-span-2 text-center lg:w-6/12 w-10/12 mx-auto relative">

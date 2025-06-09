@@ -42,3 +42,14 @@ export interface QuestionBank {
   subjectID: ID;
   topicID: ID;
 }
+
+export interface Topics {
+  id: ID;
+  topicName: string;
+  status: number;
+}
+
+export interface StudentProgress {
+  subjectName: string;
+  progress: string;
+}
