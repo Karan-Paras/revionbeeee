@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
-import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/useRedirectIfProfileIncomplete";
+import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
 
 interface AppLayoutProps {
   children: React.ReactNode;
