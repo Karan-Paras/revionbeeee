@@ -48,7 +48,7 @@ export function CreateProfileForm() {
         }
       });
     }
-  }, [formState, router]);
+  }, [formState, router, queryClient]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

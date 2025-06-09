@@ -10,6 +10,7 @@ export const {
 } = NextAuth({
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   callbacks: {
     jwt({ token, user, trigger, session }) {

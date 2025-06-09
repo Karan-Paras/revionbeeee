@@ -41,8 +41,10 @@ export const register = async (
     };
   }
 
+  let json;
+
   try {
-    await registerApi(validatedFields.data);
+    json = await registerApi(validatedFields.data);
   } catch (error: unknown) {
     if ((error as ApiErrorResponse)?.message) {
       return {
@@ -53,15 +55,15 @@ export const register = async (
     }
   }
 
-  const { email, password } = validatedFields.data;
-
   try {
     await signIn("credentials", {
-      email,
-      password,
+      user: JSON.stringify(json?.data),
+      token: json?.token,
+      redirect: false,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
+    return { errors: { _form: ["Something went wrong!"] } };
   }
 
   return { errors: {}, success: true };

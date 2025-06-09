@@ -2,7 +2,8 @@
 
 import { LoginSchema } from "@/features/auth/schemas";
 import { signIn } from "@/auth";
-import { AuthError } from "next-auth";
+import { ApiErrorResponse } from "@/types/api";
+import { login as loginApi } from "@/features/auth/api/login";
 
 type LoginFormState = {
   errors: {
@@ -26,19 +27,29 @@ export const login = async (
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
-  const { email, password } = validatedFields.data;
+  let json;
+
+  try {
+    json = await loginApi(validatedFields.data);
+  } catch (error: unknown) {
+    if ((error as ApiErrorResponse)?.message) {
+      return {
+        errors: {
+          _form: [(error as ApiErrorResponse)?.message || "An error occurred!"],
+        },
+      };
+    }
+  }
 
   try {
     await signIn("credentials", {
-      email,
-      password,
+      user: JSON.stringify(json?.data),
+      token: json?.token,
+      redirect: false,
     });
-  } catch (error) {
-    if (error instanceof AuthError) {
-      return error.type === "CredentialsSignin"
-        ? { errors: { _form: ["Invalid credentials!"] } }
-        : { errors: { _form: ["Something went wrong!"] } };
-    }
+  } catch (error: unknown) {
+    console.error(error);
+    return { errors: { _form: ["Something went wrong!"] } };
   }
 
   return { errors: {}, success: true };
