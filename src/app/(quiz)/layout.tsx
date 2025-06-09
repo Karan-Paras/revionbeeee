@@ -1,6 +1,6 @@
 "use client";
 
-import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/useRedirectIfProfileIncomplete";
+import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
 
 interface QuizLayoutProps {
   children: React.ReactNode;
