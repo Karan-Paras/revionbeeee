@@ -53,12 +53,12 @@ export function LandingSlider() {
       <Slider {...settings}>
         {[...Array(3)].map((_, index) => (
           <div key={index} className="item p-3">
-            <div className="border border-[#E2E2E2] grid-cols-7 grid gap-5 rounded-2xl p-4 items-center relative">
-              <div className="img lg:col-span-3 col-span-7">
-                <div className="img_blk size-44 rounded-full mx-auto overflow-hidden">
+            <div className="border border-[#E2E2E2] grid-cols-7 grid xl:gap-5 lg:gap-2 rounded-2xl p-4 items-center relative">
+              <div className="img xl:col-span-3 lg:col-span-3 col-span-7">
+                <div className="img_blk xl:size-44 lg:size-32 rounded-full mx-auto overflow-hidden">
                   <Image src={SubTwo} alt="Slide 1" />
                 </div>
-                <div className="dsc text-center mt-4">
+                <div className="dsc text-center xl:mt-4 lg:mt-3">
                   <h4 className="text-xl font-semibold">Esther Howard</h4>
                   <p className="text-[#787878] text-sm">Student</p>
                 </div>
@@ -73,7 +73,7 @@ export function LandingSlider() {
                     students boost their confidence, sharpen their skills, and
                     fall in love with math!
                   </p>
-                  <div className="itm mt-3 flex md:justify-start justify-center">
+                  <div className="itm xl:mt-3 lg:mt-2 flex md:justify-start justify-center">
                     <svg
                       width="133"
                       height="24"

@@ -1,23 +1,23 @@
 import { SupportForm } from "@/features/support/components/support-form";
-import { Mail, MapPin, Minus, Phone } from "@/lib/icons";
+import { Mail, MapPin, Phone } from "@/lib/icons";
 
 export function Support() {
   return (
     <section
       id="contact"
-      className="bg-[#F6F6F6] relative py-20 2xl:px-0 lg:px-20 px-10"
+      className="bg-[#F6F6F6] relative py-20 2xl:px-0 xl:px-20 px-10"
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-6 gap-8">
           <div className="md:col-span-3 col-span-6">
-            <div className="itm mb-5 flex items-center gap-1.5 uppercase">
-              <span>
+            <div className="itm mb-5 flex items-center gap-1.5 capitalize">
+              {/* <span>
                 <Minus color="#53A2EB" />
-              </span>
+              </span> */}
               <p className="text-[#53A2EB]">Contact us</p>
             </div>
             <div className="hed">
-              <h3 className="font-bold md:text-5xl text-3xl md:leading-16 leading-normal">
+              <h3 className="2xl:text-6xl xl:text-5xl lg:text-4xl text-3xl font-bold xl:leading-normal lg:leading-10 mb-3">
                 We&apos;re Here To <br /> Provide 24X7 Support
               </h3>
               <p className="font-light leading-8 my-4">
@@ -29,11 +29,11 @@ export function Support() {
             <div className="addrs my-5">
               <div className="flex items-center gap-2.5 mb-10  md:flex-nowrap flex-wrap">
                 <h3 className="font-bold text-lg">Our Address</h3>
-                <span>
+                {/* <span>
                   <svg width="227" height="1" viewBox="0 0 227 1" fill="none">
                     <rect width="227" height="1" fill="#505050" />
                   </svg>
-                </span>
+                </span> */}
               </div>
               <div className="item flex items-center gap-3 mb-5">
                 <span>
