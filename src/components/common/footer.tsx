@@ -8,7 +8,7 @@ interface FooterProps {
 
 export function Footer({ variant = "compact" }: FooterProps) {
   return (
-    <footer className="bg-[#126DC2] foot_bg bg-no-repeat bg-blend-multiply bg-cover py-10 lg:px-0 px-10">
+    <footer className="bg-[#126DC2] foot_bg bg-no-repeat bg-blend-multiply bg-cover py-10 xl:px-0 px-10">
       <div className="container mx-auto">
         {variant === "extended" ? (
           <div className="grid-cols-4 grid gap-5">

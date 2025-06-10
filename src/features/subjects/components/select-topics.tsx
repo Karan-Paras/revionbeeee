@@ -45,12 +45,14 @@ export function SelectTopics({ maxLength }: SelectTopicsProps) {
     }
 
     return (
-      <div className="grid grid-cols-3 gap-7">
+      <div className="grid grid-cols-3 xl:gap-7 gap-4">
         {topics.map(({ id, subjects, topicName }) => (
           <div key={id} className="md:col-span-1 col-span-3">
             <div className="itm p-2 bg-white rounded-xl shadow-xl">
-              <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
-                <h3 className="font-bold md:text-2xl text-xl">{topicName}</h3>
+              <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24 px-5">
+                <h3 className="font-bold xl:text-2xl lg:text-xl">
+                  {topicName}
+                </h3>
               </div>
               <ul className="overflow-y-auto max-h-[410px] min-h-[400px]">
                 {subjects.map(({ id, subjectName }) => (

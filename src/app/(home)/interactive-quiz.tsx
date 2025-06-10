@@ -3,14 +3,14 @@ import {
   Certificate,
   LaptopUser,
   LibraryBig,
-  Minus,
+  MessageStar,
   MoveUpRight,
 } from "@/lib/icons";
 import Image from "next/image";
 
 export function InteractiveQuiz() {
   return (
-    <section id="about" className="py-20 px-10 relative 2xl:px-0 lg:px-20">
+    <section id="about" className="py-20 px-10 relative 2xl:px-0 xl:px-20">
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-10">
           <div className="lg:col-span-1 md:col-span-2 col-span-2">
@@ -23,9 +23,9 @@ export function InteractiveQuiz() {
                     alt=""
                   />
                 </div>
-                <div className="border rounded-xl border-[#DFDFDF] p-4 px-7">
+                <div className="border rounded-xl border-[#DFDFDF] 2xl:p-4 lg:p-3 px-7">
                   <div className="grid grid-cols-2">
-                    <div className="md:col-span-1 col-span-2 md:text-left text-center ">
+                    <div className="xl:col-span-1 col-span-2 md:text-left text-center ">
                       <div className="itm size-12 rounded-full overflow-hidden inline-flex -ms-3 border-4 border-[#fff]">
                         <Image src={Lft} alt="" />
                       </div>
@@ -39,7 +39,7 @@ export function InteractiveQuiz() {
                         <Image src={Lft} alt="" />
                       </div>
                     </div>
-                    <div className="md:col-span-1 col-span-2 md:text-left text-center">
+                    <div className="xl:col-span-1 col-span-2 md:text-left text-center">
                       <h3 className="text-xl font-bold">Top -Students</h3>
                       <p>All Over the words</p>
                     </div>
@@ -66,16 +66,18 @@ export function InteractiveQuiz() {
           </div>
           <div className="lg:col-span-1 md:col-span-2 col-span-2">
             <div className="itm flex items-center gap-1.5">
-              <span>
+              {/* <span>
                 <Minus color="#53A2EB" />
-              </span>
-              <p className="text-[#53A2EB]">Flexible supported learning</p>
+              </span> */}
+              <p className="text-[#53A2EB] capitalize">
+                Flexible supported learning
+              </p>
             </div>
             <div className="hed">
-              <h3 className="md:text-6xl text-3xl font-bold leading-normal mb-3">
+              <h3 className="2xl:text-6xl xl:text-5xl lg:text-4xl text-3xl font-bold xl:leading-normal lg:leading-10 mb-3">
                 Interactive Quizzes for Curious Young Minds
               </h3>
-              <p className="text-[#505050] leading-10 md:text-lg text-base font-light">
+              <p className="text-[#505050] leading-10 lg:leading-7 2xl:text-lg lg:text-base text-base font-light">
                 Engage students with fun, educational quizzes designed to spark
                 curiosity, reinforce learning, and build confidence across a
                 wide range of subjects and grade levels.
@@ -88,7 +90,9 @@ export function InteractiveQuiz() {
                     <LibraryBig />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold text-5xl mb-4">70+</h4>
+                    <h4 className="font-bold xl:text-5xl lg:text-4xl xl:mb-4 lg:mb-2">
+                      70+
+                    </h4>
                     <p>
                       Metus dictum at tempor commodo ullamcorper a lacus
                       vestibulum.
@@ -98,9 +102,13 @@ export function InteractiveQuiz() {
               </div>
               <div className="md:col-span-1 col-span-2">
                 <div className="flex gap-4">
-                  <div className="itm"></div>
+                  <div className="itm">
+                    <MessageStar />
+                  </div>
                   <div className="desc">
-                    <h4 className="font-bold text-5xl mb-4">9/10</h4>
+                    <h4 className="font-bold xl:text-5xl lg:text-4xl xl:mb-4 lg:mb-2">
+                      9/10
+                    </h4>
                     <p>
                       Metus dictum at tempor commodo ullamcorper a lacus
                       vestibulum.
@@ -114,7 +122,9 @@ export function InteractiveQuiz() {
                     <LaptopUser />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold text-5xl mb-4">95%</h4>
+                    <h4 className="font-bold xl:text-5xl lg:text-4xl xl:mb-4 lg:mb-2">
+                      95%
+                    </h4>
                     <p>
                       Metus dictum at tempor commodo ullamcorper a lacus
                       vestibulum.
@@ -128,7 +138,9 @@ export function InteractiveQuiz() {
                     <Certificate />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold text-5xl mb-4">40k</h4>
+                    <h4 className="font-bold xl:text-5xl lg:text-4xl xl:mb-4 lg:mb-2">
+                      40k
+                    </h4>
                     <p>
                       Metus dictum at tempor commodo ullamcorper a lacus
                       vestibulum.
