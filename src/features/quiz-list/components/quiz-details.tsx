@@ -14,14 +14,14 @@ export function QuizDetails() {
   // let { subjectId } = useParams();
   const params = useParams();
   const quizId = params?.quizId?.toString() ?? "";
-  console.log(quizId, "quizId");
 
   const { data, isPending, error } = useGetSubjectDetails(quizId);
+  console.log(data?.data, "data");
 
   const { activeSubject } = useActiveSubjectStore();
 
   const subject =
-    activeSubject.subject || data?.data[0].subjectName || "Loading...";
+    activeSubject.subject || data?.data?.subjectName || "Loading...";
 
   const breadcrumbs = [
     {
@@ -60,15 +60,15 @@ export function QuizDetails() {
                   <div className="grid grid-cols-2 bg-white rounded-xl py-5 px-7">
                     <div className="col-span-2">
                       <h3 className="font-bold lg:text-xl text-lg mb-4 pb-4 border-b border-[#D9D9D9] text-[#505050]">
-                        {data?.data[0]?.title}
+                        {data?.data?.title}
                       </h3>
                       <h5 className="font-semibold text-base pb-4 text-[#505050]">
-                        {data?.data[0]?.subjectName}
+                        {data?.data?.subjectName}
                       </h5>
                       <p
                         className="text-[#505050] mb-3"
                         dangerouslySetInnerHTML={{
-                          __html: data?.data[0]?.description,
+                          __html: data?.data?.description,
                         }}
                       ></p>
                     </div>
