@@ -5,7 +5,7 @@ import { useHomeTopics } from "../queries/use-home";
 
 export function Home() {
   const { data } = useHomeTopics();
-  console.log(data?.data, "home data");
+
   return (
     <div className="grid grid-cols-3 p-8 bg-white rounded-xl gap-8">
       <div className="col-span-3">
