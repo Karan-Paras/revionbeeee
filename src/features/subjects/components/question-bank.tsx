@@ -40,7 +40,7 @@ export function QuestionBank() {
   const { data, isPending, error } = useGetQuestionBank(subjectId);
 
   const subject =
-    activeSubject.subject || subjectData?.data[0].subjectName || "Loading...";
+    activeSubject.subject || subjectData?.data?.subjectName || "Loading...";
 
   const breadcrumbs = [
     {

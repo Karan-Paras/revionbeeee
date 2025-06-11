@@ -22,12 +22,12 @@ export function SubjectDetails() {
   subjectId = subjectId?.toString?.() ?? "";
 
   const { data, isPending, error } = useGetSubjectDetails(subjectId);
+  console.log(data, "dataaaa");
 
   const { activeSubject } = useActiveSubjectStore();
-  console.log(activeSubject, "activeSubject");
 
   const subject =
-    activeSubject.subject || data?.data[0].subjectName || "Loading...";
+    activeSubject.subject || data?.data?.subjectName || "Loading...";
 
   const breadcrumbs = [
     {
@@ -58,7 +58,7 @@ export function SubjectDetails() {
         }
 
         if (data) {
-          const [{ description, title, video }] = data.data;
+          // const [{ description, title, video }] = data.data;
 
           return (
             <>
@@ -66,12 +66,18 @@ export function SubjectDetails() {
                 <div className="container mx-auto">
                   <div className="grid">
                     <h3 className="font-bold md:text-3xl text-2xl mb-4">
-                      {title}
+                      {data?.data?.title}
                     </h3>
-                    {video && <VideoPlayer src={getSubjectVideoUrl(video)} />}
+                    {data?.data?.video && (
+                      <VideoPlayer
+                        src={getSubjectVideoUrl(data?.data?.video)}
+                      />
+                    )}
                     <article
                       className="md:text-xl text-base text-[#505050] mb-3 font-normal my-5 desc_blk"
-                      dangerouslySetInnerHTML={{ __html: description }}
+                      dangerouslySetInnerHTML={{
+                        __html: data?.data?.description,
+                      }}
                     />
                   </div>
                 </div>
