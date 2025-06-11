@@ -13,7 +13,6 @@ export function ProgressTracker({ topicId }: Props) {
   // subjectId = subjectId?.toString?.() ?? "";
 
   const { data } = useGetStudentProgress(topicId || "");
-  console.log(data?.data, "student progress data");
 
   if (!topicId) return <div className="md:col-span-9">Loading topic...</div>;
   return (

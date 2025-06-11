@@ -52,7 +52,6 @@ export function QuizDetails() {
 
         if (data) {
           //   const [{ description, title, video }] = data.data;
-          console.log(data, "datatatat");
 
           return (
             <>
