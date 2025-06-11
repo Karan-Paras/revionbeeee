@@ -16,7 +16,6 @@ export function QuizDetails() {
   const quizId = params?.quizId?.toString() ?? "";
 
   const { data, isPending, error } = useGetSubjectDetails(quizId);
-  console.log(data?.data, "data");
 
   const { activeSubject } = useActiveSubjectStore();
 

@@ -9,7 +9,6 @@ import {
   CircleCheckFading,
   HelpLightBulb,
   MessageCircleQuestion,
-  Video,
 } from "@/lib/icons";
 import { getSubjectVideoUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
@@ -22,7 +21,6 @@ export function SubjectDetails() {
   subjectId = subjectId?.toString?.() ?? "";
 
   const { data, isPending, error } = useGetSubjectDetails(subjectId);
-  console.log(data, "dataaaa");
 
   const { activeSubject } = useActiveSubjectStore();
 
@@ -84,10 +82,10 @@ export function SubjectDetails() {
               </section>
               <section>
                 <div className="container mx-auto bg-[#F9F9F9] rounded-xl py-16 xl:px-0 md:px-10 px-10">
-                  <div className="grid grid-cols-2 mx-auto md:w-9/12 w-full gap-7">
+                  <div className="grid grid-cols-3 w-full gap-5">
                     <div className="md:col-span-1 col-span-2">
                       <Link href={paths.quizBank(subjectId)}>
-                        <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FBBE1B] items-center">
+                        <div className="grid grid-cols-12 bg-white px-5 min-h-[210px] md:py-10 py-6 rounded-xl border border-[#FBBE1B] items-center">
                           <div className="md:col-span-3 col-span-12">
                             <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                               <HelpLightBulb
@@ -111,7 +109,7 @@ export function SubjectDetails() {
                     </div>
                     <div className="md:col-span-1 col-span-2">
                       <Link href={paths.questionBank(subjectId)}>
-                        <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#53A2EB] items-center">
+                        <div className="grid grid-cols-12 bg-white px-5 min-h-[210px] md:py-10 py-6 rounded-xl border border-[#53A2EB] items-center">
                           <div className="md:col-span-3 col-span-12">
                             <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                               <MessageCircleQuestion color="#53A2EB" />
@@ -129,7 +127,7 @@ export function SubjectDetails() {
                         </div>
                       </Link>
                     </div>
-                    <div className="md:col-span-1 col-span-2">
+                    {/* <div className="md:col-span-1 col-span-2">
                       <Link href="/videos" className="">
                         <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FAB89B] items-center">
                           <div className="md:col-span-3 col-span-12">
@@ -148,10 +146,10 @@ export function SubjectDetails() {
                           </div>
                         </div>
                       </Link>
-                    </div>
+                    </div> */}
                     <div className="md:col-span-1 col-span-2">
-                      <Link href="/track-progress" className="">
-                        <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#9F9BFD] items-center">
+                      <Link href={paths.progress()} className="">
+                        <div className="grid grid-cols-12 bg-white px-5 min-h-[210px] md:py-10 py-6 rounded-xl border border-[#9F9BFD] items-center">
                           <div className="md:col-span-3 col-span-12">
                             <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
                               <CircleCheckFading color="#9F9CF8" />
