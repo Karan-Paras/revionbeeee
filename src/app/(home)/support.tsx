@@ -40,7 +40,7 @@ export function Support() {
                   <MapPin color="#FBBE1B" />
                 </span>
                 <p className="font-medium">
-                  7 Sente Des Pierres Mayettes, 33305 Dijon
+                  RevisionBee LLC 30 N Gould St Ste N Sheridan, WY 82801
                 </p>
               </div>
               <div className="item flex items-center gap-3 mb-5">
@@ -53,7 +53,7 @@ export function Support() {
                 <span>
                   <Mail color="#FBBE1B" />
                 </span>
-                <p className="font-medium">support@example.com</p>
+                <p className="font-medium">support@revisionbee.com</p>
               </div>
             </div>
           </div>

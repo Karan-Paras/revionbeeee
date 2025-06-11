@@ -11,7 +11,6 @@ export function SelectLevel({ setSelectedTopicId }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const { data } = useGetLevelTopics();
-  console.log(data, "topics level data");
 
   useEffect(() => {
     // set default first topic id

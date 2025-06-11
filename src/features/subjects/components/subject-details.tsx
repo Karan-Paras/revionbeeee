@@ -24,6 +24,7 @@ export function SubjectDetails() {
   const { data, isPending, error } = useGetSubjectDetails(subjectId);
 
   const { activeSubject } = useActiveSubjectStore();
+  console.log(activeSubject, "activeSubject");
 
   const subject =
     activeSubject.subject || data?.data[0].subjectName || "Loading...";
