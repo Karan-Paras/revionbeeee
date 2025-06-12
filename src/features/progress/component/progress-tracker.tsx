@@ -24,11 +24,11 @@ export function ProgressTracker({ topicId }: Props) {
           {Array.isArray(data?.data) && data?.data?.length > 0 ? (
             data?.data?.map(({ subjectName, progress }, index) => {
               const progressValue = parseInt(progress.replace("%", ""));
-              let progressColor = "#FBBE1B";
-              if (progressValue < 30) progressColor = "#F87171";
-              else if (progressValue < 70) progressColor = "#FBBE1B";
-              else progressColor = "#34D399";
+              let progressColor = "transparent";
 
+              if (progressValue > 0) {
+                progressColor = "#FBBE1B";
+              }
               return (
                 <div
                   key={index}
@@ -40,7 +40,7 @@ export function ProgressTracker({ topicId }: Props) {
                       <div className="prog relative">
                         <div
                           className="absolute w-[75%] bg-[#FBBE1B] top-0 left-0 
-                  right-0 bottom-0 z-10 rounded-xl h-full"
+                          right-0 bottom-0 z-10 rounded-xl h-full"
                           style={{
                             width: `${progressValue}%`,
                             backgroundColor: progressColor,

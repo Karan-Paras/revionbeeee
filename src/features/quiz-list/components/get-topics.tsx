@@ -38,7 +38,7 @@ export function SelectTopics({ maxLength }: SelectTopicsProps) {
     toast.error(error.message);
   }
 
-  if (data) {
+  if (data?.data) {
     let topics = data.data;
 
     if (maxLength && topics.length > maxLength) {
@@ -64,31 +64,39 @@ export function SelectTopics({ maxLength }: SelectTopicsProps) {
       <>
         {/* <BreadcrumbBanner title={subject} breadcrumbs={breadcrumbs} /> */}
         <div className="grid grid-cols-3 gap-7">
-          {topics.map(({ id, subjects, topicName }) => (
+          {topics?.map(({ id, subjects, topicName }) => (
             <div key={id} className="md:col-span-1 col-span-3">
               <div className="itm p-2 bg-white rounded-xl shadow-xl">
                 <div className="hed bg-[#F5F5F5] rounded-xl content-center text-center min-h-24">
                   <h3 className="font-bold md:text-2xl text-xl">{topicName}</h3>
                 </div>
                 <ul className="overflow-y-auto max-h-[410px] min-h-[400px]">
-                  {subjects.map(({ id, subjectName }) => (
-                    <li
-                      key={id}
-                      className="flex justify-between border-b border-[#DEDEDE] p-5 items-center"
-                    >
-                      <button
-                        className="w-full flex items-center justify-between cursor-pointer"
-                        onClick={() =>
-                          onSubjectClick(id, topicName, subjectName)
-                        }
+                  {subjects && subjects.length > 0 ? (
+                    subjects?.map(({ id, subjectName }) => (
+                      <li
+                        key={id}
+                        className="flex justify-between border-b border-[#DEDEDE] p-5 items-center"
                       >
-                        <p className="font-semibold uppercase">{subjectName}</p>
-                        <span>
-                          <ChevronRight />
-                        </span>
-                      </button>
+                        <button
+                          className="w-full flex items-center justify-between cursor-pointer"
+                          onClick={() =>
+                            onSubjectClick(id, topicName, subjectName)
+                          }
+                        >
+                          <p className="font-semibold uppercase">
+                            {subjectName}
+                          </p>
+                          <span>
+                            <ChevronRight />
+                          </span>
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="mt-3 p-1 text-gray-500 text-md content-center text-center">
+                      No quiz available
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
