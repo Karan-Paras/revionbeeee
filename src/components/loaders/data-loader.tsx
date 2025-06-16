@@ -62,13 +62,18 @@ const Cube = ({ size }: { size: number }) => {
   );
 };
 
-const DataLoader = () => {
+interface DataLoaderProps {
+  className?: string;
+}
+
+const DataLoader = ({ className }: DataLoaderProps) => {
   const orbitRadius = 40;
   const cubeSize = 40;
   const duration = 8;
 
   return (
     <div
+      className={className}
       style={{
         display: "flex",
         justifyContent: "center",
