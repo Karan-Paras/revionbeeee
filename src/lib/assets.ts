@@ -17,9 +17,8 @@ import NoData from "public/images/nodata.png";
 
 import OnlineQuiz from "public/images/online_quiz.gif";
 
-const Demo = "/video/demo.mp4";
-
-export { Demo };
+const Demo = "/videos/demo.mp4";
+const Intro = "/videos/introduction-video.mov";
 
 export {
   Logo,
@@ -39,4 +38,6 @@ export {
   Faq2,
   NoData,
   User,
+  Intro,
+  Demo,
 };
