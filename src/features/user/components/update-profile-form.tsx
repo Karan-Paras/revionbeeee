@@ -114,6 +114,12 @@ function Form({ userData }: FormProps) {
         <FormLabel className="text-sm font-light flex justify-center items-center">
           Upload your image
         </FormLabel>
+        {!!formState.errors.profilePicture && (
+          <InputError
+            error={formState.errors.profilePicture?.join(", ")}
+            className="text-center"
+          />
+        )}
         <div className="grid grid-cols-2 gap-10 my-5">
           <div className="col-span-1">
             <div className="itm relative gap-1.5 grid">
