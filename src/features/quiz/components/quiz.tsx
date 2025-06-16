@@ -17,13 +17,7 @@ import {
 import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
 import { ApiError } from "@/components/errors/api-error";
-
-type Option = 0 | 1 | 2 | 3;
-
-type Result = {
-  selectedOption: Option | -1;
-  correctOption: Option;
-};
+import type { Option, Result } from "@/features/quiz/types";
 
 export function Quiz() {
   const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
@@ -81,7 +75,14 @@ export function Quiz() {
       return <DataLoader />;
     }
 
-    const { id, quizID, question, answer, questionVideo } = currentQuestion;
+    const {
+      id,
+      quizID,
+      question,
+      answer,
+      questionVideo,
+      quiz: { title },
+    } = currentQuestion;
 
     const onNextQuestion = () => {
       setDisplayQuestionIdx((val) => {
@@ -106,7 +107,13 @@ export function Quiz() {
 
       const percentage = Math.round((totalCorrect / totalQuestions) * 100);
 
-      setQuizResult(subjectId, totalAttempted, totalQuestions, percentage);
+      setQuizResult(
+        subjectId,
+        totalAttempted,
+        totalQuestions,
+        percentage,
+        options
+      );
 
       mutation
         .mutateAsync({
@@ -114,7 +121,7 @@ export function Quiz() {
           totalAttempts: totalAttempted,
           progress: percentage,
         })
-        .then(() => router.replace(paths.quizResult(subjectId)));
+        .then(() => router.replace(paths.quizFinished(subjectId)));
     };
 
     return (
@@ -181,7 +188,12 @@ export function Quiz() {
                       ease: "easeInOut",
                     }}
                   />
-                  <div className="question_blk flex items-start gap-2.5 md:pt-32 mb-5 flex-wrap">
+
+                  <h2 className="md:pt-20 mb-8 text-center text-4xl font-bold">
+                    {title}
+                  </h2>
+
+                  <div className="question_blk flex items-start gap-2.5  mb-5 flex-wrap">
                     <div className="size-10 bg-white flex justify-center items-center rounded-full font-semibold">
                       {displayQuestionIdx + 1}
                     </div>

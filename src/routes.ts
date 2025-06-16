@@ -87,6 +87,9 @@ export const paths = {
   quizBank(subjectId: ID) {
     return `/quiz-bank/${subjectId}`;
   },
+  quizFinished(subjectId: ID) {
+    return `/quiz-finished/${subjectId}`;
+  },
   quizResult(subjectId: ID) {
     return `/quiz-result/${subjectId}`;
   },
