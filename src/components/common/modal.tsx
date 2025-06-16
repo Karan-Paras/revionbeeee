@@ -5,7 +5,7 @@ import * as motion from "motion/react-client";
 import { useEffect } from "react";
 
 type ModalProps = {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   onClose: () => void;
   className?: string;
@@ -84,11 +84,13 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
               }}
             >
               {/* Modal Content */}
-              <div className="flex items-center p-4 border-b border-[#ffffff26]  justify-center txt_hed mt-5">
-                <h2 className="text-lg font-semibold text-[#232323]">
-                  {title}
-                </h2>
-              </div>
+              {title && (
+                <div className="flex items-center p-4 border-b border-[#ffffff26]  justify-center txt_hed mt-5">
+                  <h2 className="text-lg font-semibold text-[#232323]">
+                    {title}
+                  </h2>
+                </div>
+              )}
               {children}
             </motion.div>
           </div>
