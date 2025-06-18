@@ -40,7 +40,6 @@ export default async function fetcher<T>(
     });
 
     const json: ApiResponse<T> = await response.json();
-    console.log(url, body, json);
 
     if (json.status != 200) {
       throw new Error(json.message);
