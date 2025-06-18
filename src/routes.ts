@@ -1,98 +1,45 @@
 import type { ID } from "@/types/globals";
 
-const withPrefix = (prefix: string, paths: Record<string, () => string>) => {
-  return Object.fromEntries(
-    Object.entries(paths).map(([key, fn]) => [key, () => `${prefix}${fn()}`])
+type PathFn = Record<string, () => string>;
+
+const withPrefix = <T extends PathFn>(prefix: string, paths: T): T => {
+  const entries = Object.entries(paths).map(
+    ([key, fn]) => [key, () => `${prefix}${fn()}`] as const
   );
+  return Object.fromEntries(entries) as T;
 };
 
 export const paths = {
-  home() {
-    return "/";
-  },
-  login() {
-    return "/login";
-  },
-  signup() {
-    return "/signup";
-  },
-  createProfile() {
-    return "/create-profile";
-  },
-  subscriptionPlans() {
-    return "/subscription-plans";
-  },
-  paymentMethod() {
-    return "/payment-method";
-  },
-  paymentComplete() {
-    return "/payment-complete";
-  },
-  forgotPassword() {
-    return "/forgot-password";
-  },
-  emailSent() {
-    return "/email-sent";
-  },
-  resetPassword() {
-    return "/reset-password";
-  },
-  passwordChanged() {
-    return "/password-changed";
-  },
-  dashboard() {
-    return "/dashboard";
-  },
-  progress() {
-    return "/progress";
-  },
-  quiz() {
-    return "/quiz";
-  },
+  home: () => "/",
+  login: () => "/login",
+  signup: () => "/signup",
+  createProfile: () => "/create-profile",
+  subscriptionPlans: () => "/subscription-plans",
+  paymentMethod: () => "/payment-method",
+  paymentComplete: () => "/payment-complete",
+  forgotPassword: () => "/forgot-password",
+  emailSent: () => "/email-sent",
+  resetPassword: () => "/reset-password",
+  passwordChanged: () => "/password-changed",
+  dashboard: () => "/dashboard",
+  progress: () => "/progress",
+  quiz: () => "/quiz",
   accounts: withPrefix("/accounts", {
-    myProfile() {
-      return "/my-profile";
-    },
-    subscription() {
-      return "/subscription";
-    },
-    settings() {
-      return "/settings";
-    },
-    editProfile() {
-      return "/my-profile/edit";
-    },
+    myProfile: () => "/my-profile",
+    subscription: () => "/subscription",
+    settings: () => "/settings",
+    editProfile: () => "/my-profile/edit",
   }),
-  privacyPolicy() {
-    return "/privacy-policy";
-  },
-  termsAndConditions() {
-    return "/terms-and-conditions";
-  },
-  faq() {
-    return "/faq";
-  },
-  subjects() {
-    return "/subjects";
-  },
-  subjectDetails(subjectId: ID) {
-    return `/subjects/${subjectId}`;
-  },
-  quizDetails(subjectId: ID) {
-    return `/quiz/${subjectId}`;
-  },
-  questionBank(subjectId: ID) {
-    return `/question-bank/${subjectId}`;
-  },
-  quizBank(subjectId: ID) {
-    return `/quiz-bank/${subjectId}`;
-  },
-  quizFinished(subjectId: ID) {
-    return `/quiz-finished/${subjectId}`;
-  },
-  quizResult(subjectId: ID) {
-    return `/quiz-result/${subjectId}`;
-  },
+  privacyPolicy: () => "/privacy-policy",
+  termsAndConditions: () => "/terms-and-conditions",
+  faq: () => "/faq",
+  subjects: () => "/subjects",
+  subjectDetails: (subjectId: ID) => `/subjects/${subjectId}`,
+  quizDetails: (subjectId: ID) => `/quiz/${subjectId}`,
+  questionBank: (subjectId: ID) => `/question-bank/${subjectId}`,
+  quizBank: (subjectId: ID) => `/quiz-bank/${subjectId}`,
+  quizFinished: (subjectId: ID) => `/quiz-finished/${subjectId}`,
+  quizResult: (subjectId: ID) => `/quiz-result/${subjectId}`,
 };
 
 /**
