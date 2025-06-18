@@ -1,4 +1,4 @@
-import { ID } from "@/types/globals";
+import type { ID } from "@/types/globals";
 
 const withPrefix = (prefix: string, paths: Record<string, () => string>) => {
   return Object.fromEntries(

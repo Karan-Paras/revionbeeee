@@ -1,10 +1,13 @@
 "use client";
+
+import Image from "next/image";
 import Slider from "react-slick";
+
+import { SubTwo } from "@/lib/assets";
+import { Quote } from "@/lib/icons";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { SubTwo } from "@/lib/assets";
-import Image from "next/image";
-import { Quote } from "@/lib/icons";
 
 export function LandingSlider() {
   const settings = {

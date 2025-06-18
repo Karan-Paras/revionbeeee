@@ -1,6 +1,7 @@
-import { isUserProfileComplete } from "@/features/user/utils";
-import { User } from "next-auth";
 import { describe, expect, it } from "vitest";
+import { User } from "next-auth";
+
+import { isUserProfileComplete } from "@/features/user/utils";
 
 describe("isUserProfileComplete()", () => {
   it("should return true if user has name and image", () => {

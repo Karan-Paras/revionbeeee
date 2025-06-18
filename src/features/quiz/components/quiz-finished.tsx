@@ -1,13 +1,16 @@
 "use client";
 
-import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { OnlineQuiz } from "@/lib/assets";
-import { RevisionBee } from "@/lib/icons";
-import { paths } from "@/routes";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+
+import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
+
+import { OnlineQuiz } from "@/lib/assets";
+import { RevisionBee } from "@/lib/icons";
+
+import { paths } from "@/routes";
 
 export function QuizFinished() {
   let { subjectId } = useParams();

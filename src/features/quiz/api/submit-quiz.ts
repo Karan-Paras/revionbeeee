@@ -1,5 +1,6 @@
 import fetcher from "@/lib/fetcher";
-import { ID } from "@/types/globals";
+
+import type { ID } from "@/types/globals";
 
 export async function submitQuiz({
   quizId,

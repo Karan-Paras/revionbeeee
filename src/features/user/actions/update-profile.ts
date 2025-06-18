@@ -1,9 +1,11 @@
 "use server";
 
+import { auth, unstable_update } from "@/auth";
+
 import { UpdateProfileSchema } from "@/features/user/schemas";
 import { updateProfile as updateProfileApi } from "@/features/user/api/update-profile";
+
 import type { ApiErrorResponse } from "@/types/api";
-import { auth, unstable_update } from "@/auth";
 
 type UpdateProfileFormState = {
   errors: {

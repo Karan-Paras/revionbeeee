@@ -1,6 +1,7 @@
-import type { Quiz } from "@/features/quiz/types";
 import fetcher from "@/lib/fetcher";
-import { ID } from "@/types/globals";
+
+import type { ID } from "@/types/globals";
+import type { Quiz } from "@/features/quiz/types";
 
 export async function getQuiz(subjectId: ID, page: number) {
   const apiUrl = "/quiz/question/list";

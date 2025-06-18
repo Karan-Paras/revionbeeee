@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 import { CircleUser, LogOut, Settings, Video } from "@/lib/icons";
-import { paths } from "@/routes";
-import { useState } from "react";
+
 import { LogoutModal } from "@/features/auth/components/logout-modal";
+
+import { paths } from "@/routes";
 
 const sidebarItems = [
   {

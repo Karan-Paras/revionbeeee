@@ -1,16 +1,20 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
+
 import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { isUserProfileComplete } from "@/features/user/utils";
+
 import { Logo } from "@/lib/assets";
+
 import { paths } from "@/routes";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
 
 interface HeaderProps {
   variant?: "home" | "dashboard";

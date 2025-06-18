@@ -1,9 +1,11 @@
 "use server";
 
 import { LoginSchema } from "@/features/auth/schemas";
-import { signIn } from "@/auth";
-import { ApiErrorResponse } from "@/types/api";
 import { login as loginApi } from "@/features/auth/api/login";
+
+import { signIn } from "@/auth";
+
+import type { ApiErrorResponse } from "@/types/api";
 
 type LoginFormState = {
   errors: {

@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
-import { paths } from "@/routes";
-import { Session } from "next-auth";
 import Image from "next/image";
-import { Logo } from "@/lib/assets";
+import { useState } from "react";
+import { Session } from "next-auth";
+import { motion, AnimatePresence } from "framer-motion";
+
+import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
+
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { useLogout } from "@/features/auth/hooks/use-logout";
+
+import { Menu, X } from "lucide-react";
+import { Logo } from "@/lib/assets";
+
+import { paths } from "@/routes";
 
 interface MobileSidebarProps {
   NavLinks: Array<{

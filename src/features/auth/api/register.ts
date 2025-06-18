@@ -1,7 +1,7 @@
-import { RegisterSchema } from "@/features/auth/schemas";
-import api from "@/lib/api";
-import { User } from "@/features/user/types";
 import { z } from "zod";
+import api from "@/lib/api";
+import { RegisterSchema } from "@/features/auth/schemas";
+import type { User } from "@/features/user/types";
 
 export async function register(data: z.infer<typeof RegisterSchema>) {
   const apiUrl = "/signup";

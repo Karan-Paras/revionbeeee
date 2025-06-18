@@ -1,4 +1,5 @@
 import { RegisterForm } from "@/features/auth/components/register-form";
+
 import { RevisionBee } from "@/lib/icons";
 
 export default function Signup() {

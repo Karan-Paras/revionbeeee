@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
-
 import authConfig from "@/auth.config";
+
 import {
   paths,
   DEFAULT_LOGIN_REDIRECT,

@@ -1,5 +1,5 @@
 import fetcher from "@/lib/fetcher";
-import { User } from "@/features/user/types";
+import type { User } from "@/features/user/types";
 
 export async function getProfile() {
   const apiUrl = "/profile";

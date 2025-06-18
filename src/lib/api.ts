@@ -2,7 +2,8 @@
 
 import { auth } from "@/auth";
 import { API_URL } from "@/lib/constants";
-import { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
+
+import type { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
 
 export default async function api<T>(
   url: string,

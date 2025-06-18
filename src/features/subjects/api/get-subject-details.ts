@@ -1,6 +1,6 @@
-import { Subject } from "@/features/subjects/types";
 import fetcher from "@/lib/fetcher";
-import { ID } from "@/types/globals";
+import { Subject } from "@/features/subjects/types";
+import type { ID } from "@/types/globals";
 
 export async function getSubjectDetails(subjectId: ID) {
   const apiUrl = "/subject/detail";

@@ -1,23 +1,27 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
-import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
+
 import { DataLoader } from "@/components/loaders/data-loader";
-import Link from "next/link";
-import { paths } from "@/routes";
+import { ApiError } from "@/components/errors/api-error";
+import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { VideoPlayer } from "@/features/videos/components/video-player";
+import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
+import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
+import type { Option, Result } from "@/features/quiz/types";
+import DOMPurify from "dompurify";
+
+import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,
 } from "@/lib/media-urls";
-import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
-import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { ApiError } from "@/components/errors/api-error";
-import type { Option, Result } from "@/features/quiz/types";
+
+import { cn } from "@/lib/utils";
+import { paths } from "@/routes";
 
 export function Quiz() {
   const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
@@ -202,7 +206,7 @@ export function Quiz() {
                         <span
                           className="img_spc"
                           dangerouslySetInnerHTML={{
-                            __html: question,
+                            __html: DOMPurify.sanitize(question),
                           }}
                         />
                       </h3>
@@ -241,7 +245,7 @@ export function Quiz() {
                           <span
                             className="img_spc"
                             dangerouslySetInnerHTML={{
-                              __html: answer,
+                              __html: DOMPurify.sanitize(answer),
                             }}
                           />
                         </p>

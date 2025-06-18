@@ -1,6 +1,8 @@
-import { getQuiz } from "@/features/quiz/api/get-quiz";
-import type { ID } from "@/types/globals";
 import { useQueries, useQuery } from "@tanstack/react-query";
+
+import { getQuiz } from "@/features/quiz/api/get-quiz";
+
+import type { ID } from "@/types/globals";
 
 export const useGetQuiz = (subjectId: ID) => {
   const initialQuery = useQuery({

@@ -1,7 +1,9 @@
-import { PassChng } from "@/lib/assets";
-import { paths } from "@/routes";
 import Image from "next/image";
 import Link from "next/link";
+
+import { PassChng } from "@/lib/assets";
+
+import { paths } from "@/routes";
 
 export default function PaymentComplete() {
   return (

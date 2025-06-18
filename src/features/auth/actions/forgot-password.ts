@@ -1,8 +1,9 @@
 "use server";
 
 import { forgotPassword as forgotPasswordApi } from "@/features/auth/api/forgot-password";
-import type { ApiErrorResponse } from "@/types/api";
 import { ForgotPasswordSchema } from "@/features/auth/schemas";
+
+import type { ApiErrorResponse } from "@/types/api";
 
 type ForgotPasswordFormState = {
   errors: {

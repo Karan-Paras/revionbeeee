@@ -1,4 +1,4 @@
-import SettingsTab from "@/app/(app)/accounts/settings/settings-tabs";
+import { SettingsTab } from "@/app/(app)/accounts/settings/settings-tabs";
 
 export default function Settings() {
   return (
