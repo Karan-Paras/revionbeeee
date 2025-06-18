@@ -131,26 +131,6 @@ export function SubjectDetails() {
                         </div>
                       </Link>
                     </div>
-                    {/* <div className="md:col-span-1 col-span-2">
-                      <Link href="/videos" className="">
-                        <div className="grid grid-cols-12 bg-white px-4 md:py-10 py-6 rounded-xl border border-[#FAB89B] items-center">
-                          <div className="md:col-span-3 col-span-12">
-                            <div className="size-20 bg-[#F9F9F9] rounded-full flex justify-center items-center  mx-auto">
-                              <Video width={35} height={25} color="#F39A74" />
-                            </div>
-                          </div>
-                          <div className="md:col-span-9 col-span-12">
-                            <h3 className="text-2xl font-bold mb-2 md:mt-0 mt-5 md:text-left text-center">
-                              Videos
-                            </h3>
-                            <p className="md:text-lg text-base md:text-left text-center font-normal">
-                              Watch, learn, and understand concepts with visual
-                              clarity
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </div> */}
                     <div className="md:col-span-1 col-span-2">
                       <Link href={paths.progress()} className="">
                         <div className="grid grid-cols-12 bg-white px-5 min-h-[210px] md:py-10 py-6 rounded-xl border border-[#9F9BFD] items-center">

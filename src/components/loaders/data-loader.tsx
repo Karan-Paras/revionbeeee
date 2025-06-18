@@ -79,8 +79,6 @@ const DataLoader = ({ className }: DataLoaderProps) => {
         justifyContent: "center",
         alignItems: "center",
         height: "400px",
-        // perspective: "1000px",
-        // overflow: "hidden",
       }}
     >
       <div
