@@ -1,10 +1,12 @@
+import { toast } from "sonner";
+import { startTransition, useActionState, useEffect, useRef } from "react";
+
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
+
 import { changePassword } from "@/features/auth/actions/change-password";
-import { startTransition, useActionState, useEffect, useRef } from "react";
-import { toast } from "sonner";
 
 export function ChangePasswordForm() {
   const [formState, action, isPending] = useActionState(changePassword, {

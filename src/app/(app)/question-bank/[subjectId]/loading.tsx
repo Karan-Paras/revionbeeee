@@ -1,5 +1,6 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DataLoader } from "@/components/loaders/data-loader";
+
 import { paths } from "@/routes";
 
 export default function QuestionBankLoading() {

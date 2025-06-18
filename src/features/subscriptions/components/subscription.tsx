@@ -1,8 +1,11 @@
-import { Plan } from "@/features/subscriptions/types";
+import Link from "next/link";
+
+import type { Plan } from "@/features/subscriptions/types";
+
 import { BadgeCheck } from "@/lib/icons";
+
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import Link from "next/link";
 
 interface SubscriptionProps {
   plan: Plan;

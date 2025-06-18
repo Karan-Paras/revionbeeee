@@ -1,4 +1,4 @@
-import { ID } from "@/types/globals";
+import type { ID } from "@/types/globals";
 
 export interface User {
   id: ID;

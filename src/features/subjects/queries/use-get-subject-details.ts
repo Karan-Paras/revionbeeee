@@ -1,6 +1,6 @@
 import { getSubjectDetails } from "@/features/subjects/api/get-subject-details";
-import type { ID } from "@/types/globals";
 import { useQuery } from "@tanstack/react-query";
+import type { ID } from "@/types/globals";
 
 export const useGetSubjectDetails = (subjectId: ID) => {
   return useQuery({

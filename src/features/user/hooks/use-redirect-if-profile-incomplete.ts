@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+
 import { isUserProfileComplete } from "@/features/user/utils";
+
 import { paths } from "@/routes";
 
 export function useRedirectIfProfileIncomplete() {

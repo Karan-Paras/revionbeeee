@@ -1,8 +1,10 @@
 "use client";
 
 import { LogOut, X } from "lucide-react";
+
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
+
 import { useLogout } from "@/features/auth/hooks/use-logout";
 
 interface LogoutModalProps {

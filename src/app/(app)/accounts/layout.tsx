@@ -1,5 +1,6 @@
-import { ProfileSidebar } from "@/app/(app)/accounts/profile-sidebar";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { ProfileSidebar } from "@/app/(app)/accounts/profile-sidebar";
+
 import { paths } from "@/routes";
 
 interface AccountsLayoutProps {

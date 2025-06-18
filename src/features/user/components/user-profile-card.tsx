@@ -1,14 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { SquarePencil } from "@/lib/icons";
 import Link from "next/link";
-import { paths } from "@/routes";
-import { getUserImageUrl } from "@/lib/media-urls";
+import Image from "next/image";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { toast } from "sonner";
+
+import { SquarePencil } from "@/lib/icons";
+import { getUserImageUrl } from "@/lib/media-urls";
+
+import { paths } from "@/routes";
 
 export function UserProfileCard() {
   const { data, isPending, error } = useGetProfile();

@@ -1,5 +1,9 @@
 "use client";
 
+import DOMPurify from "dompurify";
+import { useParams } from "next/navigation";
+import { useReducer } from "react";
+
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
@@ -7,12 +11,12 @@ import { useGetQuestionBank } from "@/features/subjects/queries/use-get-question
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import { VideoPlayer } from "@/features/videos/components/video-player";
+
 import { ChevronUp } from "@/lib/icons";
 import { getQuestionBankVideoUrl } from "@/lib/media-urls";
+
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { useParams } from "next/navigation";
-import { useReducer } from "react";
 
 type State = { visible: number };
 
@@ -92,7 +96,9 @@ export function QuestionBank() {
                         <div className="desc_blk">
                           <h5
                             className="font-semibold text-xl"
-                            dangerouslySetInnerHTML={{ __html: question }}
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(question),
+                            }}
                           />
                         </div>
                         {questionVideo && (
@@ -118,7 +124,11 @@ export function QuestionBank() {
                         <div className="py-5">
                           {state.visible === index && (
                             <div className="desc_blk">
-                              <p dangerouslySetInnerHTML={{ __html: answer }} />
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(answer),
+                                }}
+                              />
                               {answerVideo && (
                                 <VideoPlayer
                                   src={getQuestionBankVideoUrl(answerVideo)}

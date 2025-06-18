@@ -1,6 +1,6 @@
-import { QuestionBank } from "@/features/subjects/types";
 import fetcher from "@/lib/fetcher";
-import { ID } from "@/types/globals";
+import { QuestionBank } from "@/features/subjects/types";
+import type { ID } from "@/types/globals";
 
 export async function getQuestionBank(subjectId: ID) {
   const apiUrl = "/questionbank/list";

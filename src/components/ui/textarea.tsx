@@ -1,6 +1,7 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+
 import { InputError } from "@/components/errors/input-error";
-import { cva, VariantProps } from "class-variance-authority";
 
 const textAreaLabelVariants = cva("w-full outline-0", {
   variants: {

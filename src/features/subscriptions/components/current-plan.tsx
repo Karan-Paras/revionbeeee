@@ -1,7 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { BadgeCheck } from "@/lib/icons";
 import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import { UpgradeSubscriptionModal } from "@/features/subscriptions/components/upgrade-subscription-modal";
+
+import { BadgeCheck } from "@/lib/icons";
+
 import { STARTER_PLAN } from "@/features/subscriptions/types";
 
 export function CurrentPlan() {

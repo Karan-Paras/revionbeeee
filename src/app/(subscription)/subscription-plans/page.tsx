@@ -1,7 +1,10 @@
-import { ChevronRight } from "@/lib/icons";
-import { paths } from "@/routes";
 import Link from "next/link";
+
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
+
+import { ChevronRight } from "@/lib/icons";
+
+import { paths } from "@/routes";
 
 export default function SubscriptionPlans() {
   return (

@@ -1,9 +1,11 @@
 "use server";
 
-import { createProfile as createProfileApi } from "@/features/user/api/create-profile";
-import type { ApiErrorResponse } from "@/types/api";
 import { unstable_update } from "@/auth";
+
+import { createProfile as createProfileApi } from "@/features/user/api/create-profile";
 import { CreateProfileSchema } from "@/features/user/schemas";
+
+import type { ApiErrorResponse } from "@/types/api";
 
 type CreateProfileFormState = {
   errors: {

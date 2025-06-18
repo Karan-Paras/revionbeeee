@@ -1,15 +1,6 @@
 "use client";
 
-// import { useLogout } from "@/features/auth/queries/use-logout";
-// import { useEffect } from "react";
-
 export default function Error() {
-  // const logout = useLogout();
-
-  // useEffect(() => {
-  //   logout();
-  // }, [logout]);
-
   return (
     <div className="text-black flex items-center min-h-screen justify-center flex-col">
       <div className="error_icn flex flex-col justify-center items-center p-5 ">

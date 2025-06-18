@@ -1,14 +1,18 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { getUserImageUrl } from "@/lib/media-urls";
-import Link from "next/link";
-import { ChevronDown } from "@/lib/icons";
-import { paths } from "@/routes";
+
 import { User } from "@/features/user/types";
 import { useLogout } from "@/features/auth/hooks/use-logout";
+
+import { getUserImageUrl } from "@/lib/media-urls";
+
+import { ChevronDown } from "@/lib/icons";
+
+import { paths } from "@/routes";
 
 interface ProfileDropdownProps {
   user: User;

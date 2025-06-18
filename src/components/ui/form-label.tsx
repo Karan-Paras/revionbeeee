@@ -1,6 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 const formLabelVariants = cva("w-full", {
   variants: {

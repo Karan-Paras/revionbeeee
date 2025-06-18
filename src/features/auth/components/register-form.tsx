@@ -1,16 +1,19 @@
 "use client";
 
+import Link from "next/link";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBlock } from "@/components/errors/error-block";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
+
 import { register } from "@/features/auth/actions/register";
+
 import { paths } from "@/routes";
-import Link from "next/link";
-import { startTransition, useActionState, useEffect } from "react";
-import { getSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
   const router = useRouter();

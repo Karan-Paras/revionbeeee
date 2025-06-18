@@ -1,6 +1,8 @@
-import { ArrowBack } from "@/lib/icons";
-import { paths } from "@/routes";
 import Link from "next/link";
+
+import { ArrowBack } from "@/lib/icons";
+
+import { paths } from "@/routes";
 
 export default function PaymentMethod() {
   return (

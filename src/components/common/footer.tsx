@@ -1,6 +1,8 @@
-import { Facebook, Instagram, RevisionBee, TikTok, YouTube } from "@/lib/icons";
-import { paths } from "@/routes";
 import Link from "next/link";
+
+import { Facebook, Instagram, RevisionBee, TikTok, YouTube } from "@/lib/icons";
+
+import { paths } from "@/routes";
 
 interface FooterProps {
   variant?: "compact" | "extended";
@@ -82,9 +84,11 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     <Link href={paths.faq()}>FAQ</Link>
                   </li>
                   <li className="text-lg font-normal text-white mb-5">
-                    Contact
+                    <Link href={"#contact"}>Contact</Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">Help</li>
+                  <li className="text-lg font-normal text-white mb-5">
+                    <Link href={"#contact"}>Help</Link>
+                  </li>
                 </ul>
               </div>
             </div>

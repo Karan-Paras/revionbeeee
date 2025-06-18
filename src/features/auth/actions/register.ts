@@ -2,8 +2,10 @@
 
 import { RegisterSchema } from "@/features/auth/schemas";
 import { register as registerApi } from "@/features/auth/api/register";
-import type { ApiErrorResponse } from "@/types/api";
+
 import { signIn } from "@/auth";
+
+import type { ApiErrorResponse } from "@/types/api";
 
 type RegisterFormState = {
   errors: {

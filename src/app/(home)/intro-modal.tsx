@@ -1,5 +1,6 @@
 import { Modal } from "@/components/common/modal";
 import { VideoPlayer } from "@/features/videos/components/video-player";
+
 import { Intro } from "@/lib/assets";
 import { CircleX } from "lucide-react";
 
@@ -20,7 +21,7 @@ export function IntroModal({ onClose }: IntroModalProps) {
         <CircleX stroke="#fff" />
       </span>
       <div className="px-3 pb-3">
-        <VideoPlayer src={Intro} />
+        <VideoPlayer src={Intro} autoPlay muted />
       </div>
     </Modal>
   );

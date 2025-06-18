@@ -1,5 +1,6 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { SelectTopics } from "@/features/quiz-list/components/get-topics";
+
 import { paths } from "@/routes";
 
 export default function Quiz() {

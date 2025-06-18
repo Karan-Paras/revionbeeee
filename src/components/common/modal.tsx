@@ -1,8 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import * as motion from "motion/react-client";
 import { useEffect } from "react";
+
+import { cn } from "@/lib/utils";
 
 type ModalProps = {
   title?: string;
@@ -31,7 +32,7 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
     <>
       <div onClick={onClose} />
       <dialog open>
-        <div id="add_modal" className="fixed z-[999] inset-0 overflow-y-auto">
+        <div id="add_modal" className="fixed z-[9999] inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" onClick={onClose}>
               <div className="absolute inset-0 bg-gray-950 opacity-75" />

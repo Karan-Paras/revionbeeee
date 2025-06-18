@@ -1,20 +1,24 @@
 "use client";
 
+import Link from "next/link";
+import DOMPurify from "dompurify";
+import { toast } from "sonner";
+import { useParams } from "next/navigation";
+
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import { VideoPlayer } from "@/features/videos/components/video-player";
+
 import {
   CircleCheckFading,
   HelpLightBulb,
   MessageCircleQuestion,
 } from "@/lib/icons";
 import { getSubjectVideoUrl } from "@/lib/media-urls";
+
 import { paths } from "@/routes";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
 
 export function SubjectDetails() {
   let { subjectId } = useParams();
@@ -74,7 +78,7 @@ export function SubjectDetails() {
                     <article
                       className="md:text-xl text-base text-[#505050] mb-3 font-normal my-5 desc_blk"
                       dangerouslySetInnerHTML={{
-                        __html: data?.data?.description,
+                        __html: DOMPurify.sanitize(data?.data?.description),
                       }}
                     />
                   </div>

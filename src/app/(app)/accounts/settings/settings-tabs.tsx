@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 import { ChangePasswordForm } from "@/features/auth/components/change-password-form";
 import { ContactUsForm } from "@/features/support/components/contact-us-form";
-import { RevisionBee } from "@/lib/icons";
-import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 
-export default function SettingsTab() {
+import { RevisionBee } from "@/lib/icons";
+
+import { cn } from "@/lib/utils";
+
+export function SettingsTab() {
   const tabContent = {
     changePassword: <ChangePasswordForm />,
     aboutUs: (
