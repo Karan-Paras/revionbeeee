@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 
 import { MoveUpRight } from "@/lib/icons";
+import { Hero } from "@/lib/assets";
 
 export function HeroSection() {
   const controls = useAnimationControls();
@@ -41,8 +42,8 @@ export function HeroSection() {
         muted
         loop
         playsInline
-        src="/videos/3591398943-preview.mp4"
-      ></video>
+        src={Hero}
+      />
       <div className="container mx-auto">
         <div className="grid grid-cols-2 content-center min-h-screen">
           <div className="col-span-2 text-center 2xl:w-6/12 xl:w-7/12 lg:w-8/12 w-10/12 mx-auto relative">
