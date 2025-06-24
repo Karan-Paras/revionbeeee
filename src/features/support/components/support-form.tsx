@@ -1,17 +1,28 @@
 "use client";
 
-import { startTransition, useActionState } from "react";
+import { toast } from "sonner";
+import { startTransition, useActionState, useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
 import { support } from "@/features/support/actions/support";
 
 export function SupportForm() {
   const [formState, action, isPending] = useActionState(support, {
     errors: {},
   });
+
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (formState.success) {
+      formRef.current?.reset();
+      toast.success("Support request submitted successfully!");
+    }
+  }, [formState]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
