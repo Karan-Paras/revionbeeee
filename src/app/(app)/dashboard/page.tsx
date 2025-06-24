@@ -1,5 +1,5 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-import { Home } from "@/features/dashboard/components/home";
+import { DashboardCard } from "@/features/dashboard/components/dashboard-card";
 
 export default function Dashboard() {
   return (
@@ -15,7 +15,7 @@ export default function Dashboard() {
       />
       <section className="bg-[#F6F6F6] py-20">
         <div className="container mx-auto">
-          <Home />
+          <DashboardCard />
         </div>
       </section>
     </>
