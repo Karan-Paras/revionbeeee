@@ -44,7 +44,7 @@ const MinusIcon = () => (
   </svg>
 );
 
-export function FaqAccordion() {
+export function Accordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {

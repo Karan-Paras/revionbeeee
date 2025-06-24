@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { FaqAccordion } from "@/app/(support)/faq/faq-accordion";
+import { Accordion } from "@/app/(support)/faq/accordion";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 
 import { Faq, Faq2 } from "@/lib/assets";
@@ -44,7 +44,7 @@ export default function FaqPage() {
                   sed risus pretium quam vulputate.
                 </p>
               </div>
-              <FaqAccordion />
+              <Accordion />
             </div>
             <div className="col-span-1">
               <div className="img overflow-hidden rounded-xl border-4 border-white shadow-xl/5">
@@ -73,7 +73,7 @@ export default function FaqPage() {
                   sed risus pretium quam vulputate.
                 </p>
               </div>
-              <FaqAccordion />
+              <Accordion />
             </div>
           </div>
         </div>
