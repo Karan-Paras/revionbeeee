@@ -119,7 +119,9 @@ body {
 .txt_hed h2.text-lg {
   font-size: 28px;
 }
-
+/* .slick-track {
+    width: 100% !important;
+} */
 @media only screen and (max-width: 550px) {
   .hed_bg::before {
     display: none;

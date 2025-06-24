@@ -9,6 +9,8 @@ import Faq from "public/images/faq.jpg";
 import Faq2 from "public/images/faq2.png";
 import NoData from "public/images/nodata.png";
 import OnlineQuiz from "public/images/online_quiz.gif";
+import Yara from "public/images/yara.png";
+import Camille from "public/images/camille.png";
 
 const Intro = "/videos/introduction-video.mov";
 const Hero = "/videos/hero-video.mp4";
@@ -27,4 +29,6 @@ export {
   NoData,
   Intro,
   Hero,
+  Yara,
+  Camille,
 };
