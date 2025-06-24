@@ -9,7 +9,7 @@ import { Quote } from "@/lib/icons";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export function LandingSlider() {
+export function TestimonialsSlider() {
   const settings = {
     infinite: true,
     speed: 500,
@@ -59,7 +59,7 @@ export function LandingSlider() {
             <div className="relative grid grid-cols-7 items-center rounded-2xl border border-[#E2E2E2] p-4 lg:gap-2 xl:gap-5">
               <div className="img col-span-7 lg:col-span-3 xl:col-span-3">
                 <div className="img_blk mx-auto overflow-hidden rounded-full lg:size-32 xl:size-44">
-                  <Image src={SubTwo} alt="Slide 1" />
+                  <Image src={SubTwo} width={81} height={81} alt="Slide 1" />
                 </div>
                 <div className="dsc text-center lg:mt-3 xl:mt-4">
                   <h4 className="text-xl font-semibold">Esther Howard</h4>
