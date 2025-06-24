@@ -8,7 +8,7 @@ import { Minus } from "lucide-react";
 
 import { paths } from "@/routes";
 
-export default function FAQ() {
+export default function FaqPage() {
   return (
     <>
       <BreadcrumbBanner

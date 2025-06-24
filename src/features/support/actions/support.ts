@@ -1,6 +1,8 @@
 "use server";
 
 import { SupportSchema } from "@/features/support/schemas";
+import { support as supportApi } from "@/features/support/api/support";
+import type { ApiErrorResponse } from "@/types/api";
 
 type SupportFormState = {
   errors: {
@@ -28,6 +30,18 @@ export const support = async (
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  try {
+    await supportApi(validatedFields.data);
+  } catch (error: unknown) {
+    if ((error as ApiErrorResponse)?.message) {
+      return {
+        errors: {
+          _form: [(error as ApiErrorResponse)?.message || "An error occurred!"],
+        },
+      };
+    }
   }
 
   return {
