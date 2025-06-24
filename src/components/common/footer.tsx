@@ -10,23 +10,23 @@ interface FooterProps {
 
 export function Footer({ variant = "compact" }: FooterProps) {
   return (
-    <footer className="bg-[#126DC2] foot_bg bg-no-repeat bg-blend-multiply bg-cover py-10 xl:px-0 px-10">
+    <footer className="foot_bg bg-[#126DC2] bg-cover bg-no-repeat px-10 py-10 bg-blend-multiply xl:px-0">
       <div className="container mx-auto">
         {variant === "extended" ? (
-          <div className="grid-cols-4 grid gap-5">
+          <div className="grid grid-cols-4 gap-5">
             <div className="col-span-4 md:col-span-2">
               <div className="mb-5">
                 <RevisionBee />
               </div>
-              <h3 className="font-bold text-white text-2xl mb-3">
+              <h3 className="mb-3 text-2xl font-bold text-white">
                 About Revision Bee
               </h3>
-              <p className="text-white leading-normal font-normal">
+              <p className="leading-normal font-normal text-white">
                 Quisque fermentum arcu dolor, vitae pharetra arcu efficitur in.
                 Nulla sed dui in tortor suscipit pulvinar. In rhoncus, orci
                 blandit tincidunt.
               </p>
-              <div className="flex gap-2 mt-3 items-center">
+              <div className="mt-3 flex items-center gap-2">
                 <p className="text-white">Follow Us :-</p>
                 <div className="spc_itms flex gap-2">
                   <div className="items">
@@ -45,48 +45,48 @@ export function Footer({ variant = "compact" }: FooterProps) {
               </div>
             </div>
             <div className="col-span-4 md:col-span-1">
-              <div className="md:w-8/12 w-full mx-auto">
-                <h3 className="text-2xl font-bold text-white mb-5">
+              <div className="mx-auto w-full md:w-8/12">
+                <h3 className="mb-5 text-2xl font-bold text-white">
                   Main Menu
                 </h3>
                 <ul>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     About Us
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     Topics
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     Questions
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     My Account
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     Testimonials
                   </li>
                 </ul>
               </div>
             </div>
             <div className="col-span-4 md:col-span-1">
-              <div className="md:w-8/12 w-full ms-auto">
-                <h3 className="text-2xl font-bold text-white mb-5">Support</h3>
+              <div className="ms-auto w-full md:w-8/12">
+                <h3 className="mb-5 text-2xl font-bold text-white">Support</h3>
                 <ul>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.privacyPolicy()}> Privacy Policy</Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.termsAndConditions()}>
                       Terms & Conditions
                     </Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.faq()}>FAQ</Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     <Link href={"#contact"}>Contact</Link>
                   </li>
-                  <li className="text-lg font-normal text-white mb-5">
+                  <li className="mb-5 text-lg font-normal text-white">
                     <Link href={"#contact"}>Help</Link>
                   </li>
                 </ul>
@@ -94,7 +94,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
             </div>
             <div className="col-span-4 md:col-span-4">
               <div className="border-t border-[#5D98CF]">
-                <p className="text-white text-center mt-8 font-light md:text-lg text-sm">
+                <p className="mt-8 text-center text-sm font-light text-white md:text-lg">
                   © 2025 Revision Bee All rights reserved
                 </p>
               </div>
@@ -102,7 +102,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
           </div>
         ) : (
           <div>
-            <p className="text-white text-center font-light md:text-lg text-sm">
+            <p className="text-center text-sm font-light text-white md:text-lg">
               © 2025 Revision Bee All rights reserved
             </p>
           </div>

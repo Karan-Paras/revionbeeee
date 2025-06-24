@@ -52,31 +52,31 @@ export function LandingSlider() {
     ],
   };
   return (
-    <div className="w-full xl:ml-[10%] ">
+    <div className="w-full xl:ml-[10%]">
       <Slider {...settings}>
         {[...Array(3)].map((_, index) => (
           <div key={index} className="item p-3">
-            <div className="border border-[#E2E2E2] grid-cols-7 grid xl:gap-5 lg:gap-2 rounded-2xl p-4 items-center relative">
-              <div className="img xl:col-span-3 lg:col-span-3 col-span-7">
-                <div className="img_blk xl:size-44 lg:size-32 rounded-full mx-auto overflow-hidden">
+            <div className="relative grid grid-cols-7 items-center rounded-2xl border border-[#E2E2E2] p-4 lg:gap-2 xl:gap-5">
+              <div className="img col-span-7 lg:col-span-3 xl:col-span-3">
+                <div className="img_blk mx-auto overflow-hidden rounded-full lg:size-32 xl:size-44">
                   <Image src={SubTwo} alt="Slide 1" />
                 </div>
-                <div className="dsc text-center xl:mt-4 lg:mt-3">
+                <div className="dsc text-center lg:mt-3 xl:mt-4">
                   <h4 className="text-xl font-semibold">Esther Howard</h4>
-                  <p className="text-[#787878] text-sm">Student</p>
+                  <p className="text-sm text-[#787878]">Student</p>
                 </div>
               </div>
-              <div className="lg:col-span-4 col-span-7">
+              <div className="col-span-7 lg:col-span-4">
                 <div className="itm">
-                  <h3 className="font-bold text-2xl md:text-left text-center">
+                  <h3 className="text-center text-2xl font-bold md:text-left">
                     Loved the Quiz !
                   </h3>
-                  <p className="text-[#505050] text-sm md:text-left text-center">
+                  <p className="text-center text-sm text-[#505050] md:text-left">
                     Discover how our fun and challenging quizzes are helping
                     students boost their confidence, sharpen their skills, and
                     fall in love with math!
                   </p>
-                  <div className="itm xl:mt-3 lg:mt-2 flex md:justify-start justify-center">
+                  <div className="itm flex justify-center md:justify-start lg:mt-2 xl:mt-3">
                     <svg
                       width="133"
                       height="24"
@@ -108,7 +108,7 @@ export function LandingSlider() {
                   </div>
                 </div>
               </div>
-              <div className="absolute right-3 top-3">
+              <div className="absolute top-3 right-3">
                 <Quote color="#53A2EB" />
               </div>
             </div>

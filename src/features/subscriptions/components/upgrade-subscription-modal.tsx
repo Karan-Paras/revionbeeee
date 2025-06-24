@@ -23,12 +23,12 @@ export function UpgradeSubscriptionModal({
         <div className="hed mb-4 text-center">
           <p>Unlock more features with premium access.</p>
         </div>
-        <div className="grid grid-cols-3 gap-5 mt-10">
+        <div className="mt-10 grid grid-cols-3 gap-5">
           <Subscription plan={BASIC_PLAN} variant="compact" />
           <Subscription plan={STARTER_PLAN} variant="compact" isCurrent />
           <Subscription plan={ADVANCED_PLAN} variant="compact" />
           <div className="col-span-3">
-            <div className="btn w-3/12 mx-auto my-5">
+            <div className="btn mx-auto my-5 w-3/12">
               <Link href="">
                 <Button className="shadow-xl/10" type="button">
                   Upgrade Plan

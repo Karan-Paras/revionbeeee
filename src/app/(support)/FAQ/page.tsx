@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { FaqAccordion } from "@/components/accordions/faq-accordion";
+import { FaqAccordion } from "@/app/(support)/faq/faq-accordion";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 
 import { Faq, Faq2 } from "@/lib/assets";
@@ -24,7 +24,7 @@ export default function FAQ() {
           },
         ]}
       />
-      <section className="py-20 bg-[#F6F6F6]">
+      <section className="bg-[#F6F6F6] py-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-3 gap-7">
             <div className="col-span-2">
@@ -35,7 +35,7 @@ export default function FAQ() {
                 <p className="text-[#53A2EB]">Select your Subject</p>
               </div>
               <div className="hed mb-8">
-                <h3 className="font-bold text-3xl leading-20">
+                <h3 className="text-3xl leading-20 font-bold">
                   Answer you need to know
                 </h3>
                 <p className="leading-8">
@@ -47,12 +47,12 @@ export default function FAQ() {
               <FaqAccordion />
             </div>
             <div className="col-span-1">
-              <div className="img border-4 border-white rounded-xl overflow-hidden shadow-xl/5">
+              <div className="img overflow-hidden rounded-xl border-4 border-white shadow-xl/5">
                 <Image src={Faq} alt="Faq" />
               </div>
             </div>
             <div className="col-span-1">
-              <div className="img border-4 border-white rounded-xl overflow-hidden shadow-xl/5">
+              <div className="img overflow-hidden rounded-xl border-4 border-white shadow-xl/5">
                 <Image src={Faq2} alt="Faq2" />
               </div>
             </div>
@@ -64,7 +64,7 @@ export default function FAQ() {
                 <p className="text-[#53A2EB]">Select your Subject</p>
               </div>
               <div className="hed mb-8">
-                <h3 className="font-bold text-3xl leading-20">
+                <h3 className="text-3xl leading-20 font-bold">
                   Answer you need to know
                 </h3>
                 <p className="leading-8">

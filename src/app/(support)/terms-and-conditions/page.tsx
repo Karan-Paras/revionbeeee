@@ -21,7 +21,7 @@ export default function TermsAndConditions() {
       <section className="py-10">
         <div className="container mx-auto">
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">AGREEMENT TO TERMS</h3>
+            <h3 className="mb-2 text-2xl font-bold">AGREEMENT TO TERMS</h3>
             <p className="mb-5">
               These Terms and Conditions constitute a legally binding agreement
               made between you, whether personally or on behalf of an entity
@@ -84,7 +84,7 @@ export default function TermsAndConditions() {
             </p>
           </div>
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">
+            <h3 className="mb-2 text-2xl font-bold">
               INTELLECTUAL PROPERTY RIGHTS
             </h3>
             <p className="mb-5">
@@ -118,7 +118,7 @@ export default function TermsAndConditions() {
             </p>
           </div>
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">USER REGISTRATION</h3>
+            <h3 className="mb-2 text-2xl font-bold">USER REGISTRATION</h3>
             <p>
               You may be required to register with the Site. You agree to keep
               your password confidential and will be responsible for all use of

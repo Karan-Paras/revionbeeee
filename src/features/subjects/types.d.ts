@@ -49,11 +49,6 @@ export interface Topics {
   status: number;
 }
 
-export interface StudentProgress {
-  subjectName: string;
-  progress: string;
-}
-
 export interface Home {
   totalQuizzes: number;
   topicsCompleted: number;

@@ -98,7 +98,7 @@ export function LoginForm() {
             autoComplete="current-password"
           />
         </div>
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <div className="chk flex gap-1.5">
             <Checkbox
               checked={rememberMe}
@@ -106,7 +106,7 @@ export function LoginForm() {
             />
             <label
               htmlFor="vehicle1"
-              className="text-[#0B0B0B] font-light text-sm"
+              className="text-sm font-light text-[#0B0B0B]"
             >
               Remember me
             </label>
@@ -114,7 +114,7 @@ export function LoginForm() {
           <div className="lnk">
             <Link
               href={paths.forgotPassword()}
-              className="text-[#53A2EB] font-medium"
+              className="font-medium text-[#53A2EB]"
             >
               Forgot password?
             </Link>
@@ -129,7 +129,7 @@ export function LoginForm() {
             Not registered yet?&nbsp;
             <Link
               href={paths.signup()}
-              className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+              className="font-semibold text-[#53A2EB] underline underline-offset-5"
             >
               Sign Up
             </Link>

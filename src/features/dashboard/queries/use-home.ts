@@ -1,5 +1,5 @@
+import { getHomeData } from "@/features/dashboard/api/home";
 import { useQuery } from "@tanstack/react-query";
-import { getHomeData } from "../api/home";
 
 export const useHomeTopics = () => {
   return useQuery({

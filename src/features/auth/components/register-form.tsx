@@ -79,8 +79,8 @@ export function RegisterForm() {
             autoComplete="new-password"
           />
         </div>
-        <div className="flex justify-between items-center mb-8">
-          <div className="chk flex gap-1.5 items-start flex-wrap">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="chk flex flex-wrap items-start gap-1.5">
             <Checkbox
               id="terms-and-conditions"
               disabled={isPending}
@@ -89,11 +89,11 @@ export function RegisterForm() {
             <label
               htmlFor="
                 terms-and-conditions"
-              className="text-[#0B0B0B] font-light text-sm md:w-8/12 w-10/12"
+              className="w-10/12 text-sm font-light text-[#0B0B0B] md:w-8/12"
             >
               By signing up, you are agreeing to our&nbsp;
               <Link
-                className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+                className="font-semibold text-[#53A2EB] underline underline-offset-5"
                 href={paths.termsAndConditions()}
                 target="_blank"
               >
@@ -101,7 +101,7 @@ export function RegisterForm() {
               </Link>
               &nbsp; and&nbsp;
               <Link
-                className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+                className="font-semibold text-[#53A2EB] underline underline-offset-5"
                 href={paths.privacyPolicy()}
                 target="_blank"
               >
@@ -118,7 +118,7 @@ export function RegisterForm() {
           <p className="text-center text-[#505050]">
             Not registered yet?&nbsp;
             <Link
-              className="text-[#53A2EB] underline underline-offset-5 font-semibold"
+              className="font-semibold text-[#53A2EB] underline underline-offset-5"
               href="/login"
             >
               Sign in

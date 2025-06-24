@@ -40,7 +40,7 @@ export function MobileSidebar({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden text-[#53A2EB] right-5 top-0 bottom-0 absolute"
+        className="absolute top-0 right-5 bottom-0 text-[#53A2EB] lg:hidden"
       >
         <Menu className="stroke-[#505050]" size={28} />
       </button>
@@ -49,14 +49,14 @@ export function MobileSidebar({
         {isOpen && (
           <>
             <motion.div
-              className="fixed top-0 left-0 lg:w-64 w-10/12 h-full bg-white z-[1000] shadow-lg p-6 "
+              className="fixed top-0 left-0 z-[1000] h-full w-10/12 bg-white p-6 shadow-lg lg:w-64"
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="flex justify-between items-start mb-5">
-                <div className="img size-20 relative flex items-start justify-center">
+              <div className="mb-5 flex items-start justify-between">
+                <div className="img relative flex size-20 items-start justify-center">
                   <Link className="" href="/">
                     <Image src={Logo} alt="" fill />
                   </Link>
@@ -86,21 +86,21 @@ export function MobileSidebar({
                       {session.user.image ? (
                         <Link
                           href={paths.dashboard()}
-                          className="block w-full mt-4 mb-3 lg:mb-0 border-2 rounded-xl text-center border-[#53A2EB] text-[#53A2EB] px-4 py-2 font-semibold hover:bg-[#53A2EB] hover:text-white transition"
+                          className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
                           Go to Dashboard
                         </Link>
                       ) : (
                         <Link
                           href={paths.createProfile()}
-                          className="block w-full mt-4 mb-3 lg:mb-0 border-2 rounded-xl text-center border-[#53A2EB] text-[#53A2EB] px-4 py-2 font-semibold hover:bg-[#53A2EB] hover:text-white transition"
+                          className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
                           Complete Profile
                         </Link>
                       )}
                       <button
                         onClick={() => logout()}
-                        className="w-full border-2 mb-3 lg:mb-0 rounded-xl border-[#53A2EB] text-[#53A2EB] px-4 py-2 font-semibold hover:bg-[#53A2EB] hover:text-white transition"
+                        className="mb-3 w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                       >
                         Logout
                       </button>
@@ -108,7 +108,7 @@ export function MobileSidebar({
                   ) : (
                     <Link
                       href="/login"
-                      className="block w-full mt-4 border-2 rounded-xl text-center border-[#53A2EB] text-[#53A2EB] px-4 py-2 font-semibold hover:bg-[#53A2EB] hover:text-white transition"
+                      className="mt-4 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white"
                     >
                       Login Now
                     </Link>
@@ -121,7 +121,7 @@ export function MobileSidebar({
 
             {/* Background Overlay */}
             <motion.div
-              className="fixed inset-0 bg-black/50 bg-opacity-40 z-[999]"
+              className="bg-opacity-40 fixed inset-0 z-[999] bg-black/50"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

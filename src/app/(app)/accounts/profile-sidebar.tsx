@@ -39,18 +39,18 @@ export function ProfileSidebar() {
       {showLogoutModal && (
         <LogoutModal onClose={() => setShowLogoutModal(false)} />
       )}
-      <div className="itm bg-white rounded-xl grad_colr">
+      <div className="itm grad_colr rounded-xl bg-white">
         <ul className="p-4">
           {sidebarItems.map(({ href, icon, title }) => (
             <li
               key={href}
               className={cn(
-                "flex gap-2 border-b border-[#D9D9D9] mb-3.5",
-                pathname.startsWith(href) && "text-[#53A2EB] act_lst"
+                "mb-3.5 flex gap-2 border-b border-[#D9D9D9]",
+                pathname.startsWith(href) && "act_lst text-[#53A2EB]"
               )}
             >
               <Link
-                className="flex items-center gap-2 cursor-pointer w-full p-4"
+                className="flex w-full cursor-pointer items-center gap-2 p-4"
                 href={href}
               >
                 <span>{icon}</span>
@@ -60,9 +60,9 @@ export function ProfileSidebar() {
           ))}
           <li
             onClick={() => setShowLogoutModal(true)}
-            className="rounded-xl  flex gap-2  "
+            className="flex gap-2 rounded-xl"
           >
-            <div className="flex gap-2 cursor-pointer p-4 w-full">
+            <div className="flex w-full cursor-pointer gap-2 p-4">
               <span>
                 <LogOut />
               </span>

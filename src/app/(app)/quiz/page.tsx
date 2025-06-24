@@ -1,5 +1,7 @@
+"use client";
+
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-import { SelectTopics } from "@/features/quiz-list/components/get-topics";
+import { SelectTopics } from "@/features/subjects/components/select-topics";
 
 import { paths } from "@/routes";
 
@@ -21,13 +23,12 @@ export default function Quiz() {
       />
       <section
         id="topics"
-        className="py-20 md:px-0 px-10 mths_bg relative 2xl:px-0 lg:px-20"
+        className="mths_bg relative px-10 py-20 md:px-0 lg:px-20 2xl:px-0"
       >
-        <div className="container mx-auto relative">
-          <SelectTopics />
+        <div className="relative container mx-auto">
+          <SelectTopics href={paths.quizDetails} />
         </div>
       </section>
     </>
   );
 }
-// SelectTopics;

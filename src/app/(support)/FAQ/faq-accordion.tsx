@@ -51,11 +51,11 @@ export function FaqAccordion() {
     setOpenIndex(openIndex === index ? null : index);
   };
   return (
-    <div className="w-full my-4">
+    <div className="my-4 w-full">
       {items.map((item, index) => (
-        <div key={item.id} className="rounded-xl bg-white mb-5">
+        <div key={item.id} className="mb-5 rounded-xl bg-white">
           <button
-            className="flex items-center justify-between w-full cursor-pointer px-4 py-5 text-left rounded-xl font-medium text-[#000000] text-xl"
+            className="flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-5 text-left text-xl font-medium text-[#000000]"
             onClick={() => toggle(index)}
           >
             <span>{item.title}</span>

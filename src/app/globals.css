@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 body {
-  @apply text-[#0b0b0b] overflow-x-hidden scroll-smooth;
+  @apply overflow-x-hidden scroll-smooth text-[#0b0b0b];
 }
 .icn_bg::before {
   content: "";
-  @apply absolute top-0 bottom-0 left-4.5 w-6 h-full z-[999] bg-no-repeat bg-center;
+  @apply absolute top-0 bottom-0 left-4.5 z-[999] h-full w-6 bg-center bg-no-repeat;
   background-size: 18px;
 }
 .mail_bg::before {
@@ -40,14 +40,14 @@ body {
 }
 .mths_bg::before {
   content: "";
-  @apply absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/40;
+  @apply absolute top-0 right-0 bottom-0 left-0 h-full w-full bg-white/40;
 }
 .hero_bg {
   background-image: url("../../public/images/hero_img.jpg");
 }
 .hero_bg::before {
   content: "";
-  @apply absolute top-0 right-0 left-0 bottom-0;
+  @apply absolute top-0 right-0 bottom-0 left-0;
   background: #000;
   background: linear-gradient(
     120deg,
@@ -67,7 +67,7 @@ body {
 }
 .hed_bg::before {
   content: "";
-  @apply bg-cover bg-no-repeat bg-white absolute  left-auto right-0 bottom-0 w-6/12 h-full;
+  @apply absolute right-0 bottom-0 left-auto h-full w-6/12 bg-white bg-cover bg-no-repeat;
 }
 .inp_spc::-webkit-outer-spin-button,
 .inp_spc::-webkit-inner-spin-button {
@@ -85,7 +85,7 @@ body {
 }
 .act_bg::before {
   content: "";
-  @apply absolute top-0 right-0 left-0 bottom-0;
+  @apply absolute top-0 right-0 bottom-0 left-0;
   background: #000;
   background: linear-gradient(
     120deg,
@@ -103,7 +103,7 @@ body {
 }
 .bg_shp::before {
   content: "";
-  @apply absolute top-0 right-0 left-0 bottom-0 bg-contain w-[600px] h-[300px] bg-no-repeat mx-auto;
+  @apply absolute top-0 right-0 bottom-0 left-0 mx-auto h-[300px] w-[600px] bg-contain bg-no-repeat;
   background-image: url("../../public/images/upr_shp.png");
 }
 .act_lst svg path {
@@ -157,6 +157,6 @@ body {
 }
 
 #home::before {
-  @apply absolute top-0 right-0 left-0 bottom-0 bg-black/75;
+  @apply absolute top-0 right-0 bottom-0 left-0 bg-black/75;
   content: "";
 }

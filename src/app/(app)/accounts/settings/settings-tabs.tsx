@@ -15,7 +15,7 @@ export function SettingsTab() {
     changePassword: <ChangePasswordForm />,
     aboutUs: (
       <>
-        <div className="img bg-[#FFFAEB] size-40 flex rounded-full justify-center items-center mx-auto mt-10">
+        <div className="img mx-auto mt-10 flex size-40 items-center justify-center rounded-full bg-[#FFFAEB]">
           <RevisionBee width={100} />
         </div>
         <div className="desc">
@@ -48,8 +48,8 @@ export function SettingsTab() {
     contactUs: <ContactUsForm />,
     termsAndPolicy: (
       <div className="desc">
-        <h4 className="text-xl font-bold mb-3">AGREEMENT TO TERMS</h4>
-        <p className="text-base font-normal text-[#505050] mb-3">
+        <h4 className="mb-3 text-xl font-bold">AGREEMENT TO TERMS</h4>
+        <p className="mb-3 text-base font-normal text-[#505050]">
           These Terms and Conditions constitute a legally binding agreement made
           between you, whether personally or on behalf of an entity (“you”) and
           [business entity name] (“we,” “us” or “our”), concerning your access
@@ -58,21 +58,21 @@ export function SettingsTab() {
           related, linked, or otherwise connected thereto (collectively, the
           “Site”).
         </p>
-        <p className="text-base font-normal text-[#505050] mb-3">
+        <p className="mb-3 text-base font-normal text-[#505050]">
           You agree that by accessing the Site, you have read, understood, and
           agree to be bound by all of these Terms and Conditions. If you do not
           agree with all of these Terms and Conditions, then you are expressly
           prohibited from using the Site and you must discontinue use
           immediately.
         </p>
-        <p className="text-base font-normal text-[#505050] mb-3">
+        <p className="mb-3 text-base font-normal text-[#505050]">
           Supplemental terms and conditions or documents that may be posted on
           the Site from time to time are hereby expressly incorporated herein by
           reference. We reserve the right, in our sole discretion, to make
           changes or modifications to these Terms and Conditions at any time and
           for any reason.
         </p>
-        <p className="text-base font-normal text-[#505050] mb-3">
+        <p className="mb-3 text-base font-normal text-[#505050]">
           We will alert you about any changes by updating the “Last updated”
           date of these Terms and Conditions, and you waive any right to receive
           specific notice of each such change.
@@ -82,7 +82,7 @@ export function SettingsTab() {
   };
   const [activeTab, setActiveTab] = useState("changePassword");
   return (
-    <div className="w-full mx-auto mt-10">
+    <div className="mx-auto mt-10 w-full">
       <div className="flex border-b border-gray-300">
         <button
           onClick={() => setActiveTab("changePassword")}
@@ -130,7 +130,7 @@ export function SettingsTab() {
         </button>
       </div>
       {/* Tabs Content */}
-      <div className="py-5 px-3">
+      <div className="px-3 py-5">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

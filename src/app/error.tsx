@@ -2,12 +2,12 @@
 
 export default function Error() {
   return (
-    <div className="text-black flex items-center min-h-screen justify-center flex-col">
-      <div className="error_icn flex flex-col justify-center items-center p-5 ">
-        <h2 className="text-9xl text-[#fbbe1b] font-bold pt-2 mb-0 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center text-black">
+      <div className="error_icn flex flex-col items-center justify-center p-5">
+        <h2 className="mb-0 pt-2 text-center text-9xl font-bold text-[#fbbe1b]">
           500
         </h2>
-        <p className="text-2xl text-black font-normal py-3 text-center">
+        <p className="py-3 text-center text-2xl font-normal text-black">
           Something went wrong
         </p>
       </div>

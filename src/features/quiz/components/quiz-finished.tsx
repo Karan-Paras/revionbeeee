@@ -35,11 +35,11 @@ export function QuizFinished() {
   return (
     <section className="py-5">
       <div className="container mx-auto">
-        <div className="grid grid-cols-6 ">
+        <div className="grid grid-cols-6">
           <div className="col-span-1">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <div className="hed">
-                <h3 className="font-semibold text-2xl">Questions</h3>
+                <h3 className="text-2xl font-semibold">Questions</h3>
               </div>
               <div className="count">
                 <p>
@@ -47,34 +47,34 @@ export function QuizFinished() {
                 </p>
               </div>
             </div>
-            <div className="load w-full relative mt-2.5">
-              <div className="h-2 rounded-2xl bg-[#FBBE1B] absolute left-0 right-0 w-full" />
-              <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl" />
+            <div className="load relative mt-2.5 w-full">
+              <div className="absolute right-0 left-0 h-2 w-full rounded-2xl bg-[#FBBE1B]" />
+              <div className="load h-2 w-full rounded-2xl bg-[#EDEDED]" />
             </div>
           </div>
-          <div className="col-span-4 relative bg_shp">
-            <div className="lgo size-[160px] mx-auto bg-white shadow-xl border border-[#f7f7f7] rounded-full flex justify-center items-center relative">
+          <div className="bg_shp relative col-span-4">
+            <div className="lgo relative mx-auto flex size-[160px] items-center justify-center rounded-full border border-[#f7f7f7] bg-white shadow-xl">
               <RevisionBee />
             </div>
           </div>
           <div className="col-span-1" />
-          <div className="col-span-6 bg-[#F6F6F6] py-4 px-10 rounded-xl grid -mt-[50px]">
-            <div className="img mt-40 flex items-center flex-col">
+          <div className="col-span-6 -mt-[50px] grid rounded-xl bg-[#F6F6F6] px-10 py-4">
+            <div className="img mt-40 flex flex-col items-center">
               <Image src={OnlineQuiz} alt="" />
-              <h3 className="font-bold mt-4 text-3xl">Quiz Finished</h3>
+              <h3 className="mt-4 text-3xl font-bold">Quiz Finished</h3>
             </div>
 
-            <div className="grid grid-cols-6 gap-5 my-16 justify-center">
+            <div className="my-16 grid grid-cols-6 justify-center gap-5">
               <div className="col-span-2 col-start-2">
-                <div className="itm border-[#53A2EB] border-2 p-5 rounded-xl text-center min-h-[170px] flex justify-center items-center flex-col gap-2 bg-white">
+                <div className="itm flex min-h-[170px] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[#53A2EB] bg-white p-5 text-center">
                   <h3 className="text-xl">Total Questions Attempted</h3>
-                  <p className="font-bold text-3xl">{totalAttempted}</p>
+                  <p className="text-3xl font-bold">{totalAttempted}</p>
                 </div>
               </div>
               <div className="col-span-2">
-                <div className="itm border-[#FBBE1B] border-2 p-5 rounded-xl text-center min-h-[170px] flex justify-center items-center flex-col gap-2 bg-white">
+                <div className="itm flex min-h-[170px] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[#FBBE1B] bg-white p-5 text-center">
                   <h3 className="text-xl">Total Progress</h3>
-                  <p className="font-bold text-3xl">{progress}%</p>
+                  <p className="text-3xl font-bold">{progress}%</p>
                 </div>
               </div>
             </div>
@@ -83,13 +83,13 @@ export function QuizFinished() {
             <div className="btn flex justify-center gap-3">
               <Link
                 href={paths.quiz()}
-                className="bg-[#53A2EB] p-4 text-white mt-8 px-16 rounded-2xl font-medium cursor-pointer hover:shadow-sm"
+                className="mt-8 cursor-pointer rounded-2xl bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
               >
                 View All Quizzes
               </Link>
               <Link
                 href={paths.quizResult(subjectId)}
-                className="bg-[#53A2EB] p-4 text-white mt-8 px-16 rounded-2xl font-medium cursor-pointer hover:shadow-sm"
+                className="mt-8 cursor-pointer rounded-2xl bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
               >
                 View Result
               </Link>

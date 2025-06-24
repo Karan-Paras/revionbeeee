@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
       <section className="py-10">
         <div className="container mx-auto">
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">
+            <h3 className="mb-2 text-2xl font-bold">
               1. What do we do with your information?
             </h3>
             <p>
@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">2. Consent</h3>
+            <h3 className="mb-2 text-2xl font-bold">2. Consent</h3>
             <p>
               Mattis aliquam faucibus purus in massa tempor nec feugiat nisl. Et
               netus et malesuada fames ac turpis egestas integer. Morbi
@@ -57,7 +57,7 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">3. Disclosure</h3>
+            <h3 className="mb-2 text-2xl font-bold">3. Disclosure</h3>
             <p>
               Mattis aliquam faucibus purus in massa tempor nec feugiat nisl. Et
               netus et malesuada fames ac turpis egestas integer. Morbi
@@ -74,7 +74,7 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">4. Third-party services</h3>
+            <h3 className="mb-2 text-2xl font-bold">4. Third-party services</h3>
             <p>
               Mattis aliquam faucibus purus in massa tempor nec feugiat nisl. Et
               netus et malesuada fames ac turpis egestas integer. Morbi
@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">5. Security</h3>
+            <h3 className="mb-2 text-2xl font-bold">5. Security</h3>
             <p>
               Mattis aliquam faucibus purus in massa tempor nec feugiat nisl. Et
               netus et malesuada fames ac turpis egestas integer. Morbi
@@ -108,7 +108,7 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="rw mb-8">
-            <h3 className="font-bold text-2xl mb-2">6. Cookies</h3>
+            <h3 className="mb-2 text-2xl font-bold">6. Cookies</h3>
             <p>
               Mattis aliquam faucibus purus in massa tempor nec feugiat nisl. Et
               netus et malesuada fames ac turpis egestas integer. Morbi

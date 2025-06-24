@@ -10,9 +10,9 @@ import { paths } from "@/routes";
 
 export default function ForgetPassword() {
   return (
-    <div className="max-w-lg md:w-11/12 w-full m-auto rounded-xl border border-gray-100 shadow-2xl md:p-8 p-5 md:mt-0 mt-10 relative bg-white">
+    <div className="relative m-auto mt-10 w-full max-w-lg rounded-xl border border-gray-100 bg-white p-5 shadow-2xl md:mt-0 md:w-11/12 md:p-8">
       <Link href={paths.login()}>
-        <button className="absolute top-4 left-5 flex gap-1 items-center text-sm cursor-pointer">
+        <button className="absolute top-4 left-5 flex cursor-pointer items-center gap-1 text-sm">
           <ArrowBack />
           back
         </button>
@@ -20,11 +20,11 @@ export default function ForgetPassword() {
       <div className="img flex justify-center">
         <Image src={EmailService} alt="email-service" />
       </div>
-      <div className="desc text-center my-5">
-        <h3 className="text-[#0B0B0B] font-bold text-2xl mb-3">
+      <div className="desc my-5 text-center">
+        <h3 className="mb-3 text-2xl font-bold text-[#0B0B0B]">
           Forgot password?
         </h3>
-        <p className="text-[#6C6C6C] font-light text-sm">
+        <p className="text-sm font-light text-[#6C6C6C]">
           Don&apos;t worry! Please enter the email address linked with your
           account.
         </p>

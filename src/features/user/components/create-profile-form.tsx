@@ -67,16 +67,16 @@ export function CreateProfileForm() {
       <form onSubmit={handleFormSubmit}>
         <div className="grid grid-cols-2">
           <div className="col-span-2">
-            <div className="w-28 h-28 mb-4 relative mx-auto  flex items-center justify-center mt-5 border-dotted border rounded-full">
+            <div className="relative mx-auto mt-5 mb-4 flex h-28 w-28 items-center justify-center rounded-full border border-dotted">
               <div
                 className={cn(
-                  "size-[6.6rem] rounded-full overflow-hidden bg-cover bg-no-repeat flex items-center justify-center",
+                  "flex size-[6.6rem] items-center justify-center overflow-hidden rounded-full bg-cover bg-no-repeat",
                   !profilePicture && "blk"
                 )}
               >
                 {profilePicture && (
                   <Image
-                    className="object-cover rounded-full w-full h-full "
+                    className="h-full w-full rounded-full object-cover"
                     src={profilePicture}
                     alt="profilePicture"
                     width={100}
@@ -85,12 +85,12 @@ export function CreateProfileForm() {
                 )}
               </div>
 
-              <span className="absolute bottom-0 right-0 rounded-full flex items-center justify-center w-8 h-8 bg-[#53A2EB]   border border-white  ">
+              <span className="absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border border-white bg-[#53A2EB]">
                 <Camera color="white" />
                 <input
                   id="profile-picture"
                   name="profile-picture"
-                  className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
+                  className="absolute top-0 right-0 bottom-0 left-0 w-full opacity-0"
                   type="file"
                   accept="image/*"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +101,7 @@ export function CreateProfileForm() {
                 />
               </span>
             </div>
-            <p className="text-center text-[#505050] text-sm">
+            <p className="text-center text-sm text-[#505050]">
               Upload your image
             </p>
             {!!formState.errors.profilePicture && (
@@ -112,7 +112,7 @@ export function CreateProfileForm() {
             )}
           </div>
           <div className="col-span-2">
-            <div className="itm relative mb-3.5 mt-5">
+            <div className="itm relative mt-5 mb-3.5">
               <FormLabel htmlFor="first-name">First name</FormLabel>
               <Input
                 id="first-name"

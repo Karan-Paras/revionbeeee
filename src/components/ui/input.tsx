@@ -70,13 +70,13 @@ export function Input({
   return (
     <>
       {hasIcon ? (
-        <div className={cn("relative my-1.5 icn_bg", iconClassName)}>
+        <div className={cn("icn_bg relative my-1.5", iconClassName)}>
           {inputElement}
           {props.type === "password" && (
             <button
               type="button"
               onClick={handlePasswordToggle}
-              className="pass_icon absolute right-5 top-0 bottom-0 h-full content-center cursor-pointer"
+              className="pass_icon absolute top-0 right-5 bottom-0 h-full cursor-pointer content-center"
             >
               <span>{showPassword ? <Eye /> : <EyeOff />}</span>
             </button>
@@ -89,7 +89,7 @@ export function Input({
             <button
               type="button"
               onClick={handlePasswordToggle}
-              className="pass_icon absolute right-5 top-0 bottom-0  content-center cursor-pointer"
+              className="pass_icon absolute top-0 right-5 bottom-0 cursor-pointer content-center"
             >
               <span>{showPassword ? <Eye /> : <EyeOff />}</span>
             </button>

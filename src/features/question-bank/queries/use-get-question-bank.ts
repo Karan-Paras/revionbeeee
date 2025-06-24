@@ -1,4 +1,4 @@
-import { getQuestionBank } from "@/features/subjects/api/get-question-bank";
+import { getQuestionBank } from "@/features/question-bank/api/get-question-bank";
 import { useQuery } from "@tanstack/react-query";
 import type { ID } from "@/types/globals";
 

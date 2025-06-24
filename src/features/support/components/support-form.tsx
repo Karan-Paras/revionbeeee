@@ -22,10 +22,10 @@ export function SupportForm() {
   }
 
   return (
-    <div className="md:col-span-3 col-span-6">
-      <div className="crd bg-white px-4 lg:py-10 py-5 rounded-xl shadow-md">
+    <div className="col-span-6 md:col-span-3">
+      <div className="crd rounded-xl bg-white px-4 py-5 shadow-md lg:py-10">
         <form className="grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
-          <div className="md:col-span-1 col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <Input
               variant="transparent"
               placeholder="First Name*"
@@ -36,7 +36,7 @@ export function SupportForm() {
               autoComplete="given-name"
             />
           </div>
-          <div className="md:col-span-1 col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <Input
               variant="transparent"
               placeholder="Last Name*"
@@ -47,7 +47,7 @@ export function SupportForm() {
               autoComplete="family-name"
             />
           </div>
-          <div className="md:col-span-1 col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <Input
               type="email"
               variant="transparent"
@@ -59,7 +59,7 @@ export function SupportForm() {
               autoComplete="email"
             />
           </div>
-          <div className="md:col-span-1 col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <Input
               type="tel"
               variant="transparent"
@@ -92,7 +92,7 @@ export function SupportForm() {
             <div className="flex justify-center">
               <Button
                 variant="rounded"
-                className="w-auto font-semibold py-5 px-8"
+                className="w-auto px-8 py-5 font-semibold"
               >
                 Submit a Query
               </Button>

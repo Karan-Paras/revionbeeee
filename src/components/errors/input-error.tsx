@@ -6,5 +6,5 @@ interface InputErrorProps {
 }
 
 export function InputError({ error, className }: InputErrorProps) {
-  return <p className={cn("text-red-600 mt-1 text-sm", className)}>{error}</p>;
+  return <p className={cn("mt-1 text-sm text-red-600", className)}>{error}</p>;
 }
