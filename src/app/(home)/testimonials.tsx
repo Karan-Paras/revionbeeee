@@ -1,4 +1,4 @@
-import { LandingSlider } from "@/components/sliders/landing-slider";
+import { TestimonialsSlider } from "@/app/(home)/testimonials-slider";
 
 export function Testimonials() {
   return (
@@ -7,9 +7,6 @@ export function Testimonials() {
         <div className="grid grid-cols-2">
           <div className="col-span-2">
             <div className="itm mb-8 flex items-center justify-center gap-1.5 capitalize">
-              {/* <span>
-                <Minus width={42} height={2} color="#53A2EB" />
-              </span> */}
               <p className="text-[#53A2EB]">Testimonials</p>
             </div>
             <h2 className="mb-3 text-center text-3xl font-bold lg:text-5xl lg:leading-14 xl:text-5xl xl:leading-normal 2xl:text-6xl">
@@ -19,7 +16,7 @@ export function Testimonials() {
           <div className="col-span-2" />
         </div>
       </div>
-      <LandingSlider />
+      <TestimonialsSlider />
     </section>
   );
 }
