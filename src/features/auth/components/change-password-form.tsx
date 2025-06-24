@@ -73,7 +73,7 @@ export function ChangePasswordForm() {
       </div>
       <div className="itm mb-3">
         <Button
-          className="w-fit px-10 shadow-xl/10 rounded-xl mx-auto mt-10"
+          className="mx-auto mt-10 w-fit rounded-xl px-10 shadow-xl/10"
           disabled={isPending}
         >
           Update Password

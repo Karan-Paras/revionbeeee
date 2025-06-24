@@ -70,22 +70,22 @@ function Form({ userData }: FormProps) {
   }
 
   return (
-    <div className="bg-white px-7 py-8 rounded-xl">
-      <h3 className="font-bold border-b text-2xl pb-3 border-[#D9D9D9]">
+    <div className="rounded-xl bg-white px-7 py-8">
+      <h3 className="border-b border-[#D9D9D9] pb-3 text-2xl font-bold">
         Update Profile
       </h3>
 
       <form className="frm" onSubmit={handleFormSubmit}>
-        <div className="size-40 mb-4 relative mx-auto  flex items-center justify-center mt-5 border border-white shadow-sm/30 rounded-full">
+        <div className="relative mx-auto mt-5 mb-4 flex size-40 items-center justify-center rounded-full border border-white shadow-sm/30">
           <div
             className={cn(
-              "size-full rounded-full overflow-hidden bg-cover bg-no-repeat flex items-center justify-center",
+              "flex size-full items-center justify-center overflow-hidden rounded-full bg-cover bg-no-repeat",
               !profilePicture && "blk"
             )}
           >
             {profilePicture && (
               <Image
-                className="object-cover rounded-full w-full h-full "
+                className="h-full w-full rounded-full object-cover"
                 src={
                   profilePicture.startsWith("blob")
                     ? profilePicture
@@ -98,12 +98,12 @@ function Form({ userData }: FormProps) {
             )}
           </div>
 
-          <span className="absolute bottom-2 right-0 rounded-full flex items-center justify-center size-10 bg-[#53A2EB]   border border-white  ">
+          <span className="absolute right-0 bottom-2 flex size-10 items-center justify-center rounded-full border border-white bg-[#53A2EB]">
             <Camera color="white" />
             <input
               id="profile-picture"
               name="profile-picture"
-              className="absolute top-0 bottom-0 w-full left-0 right-0 opacity-0"
+              className="absolute top-0 right-0 bottom-0 left-0 w-full opacity-0"
               type="file"
               accept="image/*"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +115,7 @@ function Form({ userData }: FormProps) {
             />
           </span>
         </div>
-        <FormLabel className="text-sm font-light flex justify-center items-center">
+        <FormLabel className="flex items-center justify-center text-sm font-light">
           Upload your image
         </FormLabel>
         {!!formState.errors.profilePicture && (
@@ -124,9 +124,9 @@ function Form({ userData }: FormProps) {
             className="text-center"
           />
         )}
-        <div className="grid grid-cols-2 gap-10 my-5">
+        <div className="my-5 grid grid-cols-2 gap-10">
           <div className="col-span-1">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="first-name" variant="bold">
                 First Name
               </FormLabel>
@@ -143,7 +143,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-1">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="last-name" variant="bold">
                 Last name
               </FormLabel>
@@ -160,7 +160,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-1">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="city" variant="bold">
                 City
               </FormLabel>
@@ -177,7 +177,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-1">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="state" variant="bold">
                 State
               </FormLabel>
@@ -194,7 +194,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-1">
-            <div className="flex justify-between h-full flex-wrap items-center">
+            <div className="flex h-full flex-wrap items-center justify-between">
               <FormLabel htmlFor="gender" variant="bold">
                 Gender
               </FormLabel>
@@ -206,14 +206,14 @@ function Form({ userData }: FormProps) {
                     name="gender"
                     value="male"
                     checked={genderValue === "male"}
-                    className="absolute left-0 w-full h-full opacity-0 cursor-pointer"
+                    className="absolute left-0 h-full w-full cursor-pointer opacity-0"
                     onChange={(e) => {
                       setGenderValue(e.target.value as "male");
                     }}
                   />
                   <button
                     className={cn(
-                      "border flex gap-2 w-full rounded-lg font-bold items-center px-5 py-3",
+                      "flex w-full items-center gap-2 rounded-lg border px-5 py-3 font-bold",
                       genderValue === "male"
                         ? "border-[#53A2EB] text-[#53A2EB]"
                         : "border-[#9D9D9D] text-[#9D9D9D]"
@@ -234,7 +234,7 @@ function Form({ userData }: FormProps) {
                     name="gender"
                     value="female"
                     checked={genderValue === "female"}
-                    className="absolute left-0 w-full h-full opacity-0 cursor-pointer"
+                    className="absolute left-0 h-full w-full cursor-pointer opacity-0"
                     onChange={(e) => {
                       setGenderValue(e.target.value as "female");
                     }}
@@ -242,7 +242,7 @@ function Form({ userData }: FormProps) {
 
                   <button
                     className={cn(
-                      "border flex gap-2 w-full rounded-lg font-bold items-center px-5 py-3",
+                      "flex w-full items-center gap-2 rounded-lg border px-5 py-3 font-bold",
                       genderValue === "female"
                         ? "border-[#53A2EB] text-[#53A2EB]"
                         : "border-[#9D9D9D] text-[#9D9D9D]"
@@ -263,7 +263,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-1">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="phone-number" variant="bold">
                 Mobile
               </FormLabel>
@@ -284,7 +284,7 @@ function Form({ userData }: FormProps) {
             </div>
           </div>
           <div className="col-span-2">
-            <div className="itm relative gap-1.5 grid">
+            <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="address" variant="bold">
                 Address
               </FormLabel>
@@ -302,7 +302,7 @@ function Form({ userData }: FormProps) {
           <div className="col-span-2">
             <div className="flex justify-center">
               <Button
-                className="shadow-xl/10 w-auto px-16"
+                className="w-auto px-16 shadow-xl/10"
                 variant="rounded"
                 disabled={isPending}
               >

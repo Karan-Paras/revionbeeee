@@ -8,7 +8,7 @@ import { useEffect, useReducer } from "react";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { VideoPlayer } from "@/features/videos/components/video-player";
+import { VideoPlayer } from "@/components/common/video-player";
 
 import { ChevronUp, RevisionBee } from "@/lib/icons";
 import {
@@ -68,11 +68,11 @@ export function QuizResult() {
     return (
       <section className="py-5">
         <div className="container mx-auto">
-          <div className="grid grid-cols-6 ">
+          <div className="grid grid-cols-6">
             <div className="col-span-1">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <div className="hed">
-                  <h3 className="font-semibold text-2xl">Questions</h3>
+                  <h3 className="text-2xl font-semibold">Questions</h3>
                 </div>
                 <div className="count">
                   <p>
@@ -80,33 +80,33 @@ export function QuizResult() {
                   </p>
                 </div>
               </div>
-              <div className="load w-full relative mt-2.5">
-                <div className="h-2 rounded-2xl bg-[#FBBE1B] absolute left-0 right-0 w-full" />
-                <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl" />
+              <div className="load relative mt-2.5 w-full">
+                <div className="absolute right-0 left-0 h-2 w-full rounded-2xl bg-[#FBBE1B]" />
+                <div className="load h-2 w-full rounded-2xl bg-[#EDEDED]" />
               </div>
             </div>
-            <div className="col-span-4 relative bg_shp">
-              <div className="lgo size-[160px] mx-auto bg-white shadow-xl border border-[#f7f7f7] rounded-full flex justify-center items-center relative">
+            <div className="bg_shp relative col-span-4">
+              <div className="lgo relative mx-auto flex size-[160px] items-center justify-center rounded-full border border-[#f7f7f7] bg-white shadow-xl">
                 <RevisionBee />
               </div>
             </div>
             <div className="col-span-1" />
-            <div className="col-span-6 bg-[#F6F6F6] py-4 px-10 rounded-xl grid -mt-[50px] pt-40">
+            <div className="col-span-6 -mt-[50px] grid rounded-xl bg-[#F6F6F6] px-10 py-4 pt-40">
               {questions.map(({ question, id, answer, questionVideo }, idx) => (
-                <div key={id} className="grid-cols-12  grid">
+                <div key={id} className="grid grid-cols-12">
                   <div
                     className={cn(
-                      "itm  col-start-4 col-span-7 bg-white p-5 shadow-md rounded-xl mb-5 relative cursor-pointer",
+                      "itm relative col-span-7 col-start-4 mb-5 cursor-pointer rounded-xl bg-white p-5 shadow-md",
                       result[idx].selectedOption === result[idx].correctOption
                         ? "bg-[#FBBE1B]"
                         : "bg-[#ff77774a] text-[#cb3c3c]"
                     )}
                     onClick={() => handleToggle(idx)}
                   >
-                    <span className="absolute -left-14 text-center content-center size-10 shadow-sm font-bold bg-white rounded-full text-black">
+                    <span className="absolute -left-14 size-10 content-center rounded-full bg-white text-center font-bold text-black shadow-sm">
                       {idx + 1}
                     </span>
-                    <h3 className="font-semibold text-xl">
+                    <h3 className="text-xl font-semibold">
                       <span
                         className="img_spc"
                         dangerouslySetInnerHTML={{
@@ -121,7 +121,7 @@ export function QuizResult() {
                       />
                     )}
 
-                    <button className="absolute right-3  top-7 cursor-pointer">
+                    <button className="absolute top-7 right-3 cursor-pointer">
                       <ChevronUp
                         color="#000"
                         className={cn(
@@ -132,13 +132,13 @@ export function QuizResult() {
                     </button>
                   </div>
                   {state.visible === idx && (
-                    <div className="col-start-4 col-span-7 p-5 shadow-md rounded-xl mb-5 relative bg-white">
+                    <div className="relative col-span-7 col-start-4 mb-5 rounded-xl bg-white p-5 shadow-md">
                       <div className="desc_blk p-5">
-                        <p className="text-lg font-semibold mb-2">
+                        <p className="mb-2 text-lg font-semibold">
                           Your Answer:
                         </p>
                         {result[idx].selectedOption === -1 ? (
-                          <p className="text-red-500 ">
+                          <p className="text-red-500">
                             You did not attempt this question.
                           </p>
                         ) : (
@@ -170,7 +170,7 @@ export function QuizResult() {
                           </>
                         )}
                         <hr className="my-3 border-gray-300" />
-                        <p className="text-lg font-semibold mt-4 mb-2">
+                        <p className="mt-4 mb-2 text-lg font-semibold">
                           Correct Answer:
                         </p>
                         <p className="mb-2 font-semibold">
@@ -207,7 +207,7 @@ export function QuizResult() {
               <div className="btn flex justify-center">
                 <Link
                   href={paths.quiz()}
-                  className="bg-[#53A2EB] p-4 text-white mt-8 px-16 rounded-2xl font-medium cursor-pointer hover:shadow-sm"
+                  className="mt-8 cursor-pointer rounded-2xl bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
                 >
                   View All Quiz
                 </Link>

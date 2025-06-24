@@ -1,58 +1,61 @@
 "use client";
 
-import { NoData } from "@/lib/assets";
-import Image from "../../../../node_modules/next/image";
-import { useGetStudentProgress } from "../queries/use-get-student-progress";
+import { useGetProgress } from "@/features/progress/queries/use-get-progress";
+import type { ID } from "@/types/globals";
+import { DataLoader } from "@/components/loaders/data-loader";
+import { ApiError } from "@/components/errors/api-error";
 
 interface Props {
-  topicId: string | null;
+  topicId: ID | null;
 }
 
 export function ProgressTracker({ topicId }: Props) {
-  // let { subjectId } = useParams();
-  // subjectId = subjectId?.toString?.() ?? "";
+  const { data, isLoading, error } = useGetProgress(topicId);
 
-  const { data } = useGetStudentProgress(topicId || "");
-
-  if (!topicId) return <div className="md:col-span-9">Loading topic...</div>;
   return (
-    <>
-      <div className="md:col-span-8 col-span-12 ">
-        <div className="p-8 border border-[#CECECE] rounded-2xl bg-white h-[90vh] overflow-y-auto">
-          <h3 className="font-bold text-xl mb-3.5">Progress Tracker</h3>
+    <div className="col-span-12 md:col-span-8">
+      <div className="h-[90vh] overflow-y-auto rounded-2xl border border-[#CECECE] bg-white p-8">
+        <h3 className="mb-3.5 text-xl font-bold">Progress Tracker</h3>
 
-          {Array.isArray(data?.data) && data?.data?.length > 0 ? (
-            data?.data?.map(({ subjectName, progress }, index) => {
-              const progressValue = parseInt(progress.replace("%", ""));
-              let progressColor = "transparent";
+        {(() => {
+          if (isLoading) {
+            return <DataLoader />;
+          }
 
-              if (progressValue > 0) {
-                progressColor = "#FBBE1B";
-              }
+          if (error) {
+            return <ApiError error={error.message} />;
+          }
+
+          if (data) {
+            const progressData = data.data || [];
+            return progressData.map(({ subjectName, progress }, index) => {
+              const progressValue = +progress.replace("%", "");
+              const progressColor =
+                progressValue > 0 ? "#FBBE1B" : "transparent";
+
               return (
                 <div
                   key={index}
-                  className="itm border border-[#E0E0E0] p-5 rounded-xl mb-4"
+                  className="itm mb-4 rounded-xl border border-[#E0E0E0] p-5"
                 >
-                  <div className="grid grid-cols-12 gap-4 justify-between items-end">
-                    <div className="md:col-span-11 col-span-9">
+                  <div className="grid grid-cols-12 items-end justify-between gap-4">
+                    <div className="col-span-9 md:col-span-11">
                       <h2>{subjectName}</h2>
                       <div className="prog relative">
                         <div
-                          className="absolute w-[75%] bg-[#FBBE1B] top-0 left-0 
-                          right-0 bottom-0 z-10 rounded-xl h-full"
+                          className="absolute top-0 right-0 bottom-0 left-0 z-10 h-full w-[75%] rounded-xl bg-[#FBBE1B]"
                           style={{
                             width: `${progressValue}%`,
                             backgroundColor: progressColor,
                             transition: "width 0.3s ease",
                           }}
-                        ></div>
-                        <div className="w-full relative bg-[#F4F4F4] h-2 mt-3.5 rounded-xl"></div>
+                        />
+                        <div className="relative mt-3.5 h-2 w-full rounded-xl bg-[#F4F4F4]" />
                       </div>
                     </div>
-                    <div className="md:col-span-1 col-span-3">
+                    <div className="col-span-3 md:col-span-1">
                       <div className="pro_load text-center">
-                        <h4 className="font-bold lg:text-2xl text-xl">
+                        <h4 className="text-xl font-bold lg:text-2xl">
                           {progress}
                         </h4>
                       </div>
@@ -60,15 +63,10 @@ export function ProgressTracker({ topicId }: Props) {
                   </div>
                 </div>
               );
-            })
-          ) : (
-            <div className="flex items-center align-center justify-center flex-col relative">
-              <Image src={NoData} alt="" height={300} width={300}></Image>
-              <h3 className="text-3xl font-medium">No Data Found</h3>
-            </div>
-          )}
-        </div>
+            });
+          }
+        })()}
       </div>
-    </>
+    </div>
   );
 }

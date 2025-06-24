@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
@@ -8,11 +9,10 @@ import { useParams, useRouter } from "next/navigation";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { ApiError } from "@/components/errors/api-error";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
-import { VideoPlayer } from "@/features/videos/components/video-player";
+import { VideoPlayer } from "@/components/common/video-player";
 import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
 import type { Option, Result } from "@/features/quiz/types";
-import DOMPurify from "dompurify";
 
 import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import {
@@ -129,13 +129,13 @@ export function Quiz() {
     };
 
     return (
-      <section className="py-5 xl:px-0 px-5">
+      <section className="px-5 py-5 xl:px-0">
         <div className="container mx-auto">
-          <div className="grid grid-cols-6 ">
-            <div className="md:col-span-1 col-span-6 md:order-1 order-2 md:mb-0 mb-5">
-              <div className="flex justify-between items-center">
+          <div className="grid grid-cols-6">
+            <div className="order-2 col-span-6 mb-5 md:order-1 md:col-span-1 md:mb-0">
+              <div className="flex items-center justify-between">
                 <div className="hed">
-                  <h3 className="font-semibold text-2xl">Questions</h3>
+                  <h3 className="text-2xl font-semibold">Questions</h3>
                 </div>
                 <div className="count">
                   <p>
@@ -143,7 +143,7 @@ export function Quiz() {
                   </p>
                 </div>
               </div>
-              <div className="load w-full relative mt-2.5">
+              <div className="load relative mt-2.5 w-full">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{
@@ -153,34 +153,34 @@ export function Quiz() {
                     duration: 0.6,
                     ease: "easeOut",
                   }}
-                  className="h-2 rounded-2xl bg-[#FBBE1B] absolute left-0 right-0"
+                  className="absolute right-0 left-0 h-2 rounded-2xl bg-[#FBBE1B]"
                   style={{
                     width: `${((displayQuestionIdx + 1) / totalQuestions) * 100}%`,
                   }}
                 />
-                <div className="load w-full h-2 bg-[#EDEDED] rounded-2xl" />
+                <div className="load h-2 w-full rounded-2xl bg-[#EDEDED]" />
               </div>
             </div>
-            <div className="col-span-4 relative bg_shp md:order-2 md:block hidden">
-              <div className="lgo size-[160px] mx-auto bg-white shadow-xl border border-[#f7f7f7] rounded-full flex justify-center items-center relative">
+            <div className="bg_shp relative col-span-4 hidden md:order-2 md:block">
+              <div className="lgo relative mx-auto flex size-[160px] items-center justify-center rounded-full border border-[#f7f7f7] bg-white shadow-xl">
                 <RevisionBee />
               </div>
             </div>
-            <div className="md:col-span-1 col-span-6 md:order-3 order-1">
+            <div className="order-1 col-span-6 md:order-3 md:col-span-1">
               <Link
                 href={paths.subjectDetails(subjectId)}
-                className="flex justify-end md:mb-0 mb-4 items-center gap-2 cursor-pointer ms-auto"
+                className="ms-auto mb-4 flex cursor-pointer items-center justify-end gap-2 md:mb-0"
               >
-                <button className="flex gap-2 cursor-pointer items-center">
-                  <span className="text-[#F15642] text-xl font-semibold">
+                <button className="flex cursor-pointer items-center gap-2">
+                  <span className="text-xl font-semibold text-[#F15642]">
                     Exit
                   </span>
                   <Exit color="#F15642" />
                 </button>
               </Link>
             </div>
-            <div className="order-4 col-span-6 bg-[#F6F6F6] p-4 rounded-xl grid justify-items-center md:-mt-[50px] md:min-h-[75vh]">
-              <div className="md:w-6/12 w-full max-w-lg mt-5 md:mb-10 mb-5 relative">
+            <div className="order-4 col-span-6 grid justify-items-center rounded-xl bg-[#F6F6F6] p-4 md:-mt-[50px] md:min-h-[75vh]">
+              <div className="relative mt-5 mb-5 w-full max-w-lg md:mb-10 md:w-6/12">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={id}
@@ -193,16 +193,16 @@ export function Quiz() {
                     }}
                   />
 
-                  <h2 className="md:pt-20 mb-8 text-center text-4xl font-bold">
+                  <h2 className="mb-8 text-center text-4xl font-bold md:pt-20">
                     {title}
                   </h2>
 
-                  <div className="question_blk flex items-start gap-2.5  mb-5 flex-wrap">
-                    <div className="size-10 bg-white flex justify-center items-center rounded-full font-semibold">
+                  <div className="question_blk mb-5 flex flex-wrap items-start gap-2.5">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-white font-semibold">
                       {displayQuestionIdx + 1}
                     </div>
                     <div className="hed w-10/12">
-                      <h3 className="font-semibold text-xl">
+                      <h3 className="text-xl font-semibold">
                         <span
                           className="img_spc"
                           dangerouslySetInnerHTML={{
@@ -231,13 +231,13 @@ export function Quiz() {
                         ease: "easeOut",
                       }}
                       className={cn(
-                        "itm px-5 py-6 rounded-xl mb-5 cursor-pointer hover:shadow-xl/5 duration-150 ease-in-out",
+                        "itm mb-5 cursor-pointer rounded-xl px-5 py-6 duration-150 ease-in-out hover:shadow-xl/5",
                         options[displayQuestionIdx]?.selectedOption === index
                           ? "bg-[#FBBE1B]"
                           : "bg-white"
                       )}
                     >
-                      <div className="flex gap-1 text-lg flex-wrap">
+                      <div className="flex flex-wrap gap-1 text-lg">
                         <p className="font-bold">
                           {String.fromCharCode(65 + index)}.
                         </p>
@@ -261,14 +261,14 @@ export function Quiz() {
               </div>
             </div>
             <div className="order-5 col-span-6">
-              <div className="flex justify-center mt-7 gap-3 md:flex-nowrap flex-wrap">
+              <div className="mt-7 flex flex-wrap justify-center gap-3 md:flex-nowrap">
                 {displayQuestionIdx > 0 && (
                   <motion.button
                     disabled={mutation.isPending}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
                     onClick={onPreviousQuestion}
-                    className="bg-white border-[#505050] text-[#505050] border p-4 rounded-xl flex gap-2 items-center justify-center  min-w-48 font-medium cursor-pointer hover:shadow-lg hover:bg-[#505050] hover:text-white duration-150 ease-in-out group"
+                    className="group flex min-w-48 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#505050] bg-white p-4 font-medium text-[#505050] duration-150 ease-in-out hover:bg-[#505050] hover:text-white hover:shadow-lg"
                   >
                     <span>
                       <ArrowLeft color="#505050" />
@@ -282,7 +282,7 @@ export function Quiz() {
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
                     onClick={onNextQuestion}
-                    className="bg-[#53A2EB] border-transparent border p-4 rounded-xl flex gap-2 items-center justify-center text-white min-w-48 font-medium cursor-pointer hover:shadow-lg hover:border-[#53A2EB] hover:text-[#53A2EB] hover:bg-transparent duration-150 ease-in-out group"
+                    className="group flex min-w-48 cursor-pointer items-center justify-center gap-2 rounded-xl border border-transparent bg-[#53A2EB] p-4 font-medium text-white duration-150 ease-in-out hover:border-[#53A2EB] hover:bg-transparent hover:text-[#53A2EB] hover:shadow-lg"
                   >
                     Next
                     <span>
@@ -299,7 +299,7 @@ export function Quiz() {
                     onClick={onSubmit}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.03 }}
-                    className="bg-[#53A2EB] border-transparent border p-4 rounded-xl flex gap-2 items-center justify-center text-white min-w-48 font-medium cursor-pointer hover:shadow-lg hover:border-[#53A2EB] hover:text-[#53A2EB] hover:bg-transparent duration-150 ease-in-out group"
+                    className="group flex min-w-48 cursor-pointer items-center justify-center gap-2 rounded-xl border border-transparent bg-[#53A2EB] p-4 font-medium text-white duration-150 ease-in-out hover:border-[#53A2EB] hover:bg-transparent hover:text-[#53A2EB] hover:shadow-lg"
                   >
                     Submit
                   </motion.button>

@@ -1,3 +1,3 @@
-import { QuizDetails } from "@/features/quiz-list/components/quiz-details";
+import { QuizDetails } from "@/features/quiz/components/quiz-details";
 
 export default QuizDetails;

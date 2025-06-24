@@ -34,10 +34,10 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen overflow-hidden bg-top 2xl:px-0 lg:px-20 "
+      className="relative min-h-screen overflow-hidden bg-top lg:px-20 2xl:px-0"
     >
       <video
-        className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+        className="absolute top-0 left-0 z-[-1] h-full w-full object-cover"
         autoPlay
         muted
         loop
@@ -45,12 +45,12 @@ export function HeroSection() {
         src={Hero}
       />
       <div className="container mx-auto">
-        <div className="grid grid-cols-2 content-center min-h-screen">
-          <div className="col-span-2 text-center 2xl:w-6/12 xl:w-7/12 lg:w-8/12 w-10/12 mx-auto relative">
+        <div className="grid min-h-screen grid-cols-2 content-center">
+          <div className="relative col-span-2 mx-auto w-10/12 text-center lg:w-8/12 xl:w-7/12 2xl:w-6/12">
             <motion.h1
               initial={{ y: 50, opacity: 0, x: 1 }}
               animate={controls}
-              className="font-bold text-white text-5xl mb-5"
+              className="mb-5 text-5xl font-bold text-white"
             >
               Buzzing with Knowledge
             </motion.h1>
@@ -58,13 +58,13 @@ export function HeroSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               custom="paragraph"
               animate={controls}
-              className="font-normal text-lg text-white mb-5"
+              className="mb-5 text-lg font-normal text-white"
             >
               Empowering curious minds through engaging quizzes, smart study
               tools, and interactive learning experiences daily
             </motion.p>
 
-            <button className="flex gap-2 items-center mx-auto text-[#FBBE1B] py-4 px-8 rounded-2xl border-[#FBBE1B] border  cursor-pointer group hover:bg-[#FBBE1B] hover:text-black">
+            <button className="group mx-auto flex cursor-pointer items-center gap-2 rounded-2xl border border-[#FBBE1B] px-8 py-4 text-[#FBBE1B] hover:bg-[#FBBE1B] hover:text-black">
               Get Started
               <span>
                 <MoveUpRight

@@ -40,14 +40,14 @@ export function UserProfileCard() {
     } = user;
 
     return (
-      <div className="bg-white px-7 py-8 rounded-xl">
-        <h3 className="font-bold border-b text-2xl pb-3 border-[#D9D9D9]">
+      <div className="rounded-xl bg-white px-7 py-8">
+        <h3 className="border-b border-[#D9D9D9] pb-3 text-2xl font-bold">
           Profile
         </h3>
         <div className="frm">
-          <div className="profile flex justify-center gap-3.5 flex-col text-center my-10">
+          <div className="profile my-10 flex flex-col justify-center gap-3.5 text-center">
             {profilePicture ? (
-              <div className="size-40 border-2 border-white rounded-full mx-auto overflow-hidden relative">
+              <div className="relative mx-auto size-40 overflow-hidden rounded-full border-2 border-white">
                 <Image
                   src={getUserImageUrl(profilePicture)}
                   alt="ProfilePicture"
@@ -56,20 +56,20 @@ export function UserProfileCard() {
                 />
               </div>
             ) : (
-              <div className="size-40 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
-                <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold text-4xl w-full h-full">
+              <div className="mx-auto size-40 overflow-hidden rounded-full border-2 border-white bg-blue-500">
+                <div className="bg-muted flex h-full w-full items-center justify-center rounded-full text-4xl font-bold text-white">
                   {firstName?.charAt(0).toUpperCase() || "R"}
                 </div>
               </div>
             )}
             <div className="desc">
-              <h3 className="font-bold text-xl">
+              <h3 className="text-xl font-bold">
                 {firstName}&nbsp;{lastName}
               </h3>
               <p>{email}</p>
             </div>
           </div>
-          <div className="flex justify-between pb-3 border-b border-[#E6E6E6] text-[#505050] mb-7">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
             <div className="lbl">
               <p>Mobile Number</p>
             </div>
@@ -77,7 +77,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{phoneNumber || "-"}</h3>
             </div>
           </div>
-          <div className="flex justify-between pb-3 border-b border-[#E6E6E6] text-[#505050] mb-7">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
             <div className="lbl">
               <p>Gender</p>
             </div>
@@ -85,7 +85,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{gender || "-"}</h3>
             </div>
           </div>
-          <div className="flex justify-between pb-3 border-b border-[#E6E6E6] text-[#505050] mb-7">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
             <div className="lbl">
               <p>City</p>
             </div>
@@ -93,7 +93,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{city || "-"}</h3>
             </div>
           </div>
-          <div className="flex justify-between pb-3 border-b border-[#E6E6E6] text-[#505050] mb-7">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
             <div className="lbl">
               <p>State</p>
             </div>
@@ -101,7 +101,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{state || "-"}</h3>
             </div>
           </div>
-          <div className="flex justify-between pb-3 border-b border-[#E6E6E6] text-[#505050] mb-7">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
             <div className="lbl">
               <p>Address</p>
             </div>
@@ -113,7 +113,7 @@ export function UserProfileCard() {
           <div className="btn flex justify-center">
             <Link href={paths.accounts.editProfile()}>
               <Button
-                className="px-10 py-5 flex gap-2 cursor-pointer w-auto"
+                className="flex w-auto cursor-pointer gap-2 px-10 py-5"
                 variant="rounded"
               >
                 <span>

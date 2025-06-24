@@ -2,10 +2,10 @@ import { CreateProfileForm } from "@/features/user/components/create-profile-for
 
 export default function CreateProfile() {
   return (
-    <div className="mx-auto max-w-md w-11/12 h-full content-center">
+    <div className="mx-auto h-full w-11/12 max-w-md content-center">
       <div className="hed my-3.5 text-center">
-        <h1 className="text-3xl font-bold text-center mb-2">Create profile</h1>
-        <p className="text-[#505050] text-sm">
+        <h1 className="mb-2 text-center text-3xl font-bold">Create profile</h1>
+        <p className="text-sm text-[#505050]">
           Enter your profile details to continue.
         </p>
       </div>

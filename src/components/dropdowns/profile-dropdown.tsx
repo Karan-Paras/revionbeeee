@@ -65,10 +65,10 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 cursor-pointer focus:outline-none md:w-auto w-full md:justify-start justify-between"
+        className="flex w-full cursor-pointer items-center justify-between gap-2 focus:outline-none md:w-auto md:justify-start"
       >
         {profilePicture ? (
-          <div className="size-14 rounded-full overflow-hidden border-2 border-gray-200 relative">
+          <div className="relative size-14 overflow-hidden rounded-full border-2 border-gray-200">
             <Image
               src={getUserImageUrl(profilePicture)}
               alt="User Profile Picture"
@@ -77,13 +77,13 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             />
           </div>
         ) : (
-          <div className="size-14 border-2 border-white rounded-full mx-auto overflow-hidden bg-blue-500">
-            <div className="flex items-center justify-center rounded-full bg-muted text-white font-bold w-full h-full">
+          <div className="mx-auto size-14 overflow-hidden rounded-full border-2 border-white bg-blue-500">
+            <div className="bg-muted flex h-full w-full items-center justify-center rounded-full font-bold text-white">
               {user.firstName?.charAt(0).toUpperCase() || "R"}
             </div>
           </div>
         )}
-        <span className="md:inline text-[#505050]">
+        <span className="text-[#505050] md:inline">
           {firstName}&nbsp;{lastName}
         </span>
         <motion.div
@@ -101,13 +101,13 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-xl md:shadow-2xl shadow-2xl/5 md:border-b border-b-0 border-[#858080] pt-2  z-50 "
+            className="absolute right-0 z-50 mt-2 w-48 rounded-xl border-b-0 border-[#858080] bg-white pt-2 shadow-2xl/5 md:border-b md:shadow-2xl"
           >
             {LINKS.map(({ name, href }) => (
               <Link
                 key={href}
                 href={href}
-                className="block px-4 py-2 text-sm border-b border-[#c9c9c9] pb-2 my-2 text-gray-700"
+                className="my-2 block border-b border-[#c9c9c9] px-4 py-2 pb-2 text-sm text-gray-700"
                 onClick={closeDropdown}
               >
                 {name}
@@ -115,7 +115,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             ))}
             <button
               onClick={() => logout()}
-              className="block w-full text-left px-4 py-2 text-sm pb-2 mb-2 text-gray-700 cursor-pointer"
+              className="mb-2 block w-full cursor-pointer px-4 py-2 pb-2 text-left text-sm text-gray-700"
             >
               Sign out
             </button>

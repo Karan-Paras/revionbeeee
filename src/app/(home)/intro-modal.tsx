@@ -1,5 +1,5 @@
 import { Modal } from "@/components/common/modal";
-import { VideoPlayer } from "@/features/videos/components/video-player";
+import { VideoPlayer } from "@/components/common/video-player";
 
 import { Intro } from "@/lib/assets";
 import { CircleX } from "lucide-react";
@@ -11,7 +11,7 @@ interface IntroModalProps {
 export function IntroModal({ onClose }: IntroModalProps) {
   return (
     <Modal
-      className="!bg-[#000] !rounded-2xl !border-transparent "
+      className="!rounded-2xl !border-transparent !bg-[#000]"
       onClose={onClose}
     >
       <span

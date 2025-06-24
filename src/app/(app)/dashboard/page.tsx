@@ -1,5 +1,5 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-import { Home } from "@/features/Home/components/home";
+import { Home } from "@/features/dashboard/components/home";
 
 export default function Dashboard() {
   return (

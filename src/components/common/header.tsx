@@ -59,13 +59,13 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
               href={
                 isProfileComplete ? paths.dashboard() : paths.createProfile()
               }
-              className="flex border-2  rounded-xl border-[#53A2EB] text-[#53A2EB] px-5 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+              className="flex cursor-pointer rounded-xl border-2 border-[#53A2EB] px-5 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
             >
               {isProfileComplete ? "Go to Dashboard" : "Complete Profile"}
             </Link>
             <button
               onClick={() => logout()}
-              className="border-2 rounded-xl border-[#53A2EB] text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+              className="cursor-pointer rounded-xl border-2 border-[#53A2EB] px-8 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
             >
               Logout
             </button>
@@ -76,7 +76,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       return (
         <Link
           href="/login"
-          className="border-2 mb-4 rounded-xl border-[#53A2EB] text-[#53A2EB] px-8 py-4 font-semibold cursor-pointer hover:bg-[#53A2EB] hover:text-white duration-500 ease-in-out"
+          className="mb-4 cursor-pointer rounded-xl border-2 border-[#53A2EB] px-8 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
         >
           Login Now
         </Link>
@@ -93,11 +93,11 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
   };
 
   return (
-    <header className="relative z-[999] p-10 hed_bg">
+    <header className="hed_bg relative z-[999] p-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-4 items-center">
           <div className="col-span-1">
-            <div className="size-32 absolute left-[100px] flex items-center justify-center">
+            <div className="absolute left-[100px] flex size-32 items-center justify-center">
               <Link
                 href={variant === "home" ? paths.home() : paths.dashboard()}
               >
@@ -106,15 +106,15 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
             </div>
           </div>
 
-          <div className="col-span-3 relative">
-            <div className="hidden lg:flex justify-end items-center w-full gap-5">
+          <div className="relative col-span-3">
+            <div className="hidden w-full items-center justify-end gap-5 lg:flex">
               <ul className="flex gap-5">
                 {navLinks.map(({ name, path }) => (
                   <li key={name}>
                     <NavLink
                       href={path}
                       activeClassName="text-[#53A2EB]"
-                      className="font-medium text-[#505050] hover:text-[#53A2EB] 2xl:text-base md:text-sm"
+                      className="font-medium text-[#505050] hover:text-[#53A2EB] md:text-sm 2xl:text-base"
                     >
                       {name}
                     </NavLink>

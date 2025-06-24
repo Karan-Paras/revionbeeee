@@ -76,7 +76,7 @@ export function ContactUsForm() {
           name="attachment"
           disabled={isPending}
           type="file"
-          className="bg-[#EFF7FF] px-5 py-5 text-[#6CB5F9] rounded-xl w-4/12"
+          className="w-4/12 rounded-xl bg-[#EFF7FF] px-5 py-5 text-[#6CB5F9]"
         />
         {!!formState.errors.attachment && (
           <InputError error={formState.errors.attachment?.join(", ")} />
@@ -84,7 +84,7 @@ export function ContactUsForm() {
       </div>
       <div className="itm mb-3">
         <Button
-          className="w-fit px-10 shadow-xl/10 rounded-xl mx-auto mt-10"
+          className="mx-auto mt-10 w-fit rounded-xl px-10 shadow-xl/10"
           disabled={isPending}
         >
           Submit the Request

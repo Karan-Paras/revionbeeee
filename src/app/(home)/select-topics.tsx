@@ -10,10 +10,10 @@ export function SelectTopics() {
   return (
     <section
       id="topics"
-      className="py-20 mths_bg relative 2xl:px-0 xl:px-20 px-10"
+      className="mths_bg relative px-10 py-20 xl:px-20 2xl:px-0"
     >
-      <div className="container mx-auto relative">
-        <div className="flex mb:mb-8 mb-5 lg:gap-4 gap-7 justify-between md:flex-nowrap flex-wrap">
+      <div className="relative container mx-auto">
+        <div className="mb:mb-8 mb-5 flex flex-wrap justify-between gap-7 md:flex-nowrap lg:gap-4">
           <div className="hed">
             <div className="itm mb-5 flex items-center gap-1.5 capitalize">
               {/* <span>
@@ -26,7 +26,7 @@ export function SelectTopics() {
           <div className="btn">
             <Link
               href={paths.subjects()}
-              className="border-[#53A2EB] text-[#53A2EB] font-semibold flex gap-2 items-center rounded-xl border-2 px-6 py-4 cursor-pointer hover:bg-[#53A2EB] hover:text-white group"
+              className="group flex cursor-pointer items-center gap-2 rounded-xl border-2 border-[#53A2EB] px-6 py-4 font-semibold text-[#53A2EB] hover:bg-[#53A2EB] hover:text-white"
             >
               Browse all Subjects
               <MoveUpRight

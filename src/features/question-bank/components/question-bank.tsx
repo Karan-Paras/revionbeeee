@@ -7,16 +7,16 @@ import { useReducer } from "react";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
-import { useGetQuestionBank } from "@/features/subjects/queries/use-get-question-bank";
+import { useGetQuestionBank } from "@/features/question-bank/queries/use-get-question-bank";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
-import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
-import { VideoPlayer } from "@/features/videos/components/video-player";
+import { VideoPlayer } from "@/components/common/video-player";
 
 import { ChevronUp } from "@/lib/icons";
 import { getQuestionBankVideoUrl } from "@/lib/media-urls";
 
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 
 type State = { visible: number };
 
@@ -37,11 +37,11 @@ export function QuestionBank() {
   let { subjectId } = useParams();
   subjectId = subjectId?.toString?.() ?? "";
 
-  const { activeSubject } = useActiveSubjectStore();
-
   const { data: subjectData } = useGetSubjectDetails(subjectId);
 
   const { data, isPending, error } = useGetQuestionBank(subjectId);
+
+  const { activeSubject } = useActiveSubjectStore();
 
   const subject =
     activeSubject.subject || subjectData?.data?.subjectName || "Loading...";
@@ -81,7 +81,7 @@ export function QuestionBank() {
           const questions = data.data;
 
           return (
-            <section className="bg-[#F6F6F6] py-16 md:px-0 px-10">
+            <section className="bg-[#F6F6F6] px-10 py-16 md:px-0">
               <div className="container mx-auto">
                 {questions.map(
                   (
@@ -89,13 +89,13 @@ export function QuestionBank() {
                     index
                   ) => (
                     <div key={id} className="item mb-5">
-                      <h2 className="mb-5 font-bold text-2xl">
+                      <h2 className="mb-5 text-2xl font-bold">
                         Question {index + 1}
                       </h2>
-                      <div className="itm_blk p-7 bg-white rounded-xl">
+                      <div className="itm_blk rounded-xl bg-white p-7">
                         <div className="desc_blk">
                           <h5
-                            className="font-semibold text-xl"
+                            className="text-xl font-semibold"
                             dangerouslySetInnerHTML={{
                               __html: DOMPurify.sanitize(question),
                             }}
@@ -107,7 +107,7 @@ export function QuestionBank() {
                           />
                         )}
                         <button
-                          className="bg-[#F0F8FF] text-[#53A2EB] flex items-center rounded-xl font-semibold gap-2.5 py-3 px-5 mt-5"
+                          className="mt-5 flex items-center gap-2.5 rounded-xl bg-[#F0F8FF] px-5 py-3 font-semibold text-[#53A2EB]"
                           onClick={() => handleToggle(index)}
                         >
                           View Solution

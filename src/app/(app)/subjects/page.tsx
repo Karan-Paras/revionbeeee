@@ -21,9 +21,9 @@ export default function Subjects() {
       />
       <section
         id="topics"
-        className="py-20 md:px-0 px-10 mths_bg relative 2xl:px-0 lg:px-20"
+        className="mths_bg relative px-10 py-20 md:px-0 lg:px-20 2xl:px-0"
       >
-        <div className="container mx-auto relative">
+        <div className="relative container mx-auto">
           <SelectTopics />
         </div>
       </section>

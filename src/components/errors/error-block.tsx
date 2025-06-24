@@ -18,7 +18,7 @@ export function ErrorBlock({ errors }: ErrorBlockProps) {
   if (!visible || !errors || errors.length === 0) return null;
 
   return (
-    <div className="rounded mt-4 p-2 bg-red-200 border border-red-400">
+    <div className="mt-4 rounded border border-red-400 bg-red-200 p-2">
       {errors.join(", ")}
     </div>
   );

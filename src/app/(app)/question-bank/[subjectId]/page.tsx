@@ -1,3 +1,3 @@
-import { QuestionBank } from "@/features/subjects/components/question-bank";
+import { QuestionBank } from "@/features/question-bank/components/question-bank";
 
 export default QuestionBank;

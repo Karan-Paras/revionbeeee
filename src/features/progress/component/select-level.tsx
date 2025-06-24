@@ -1,57 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useGetLevelTopics } from "../queries/use-get-level-topics";
+import { DataLoader } from "@/components/loaders/data-loader";
+import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
+import { cn } from "@/lib/utils";
+import type { ID } from "@/types/globals";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 interface Props {
-  setSelectedTopicId: (id: string) => void;
+  selectedTopicId: ID | null;
+  setSelectedTopicId: React.Dispatch<React.SetStateAction<ID | null>>;
 }
 
-export function SelectLevel({ setSelectedTopicId }: Props) {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-
-  const { data } = useGetLevelTopics();
+export function SelectLevel({ selectedTopicId, setSelectedTopicId }: Props) {
+  const { data, isPending, error } = useGetTopics();
 
   useEffect(() => {
-    // set default first topic id
-    if (data?.data?.length) {
-      setSelectedTopicId(data.data[0].id.toString());
+    if (data?.data && !selectedTopicId) {
+      setSelectedTopicId(data.data[0]?.id || null);
     }
-  }, [data, setSelectedTopicId]);
+  }, [
+    data,
+    selectedTopicId,
+    setSelectedTopicId, // No need for this, this is from setState
+  ]);
 
   return (
-    <>
-      <div className="md:col-span-4 col-span-12">
-        <div className="lvl">
-          <div className="py-6 px-5 border border-[#CECECE] rounded-2xl bg-white h-[90vh] overflow-y-auto">
-            <h3 className="font-bold text-xl mb-3.5">Select From Level</h3>
-            <ul className="trc_itm">
-              {data?.data?.map(({ topicName, id }, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    setSelectedTopicId(id.toString());
-                  }}
-                  className={`flex justify-between items-center 
-                      cursor-pointer px-5 py-3 border rounded-lg font-medium mb-5 
-                      transition-all duration-150 ${
-                        selectedIndex === index
-                          ? "border-[#53A2EB] text-[#53A2EB] bg-white active"
-                          : "border-transparent text-[#505050] bg-[#FBFBFB]"
-                      }`}
-                >
-                  {topicName}
-                </li>
-              ))}
-              {/*                     
-                     <li className="bg-[#FBFBFB] p-3 border-transparent border font-medium text-[#505050] rounded-lg mb-5">
-                      AA SL
-                    </li> */}
-            </ul>
-          </div>
+    <div className="col-span-12 md:col-span-4">
+      <div className="lvl">
+        <div className="h-[90vh] overflow-y-auto rounded-2xl border border-[#CECECE] bg-white px-5 py-6">
+          <h3 className="mb-3.5 text-xl font-bold">Select From Level</h3>
+          {(() => {
+            if (isPending) {
+              return <DataLoader />;
+            }
+
+            if (error) {
+              toast.error(error.message);
+            }
+            if (data) {
+              const topics = data.data || [];
+              return (
+                <ul className="trc_itm">
+                  {topics.map(({ topicName, id }, index) => (
+                    <li
+                      key={index}
+                      onClick={() => {
+                        setSelectedTopicId(id);
+                      }}
+                      className={cn(
+                        "mb-5 flex cursor-pointer items-center justify-between rounded-lg border px-5 py-3 font-medium transition-all duration-150",
+                        selectedTopicId === id
+                          ? "active border-[#53A2EB] bg-white text-[#53A2EB]"
+                          : "border-transparent bg-[#FBFBFB] text-[#505050]"
+                      )}
+                    >
+                      {topicName}
+                    </li>
+                  ))}
+                </ul>
+              );
+            }
+          })()}
         </div>
       </div>
-    </>
+    </div>
   );
 }

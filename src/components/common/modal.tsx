@@ -32,14 +32,14 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
     <>
       <div onClick={onClose} />
       <dialog open>
-        <div id="add_modal" className="fixed z-[9999] inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div id="add_modal" className="fixed inset-0 z-[9999] overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" onClick={onClose}>
               <div className="absolute inset-0 bg-gray-950 opacity-75" />
             </div>
 
             <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              className="hidden sm:inline-block sm:h-screen sm:align-middle"
               aria-hidden="true"
             >
               &#8203;
@@ -47,7 +47,7 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
 
             <motion.div
               className={cn(
-                "inline-block align-bottom z-[999] relative bg-white border-[#ffffff26] border rounded-4xl text-left overflow-hidden shadow-xl transform transition-all frc_trnc sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full w-full",
+                "frc_trnc relative z-[999] inline-block w-full transform overflow-hidden rounded-4xl border border-[#ffffff26] bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl sm:align-middle",
                 className
               )}
               role="dialog"
@@ -86,7 +86,7 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
             >
               {/* Modal Content */}
               {title && (
-                <div className="flex items-center p-4 border-b border-[#ffffff26]  justify-center txt_hed mt-5">
+                <div className="txt_hed mt-5 flex items-center justify-center border-b border-[#ffffff26] p-4">
                   <h2 className="text-lg font-semibold text-[#232323]">
                     {title}
                   </h2>
