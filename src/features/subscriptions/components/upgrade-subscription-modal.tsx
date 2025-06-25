@@ -1,14 +1,7 @@
-import Link from "next/link";
-
 import { Modal } from "@/components/common/modal";
-import { Button } from "@/components/ui/button";
-import { Subscription } from "@/features/subscriptions/components/subscription";
 
-import {
-  ADVANCED_PLAN,
-  BASIC_PLAN,
-  STARTER_PLAN,
-} from "@/features/subscriptions/types";
+import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
+import { SubscriptionType } from "@/features/subscriptions/types";
 
 interface UpgradeSubscriptionModalProps {
   onClose: () => void;
@@ -24,18 +17,10 @@ export function UpgradeSubscriptionModal({
           <p>Unlock more features with premium access.</p>
         </div>
         <div className="mt-10 grid grid-cols-3 gap-5">
-          <Subscription plan={BASIC_PLAN} variant="compact" />
-          <Subscription plan={STARTER_PLAN} variant="compact" isCurrent />
-          <Subscription plan={ADVANCED_PLAN} variant="compact" />
-          <div className="col-span-3">
-            <div className="btn mx-auto my-5 w-3/12">
-              <Link href="">
-                <Button className="shadow-xl/10" type="button">
-                  Upgrade Plan
-                </Button>
-              </Link>
-            </div>
-          </div>
+          <SubscriptionPlans
+            activePlan={SubscriptionType.FREE}
+            variant="compact"
+          />
         </div>
       </div>
     </Modal>

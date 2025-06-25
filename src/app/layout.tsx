@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import { Toaster } from "sonner";
 import Providers from "@/app/providers";
+import { RootModals } from "@/components/root-modals";
+import { SubscriptionAlert } from "@/features/subscriptions/components/subscription-alert";
 import "./globals.css";
 
 const sora = Sora({
@@ -24,6 +26,8 @@ export default function RootLayout({
       <body className={sora.className}>
         <Providers>
           <Toaster />
+          <RootModals />
+          <SubscriptionAlert />
           {children}
         </Providers>
       </body>

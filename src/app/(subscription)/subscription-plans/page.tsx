@@ -1,8 +1,4 @@
-import Link from "next/link";
-
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
-
-import { ChevronRight } from "@/lib/icons";
 
 import { paths } from "@/routes";
 
@@ -21,16 +17,10 @@ export default function SubscriptionPlans() {
               </p>
             </div>
           </div>
-          <SubscriptionPlansComponent href={paths.paymentMethod()} />
-          <div className="col-span-3">
-            <div className="relative flex justify-center">
-              <Link href={paths.dashboard()}>
-                <button className="group skp_btn flex cursor-pointer items-center rounded-xl border border-[#53A2EB] bg-white py-4 ps-10 pe-7 font-semibold text-[#53A2EB] hover:bg-[#53A2EB] hover:text-[#fff]">
-                  Skip <ChevronRight color="#53a2eb" />
-                </button>
-              </Link>
-            </div>
-          </div>
+          <SubscriptionPlansComponent
+            href={paths.dashboard()}
+            callback={paths.dashboard()}
+          />
         </div>
       </div>
     </section>

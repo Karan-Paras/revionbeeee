@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { startTransition, useActionState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/errors/error-block";
@@ -9,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { changePassword } from "@/features/auth/actions/change-password";
 
 export function ChangePasswordForm() {
+  const { data: session } = useSession();
+
   const [formState, action, isPending] = useActionState(changePassword, {
     errors: {},
   });
@@ -32,6 +35,13 @@ export function ChangePasswordForm() {
 
   return (
     <form className="frm" onSubmit={handleFormSubmit} ref={formRef}>
+      <input
+        type="email"
+        className="hidden"
+        name="email"
+        value={session?.user.email || ""}
+        autoComplete="email"
+      />
       <div className="itm mb-3">
         <FormLabel htmlFor="current-password">Current Password</FormLabel>
         <Input

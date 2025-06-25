@@ -1,26 +1,76 @@
-import Link from "next/link";
+"use client";
 
-import type { Plan } from "@/features/subscriptions/types";
+import { usePathname, useRouter } from "next/navigation";
+
+import {
+  type Plan,
+  type SubscriptionVariants,
+  SubscriptionType,
+} from "@/features/subscriptions/types";
+import { getSession } from "next-auth/react";
+import { useCheckout } from "@/features/subscriptions/queries/use-checkout";
 
 import { BadgeCheck } from "@/lib/icons";
 
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
 import { paths } from "@/routes";
 
 interface SubscriptionProps {
   plan: Plan;
   href?: string;
-  variant?: "compact" | "detailed";
-  isCurrent?: boolean;
+  variant?: SubscriptionVariants;
+  activePlan?: SubscriptionType;
+  callback?: string;
 }
 
 export function Subscription({
   plan,
-  href = paths.paymentMethod(),
+  href = "#",
   variant = "detailed",
-  isCurrent = false,
+  activePlan,
+  callback,
 }: SubscriptionProps) {
-  const { title, description, price, period = "Per month", features } = plan;
+  const router = useRouter();
+
+  const mutation = useCheckout();
+
+  const pathname = usePathname();
+
+  const { title, type, description, price, period = "", features } = plan;
+
+  const isCurrent = activePlan === type;
+
+  async function handleCheckout() {
+    const session = await getSession();
+
+    if (!session) {
+      router.push(paths.login());
+    }
+
+    const callbackUrl = callback || pathname;
+
+    switch (type) {
+      case SubscriptionType.MONTHLY:
+        mutation.mutate({
+          plan: "monthly",
+          callback: callbackUrl,
+        });
+        break;
+      case SubscriptionType.YEARLY:
+        mutation.mutate({
+          plan: "yearly",
+          callback: callbackUrl,
+        });
+        break;
+      case SubscriptionType.FREE:
+        router.push(href);
+        break;
+      default:
+        break;
+    }
+  }
 
   if (variant === "detailed") {
     return (
@@ -50,9 +100,13 @@ export function Subscription({
               </ul>
             </div>
             <div className="btn mt-14">
-              <button className="w-full cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white">
-                <Link href={href}>Choose This Plan</Link>
-              </button>
+              <Button
+                onClick={handleCheckout}
+                disabled={mutation.isPending}
+                variant="rounded"
+              >
+                Choose This Plan
+              </Button>
             </div>
           </div>
         </div>
@@ -93,6 +147,16 @@ export function Subscription({
             ))}
           </div>
         </div>
+        {!isCurrent && (
+          <Button
+            className="mt-4"
+            variant="rounded"
+            onClick={handleCheckout}
+            disabled={mutation.isPending}
+          >
+            Upgrade Plan
+          </Button>
+        )}
       </div>
     );
   }

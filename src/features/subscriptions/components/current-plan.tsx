@@ -5,13 +5,13 @@ import { UpgradeSubscriptionModal } from "@/features/subscriptions/components/up
 
 import { BadgeCheck } from "@/lib/icons";
 
-import { STARTER_PLAN } from "@/features/subscriptions/types";
+import { FREE_PLAN } from "@/features/subscriptions/types";
 
 export function CurrentPlan() {
   const [showUpgradeSubscriptionModal, setShowUpgradeSubscriptionModal] =
     useState(false);
 
-  const CURRENT_PLAN = STARTER_PLAN;
+  const CURRENT_PLAN = FREE_PLAN;
 
   const { title, description, price, period, features } = CURRENT_PLAN;
 
@@ -28,10 +28,6 @@ export function CurrentPlan() {
             <div className="col-span-3 px-6 py-8">
               <h3 className="mb-2 text-2xl font-bold">{title}</h3>
               <p>{description}</p>
-            </div>
-            <div className="col-span-2 px-6 py-8">
-              <p>Expire on</p>
-              <h6 className="text-lg font-bold text-[#FB4F1B]">12-5 -2025</h6>
             </div>
             <div className="col-span-5 border-t border-[#D9D9D9] px-6 py-5">
               <div className="flex items-center gap-2">
