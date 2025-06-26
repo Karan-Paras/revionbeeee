@@ -1,7 +1,7 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { LoginSchema } from "@/features/auth/schemas";
 import type { User } from "@/features/user/types";
+import api from "@/lib/api";
+import { z } from "zod";
 
 export async function login(data: z.infer<typeof LoginSchema>) {
   const apiUrl = "/login";

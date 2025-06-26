@@ -1,20 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
 import { DataLoader } from "@/components/loaders/data-loader";
+import { Button } from "@/components/ui/button";
+import { BillingModal } from "@/features/subscriptions/components/billing-modal";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-
 import { Crown, SquarePencil } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
-
 import { paths } from "@/routes";
-import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { BillingModal } from "@/features/subscriptions/components/billing-modal";
+import { toast } from "sonner";
 
 export function UserProfileCard() {
   const { data, isPending, error } = useGetProfile();

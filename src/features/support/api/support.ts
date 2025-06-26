@@ -1,6 +1,6 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { SupportSchema } from "@/features/support/schemas";
+import api from "@/lib/api";
+import { z } from "zod";
 
 export async function support({
   firstName,

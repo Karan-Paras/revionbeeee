@@ -1,5 +1,5 @@
-import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
+import { Header } from "@/components/common/header";
 
 interface AppLayoutProps {
   children: React.ReactNode;

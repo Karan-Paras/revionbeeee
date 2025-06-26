@@ -2,7 +2,6 @@
 
 import { resetPassword as resetPasswordApi } from "@/features/auth/api/reset-password";
 import { ResetPasswordSchema } from "@/features/auth/schemas";
-
 import type { ApiErrorResponse } from "@/types/api";
 
 type ResetPasswordFormState = {

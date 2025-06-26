@@ -1,9 +1,9 @@
 "use client";
 
+import { ApiError } from "@/components/errors/api-error";
+import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetProgress } from "@/features/progress/queries/use-get-progress";
 import type { ID } from "@/types/globals";
-import { DataLoader } from "@/components/loaders/data-loader";
-import { ApiError } from "@/components/errors/api-error";
 
 interface Props {
   topicId: ID | null;

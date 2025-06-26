@@ -1,22 +1,19 @@
 "use client";
 
-import DOMPurify from "dompurify";
-import { useParams } from "next/navigation";
-import { useReducer } from "react";
-
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { VideoPlayer } from "@/components/common/video-player";
 import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetQuestionBank } from "@/features/question-bank/queries/use-get-question-bank";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
-import { VideoPlayer } from "@/components/common/video-player";
-
+import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import { ChevronUp } from "@/lib/icons";
 import { getQuestionBankVideoUrl } from "@/lib/media-urls";
-
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
+import DOMPurify from "dompurify";
+import { useParams } from "next/navigation";
+import { useReducer } from "react";
 
 type State = { visible: number };
 

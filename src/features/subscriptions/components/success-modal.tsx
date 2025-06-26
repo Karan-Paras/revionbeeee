@@ -1,16 +1,13 @@
-import Image from "next/image";
-import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-
-import { PassChng } from "@/lib/assets";
-
 import { Modal } from "@/components/common/modal";
-import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
 import { useSuccess } from "@/features/subscriptions/queries/use-success";
-
-import { X } from "lucide-react";
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
+import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
 import { useStore } from "@/hooks/use-store";
+import { PassChng } from "@/lib/assets";
+import { X } from "lucide-react";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function SuccessModal() {
   const pathname = usePathname();

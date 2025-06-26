@@ -1,7 +1,7 @@
 "use server";
 
-import { SupportSchema } from "@/features/support/schemas";
 import { support as supportApi } from "@/features/support/api/support";
+import { SupportSchema } from "@/features/support/schemas";
 import type { ApiErrorResponse } from "@/types/api";
 
 type SupportFormState = {

@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { Sora } from "next/font/google";
-import { Toaster } from "sonner";
 import Providers from "@/app/providers";
 import { RootModals } from "@/components/root-modals";
 import { SubscriptionAlert } from "@/features/subscriptions/components/subscription-alert";
-import "./globals.css";
+import type { Metadata } from "next";
+import { Sora } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Toaster } from "sonner";
+import "./globals.css";
 
 const sora = Sora({
   subsets: ["latin"],

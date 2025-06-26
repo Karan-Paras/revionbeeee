@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
 import { Plus } from "@/lib/icons";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 type AccordionItem = {
   id: number;

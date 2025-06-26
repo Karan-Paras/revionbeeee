@@ -1,17 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect } from "react";
-
+import { ErrorBlock } from "@/components/errors/error-block";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { ErrorBlock } from "@/components/errors/error-block";
-
 import { forgotPassword } from "@/features/auth/actions/forgot-password";
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-
 import { paths } from "@/routes";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect } from "react";
 
 export function ForgotPasswordForm() {
   const [formState, action, isPending] = useActionState(forgotPassword, {

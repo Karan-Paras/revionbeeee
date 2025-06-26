@@ -1,7 +1,7 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { UpdateProfileSchema } from "@/features/user/schemas";
 import type { User } from "@/features/user/types";
+import api from "@/lib/api";
+import { z } from "zod";
 
 type UpdateProfileInput = z.infer<typeof UpdateProfileSchema>;
 

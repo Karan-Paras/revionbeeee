@@ -1,5 +1,4 @@
 import { Modal } from "@/components/common/modal";
-
 import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";

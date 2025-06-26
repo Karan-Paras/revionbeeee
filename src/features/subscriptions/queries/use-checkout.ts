@@ -1,8 +1,7 @@
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
 import { client } from "@/lib/hono";
 import { useMutation } from "@tanstack/react-query";
-import { InferRequestType } from "hono";
-import { InferResponseType } from "hono";
+import { InferRequestType, InferResponseType } from "hono";
 import { toast } from "sonner";
 
 type ResponseType = InferResponseType<

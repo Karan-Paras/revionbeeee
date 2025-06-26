@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
+import NextAuth from "next-auth";
 
 import {
-  paths,
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
+  paths,
   publicRoutes,
 } from "@/routes";
 

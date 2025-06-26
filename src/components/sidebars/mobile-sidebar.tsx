@@ -1,18 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Session } from "next-auth";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 
-import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { useLogout } from "@/features/auth/hooks/use-logout";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 
-import { Menu, X } from "lucide-react";
 import { Logo } from "@/lib/assets";
+import { Menu, X } from "lucide-react";
 
 import { paths } from "@/routes";
 

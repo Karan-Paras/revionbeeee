@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
-import { motion, useAnimationControls } from "framer-motion";
-
-import { MoveUpRight } from "@/lib/icons";
 import { Hero } from "@/lib/assets";
+import { MoveUpRight } from "@/lib/icons";
+import { motion, useAnimationControls } from "framer-motion";
+import { useEffect } from "react";
 
 export function HeroSection() {
   const controls = useAnimationControls();

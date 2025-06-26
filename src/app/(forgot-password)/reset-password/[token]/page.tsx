@@ -1,9 +1,7 @@
-import Image from "next/image";
-
 import { verifyToken } from "@/features/auth/api/forgot-password";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
-
 import { PassIcn } from "@/lib/assets";
+import Image from "next/image";
 
 interface ResetPasswordProps {
   params: Promise<{

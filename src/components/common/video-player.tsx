@@ -6,8 +6,8 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import "@vidstack/react/player/styles/default/theme.css";
 import "@vidstack/react/player/styles/default/layouts/video.css";
+import "@vidstack/react/player/styles/default/theme.css";
 
 interface VideoPlayerProps {
   src: string;

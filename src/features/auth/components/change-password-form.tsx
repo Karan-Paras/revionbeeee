@@ -1,13 +1,11 @@
-import { toast } from "sonner";
-import { startTransition, useActionState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
-
-import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/errors/error-block";
+import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-
 import { changePassword } from "@/features/auth/actions/change-password";
+import { useSession } from "next-auth/react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 export function ChangePasswordForm() {
   const { data: session } = useSession();

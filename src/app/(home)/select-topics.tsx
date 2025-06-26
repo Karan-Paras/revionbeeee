@@ -1,10 +1,7 @@
-import Link from "next/link";
-
 import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
-
 import { MoveUpRight } from "@/lib/icons";
-
 import { paths } from "@/routes";
+import Link from "next/link";
 
 export function SelectTopics() {
   return (

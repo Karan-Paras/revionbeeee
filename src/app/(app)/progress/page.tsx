@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-
 import { ProgressTracker } from "@/features/progress/component/progress-tracker";
 import { SelectLevel } from "@/features/progress/component/select-level";
-
 import { paths } from "@/routes";
 import { ID } from "@/types/globals";
+import { useState } from "react";
 
 export default function Progress() {
   const [selectedTopicId, setSelectedTopicId] = useState<ID | null>(null);

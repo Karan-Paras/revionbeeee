@@ -1,10 +1,9 @@
 "use client";
 
-import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
-
-import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
+import { Header } from "@/components/common/header";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
+import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
 import { useEffect } from "react";
 
 interface AppLayoutProps {

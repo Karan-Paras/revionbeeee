@@ -1,11 +1,9 @@
 "use client";
 
-import Skeleton from "react-loading-skeleton";
 import { useGetDashboardAnalytics } from "@/features/dashboard/queries/use-dashboard-analytics";
-
 import { ClockFading, HelpLightBulb, SyncCheck } from "@/lib/icons";
-
 import { cn } from "@/lib/utils";
+import Skeleton from "react-loading-skeleton";
 
 export function DashboardCard() {
   const { data } = useGetDashboardAnalytics();

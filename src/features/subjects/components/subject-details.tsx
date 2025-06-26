@@ -1,25 +1,21 @@
 "use client";
 
-import Link from "next/link";
-import DOMPurify from "dompurify";
-import { useParams } from "next/navigation";
-
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-import { DataLoader } from "@/components/loaders/data-loader";
 import { VideoPlayer } from "@/components/common/video-player";
-
+import { ApiError } from "@/components/errors/api-error";
+import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
-
 import {
   CircleCheckFading,
   HelpLightBulb,
   MessageCircleQuestion,
 } from "@/lib/icons";
 import { getSubjectVideoUrl } from "@/lib/media-urls";
-
 import { paths } from "@/routes";
-import { ApiError } from "@/components/errors/api-error";
+import DOMPurify from "dompurify";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export function SubjectDetails() {
   let { subjectId } = useParams();

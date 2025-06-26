@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { useFailModal } from "@/features/subscriptions/stores/use-fail-modal";
 import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export const SubscriptionAlert = () => {
   const params = useSearchParams();

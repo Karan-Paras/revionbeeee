@@ -1,11 +1,9 @@
-import { Hono } from "hono";
-import { verifyAuth } from "@hono/auth-js";
-
-import { stripe } from "@/lib/stripe";
-
-import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
 import { purchaseSubscription } from "@/features/subscriptions/api/purchase-subscription";
+import { stripe } from "@/lib/stripe";
+import { verifyAuth } from "@hono/auth-js";
+import { zValidator } from "@hono/zod-validator";
+import { Hono } from "hono";
+import { z } from "zod";
 
 const app = new Hono()
   .post(

@@ -1,8 +1,6 @@
-import { create } from "zustand";
-
 import type { Result } from "@/features/quiz/types";
-
 import type { ID } from "@/types/globals";
+import { create } from "zustand";
 
 interface State {
   quizResult: {

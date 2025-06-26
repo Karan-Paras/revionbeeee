@@ -1,6 +1,6 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { ChangePasswordSchema } from "@/features/auth/schemas";
+import api from "@/lib/api";
+import { z } from "zod";
 
 export async function changePassword(
   data: z.infer<typeof ChangePasswordSchema>

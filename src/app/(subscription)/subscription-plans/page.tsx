@@ -1,5 +1,4 @@
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
-
 import { paths } from "@/routes";
 
 export default function SubscriptionPlans() {

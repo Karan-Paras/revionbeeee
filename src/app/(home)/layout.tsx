@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-
 import { IntroModal } from "@/app/(home)/intro-modal";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 interface HomeLayoutProps {
   children: React.ReactNode;

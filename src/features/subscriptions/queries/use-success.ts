@@ -1,8 +1,7 @@
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
 import { client } from "@/lib/hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { InferRequestType } from "hono";
-import { InferResponseType } from "hono";
+import { InferRequestType, InferResponseType } from "hono";
 
 type ResponseType = InferResponseType<
   (typeof client.api.subscriptions.success)["$post"],

@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { Lft, Sub, SubTwo } from "@/lib/assets";
 import {
   Certificate,
@@ -8,6 +6,7 @@ import {
   MessageStar,
   MoveUpRight,
 } from "@/lib/icons";
+import Image from "next/image";
 
 export function InteractiveQuiz() {
   return (

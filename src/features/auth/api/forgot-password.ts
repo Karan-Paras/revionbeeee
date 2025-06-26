@@ -1,6 +1,6 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { ForgotPasswordSchema } from "@/features/auth/schemas";
+import api from "@/lib/api";
+import { z } from "zod";
 
 export async function forgotPassword(
   data: z.infer<typeof ForgotPasswordSchema>

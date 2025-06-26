@@ -1,24 +1,20 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-
+import { Button } from "@/components/ui/button";
+import { useCheckout } from "@/features/subscriptions/queries/use-checkout";
 import {
   type Plan,
   type SubscriptionVariants,
   SubscriptionType,
 } from "@/features/subscriptions/types";
-import { getSession } from "next-auth/react";
-import { useCheckout } from "@/features/subscriptions/queries/use-checkout";
-
-import { BadgeCheck } from "@/lib/icons";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-import { paths } from "@/routes";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import Skeleton from "react-loading-skeleton";
+import { BadgeCheck } from "@/lib/icons";
+import { cn } from "@/lib/utils";
+import { paths } from "@/routes";
 import { addDays, differenceInCalendarDays, isAfter } from "date-fns";
+import { getSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
 
 interface SubscriptionProps {
   plan: Plan;
