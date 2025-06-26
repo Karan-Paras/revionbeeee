@@ -4,6 +4,8 @@ import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
 
 import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
+import { useEffect } from "react";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -11,6 +13,15 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   useRedirectIfProfileIncomplete();
+
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
+
+  useEffect(() => {
+    if (shouldBlock && !isLoading) {
+      console.log(shouldBlock, isLoading);
+      triggerPaywall();
+    }
+  }, [shouldBlock, triggerPaywall, isLoading]);
 
   return (
     <>

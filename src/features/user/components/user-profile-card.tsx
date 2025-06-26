@@ -46,7 +46,7 @@ export function UserProfileCard() {
     } = user;
 
     const onClick = () => {
-      if (shouldBlock) {
+      if (!data.data.customerId) {
         triggerPaywall();
         return;
       }

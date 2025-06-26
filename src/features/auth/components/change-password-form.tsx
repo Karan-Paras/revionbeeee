@@ -39,7 +39,7 @@ export function ChangePasswordForm() {
         type="email"
         className="hidden"
         name="email"
-        value={session?.user.email || ""}
+        defaultValue={session?.user.email || ""}
         autoComplete="email"
       />
       <div className="itm mb-3">

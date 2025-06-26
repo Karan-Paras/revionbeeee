@@ -5,6 +5,7 @@ import Providers from "@/app/providers";
 import { RootModals } from "@/components/root-modals";
 import { SubscriptionAlert } from "@/features/subscriptions/components/subscription-alert";
 import "./globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const sora = Sora({
   subsets: ["latin"],

@@ -1,5 +1,4 @@
 import { Modal } from "@/components/common/modal";
-import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { Billing } from "@/lib/icons";
 import { X } from "lucide-react";
 
@@ -8,14 +7,7 @@ interface BillingModalProps {
 }
 
 export function BillingModal({ onClose }: BillingModalProps) {
-  const { shouldBlock, triggerPaywall } = usePaywall();
-
   const onClick = () => {
-    if (shouldBlock) {
-      triggerPaywall();
-      return;
-    }
-
     // mutation.mutate();
   };
 
