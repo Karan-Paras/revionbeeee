@@ -1,14 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-
 import { PassChng } from "@/lib/assets";
-
 import { paths } from "@/routes";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function EmailSentCard() {
   const { hasFilledEmail, setHasFilledEmail } = useForgotPasswordStore();

@@ -1,7 +1,6 @@
 import { API_URL } from "@/lib/constants";
-import { getSession } from "next-auth/react";
-
 import type { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
+import { getSession } from "next-auth/react";
 
 export default async function fetcher<T>(
   url: string,

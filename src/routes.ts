@@ -26,7 +26,6 @@ export const paths = {
   quiz: () => "/quiz",
   accounts: withPrefix("/accounts", {
     myProfile: () => "/my-profile",
-    subscription: () => "/subscription",
     settings: () => "/settings",
     editProfile: () => "/my-profile/edit",
   }),

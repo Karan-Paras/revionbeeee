@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { firstName, lastName, phoneNumber } from "@/lib/schemas";
+import { z } from "zod";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 

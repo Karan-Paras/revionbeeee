@@ -1,5 +1,4 @@
 import { SupportForm } from "@/features/support/components/support-form";
-
 import { Mail, MapPin, Phone } from "@/lib/icons";
 
 export function Support() {

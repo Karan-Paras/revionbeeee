@@ -1,12 +1,9 @@
-import Image from "next/image";
-
 import { Accordion } from "@/app/(support)/faq/accordion";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-
 import { Faq, Faq2 } from "@/lib/assets";
-import { Minus } from "lucide-react";
-
 import { paths } from "@/routes";
+import { Minus } from "lucide-react";
+import Image from "next/image";
 
 export default function FaqPage() {
   return (

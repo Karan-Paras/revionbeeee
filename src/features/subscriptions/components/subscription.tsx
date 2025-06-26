@@ -1,26 +1,104 @@
-import Link from "next/link";
+"use client";
 
-import type { Plan } from "@/features/subscriptions/types";
-
+import { Button } from "@/components/ui/button";
+import { useCheckout } from "@/features/subscriptions/queries/use-checkout";
+import {
+  type Plan,
+  type SubscriptionVariants,
+  SubscriptionType,
+} from "@/features/subscriptions/types";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { BadgeCheck } from "@/lib/icons";
-
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import { addDays, differenceInCalendarDays, isAfter } from "date-fns";
+import { getSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
 
 interface SubscriptionProps {
   plan: Plan;
   href?: string;
-  variant?: "compact" | "detailed";
-  isCurrent?: boolean;
+  variant?: SubscriptionVariants;
+  activePlan?: SubscriptionType;
+  callback?: string;
+  display?: boolean;
 }
 
 export function Subscription({
   plan,
-  href = paths.paymentMethod(),
+  href = "#",
   variant = "detailed",
-  isCurrent = false,
+  activePlan,
+  callback,
+  display,
 }: SubscriptionProps) {
-  const { title, description, price, period = "Per month", features } = plan;
+  const router = useRouter();
+
+  const mutation = useCheckout();
+
+  const pathname = usePathname();
+
+  const { title, type, description, price, period = "", features } = plan;
+
+  const { data: profile, isPending } = useGetProfile();
+
+  const isCurrent = activePlan === type;
+
+  const periodText = () => {
+    if (type === SubscriptionType.FREE && !display) {
+      if (isPending) return <Skeleton width={100} />;
+      const createdAt = profile?.data.created_at;
+
+      if (!createdAt) return "Expired";
+
+      const createdDate = new Date(createdAt);
+      // the free plan lasts for 3 days from the creation date
+      const expiryDate = addDays(createdDate, 3);
+      const now = new Date();
+
+      if (isAfter(now, expiryDate)) return "Expired";
+
+      const remainingDays = differenceInCalendarDays(expiryDate, now);
+      return `${remainingDays} day${remainingDays > 1 ? "s" : ""} left`;
+    }
+
+    return period;
+  };
+
+  async function handleCheckout() {
+    if (display) {
+      return;
+    }
+
+    const session = await getSession();
+
+    if (!session) {
+      router.push(paths.login());
+    }
+
+    const callbackUrl = callback || pathname;
+
+    switch (type) {
+      case SubscriptionType.MONTHLY:
+        mutation.mutate({
+          plan: "monthly",
+          callback: callbackUrl,
+        });
+        break;
+      case SubscriptionType.YEARLY:
+        mutation.mutate({
+          plan: "yearly",
+          callback: callbackUrl,
+        });
+        break;
+      case SubscriptionType.FREE:
+        router.push(href);
+        break;
+      default:
+        break;
+    }
+  }
 
   if (variant === "detailed") {
     return (
@@ -35,7 +113,7 @@ export function Subscription({
           <div className="lwr p-6">
             <div className="flex items-center gap-2.5">
               <h4 className="text-3xl font-bold text-black">{price}</h4>
-              <span className="font-normal text-[#9D9D9D]">{period}</span>
+              <span className="font-normal text-[#9D9D9D]">{periodText()}</span>
             </div>
             <div className="lst my-8">
               <ul>
@@ -50,9 +128,13 @@ export function Subscription({
               </ul>
             </div>
             <div className="btn mt-14">
-              <button className="w-full cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white">
-                <Link href={href}>Choose This Plan</Link>
-              </button>
+              <Button
+                onClick={handleCheckout}
+                disabled={mutation.isPending}
+                variant="rounded"
+              >
+                Choose This Plan
+              </Button>
             </div>
           </div>
         </div>
@@ -81,7 +163,7 @@ export function Subscription({
             </div>
             <div className="my-6 flex items-center gap-2">
               <h2 className="text-3xl font-bold text-[#53A2EB]">{price}</h2>
-              <p className="text-[#9D9D9D]">{period}</p>
+              <p className="text-[#9D9D9D]">{periodText()}</p>
             </div>
             {features.slice(0, 4).map((feature, index) => (
               <div className="lst mb-5 flex gap-2" key={index}>
@@ -93,6 +175,16 @@ export function Subscription({
             ))}
           </div>
         </div>
+        {!isCurrent && (
+          <Button
+            className="mt-4"
+            variant="rounded"
+            onClick={handleCheckout}
+            disabled={mutation.isPending}
+          >
+            Upgrade Plan
+          </Button>
+        )}
       </div>
     );
   }

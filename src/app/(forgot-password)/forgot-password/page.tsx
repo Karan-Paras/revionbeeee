@@ -1,12 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
-
 import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-form";
-
 import { EmailService } from "@/lib/assets";
 import { ArrowBack } from "@/lib/icons";
-
 import { paths } from "@/routes";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function ForgetPassword() {
   return (

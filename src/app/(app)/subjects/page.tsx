@@ -1,6 +1,5 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { SelectTopics } from "@/features/subjects/components/select-topics";
-
 import { paths } from "@/routes";
 
 export default function Subjects() {

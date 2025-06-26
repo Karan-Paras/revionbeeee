@@ -1,27 +1,24 @@
 "use client";
 
-import Link from "next/link";
-import DOMPurify from "dompurify";
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useParams, useRouter } from "next/navigation";
-
-import { DataLoader } from "@/components/loaders/data-loader";
-import { ApiError } from "@/components/errors/api-error";
-import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { VideoPlayer } from "@/components/common/video-player";
+import { ApiError } from "@/components/errors/api-error";
+import { DataLoader } from "@/components/loaders/data-loader";
+import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
 import type { Option, Result } from "@/features/quiz/types";
-
 import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,
 } from "@/lib/media-urls";
-
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import DOMPurify from "dompurify";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Quiz() {
   const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);

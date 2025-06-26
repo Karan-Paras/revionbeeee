@@ -1,6 +1,6 @@
-import { z } from "zod";
-import api from "@/lib/api";
 import { ContactUsSchema } from "@/features/support/schemas";
+import api from "@/lib/api";
+import { z } from "zod";
 
 type ContactUsInput = z.infer<typeof ContactUsSchema>;
 

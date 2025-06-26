@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { email } from "@/lib/schemas";
+import { z } from "zod";
 
 const password = z.string().trim().min(1, { message: "Password is required" });
 

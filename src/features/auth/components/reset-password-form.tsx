@@ -1,17 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect } from "react";
-
+import { ErrorBlock } from "@/components/errors/error-block";
+import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ErrorBlock } from "@/components/errors/error-block";
-
 import { resetPassword } from "@/features/auth/actions/reset-password";
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-
 import { paths } from "@/routes";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect } from "react";
 
 interface ResetPasswordFormProps {
   token: string;

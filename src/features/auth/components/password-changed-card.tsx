@@ -1,17 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
-
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-
 import { PassChng } from "@/lib/assets";
-
 import { paths } from "@/routes";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function PasswordChangedCard() {
   const { hasChangedPassword, setHasChangedPassword } =

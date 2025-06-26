@@ -1,6 +1,5 @@
 import { Modal } from "@/components/common/modal";
 import { VideoPlayer } from "@/components/common/video-player";
-
 import { Intro } from "@/lib/assets";
 import { CircleX } from "lucide-react";
 

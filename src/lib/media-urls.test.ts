@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
   getQuestionBankVideoUrl,
   getQuizAnswerVideoUrl,
@@ -7,6 +6,7 @@ import {
   getUserImageUrl,
   MEDIA_URL,
 } from "@/lib/media-urls";
+import { describe, expect, it } from "vitest";
 
 describe("getUserImageUrl()", () => {
   it("should return the correct user image URL", () => {

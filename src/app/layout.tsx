@@ -1,7 +1,8 @@
+import Providers from "@/app/providers";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
+import "react-loading-skeleton/dist/skeleton.css";
 import { Toaster } from "sonner";
-import Providers from "@/app/providers";
 import "./globals.css";
 
 const sora = Sora({

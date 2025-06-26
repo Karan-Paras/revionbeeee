@@ -1,5 +1,4 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-
 import { paths } from "@/routes";
 
 export default function TermsAndConditions() {

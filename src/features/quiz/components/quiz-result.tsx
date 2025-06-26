@@ -1,23 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import DOMPurify from "dompurify";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useReducer } from "react";
-
+import { VideoPlayer } from "@/components/common/video-player";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { VideoPlayer } from "@/components/common/video-player";
-
 import { ChevronUp, RevisionBee } from "@/lib/icons";
 import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,
 } from "@/lib/media-urls";
-
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import DOMPurify from "dompurify";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useReducer } from "react";
 
 type State = { visible: number };
 

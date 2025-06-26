@@ -1,5 +1,4 @@
 import fetcher from "@/lib/fetcher";
-
 import type { ID } from "@/types/globals";
 
 export async function submitQuiz({

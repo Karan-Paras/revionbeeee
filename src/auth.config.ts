@@ -1,6 +1,6 @@
 import { User } from "@/features/user/types";
-import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 export default {
   providers: [

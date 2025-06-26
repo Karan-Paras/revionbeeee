@@ -1,24 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { getSession } from "next-auth/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { startTransition, useActionState, useEffect, useState } from "react";
-
-import { Button } from "@/components/ui/button";
 import { ErrorBlock } from "@/components/errors/error-block";
+import { InputError } from "@/components/errors/input-error";
+import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
-import { InputError } from "@/components/errors/input-error";
-import { isUserProfileComplete } from "@/features/user/utils";
 import { createProfile } from "@/features/user/actions/create-profile";
-
+import { isUserProfileComplete } from "@/features/user/utils";
 import { Camera } from "@/lib/icons";
-
 import { cn } from "@/lib/utils";
-
 import { paths } from "@/routes";
+import { useQueryClient } from "@tanstack/react-query";
+import { getSession } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect, useState } from "react";
 
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");

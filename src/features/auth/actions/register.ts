@@ -1,10 +1,8 @@
 "use server";
 
-import { RegisterSchema } from "@/features/auth/schemas";
-import { register as registerApi } from "@/features/auth/api/register";
-
 import { signIn } from "@/auth";
-
+import { register as registerApi } from "@/features/auth/api/register";
+import { RegisterSchema } from "@/features/auth/schemas";
 import type { ApiErrorResponse } from "@/types/api";
 
 type RegisterFormState = {
