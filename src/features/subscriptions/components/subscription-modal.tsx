@@ -1,15 +1,12 @@
 import { Modal } from "@/components/common/modal";
 
 import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
+import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { SubscriptionType } from "@/features/subscriptions/types";
 
-interface UpgradeSubscriptionModalProps {
-  onClose: () => void;
-}
+export function SubscriptionModal() {
+  const { onClose } = useSubscriptionModal();
 
-export function UpgradeSubscriptionModal({
-  onClose,
-}: UpgradeSubscriptionModalProps) {
   return (
     <Modal title="Upgrade your Plan" onClose={onClose}>
       <div className="px-6 pb-5">

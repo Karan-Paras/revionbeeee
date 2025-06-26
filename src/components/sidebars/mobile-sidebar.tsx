@@ -119,7 +119,6 @@ export function MobileSidebar({
               </div>
             </motion.div>
 
-            {/* Background Overlay */}
             <motion.div
               className="bg-opacity-40 fixed inset-0 z-[999] bg-black/50"
               initial={{ opacity: 0 }}

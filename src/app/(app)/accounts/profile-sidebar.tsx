@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { CircleUser, LogOut, Settings, Video } from "@/lib/icons";
+import { CircleUser, LogOut, Settings } from "@/lib/icons";
 
 import { LogoutModal } from "@/features/auth/components/logout-modal";
 
@@ -16,11 +16,6 @@ const sidebarItems = [
     icon: <CircleUser />,
     title: "My Profile",
     href: paths.accounts.myProfile(),
-  },
-  {
-    icon: <Video />,
-    title: "Subscription",
-    href: paths.accounts.subscription(),
   },
   {
     icon: <Settings />,
