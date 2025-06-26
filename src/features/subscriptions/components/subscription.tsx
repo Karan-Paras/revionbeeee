@@ -22,6 +22,7 @@ interface SubscriptionProps {
   variant?: SubscriptionVariants;
   activePlan?: SubscriptionType;
   callback?: string;
+  display?: boolean;
 }
 
 export function Subscription({
@@ -30,6 +31,7 @@ export function Subscription({
   variant = "detailed",
   activePlan,
   callback,
+  display,
 }: SubscriptionProps) {
   const router = useRouter();
 
@@ -44,7 +46,7 @@ export function Subscription({
   const isCurrent = activePlan === type;
 
   const periodText = () => {
-    if (type === SubscriptionType.FREE) {
+    if (type === SubscriptionType.FREE && !display) {
       if (isPending) return <Skeleton width={100} />;
       const createdAt = profile?.data.created_at;
 
@@ -65,6 +67,10 @@ export function Subscription({
   };
 
   async function handleCheckout() {
+    if (display) {
+      return;
+    }
+
     const session = await getSession();
 
     if (!session) {

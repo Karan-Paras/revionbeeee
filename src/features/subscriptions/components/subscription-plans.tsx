@@ -10,6 +10,7 @@ interface SubscriptionProps {
   variant?: SubscriptionVariants;
   activePlan?: SubscriptionType;
   callback?: string;
+  display?: boolean;
 }
 
 export function SubscriptionPlans({
@@ -17,6 +18,7 @@ export function SubscriptionPlans({
   variant,
   activePlan,
   callback,
+  display,
 }: SubscriptionProps) {
   return PLANS.map((plan) => (
     <Subscription
@@ -26,6 +28,7 @@ export function SubscriptionPlans({
       variant={variant}
       activePlan={activePlan}
       callback={callback}
+      display={display}
     />
   ));
 }

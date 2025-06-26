@@ -5,7 +5,7 @@ import { useSuccessModal } from "@/features/subscriptions/stores/use-success-mod
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-export const SubscriptionAlert = () => {
+export const SubscriptionAlerts = () => {
   const params = useSearchParams();
 
   const { onOpen: onOpenFail } = useFailModal();

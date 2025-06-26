@@ -1,6 +1,4 @@
 import Providers from "@/app/providers";
-import { RootModals } from "@/components/root-modals";
-import { SubscriptionAlert } from "@/features/subscriptions/components/subscription-alert";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -27,8 +25,6 @@ export default function RootLayout({
       <body className={sora.className}>
         <Providers>
           <Toaster />
-          <RootModals />
-          <SubscriptionAlert />
           {children}
         </Providers>
       </body>

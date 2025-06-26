@@ -45,8 +45,6 @@ export default async function api<T>(
       throw new Error(json.message);
     }
 
-    console.log("api called", url, body, json);
-
     return json as ApiSuccessResponse<T>;
   } catch (error) {
     const message =

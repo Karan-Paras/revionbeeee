@@ -15,7 +15,7 @@ import { toast } from "sonner";
 
 export function UserProfileCard() {
   const { data, isPending, error } = useGetProfile();
-  const { shouldBlock, triggerPaywall } = usePaywall();
+  const { triggerPaywall } = usePaywall();
 
   const [showBillingModal, setShowBillingModal] = useState(false);
 
@@ -43,7 +43,7 @@ export function UserProfileCard() {
     } = user;
 
     const onClick = () => {
-      if (!data?.data.customerID) {
+      if (!user.customerID) {
         triggerPaywall();
         return;
       }
@@ -65,7 +65,7 @@ export function UserProfileCard() {
           </div>
           <div className="frm">
             <div className="profile my-10 flex flex-col justify-center gap-3.5 text-center">
-              {!shouldBlock && (
+              {user.customerID && (
                 <div className="relative flex justify-center">
                   <span className="absolute top-4 -right-32 left-0 z-50 mx-auto flex size-12 items-center justify-center rounded-full border-2 border-white bg-black p-2">
                     <Crown />

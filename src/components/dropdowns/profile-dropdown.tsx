@@ -40,13 +40,13 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const { shouldBlock } = usePaywall();
+
   const closeDropdown = () => {
     setIsOpen(false);
   };
 
   const { onOpen } = useSubscriptionModal();
-
-  const { shouldBlock, isLoading } = usePaywall();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -72,7 +72,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
         className="flex w-full cursor-pointer items-center justify-between gap-2 focus:outline-none md:w-auto md:justify-start"
       >
         <div className="relative">
-          {!shouldBlock && (
+          {user.customerID && !shouldBlock && (
             <span className="absolute -top-2.5 -right-3.5 z-50 flex size-8 items-center justify-center rounded-full border-2 border-white bg-black p-2">
               <Crown />
             </span>
@@ -114,7 +114,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             transition={{ duration: 0.2 }}
             className="absolute right-0 z-50 mt-2 w-48 rounded-xl border-b-0 border-[#858080] bg-white pt-2 shadow-2xl/5 md:border-b md:shadow-2xl"
           >
-            {shouldBlock && !isLoading && (
+            {(!user.customerID || shouldBlock) && (
               <Button
                 className="flex items-center gap-1 rounded-none border-0 border-b px-2 py-3 text-sm"
                 variant="secondary"

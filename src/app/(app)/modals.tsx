@@ -9,7 +9,7 @@ import { useFailModal } from "@/features/subscriptions/stores/use-fail-modal";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
 
-export function RootModals() {
+export function Modals() {
   const [isMounted, setIsMounted] = useState(false);
 
   const { isOpen: isSuccessModalOpen } = useSuccessModal();

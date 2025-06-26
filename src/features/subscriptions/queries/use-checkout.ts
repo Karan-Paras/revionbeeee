@@ -36,8 +36,6 @@ export const useCheckout = () => {
         return;
       }
 
-      console.log({ sessionId });
-
       setSessionId(sessionId);
 
       window.location.href = url;
