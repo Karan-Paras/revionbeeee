@@ -18,7 +18,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   useEffect(() => {
     if (shouldBlock && !isLoading) {
-      console.log(shouldBlock, isLoading);
       triggerPaywall();
     }
   }, [shouldBlock, triggerPaywall, isLoading]);

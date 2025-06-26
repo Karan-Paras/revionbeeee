@@ -54,16 +54,16 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     About Us
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    Topics
+                    <Link href={paths.subjects()}>Subjects</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     Questions
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    My Account
+                    <Link href={paths.accounts.myProfile()}>My Account</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    Testimonials
+                    <Link href="#testimonials">Testimonials</Link>
                   </li>
                 </ul>
               </div>

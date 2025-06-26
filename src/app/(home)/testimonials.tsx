@@ -2,7 +2,7 @@ import { TestimonialsSlider } from "@/app/(home)/testimonials-slider";
 
 export function Testimonials() {
   return (
-    <section className="px-10 py-20 xl:px-20 2xl:px-0">
+    <section id="testimonials" className="px-10 py-20 xl:px-20 2xl:px-0">
       <div className="container mx-auto">
         <div className="grid grid-cols-2">
           <div className="col-span-2">

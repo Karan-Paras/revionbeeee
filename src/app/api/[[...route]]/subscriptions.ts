@@ -74,7 +74,7 @@ const app = new Hono()
       const session = await stripe.checkout.sessions.retrieve(sessionId);
 
       await purchaseSubscription({
-        subscriptionID: session.id,
+        subscriptionID: session.subscription as string,
         customerID: session.customer as string,
         planType: session.metadata?.plan === "monthly" ? "monthly" : "yearly",
         amount: session.amount_total,

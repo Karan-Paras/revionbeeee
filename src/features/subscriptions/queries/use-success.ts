@@ -1,6 +1,6 @@
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
 import { client } from "@/lib/hono";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType } from "hono";
 import { InferResponseType } from "hono";
 
@@ -15,6 +15,7 @@ type RequestType = InferRequestType<
 
 export const useSuccess = () => {
   const { clearSessionId } = useSessionStore();
+  const queryClient = useQueryClient();
 
   return useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
@@ -32,6 +33,9 @@ export const useSuccess = () => {
     },
     onSuccess: () => {
       clearSessionId();
+      queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
     },
   });
 };
