@@ -7,6 +7,31 @@ import { z } from "zod";
 
 const app = new Hono()
   .post(
+    "/billing",
+    verifyAuth(),
+    zValidator(
+      "json",
+      z.object({
+        customerId: z.string().min(1, "Customer ID is required"),
+        callback: z.string().optional(),
+      })
+    ),
+    async (c) => {
+      const { customerId, callback = "/" } = c.req.valid("json");
+
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}${callback}`,
+      });
+
+      if (!session.url) {
+        return c.json({ error: "Failed to create billing session" }, 400);
+      }
+
+      return c.json({ data: session.url });
+    }
+  )
+  .post(
     "/checkout",
     verifyAuth(),
     zValidator(

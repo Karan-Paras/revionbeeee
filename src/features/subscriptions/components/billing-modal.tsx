@@ -1,14 +1,25 @@
 import { Modal } from "@/components/common/modal";
+import { useBilling } from "@/features/subscriptions/queries/use-billing";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { Billing } from "@/lib/icons";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface BillingModalProps {
   onClose: () => void;
 }
 
 export function BillingModal({ onClose }: BillingModalProps) {
+  const pathname = usePathname();
+  const { data, isPending } = useGetProfile();
+
+  const mutation = useBilling();
+
   const onClick = () => {
-    // mutation.mutate();
+    mutation.mutate({
+      callback: pathname,
+      customerId: data?.data.customerID || "",
+    });
   };
 
   return (
@@ -31,16 +42,20 @@ export function BillingModal({ onClose }: BillingModalProps) {
               </h3>
               <p className="text-sm font-light text-[#6C6C6C]">
                 You&apos;ll be redirected to our secure Stripe billing portal to
-                view invoices, update payment details, upgrade, or cancel your
-                subscription.
+                view or cancel your subscription.
               </p>
             </div>
             <div className="btn">
               <button
                 onClick={onClick}
+                disabled={isPending || mutation.isPending}
                 className="w-full cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white"
               >
-                Continue
+                {isPending
+                  ? "Processing..."
+                  : mutation.isPending
+                    ? "Redirecting..."
+                    : "Continue"}
               </button>
             </div>
           </div>

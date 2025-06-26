@@ -2,7 +2,7 @@ import type { ID, PhPBoolean } from "@/types/globals";
 
 export interface User {
   id: ID;
-  customerId: string;
+  customerID: string | null;
   firstName?: string;
   lastName?: string;
   profilePicture?: string;

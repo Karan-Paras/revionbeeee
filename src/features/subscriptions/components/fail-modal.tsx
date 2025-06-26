@@ -1,20 +1,39 @@
 import { Modal } from "@/components/common/modal";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useFailModal } from "@/features/subscriptions/stores/use-fail-modal";
+import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { Cancel } from "@/lib/icons";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function FailModal() {
-  const { onClose } = useFailModal();
-
   const pathname = usePathname();
-
   const router = useRouter();
 
+  const { onClose: onFailModalClose } = useFailModal();
+
+  const { onClose: onSubscriptionModalClose, isOpen } = useSubscriptionModal();
+
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
+
   const handleClose = () => {
+    if (isLoading) {
+      return;
+    }
+
+    if (shouldBlock) {
+      triggerPaywall();
+    }
     router.replace(pathname);
-    onClose();
+    onFailModalClose();
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      onSubscriptionModalClose();
+    }
+  }, [onSubscriptionModalClose, isOpen]);
 
   return (
     <Modal

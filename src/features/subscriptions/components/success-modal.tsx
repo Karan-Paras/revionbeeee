@@ -1,6 +1,8 @@
 import { Modal } from "@/components/common/modal";
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useSuccess } from "@/features/subscriptions/queries/use-success";
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
+import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
 import { useStore } from "@/hooks/use-store";
 import { PassChng } from "@/lib/assets";
@@ -13,18 +15,26 @@ export function SuccessModal() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { onClose } = useSuccessModal();
+  const { onClose: onSuccessModalClose } = useSuccessModal();
   const { mutate, isPending } = useSuccess();
+
+  const { onClose: onSubscriptionModalClose, isOpen } = useSubscriptionModal();
+
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
 
   const sessionId = useStore(useSessionStore, (state) => state.sessionId);
 
   const handleClose = () => {
-    if (isPending) {
+    if (isPending || isLoading) {
       return;
     }
 
+    if (shouldBlock) {
+      triggerPaywall();
+    }
+
     router.replace(pathname);
-    onClose();
+    onSuccessModalClose();
   };
 
   useEffect(() => {
@@ -34,6 +44,12 @@ export function SuccessModal() {
 
     mutate({ sessionId });
   }, [sessionId, mutate]);
+
+  useEffect(() => {
+    if (isOpen) {
+      onSubscriptionModalClose();
+    }
+  }, [onSubscriptionModalClose, isOpen]);
 
   return (
     <Modal
