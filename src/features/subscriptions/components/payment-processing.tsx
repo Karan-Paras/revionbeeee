@@ -4,7 +4,7 @@ import { TriangleAlert } from "@/lib/icons";
 
 export default function PaymentProcessing() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="h-screen bg-white/98 flex items-center justify-center p-4 fixed top-0 left-0 right-0 bottom-0 z-[9999]">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
         <div className="mb-6">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
