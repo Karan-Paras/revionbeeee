@@ -32,7 +32,7 @@ export const useCheckout = () => {
       const { sessionId, url } = data;
 
       if (!url || !sessionId) {
-        toast.error("Failed to create session");
+        toast.error("Failed to create session. Please try again.");
         return;
       }
 
@@ -41,7 +41,7 @@ export const useCheckout = () => {
       window.location.href = url;
     },
     onError: () => {
-      toast.error("Failed to create session");
+      toast.error("Failed to create session. Please try again later.");
     },
   });
 };

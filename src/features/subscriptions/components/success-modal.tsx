@@ -1,5 +1,6 @@
 import { Modal } from "@/components/common/modal";
 import { ConfettiCelebration } from "@/components/feedback/confetti-celebration";
+import PaymentProcessing from "@/features/subscriptions/components/payment-processing";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useSuccess } from "@/features/subscriptions/queries/use-success";
 import { useSessionStore } from "@/features/subscriptions/stores/use-session-store";
@@ -34,8 +35,8 @@ export function SuccessModal() {
       triggerPaywall();
     }
 
-    router.replace(pathname);
     onSuccessModalClose();
+    router.replace(pathname);
   }, [
     isPending,
     isLoading,
@@ -66,7 +67,9 @@ export function SuccessModal() {
     }
   }, [shouldBlock, isLoading, handleClose]);
 
-  return (
+  return isPending ? (
+    <PaymentProcessing />
+  ) : (
     <>
       {!shouldBlock && <ConfettiCelebration />}
       <Modal
@@ -76,9 +79,13 @@ export function SuccessModal() {
         <div className="container mx-auto h-full">
           <div className="grid h-full content-center">
             <div className="relative m-auto w-11/12 max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-2xl">
-              <div onClick={handleClose} className="absolute top-3 right-3">
+              <button
+                disabled={isPending || isLoading}
+                onClick={handleClose}
+                className="absolute top-3 right-3"
+              >
                 <X />
-              </div>
+              </button>
 
               <div className="img flex justify-center">
                 <Image src={PassChng} alt="" />
@@ -93,6 +100,7 @@ export function SuccessModal() {
               </div>
               <div className="btn">
                 <button
+                  disabled={isPending || isLoading}
                   onClick={handleClose}
                   className="w-full cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white"
                 >
