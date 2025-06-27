@@ -16,7 +16,7 @@ export function SettingsTab() {
           <RevisionBee width={100} />
         </div>
         <div className="desc">
-          <h4 className="text-xl">About Us</h4>
+          <h4 className="text-xl font-bold">About Us</h4>
           <p>
             Welcome to Revision Bee, your go-to destination for fun and engaging
             math quizzes designed specifically for students! Our mission is to

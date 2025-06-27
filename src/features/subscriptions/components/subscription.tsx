@@ -46,7 +46,10 @@ export function Subscription({
   const isCurrent = activePlan === type;
 
   const periodText = () => {
-    if (type === SubscriptionType.FREE && !display) {
+    if (type === SubscriptionType.FREE) {
+      if (display) {
+        return "3 days free trial";
+      }
       if (isPending) return <Skeleton width={100} />;
       const createdAt = profile?.data.created_at;
 
