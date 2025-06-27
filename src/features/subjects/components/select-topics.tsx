@@ -71,7 +71,9 @@ export function SelectTopics({
                           onSubjectClick(id, topicName, subjectName)
                         }
                       >
-                        <p className="font-semibold uppercase">{subjectName}</p>
+                        <p className="font-semibold uppercase text-start">
+                          {subjectName}
+                        </p>
                         <span>
                           <ChevronRight />
                         </span>
