@@ -4,7 +4,7 @@ import { ApiSuccessResponse } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetTopics = (
-  initialData: ApiSuccessResponse<Array<Topic>> | undefined
+  initialData?: ApiSuccessResponse<Array<Topic>>
 ) => {
   return useQuery({
     queryKey: ["topic"],
