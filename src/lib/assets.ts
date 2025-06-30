@@ -2,6 +2,7 @@ import Camille from "public/images/camille.png";
 import EmailService from "public/images/Email_Service.svg";
 import Faq from "public/images/faq.jpg";
 import Faq2 from "public/images/faq2.png";
+import Jisso from "public/images/jisso.png";
 import Lft from "public/images/lft.png";
 import Logo from "public/images/logo.svg";
 import NoData from "public/images/nodata.png";
@@ -22,6 +23,7 @@ export {
   Faq2,
   Hero,
   Intro,
+  Jisso,
   Lft,
   Logo,
   NoData,

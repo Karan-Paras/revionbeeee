@@ -1,6 +1,6 @@
 "use client";
 
-import { Camille, Yara } from "@/lib/assets";
+import { Camille, Jisso, Yara } from "@/lib/assets";
 import Image from "next/image";
 import Slider from "react-slick";
 
@@ -60,7 +60,7 @@ export function TestimonialsSlider() {
           <Image src={Camille} alt="" />
         </div>
         <div className="item p-3">
-          <Image src={Yara} alt="" />
+          <Image src={Jisso} alt="" />
         </div>
       </Slider>
     </div>
