@@ -3,8 +3,10 @@
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
+import type { Topic } from "@/features/subjects/types";
 import { ChevronRight } from "@/lib/icons";
 import { paths } from "@/routes";
+import type { ApiSuccessResponse } from "@/types/api";
 import type { ID } from "@/types/globals";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -12,13 +14,15 @@ import { toast } from "sonner";
 interface SelectTopicsProps {
   maxLength?: number;
   href?: (subjectId: ID) => string;
+  initialData?: ApiSuccessResponse<Array<Topic>>;
 }
 
 export function SelectTopics({
   maxLength,
   href = paths.subjectDetails,
+  initialData,
 }: SelectTopicsProps) {
-  const { data, isPending, error } = useGetTopics();
+  const { data, isPending, error } = useGetTopics(initialData);
 
   const { setActiveSubject } = useActiveSubjectStore();
 

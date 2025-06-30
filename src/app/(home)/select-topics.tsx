@@ -1,7 +1,21 @@
+import { DataLoader } from "@/components/loaders/data-loader";
 import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
+import type { Topic } from "@/features/subjects/types";
+import api from "@/lib/api";
 import { MoveUpRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import Link from "next/link";
+import { Suspense, use } from "react";
+
+async function getTopics() {
+  const apiUrl = "/topic/list";
+  return await api<Array<Topic>>(apiUrl, "GET");
+}
+
+function TopicsList() {
+  const topics = use(getTopics());
+  return <SelectTopicsComponent maxLength={6} initialData={topics} />;
+}
 
 export function SelectTopics() {
   return (
@@ -13,9 +27,6 @@ export function SelectTopics() {
         <div className="mb:mb-8 mb-5 flex flex-wrap justify-between gap-7 md:flex-nowrap lg:gap-4">
           <div className="hed">
             <div className="itm mb-5 flex items-center gap-1.5 capitalize">
-              {/* <span>
-                <Minus width={42} height={2} color="#53A2EB" />
-              </span> */}
               <p className="text-[#53A2EB]">Select your Subject</p>
             </div>
             <h2 className="text-4xl font-bold">Select Your Topics!</h2>
@@ -35,7 +46,9 @@ export function SelectTopics() {
             </Link>
           </div>
         </div>
-        <SelectTopicsComponent maxLength={6} />
+        <Suspense fallback={<DataLoader />}>
+          <TopicsList />
+        </Suspense>
       </div>
     </section>
   );
