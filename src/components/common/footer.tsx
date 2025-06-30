@@ -51,19 +51,19 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 </h3>
                 <ul>
                   <li className="mb-5 text-lg font-normal text-white">
-                    About Us
+                    <Link href={paths.progress()}>Progress</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.subjects()}>Subjects</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    Questions
+                    <Link href={paths.quiz()}>Quiz</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.accounts.myProfile()}>My Account</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    <Link href="#testimonials">Testimonials</Link>
+                    <Link href={paths.home.testimonials()}>Testimonials</Link>
                   </li>
                 </ul>
               </div>
@@ -73,7 +73,10 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 <h3 className="mb-5 text-2xl font-bold text-white">Support</h3>
                 <ul>
                   <li className="mb-5 text-lg font-normal text-white">
-                    <Link href={paths.privacyPolicy()}> Privacy Policy</Link>
+                    <Link href={paths.home.aboutUs()}>About Us</Link>
+                  </li>
+                  <li className="mb-5 text-lg font-normal text-white">
+                    <Link href={paths.privacyPolicy()}>Privacy Policy</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.termsAndConditions()}>
@@ -84,10 +87,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     <Link href={paths.faq()}>FAQ</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    <Link href={"#contact"}>Contact</Link>
-                  </li>
-                  <li className="mb-5 text-lg font-normal text-white">
-                    <Link href={"#contact"}>Help</Link>
+                    <Link href={paths.home.support()}>Contact Us</Link>
                   </li>
                 </ul>
               </div>

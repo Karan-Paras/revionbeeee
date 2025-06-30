@@ -116,7 +116,7 @@ export function RegisterForm() {
             Not registered yet?&nbsp;
             <Link
               className="font-semibold text-[#53A2EB] underline underline-offset-5"
-              href="/login"
+              href={paths.login()}
             >
               Sign in
             </Link>

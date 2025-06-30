@@ -6,11 +6,15 @@ import {
   MessageStar,
   MoveUpRight,
 } from "@/lib/icons";
+import { paths } from "@/routes";
 import Image from "next/image";
 
 export function InteractiveQuiz() {
   return (
-    <section id="about" className="relative px-10 py-20 xl:px-20 2xl:px-0">
+    <section
+      id={paths.home.aboutUs().replace("#", "")}
+      className="relative px-10 py-20 xl:px-20 2xl:px-0"
+    >
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-10">
           <div className="col-span-2 md:col-span-2 lg:col-span-1">

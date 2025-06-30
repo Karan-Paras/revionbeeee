@@ -1,8 +1,12 @@
 import { TestimonialsSlider } from "@/app/(home)/testimonials-slider";
+import { paths } from "@/routes";
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="px-10 py-20 xl:px-20 2xl:px-0">
+    <section
+      id={paths.home.testimonials().replace("#", "")}
+      className="px-10 py-20 xl:px-20 2xl:px-0"
+    >
       <div className="container mx-auto">
         <div className="grid grid-cols-2">
           <div className="col-span-2">

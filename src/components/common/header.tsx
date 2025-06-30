@@ -36,11 +36,11 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
           { name: "Quiz", path: paths.quiz() },
         ]
       : [
-          { name: "Home", path: "#home" },
-          { name: "About", path: "#about" },
-          { name: "Topics", path: "#topics" },
-          { name: "Pricing", path: "#pricing" },
-          { name: "Contact us", path: "#contact" },
+          { name: "Home", path: paths.home.hero() },
+          { name: "About", path: paths.home.aboutUs() },
+          { name: "Topics", path: paths.home.topics() },
+          { name: "Pricing", path: paths.home.pricing() },
+          { name: "Contact us", path: paths.home.support() },
         ];
 
   const renderAuthButtons = () => {
@@ -75,7 +75,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
 
       return (
         <Link
-          href="/login"
+          href={paths.login()}
           className="mb-4 cursor-pointer rounded-xl border-2 border-[#53A2EB] px-8 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
         >
           Login Now

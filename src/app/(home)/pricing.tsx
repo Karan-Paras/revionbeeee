@@ -1,8 +1,12 @@
 import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
+import { paths } from "@/routes";
 
 export function Pricing() {
   return (
-    <section id="pricing" className="relative px-10 py-20 xl:px-20 2xl:px-0">
+    <section
+      id={paths.home.pricing().replace("#", "")}
+      className="relative px-10 py-20 xl:px-20 2xl:px-0"
+    >
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-3 xl:gap-7">
           <div className="col-span-3">
@@ -17,7 +21,7 @@ export function Pricing() {
               </div>
             </div>
           </div>
-          <SubscriptionPlans href="#pricing" display />
+          <SubscriptionPlans display />
         </div>
       </div>
     </section>
