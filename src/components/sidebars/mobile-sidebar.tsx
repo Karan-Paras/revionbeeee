@@ -57,8 +57,8 @@ export function MobileSidebar({
             >
               <div className="mb-5 flex items-start justify-between">
                 <div className="img relative flex size-20 items-start justify-center">
-                  <Link className="" href="/">
-                    <Image src={Logo} alt="" fill />
+                  <Link href={paths.home()}>
+                    <Image src={Logo} alt="logo" fill />
                   </Link>
                 </div>
                 <button onClick={() => setIsOpen(false)}>
@@ -107,7 +107,7 @@ export function MobileSidebar({
                     </>
                   ) : (
                     <Link
-                      href="/login"
+                      href={paths.login()}
                       className="mt-4 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white"
                     >
                       Login Now

@@ -2,6 +2,7 @@
 
 import { Hero } from "@/lib/assets";
 import { MoveUpRight } from "@/lib/icons";
+import { paths } from "@/routes";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect } from "react";
 
@@ -32,7 +33,7 @@ export function HeroSection() {
 
   return (
     <section
-      id="home"
+      id={paths.home.hero().replace("#", "")}
       className="relative min-h-screen overflow-hidden bg-top lg:px-20 2xl:px-0"
     >
       <video

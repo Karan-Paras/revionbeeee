@@ -10,7 +10,14 @@ const withPrefix = <T extends PathFn>(prefix: string, paths: T): T => {
 };
 
 export const paths = {
-  home: () => "/",
+  home: Object.assign(() => "/", {
+    hero: () => "#home",
+    aboutUs: () => "#about-us",
+    topics: () => "#topics",
+    pricing: () => "#pricing",
+    support: () => "#support",
+    testimonials: () => "#testimonials",
+  }),
   login: () => "/login",
   signup: () => "/signup",
   createProfile: () => "/create-profile",
