@@ -1,7 +1,26 @@
+"use client";
+
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { paths } from "@/routes";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function SubscriptionPlans() {
+  const router = useRouter();
+
+  const { data } = useGetProfile();
+
+  useEffect(() => {
+    if (data) {
+      const { isSubscribed } = data.data;
+
+      if (isSubscribed) {
+        router.replace(paths.dashboard());
+      }
+    }
+  }, [data, router]);
+
   return (
     <section className="mths_bg bg-cover bg-no-repeat p-5 md:min-h-screen 2xl:h-screen">
       <div className="container mx-auto h-full">
