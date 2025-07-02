@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { paths } from "@/routes";
 import { usePathname } from "next/navigation";
 
 interface AuthLayoutProps {
@@ -18,9 +19,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <div
             className={cn(
               "img relative flex h-full overflow-hidden rounded-xl border-2 border-white bg-cover bg-center bg-no-repeat",
-              pathname === "/login" && "log_bg",
-              pathname === "/signup" && "sign_bg",
-              pathname === "/create-profile" && "crt_bg"
+              pathname === paths.login() && "log_bg",
+              pathname === paths.signup() && "sign_bg",
+              pathname === paths.createProfile() && "crt_bg"
             )}
           />
         </div>
