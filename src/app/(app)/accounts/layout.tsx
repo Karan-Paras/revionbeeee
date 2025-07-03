@@ -26,7 +26,7 @@ export default function AccountsLayout({ children }: AccountsLayoutProps) {
       <section className="bg-[#F6F6F6] py-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-7 gap-5">
-            <div className="col-span-2">
+            <div className="col-span-2 h-full">
               <ProfileSidebar />
             </div>
             <div className="col-span-5">{children}</div>

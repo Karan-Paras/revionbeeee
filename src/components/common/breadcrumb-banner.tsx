@@ -18,7 +18,7 @@ export function BreadcrumbBanner({
       <div className="container mx-auto">
         <div className="relative grid min-h-96 grid-cols-2 items-end text-center">
           <div className="col-span-2 pb-14 2xl:px-0 px-5">
-            <h3 className="2xl:text-5xl text-3xl font-bold text-white">
+            <h3 className="2xl:text-5xl xl:text-4xl font-bold text-white">
               {title}
             </h3>
 

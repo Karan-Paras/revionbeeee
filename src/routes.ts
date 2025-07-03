@@ -68,6 +68,9 @@ export const paths = {
     myProfile: Object.assign(() => "/my-profile", {
       scroll: () => "/my-profile/#profile",
     }),
+    billing: Object.assign(() => "/billing", {
+      scroll: () => "/billing/#billing",
+    }),
     settings: Object.assign(() => "/settings", {
       scroll: () => "/settings/#settings",
     }),

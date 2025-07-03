@@ -4,6 +4,7 @@ import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { CircleUser, LogOut, Settings } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import { CreditCard } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,6 +13,11 @@ const sidebarItems = [
     icon: <CircleUser />,
     title: "My Profile",
     href: paths.accounts.myProfile(),
+  },
+  {
+    icon: <CreditCard />,
+    title: "Billing",
+    href: paths.accounts.billing(),
   },
   {
     icon: <Settings />,
@@ -26,7 +32,7 @@ export function ProfileSidebar() {
   const { onOpen } = useLogoutModal();
 
   return (
-    <div className="itm grad_colr rounded-xl bg-white">
+    <div className="itm grad_colr rounded-xl bg-white h-full">
       <ul className="p-4">
         {sidebarItems.map(({ href, icon, title }) => (
           <li
