@@ -1,11 +1,5 @@
 import { Lft, Sub, SubTwo } from "@/lib/assets";
-import {
-  Certificate,
-  LaptopUser,
-  LibraryBig,
-  MessageStar,
-  MoveUpRight,
-} from "@/lib/icons";
+import { Certificate, LaptopUser, LibraryBig, MessageStar } from "@/lib/icons";
 import { paths } from "@/routes";
 import Image from "next/image";
 
@@ -70,9 +64,6 @@ export function InteractiveQuiz() {
           </div>
           <div className="col-span-2 md:col-span-2 lg:col-span-1">
             <div className="itm flex items-center gap-1.5">
-              {/* <span>
-                <Minus color="#53A2EB" />
-              </span> */}
               <p className="text-[#53A2EB] capitalize">
                 Flexible supported learning
               </p>
@@ -150,19 +141,6 @@ export function InteractiveQuiz() {
                       vestibulum.
                     </p>
                   </div>
-                </div>
-              </div>
-              <div className="col-span-2">
-                <div className="flex justify-center">
-                  <button className="group flex cursor-pointer items-center gap-2 rounded-xl border-2 border-[#53A2EB] px-10 py-4 font-semibold text-[#53A2EB] hover:bg-[#53A2EB] hover:text-white">
-                    Learn More
-                    <MoveUpRight
-                      width={14}
-                      height={14}
-                      color="#53A2EB"
-                      className="group-hover:fill-[#fff]"
-                    />
-                  </button>
                 </div>
               </div>
             </div>

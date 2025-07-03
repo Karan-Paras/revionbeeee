@@ -60,7 +60,9 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     <Link href={paths.quiz()}>Quiz</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
-                    <Link href={paths.accounts.myProfile()}>My Account</Link>
+                    <Link href={paths.accounts.myProfile.scroll()}>
+                      My Account
+                    </Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.home.testimonials()}>Testimonials</Link>
