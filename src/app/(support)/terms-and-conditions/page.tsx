@@ -17,7 +17,7 @@ export default function TermsAndConditions() {
           },
         ]}
       />
-      <section className="py-10">
+      <section className="px-10 py-20 xl:px-20 2xl:px-0">
         <div className="container mx-auto">
           <div className="rw mb-8">
             <h3 className="mb-2 text-2xl font-bold">AGREEMENT TO TERMS</h3>
