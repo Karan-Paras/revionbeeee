@@ -44,12 +44,12 @@ export function withPrefix<T extends Record<string, unknown>>(
 
 export const paths = {
   home: Object.assign(() => "/", {
-    hero: () => "#home",
-    aboutUs: () => "#about-us",
-    topics: () => "#topics",
-    pricing: () => "#pricing",
-    support: () => "#support",
-    testimonials: () => "#testimonials",
+    hero: () => "/#home",
+    aboutUs: () => "/#about-us",
+    topics: () => "/#topics",
+    pricing: () => "/#pricing",
+    support: () => "/#support",
+    testimonials: () => "/#testimonials",
   }),
   login: () => "/login",
   signup: () => "/signup",
