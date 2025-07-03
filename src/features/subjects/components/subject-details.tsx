@@ -78,9 +78,9 @@ export function SubjectDetails() {
                 </div>
               </section>
               <section>
-                <div className="container mx-auto rounded-xl bg-[#F9F9F9] px-10 py-16 md:px-10 xl:px-0">
-                  <div className="grid w-full grid-cols-3 gap-5">
-                    <div className="col-span-2 md:col-span-1">
+                <div className="container mx-auto 2xl:rounded-xl bg-[#F9F9F9] px-10 py-16 md:px-10">
+                  <div className="grid w-full grid-cols-12 gap-5">
+                    <div className="2xl:col-span-4 lg:col-span-6  col-span-12 ">
                       <Link href={paths.quizBank(subjectId)}>
                         <div className="grid min-h-[210px] grid-cols-12 items-center rounded-xl border border-[#FBBE1B] bg-white px-5 py-6 md:py-10">
                           <div className="col-span-12 md:col-span-3">
@@ -104,7 +104,7 @@ export function SubjectDetails() {
                         </div>
                       </Link>
                     </div>
-                    <div className="col-span-2 md:col-span-1">
+                    <div className="2xl:col-span-4 lg:col-span-6 col-span-12 ">
                       <Link href={paths.questionBank(subjectId)}>
                         <div className="grid min-h-[210px] grid-cols-12 items-center rounded-xl border border-[#53A2EB] bg-white px-5 py-6 md:py-10">
                           <div className="col-span-12 md:col-span-3">
@@ -124,7 +124,7 @@ export function SubjectDetails() {
                         </div>
                       </Link>
                     </div>
-                    <div className="col-span-2 md:col-span-1">
+                    <div className="2xl:col-span-4 lg:col-span-6 lg:col-start-4  col-span-12 ">
                       <Link href={paths.progress()} className="">
                         <div className="grid min-h-[210px] grid-cols-12 items-center rounded-xl border border-[#9F9BFD] bg-white px-5 py-6 md:py-10">
                           <div className="col-span-12 md:col-span-3">

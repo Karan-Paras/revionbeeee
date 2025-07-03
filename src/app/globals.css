@@ -22,9 +22,11 @@ body {
 }
 .log_bg {
   background-image: url("../../public/images/log_bg.jpeg");
+  height: calc(100vh - 40px);
 }
 .sign_bg {
   background-image: url("../../public/images/sign_bg.jpg");
+  height: calc(100vh - 40px);
 }
 .spc_frm .btn button {
   box-shadow: 0 0 30px #4aa3e847;
@@ -129,8 +131,8 @@ body {
 }
 .desc_blk img {
   display: inline-block;
-  width: 100%;
-  height: auto;
+  /* width: 100%; */
+  /* height: auto; */
   max-height: auto;
   margin: 15px 0;
   border-radius: 10px;
