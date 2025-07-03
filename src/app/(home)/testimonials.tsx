@@ -4,7 +4,7 @@ import { paths } from "@/routes";
 export function Testimonials() {
   return (
     <section
-      id={paths.home.testimonials().replace("#", "")}
+      id={paths.home.testimonials().split("#")[1]}
       className="px-10 py-20 xl:px-20 2xl:px-0"
     >
       <div className="container mx-auto">

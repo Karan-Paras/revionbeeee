@@ -8,12 +8,12 @@ import { useState } from "react";
 
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 
-import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 
 import { Logo } from "@/lib/assets";
 import { Menu, X } from "lucide-react";
 
+import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";
 
 interface MobileSidebarProps {
@@ -32,9 +32,9 @@ export function MobileSidebar({
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const logout = useLogout();
-
   const { data } = useGetProfile();
+
+  const { onOpen } = useLogoutModal();
 
   return (
     <>
@@ -99,7 +99,7 @@ export function MobileSidebar({
                         </Link>
                       )}
                       <button
-                        onClick={() => logout()}
+                        onClick={onOpen}
                         className="mb-3 w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                       >
                         Logout

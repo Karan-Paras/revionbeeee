@@ -5,7 +5,7 @@ import { paths } from "@/routes";
 export function Support() {
   return (
     <section
-      id={paths.home.support().replace("#", "")}
+      id={paths.home.support().split("#")[1]}
       className="relative bg-[#F6F6F6] px-10 py-20 xl:px-20 2xl:px-0"
     >
       <div className="container mx-auto">

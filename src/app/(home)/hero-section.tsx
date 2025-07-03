@@ -4,9 +4,12 @@ import { Hero } from "@/lib/assets";
 import { MoveUpRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import { motion, useAnimationControls } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function HeroSection() {
+  const router = useRouter();
+
   const controls = useAnimationControls();
   useEffect(() => {
     const sequence = async () => {
@@ -33,7 +36,7 @@ export function HeroSection() {
 
   return (
     <section
-      id={paths.home.hero().replace("#", "")}
+      id={paths.home.hero().split("#")[1]}
       className="relative min-h-screen overflow-hidden bg-top lg:px-20 2xl:px-0"
     >
       <video
@@ -64,7 +67,10 @@ export function HeroSection() {
               tools, and interactive learning experiences daily
             </motion.p>
 
-            <button className="group mx-auto flex cursor-pointer items-center gap-2 rounded-2xl border border-[#FBBE1B] px-8 py-4 text-[#FBBE1B] hover:bg-[#FBBE1B] hover:text-black">
+            <button
+              onClick={() => router.push(paths.dashboard())}
+              className="group mx-auto flex cursor-pointer items-center gap-2 rounded-2xl border border-[#FBBE1B] px-8 py-4 text-[#FBBE1B] hover:bg-[#FBBE1B] hover:text-black"
+            >
               Get Started
               <span>
                 <MoveUpRight

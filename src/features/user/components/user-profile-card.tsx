@@ -56,7 +56,10 @@ export function UserProfileCard() {
         {showBillingModal && (
           <BillingModal onClose={() => setShowBillingModal(false)} />
         )}
-        <div className="rounded-xl bg-white px-7 py-8">
+        <div
+          id={paths.accounts.myProfile.scroll().split("#")[1]}
+          className="rounded-xl bg-white px-7 py-8"
+        >
           <div className="mb-5 flex items-center justify-between border-b border-[#D9D9D9] pb-3">
             <h3 className="text-2xl font-bold">Profile</h3>
             <Button onClick={onClick} variant="secondary" className="w-auto">
