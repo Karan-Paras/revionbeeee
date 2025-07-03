@@ -4,7 +4,7 @@ import { paths } from "@/routes";
 export function Pricing() {
   return (
     <section
-      id={paths.home.pricing().replace("#", "")}
+      id={paths.home.pricing().split("#")[1]}
       className="relative px-10 py-20 xl:px-20 2xl:px-0"
     >
       <div className="container mx-auto">

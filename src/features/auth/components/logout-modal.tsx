@@ -2,14 +2,27 @@
 
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
-import { useLogout } from "@/features/auth/hooks/use-logout";
+import { logout } from "@/features/auth/api/logout";
+import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
+import { paths } from "@/routes";
+import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, X } from "lucide-react";
-interface LogoutModalProps {
-  onClose: () => void;
-}
+import { signOut } from "next-auth/react";
 
-export function LogoutModal({ onClose }: LogoutModalProps) {
-  const logout = useLogout();
+export function LogoutModal() {
+  const { onClose } = useLogoutModal();
+
+  const queryClient = useQueryClient();
+
+  const onLogout = () => {
+    queryClient.clear();
+
+    logout().then(() =>
+      signOut({
+        redirectTo: paths.login(),
+      })
+    );
+  };
 
   return (
     <Modal onClose={onClose} title="" className="sm:max-w-lg">
@@ -29,14 +42,14 @@ export function LogoutModal({ onClose }: LogoutModalProps) {
         <h2 className="mb-3 text-xl font-semibold text-gray-900">Logout</h2>
 
         <p className="mb-8 text-sm leading-relaxed text-gray-500">
-          Are you sure you want to log out of the account?
+          Are you sure you want to log out?
         </p>
 
         <div className="flex gap-3">
           <Button variant="secondary" onClick={onClose}>
             No
           </Button>
-          <Button variant="rounded" onClick={logout}>
+          <Button variant="rounded" onClick={onLogout}>
             Yes
           </Button>
         </div>

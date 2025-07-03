@@ -20,7 +20,7 @@ function TopicsList() {
 export function SelectTopics() {
   return (
     <section
-      id={paths.home.topics().replace("#", "")}
+      id={paths.home.topics().split("#")[1]}
       className="mths_bg relative px-10 py-20 xl:px-20 2xl:px-0"
     >
       <div className="relative container mx-auto">

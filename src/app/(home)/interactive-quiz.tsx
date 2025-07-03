@@ -12,7 +12,7 @@ import Image from "next/image";
 export function InteractiveQuiz() {
   return (
     <section
-      id={paths.home.aboutUs().replace("#", "")}
+      id={paths.home.aboutUs().split("#")[1]}
       className="relative px-10 py-20 xl:px-20 2xl:px-0"
     >
       <div className="container mx-auto">

@@ -1,13 +1,46 @@
 import type { ID } from "@/types/globals";
 
-type PathFn = Record<string, () => string>;
+type PathFn = () => string;
 
-const withPrefix = <T extends PathFn>(prefix: string, paths: T): T => {
-  const entries = Object.entries(paths).map(
-    ([key, fn]) => [key, () => `${prefix}${fn()}`] as const
-  );
-  return Object.fromEntries(entries) as T;
+type PathObject<T> = {
+  [K in keyof T]: T[K] extends PathFn
+    ? PathFn & { [SK in keyof T[K]]: T[K][SK] extends PathFn ? PathFn : never }
+    : T[K] extends object
+      ? PathObject<T[K]>
+      : never;
 };
+
+export function withPrefix<T extends Record<string, unknown>>(
+  prefix: string,
+  paths: T
+): PathObject<T> {
+  const result = {} as PathObject<T>;
+
+  for (const key in paths) {
+    const value = paths[key];
+
+    if (typeof value === "function") {
+      const fn = () => `${prefix}${value()}`;
+
+      for (const subKey in value) {
+        const subVal = (value as Record<string, unknown>)[subKey];
+        if (typeof subVal === "function") {
+          (fn as unknown as Record<string, unknown>)[subKey] = () =>
+            `${prefix}${subVal()}`;
+        }
+      }
+
+      result[key] = fn as unknown as PathObject<T>[typeof key];
+    } else if (typeof value === "object" && value !== null) {
+      result[key] = withPrefix(
+        prefix,
+        value as Record<string, unknown>
+      ) as PathObject<T>[typeof key];
+    }
+  }
+
+  return result;
+}
 
 export const paths = {
   home: Object.assign(() => "/", {
@@ -32,8 +65,12 @@ export const paths = {
   progress: () => "/progress",
   quiz: () => "/quiz",
   accounts: withPrefix("/accounts", {
-    myProfile: () => "/my-profile",
-    settings: () => "/settings",
+    myProfile: Object.assign(() => "/my-profile", {
+      scroll: () => "/my-profile/#profile",
+    }),
+    settings: Object.assign(() => "/settings", {
+      scroll: () => "/settings/#settings",
+    }),
     editProfile: () => "/my-profile/edit",
   }),
   privacyPolicy: () => "/privacy-policy",

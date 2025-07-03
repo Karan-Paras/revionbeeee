@@ -130,15 +130,17 @@ export function Subscription({
                 ))}
               </ul>
             </div>
-            <div className="btn mt-14">
-              <Button
-                onClick={handleCheckout}
-                disabled={mutation.isPending}
-                variant="rounded"
-              >
-                Choose This Plan
-              </Button>
-            </div>
+            {!display && (
+              <div className="btn mt-14">
+                <Button
+                  onClick={handleCheckout}
+                  disabled={mutation.isPending}
+                  variant="rounded"
+                >
+                  Choose This Plan
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -178,7 +180,7 @@ export function Subscription({
             ))}
           </div>
         </div>
-        {!isCurrent && (
+        {!isCurrent && !display && (
           <Button
             className="mt-4"
             variant="rounded"

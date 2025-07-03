@@ -1,12 +1,11 @@
 "use client";
 
-import { LogoutModal } from "@/features/auth/components/logout-modal";
+import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { CircleUser, LogOut, Settings } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 const sidebarItems = [
   {
@@ -24,45 +23,37 @@ const sidebarItems = [
 export function ProfileSidebar() {
   const pathname = usePathname();
 
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { onOpen } = useLogoutModal();
 
   return (
-    <>
-      {showLogoutModal && (
-        <LogoutModal onClose={() => setShowLogoutModal(false)} />
-      )}
-      <div className="itm grad_colr rounded-xl bg-white">
-        <ul className="p-4">
-          {sidebarItems.map(({ href, icon, title }) => (
-            <li
-              key={href}
-              className={cn(
-                "mb-3.5 flex gap-2 border-b border-[#D9D9D9]",
-                pathname.startsWith(href) && "act_lst text-[#53A2EB]"
-              )}
-            >
-              <Link
-                className="flex w-full cursor-pointer items-center gap-2 p-4"
-                href={href}
-              >
-                <span>{icon}</span>
-                <h3>{title}</h3>
-              </Link>
-            </li>
-          ))}
+    <div className="itm grad_colr rounded-xl bg-white">
+      <ul className="p-4">
+        {sidebarItems.map(({ href, icon, title }) => (
           <li
-            onClick={() => setShowLogoutModal(true)}
-            className="flex gap-2 rounded-xl"
+            key={href}
+            className={cn(
+              "mb-3.5 flex gap-2 border-b border-[#D9D9D9]",
+              pathname.startsWith(href) && "act_lst text-[#53A2EB]"
+            )}
           >
-            <div className="flex w-full cursor-pointer gap-2 p-4">
-              <span>
-                <LogOut />
-              </span>
-              <h3>Logout</h3>
-            </div>
+            <Link
+              className="flex w-full cursor-pointer items-center gap-2 p-4"
+              href={href}
+            >
+              <span>{icon}</span>
+              <h3>{title}</h3>
+            </Link>
           </li>
-        </ul>
-      </div>
-    </>
+        ))}
+        <li onClick={onOpen} className="flex gap-2 rounded-xl">
+          <div className="flex w-full cursor-pointer gap-2 p-4">
+            <span>
+              <LogOut />
+            </span>
+            <h3>Logout</h3>
+          </div>
+        </li>
+      </ul>
+    </div>
   );
 }

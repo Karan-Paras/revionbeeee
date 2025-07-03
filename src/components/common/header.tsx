@@ -8,12 +8,12 @@ import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
 
-import { useLogout } from "@/features/auth/hooks/use-logout";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { isUserProfileComplete } from "@/features/user/utils";
 
 import { Logo } from "@/lib/assets";
 
+import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";
 
 interface HeaderProps {
@@ -23,9 +23,9 @@ interface HeaderProps {
 export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
 
-  const logout = useLogout();
-
   const { data, isPending } = useGetProfile();
+
+  const { onOpen } = useLogoutModal();
 
   const navLinks =
     variant === "dashboard"
@@ -64,7 +64,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
               {isProfileComplete ? "Go to Dashboard" : "Complete Profile"}
             </Link>
             <button
-              onClick={() => logout()}
+              onClick={onOpen}
               className="cursor-pointer rounded-xl border-2 border-[#53A2EB] px-8 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
             >
               Logout

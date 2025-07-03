@@ -1,5 +1,6 @@
 "use client";
 
+import { ModalProvider } from "@/components/providers/modal-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 
@@ -10,7 +11,10 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <SessionProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <ModalProvider />
+        {children}
+      </QueryProvider>
     </SessionProvider>
   );
 }
