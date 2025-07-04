@@ -23,13 +23,15 @@ export default function AccountsLayout({ children }: AccountsLayoutProps) {
         ]}
       />
 
-      <section className="bg-[#F6F6F6] py-20">
+      <section className="bg-[#F6F6F6] 2xl:py-20 2xl:px-0 md:px-10 px-5 py-5">
         <div className="container mx-auto">
           <div className="grid grid-cols-7 gap-5">
-            <div className="col-span-2 h-full">
+            <div className="2xl:col-span-2 md:col-span-2 col-span-7 h-full">
               <ProfileSidebar />
             </div>
-            <div className="col-span-5">{children}</div>
+            <div className="2xl:col-span-5 md:col-span-5 col-span-7">
+              {children}
+            </div>
           </div>
         </div>
       </section>

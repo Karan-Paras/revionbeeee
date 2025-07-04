@@ -13,7 +13,7 @@ export default function Dashboard() {
           },
         ]}
       />
-      <section className="bg-[#F6F6F6] py-20">
+      <section className="bg-[#F6F6F6] px-10 py-16 md:px-10">
         <div className="container mx-auto">
           <DashboardCard />
         </div>

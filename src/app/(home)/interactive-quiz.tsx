@@ -25,7 +25,7 @@ export function InteractiveQuiz() {
                 </div>
                 <div className="rounded-xl border border-[#DFDFDF] px-7 lg:p-3 2xl:p-4">
                   <div className="grid grid-cols-2">
-                    <div className="col-span-2 text-center md:text-left xl:col-span-1">
+                    <div className="2xl:col-span-1 lg:col-span-2 col-span-2 justify-center text-center md:text-left flex items-center">
                       {AVATAR_STACK.map((img, index) => (
                         <div
                           key={index}
@@ -34,15 +34,19 @@ export function InteractiveQuiz() {
                           <Image src={img} alt={`avatar-${index}`} />
                         </div>
                       ))}
-                      <div className="mx-auto size-14 overflow-hidden rounded-full border-2 border-white bg-blue-500">
+                      <div className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-white bg-[#53A2EB]">
                         <div className="bg-muted flex h-full w-full items-center justify-center rounded-full font-bold text-white">
                           65+
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-2 text-center md:text-left xl:col-span-1">
-                      <h3 className="text-xl font-bold">Top-Students</h3>
-                      <p>All Over the words</p>
+                    <div className="2xl:col-span-1 lg:col-span-2 col-span-2 md:text-left ">
+                      <h3 className="text-xl font-bold 2xl:text-start xl:text-center text-center">
+                        Top-Students
+                      </h3>
+                      <p className="2xl:text-start xl:text-center text-center">
+                        All Over the words
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -88,12 +92,13 @@ export function InteractiveQuiz() {
                     <LibraryBig />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-4 xl:text-5xl">
+                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-2 xl:text-5xl mb-4">
                       70+
                     </h4>
+                    <h6 className="font-semibold text-xl">Subjects Covered</h6>
                     <p>
-                      Metus dictum at tempor commodo ullamcorper a lacus
-                      vestibulum.
+                      Our platform offers quizzes in more than 70 subjects to
+                      support comprehensive learning at all levels.
                     </p>
                   </div>
                 </div>
@@ -104,12 +109,15 @@ export function InteractiveQuiz() {
                     <MessageStar />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-4 xl:text-5xl">
+                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-2 xl:text-5xl mb-4">
                       9/10
                     </h4>
+                    <h6 className="font-semibold text-xl">
+                      Student Satisfaction
+                    </h6>
                     <p>
-                      Metus dictum at tempor commodo ullamcorper a lacus
-                      vestibulum.
+                      Students consistently rate our quizzes highly for being
+                      fun, helpful, and easy to follow.
                     </p>
                   </div>
                 </div>
@@ -120,12 +128,15 @@ export function InteractiveQuiz() {
                     <LaptopUser />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-4 xl:text-5xl">
+                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-2 xl:text-5xl mb-4">
                       95%
                     </h4>
+                    <h6 className="font-semibold text-xl">
+                      Improved Understanding
+                    </h6>
                     <p>
-                      Metus dictum at tempor commodo ullamcorper a lacus
-                      vestibulum.
+                      The majority of learners report better comprehension after
+                      using our interactive quizzes.
                     </p>
                   </div>
                 </div>
@@ -136,12 +147,13 @@ export function InteractiveQuiz() {
                     <Certificate />
                   </div>
                   <div className="desc">
-                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-4 xl:text-5xl">
+                    <h4 className="font-bold lg:mb-2 lg:text-4xl xl:mb-2 xl:text-5xl mb-4">
                       40k
                     </h4>
+                    <h6 className="font-semibold text-xl">Learners</h6>
                     <p>
-                      Metus dictum at tempor commodo ullamcorper a lacus
-                      vestibulum.
+                      Over 40,000 students have joined and benefited from our
+                      growing learning community.
                     </p>
                   </div>
                 </div>

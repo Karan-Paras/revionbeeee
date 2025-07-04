@@ -24,7 +24,7 @@ export default function Progress() {
           },
         ]}
       />
-      <section className="bg-[#F6F6F6] px-10 py-16 md:px-0">
+      <section className="bg-[#F6F6F6] px-10 py-16 md:px-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-12 gap-5 md:gap-10">
             <SelectLevel

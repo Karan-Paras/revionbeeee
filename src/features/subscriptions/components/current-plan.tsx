@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
-import { FREE_PLAN } from "@/features/subscriptions/types";
+import { FREE_PLAN, SubscriptionType } from "@/features/subscriptions/types";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { BadgeCheck } from "@/lib/icons";
 import { addDays, format, isFuture } from "date-fns";
@@ -11,7 +11,7 @@ export function CurrentPlan() {
   const { onOpen } = useSubscriptionModal();
   const CURRENT_PLAN = FREE_PLAN;
 
-  const { title, description, price, period, features } = CURRENT_PLAN;
+  const { title, description, price, period, features, type } = CURRENT_PLAN;
 
   const { data: profile, isPending } = useGetProfile();
 
@@ -50,7 +50,14 @@ export function CurrentPlan() {
       <div className="mx-auto w-10/12 max-w-lg rounded-2xl border border-[#D5D5D5]">
         <div className="grid grid-cols-5 items-center">
           <div className="col-span-3 px-6 py-8">
-            <h3 className="mb-2 text-2xl font-bold">{title}</h3>
+            <h3 className="mb-2 text-2xl font-bold">
+              {title}&nbsp;
+              {type === SubscriptionType.FREE && (
+                <span className="font-normal text-[#9D9D9D] text-sm">
+                  (Trial - 3 Days Only)
+                </span>
+              )}
+            </h3>
             <p>{description}</p>
           </div>
           {getExpiryDate()}

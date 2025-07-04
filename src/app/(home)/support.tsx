@@ -34,15 +34,7 @@ export function Support() {
                 <span>
                   <MapPin color="#FBBE1B" />
                 </span>
-                <address className="font-medium">
-                  <Link
-                    href="https://goo.gl/maps/3b1Z5c7d8x2b7d8c6"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {ADDRESS}
-                  </Link>
-                </address>
+                <p className="font-medium">{ADDRESS}</p>
               </div>
               <div className="item mb-5 flex items-center gap-3">
                 <span>

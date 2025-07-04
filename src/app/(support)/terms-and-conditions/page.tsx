@@ -20,8 +20,6 @@ export default function TermsAndConditions() {
       />
       <section className="px-10 py-20 xl:px-20 2xl:px-0">
         <div className="container mx-auto space-y-8">
-          <p className="text-sm text-gray-500">Effective Date: July 1, 2025</p>
-
           <div>
             <h3 className="mb-2 text-2xl font-bold">1. Acceptance of Terms</h3>
             <p>

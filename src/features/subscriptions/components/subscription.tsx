@@ -106,12 +106,23 @@ export function Subscription({
   if (variant === "detailed") {
     return (
       <div className="col-span-3 lg:col-span-1 xl:col-span-1 2xl:col-span-1">
-        <div className="crd relative rounded-3xl border border-[#D5D5D5] bg-white shadow-lg">
+        <div className="crd relative rounded-3xl border border-[#D5D5D5] bg-white shadow-lg xl:min-h-auto lg:min-h-[490px]">
+          {type === SubscriptionType.YEARLY && (
+            <div className="absolute -top-6 right-3 rounded-2xl border-4 border-white bg-[#ffefc6] px-4 py-3 text-center text-sm font-semibold text-[#765708] opacity-100">
+              {" "}
+              Best Value
+            </div>
+          )}
           <div className="upr border-b border-[#D5D5D5] p-6">
             <h3 className="pb-3.5 text-2xl font-semibold text-black">
-              {title}
+              {title}&nbsp;
+              {type === SubscriptionType.FREE && (
+                <span className="font-normal text-[#9D9D9D] text-sm">
+                  (Trial - 3 Days Only)
+                </span>
+              )}
             </h3>
-            <p>{description}</p>
+            <p className="2xl:text-base xl:text-sm  text-sm">{description}</p>
           </div>
           <div className="lwr p-6">
             <div className="flex items-center gap-2.5">
@@ -125,7 +136,9 @@ export function Subscription({
                     <span>
                       <BadgeCheck color="#FFCC00" />
                     </span>
-                    <p className="text-[#505050]">{feature}</p>
+                    <p className="text-[#505050] 2xl:text-base xl:text-sm text-sm">
+                      {feature}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -152,7 +165,7 @@ export function Subscription({
       <div className="col-span-1">
         <div
           className={cn(
-            "crd rounded-xl border border-[#DADADA] px-6 py-7",
+            "crd rounded-xl border border-[#DADADA] px-6 py-7 lg:min-h-[490px]",
             isCurrent && "relative"
           )}
         >
@@ -162,9 +175,18 @@ export function Subscription({
             </div>
           )}
           <div className={cn(isCurrent && "opacity-40")}>
-            <div className="mb-4 border-b border-[#DADADA] pb-4">
-              <h3 className="mb-2 text-2xl font-bold">{title}</h3>
-              <p className="text-sm font-light">{description}</p>
+            <div className="mb-4 border-b border-[#DADADA] pb-4 lg:min-h-[100px]">
+              <h3 className="mb-2 text-2xl font-bold">
+                {title}&nbsp;
+                {type === SubscriptionType.FREE && (
+                  <span className="font-normal text-[#9D9D9D] text-sm">
+                    (Trial - 3 Days Only)
+                  </span>
+                )}
+              </h3>
+              <p className="text-sm font-light 2xl:text-base xl:text-sm ">
+                {description}
+              </p>
             </div>
             <div className="my-6 flex items-center gap-2">
               <h2 className="text-3xl font-bold text-[#53A2EB]">{price}</h2>
@@ -175,7 +197,9 @@ export function Subscription({
                 <span>
                   <BadgeCheck width={23} height={23} color="#FFCC00" />
                 </span>
-                <p className="text-[#505050]">{feature}</p>
+                <p className="text-[#505050] 2xl:text-base xl:text-sm text-sm">
+                  {feature}
+                </p>
               </div>
             ))}
           </div>
