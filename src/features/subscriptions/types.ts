@@ -13,51 +13,37 @@ export interface Plan {
   features: string[];
 }
 
-export const FREE_PLAN_FEATURES = [
-  "Unlock 10 questions",
-  "Real time suggest answers",
-  "Providing helping tips",
-  "Cover 10 topics in a day",
-];
-
-export const MONTHLY_PLAN_FEATURES = [
-  "Unlock 10 questions",
-  "Real time suggest answers",
-  "Providing helping tips",
-  "Cover 10 topics in a day",
-];
-
-export const YEARLY_PLAN_FEATURES = [
-  "Unlock 10 questions",
-  "Real time suggest answers",
-  "Providing helping tips",
-  "Cover 10 topics in a day",
+export const FEATURES = [
+  "Access to all quizzes with progress tracking",
+  "Access to full question bank",
+  "Video explanations of key topics",
+  "Video solutions with helpful hints",
 ];
 
 export const FREE_PLAN: Plan = {
-  title: "Free Plan",
+  title: "Free Plan (Trial - 3 Days Only)",
   type: SubscriptionType.FREE,
-  description: "Best plans for the students",
+  description: "Try the full platform with no limitations for 3 days!",
   price: "Free",
-  features: FREE_PLAN_FEATURES,
+  features: FEATURES,
 };
 
 export const MONTHLY_PLAN: Plan = {
   title: "Monthly Plan",
   type: SubscriptionType.MONTHLY,
-  description: "Best plans for the students",
+  description: "Ideal for focused, short-term study",
   period: "Per month",
   price: "19 USD",
-  features: MONTHLY_PLAN_FEATURES,
+  features: FEATURES,
 };
 
 export const YEARLY_PLAN: Plan = {
   title: "Yearly Plan",
   type: SubscriptionType.YEARLY,
-  description: "Best plans for the students",
+  description: "Best value for long-term success",
   period: "Per year",
   price: "99 USD",
-  features: YEARLY_PLAN_FEATURES,
+  features: FEATURES,
 };
 
 export type SubscriptionVariants = "compact" | "detailed";

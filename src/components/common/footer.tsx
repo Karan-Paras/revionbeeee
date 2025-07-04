@@ -9,6 +9,8 @@ interface FooterProps {
 }
 
 export function Footer({ variant = "compact" }: FooterProps) {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="foot_bg bg-[#126DC2] bg-cover bg-no-repeat px-10 py-10 bg-blend-multiply xl:px-0">
       <div className="container mx-auto">
@@ -97,7 +99,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
             <div className="col-span-4 md:col-span-4">
               <div className="border-t border-[#5D98CF]">
                 <p className="mt-8 text-center text-sm font-light text-white md:text-lg">
-                  © 2025 Revision Bee All rights reserved
+                  © {currentYear} Revision Bee All rights reserved
                 </p>
               </div>
             </div>
@@ -105,7 +107,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
         ) : (
           <div>
             <p className="text-center text-sm font-light text-white md:text-lg">
-              © 2025 Revision Bee All rights reserved
+              © {currentYear} Revision Bee All rights reserved
             </p>
           </div>
         )}

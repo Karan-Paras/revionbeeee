@@ -1,6 +1,6 @@
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { addDays, isAfter } from "date-fns";
+import { addDays, isFuture } from "date-fns";
 import { useCallback } from "react";
 
 export const usePaywall = () => {
@@ -16,9 +16,8 @@ export const usePaywall = () => {
     if (createdAt) {
       const createdDate = new Date(createdAt);
       const expiryDate = addDays(createdDate, 3);
-      const now = new Date();
 
-      if (!isAfter(now, expiryDate)) {
+      if (isFuture(expiryDate)) {
         shouldBlock = false;
       }
     }
