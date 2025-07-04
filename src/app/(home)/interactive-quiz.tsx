@@ -1,7 +1,9 @@
-import { Lft, Sub, SubTwo } from "@/lib/assets";
+import { HeroImg, Lft, LogBg, ProfileJordan, Sub, SubTwo } from "@/lib/assets";
 import { Certificate, LaptopUser, LibraryBig, MessageStar } from "@/lib/icons";
 import { paths } from "@/routes";
 import Image from "next/image";
+
+const AVATAR_STACK = [ProfileJordan, LogBg, Lft, HeroImg];
 
 export function InteractiveQuiz() {
   return (
@@ -24,21 +26,22 @@ export function InteractiveQuiz() {
                 <div className="rounded-xl border border-[#DFDFDF] px-7 lg:p-3 2xl:p-4">
                   <div className="grid grid-cols-2">
                     <div className="col-span-2 text-center md:text-left xl:col-span-1">
-                      <div className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-[#fff]">
-                        <Image src={Lft} alt="" />
-                      </div>
-                      <div className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-[#fff]">
-                        <Image src={Lft} alt="" />
-                      </div>
-                      <div className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-[#fff]">
-                        <Image src={Lft} alt="" />
-                      </div>
-                      <div className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-[#fff]">
-                        <Image src={Lft} alt="" />
+                      {AVATAR_STACK.map((img, index) => (
+                        <div
+                          key={index}
+                          className="itm -ms-3 inline-flex size-12 overflow-hidden rounded-full border-4 border-[#fff]"
+                        >
+                          <Image src={img} alt={`avatar-${index}`} />
+                        </div>
+                      ))}
+                      <div className="mx-auto size-14 overflow-hidden rounded-full border-2 border-white bg-blue-500">
+                        <div className="bg-muted flex h-full w-full items-center justify-center rounded-full font-bold text-white">
+                          65+
+                        </div>
                       </div>
                     </div>
                     <div className="col-span-2 text-center md:text-left xl:col-span-1">
-                      <h3 className="text-xl font-bold">Top -Students</h3>
+                      <h3 className="text-xl font-bold">Top-Students</h3>
                       <p>All Over the words</p>
                     </div>
                   </div>

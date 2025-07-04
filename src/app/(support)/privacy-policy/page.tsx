@@ -1,4 +1,5 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
+import { EMAIL } from "@/features/support/types";
 import { paths } from "@/routes";
 import Link from "next/link";
 
@@ -126,12 +127,12 @@ export default function PrivacyPolicy() {
             If you have any questions about this policy or your data, please
             contact:&nbsp;
             <Link
-              href="mailto:support@revisionbee.com"
+              href={`mailto:${EMAIL}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
             >
-              support@revisionbee.com
+              {EMAIL}
             </Link>
           </p>
         </div>

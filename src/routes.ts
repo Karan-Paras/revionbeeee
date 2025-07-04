@@ -99,6 +99,7 @@ export const publicRoutes: string[] = [
   paths.privacyPolicy(),
   paths.termsAndConditions(),
   paths.faq(),
+  paths.aboutUs(),
 ];
 
 /**
