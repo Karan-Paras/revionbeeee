@@ -77,7 +77,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 <h3 className="mb-5 text-2xl font-bold text-white">Support</h3>
                 <ul>
                   <li className="mb-5 text-lg font-normal text-white">
-                    <Link href={paths.home.aboutUs()}>About Us</Link>
+                    <Link href={paths.aboutUs()}>About Us</Link>
                   </li>
                   <li className="mb-5 text-lg font-normal text-white">
                     <Link href={paths.privacyPolicy()}>Privacy Policy</Link>

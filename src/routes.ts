@@ -76,6 +76,7 @@ export const paths = {
     }),
     editProfile: () => "/my-profile/edit",
   }),
+  aboutUs: () => "/about-us",
   privacyPolicy: () => "/privacy-policy",
   termsAndConditions: () => "/terms-and-conditions",
   faq: () => "/faq",
