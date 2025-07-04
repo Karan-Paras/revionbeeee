@@ -11,10 +11,10 @@ type AccordionItem = {
 };
 
 interface AccordionProps {
-  faqs: AccordionItem[];
+  FAQs: AccordionItem[];
 }
 
-export function Accordion({ faqs }: AccordionProps) {
+export function Accordion({ FAQs }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
@@ -22,7 +22,7 @@ export function Accordion({ faqs }: AccordionProps) {
   };
   return (
     <div className="my-4 w-full">
-      {faqs.map((item, index) => (
+      {FAQs.map((item, index) => (
         <div key={item.id} className="mb-5 rounded-xl bg-white">
           <button
             className="flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-5 text-left text-xl font-medium text-[#000000]"
