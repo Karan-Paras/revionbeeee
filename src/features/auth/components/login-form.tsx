@@ -11,12 +11,10 @@ import { paths } from "@/routes";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 
 export function LoginForm() {
   const router = useRouter();
-  const [rememberMe, setRememberMe] = useState(false);
-  const [email, setEmail] = useState("");
 
   const [formState, action, isPending] = useActionState(login, {
     errors: {},
@@ -40,25 +38,9 @@ export function LoginForm() {
     }
   }, [formState, router]);
 
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("rememberedEmail");
-    if (savedEmail) {
-      setEmail(savedEmail);
-      setRememberMe(true);
-    }
-  }, []);
-
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email")?.toString() ?? "";
-
-    if (rememberMe) {
-      localStorage.setItem("rememberedEmail", email);
-    } else {
-      localStorage.removeItem("rememberedEmail");
-    }
-
     startTransition(() => {
       action(formData);
     });
@@ -78,8 +60,6 @@ export function LoginForm() {
             disabled={isPending}
             errors={formState.errors.email}
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="itm relative mb-5">
@@ -95,15 +75,12 @@ export function LoginForm() {
             autoComplete="current-password"
           />
         </div>
-        <div className="mb-8 flex items-center justify-between">
+        <div className="flex justify-between items-center mb-8">
           <div className="chk flex gap-1.5">
-            <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
+            <Checkbox />
             <label
               htmlFor="vehicle1"
-              className="text-sm font-light text-[#0B0B0B]"
+              className="text-[#0B0B0B] font-light text-sm"
             >
               Remember me
             </label>
@@ -111,7 +88,7 @@ export function LoginForm() {
           <div className="lnk">
             <Link
               href={paths.forgotPassword()}
-              className="font-medium text-[#53A2EB]"
+              className="text-[#53A2EB] font-medium"
             >
               Forgot password?
             </Link>
@@ -126,7 +103,7 @@ export function LoginForm() {
             Not registered yet?&nbsp;
             <Link
               href={paths.signup()}
-              className="font-semibold text-[#53A2EB] underline underline-offset-5"
+              className="text-[#53A2EB] underline underline-offset-5 font-semibold"
             >
               Sign Up
             </Link>
