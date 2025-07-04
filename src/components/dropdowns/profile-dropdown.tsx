@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface ProfileDropdownProps {
   user: User;
+  onClick?: () => void;
 }
 
 const LINKS = [
@@ -33,7 +34,7 @@ const LINKS = [
   },
 ];
 
-export function ProfileDropdown({ user }: ProfileDropdownProps) {
+export function ProfileDropdown({ user, onClick }: ProfileDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -129,7 +130,10 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                 key={href}
                 href={href}
                 className="my-2 block border-b border-[#c9c9c9] px-4 py-2 pb-2 text-sm text-gray-700"
-                onClick={closeDropdown}
+                onClick={() => {
+                  closeDropdown();
+                  onClick?.();
+                }}
               >
                 {name}
               </Link>
