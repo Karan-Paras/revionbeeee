@@ -36,10 +36,18 @@ export function MobileSidebar({
 
   const { onOpen } = useLogoutModal();
 
+  const openSidebar = () => {
+    setIsOpen(true);
+  };
+
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={openSidebar}
         className="absolute top-0 right-5 bottom-0 text-[#53A2EB] lg:hidden"
       >
         <Menu className="stroke-[#505050]" size={28} />
@@ -61,7 +69,7 @@ export function MobileSidebar({
                     <Image src={Logo} alt="logo" fill />
                   </Link>
                 </div>
-                <button onClick={() => setIsOpen(false)}>
+                <button onClick={closeSidebar}>
                   <X size={24} />
                 </button>
               </div>
@@ -70,7 +78,7 @@ export function MobileSidebar({
                   <li key={link.name}>
                     <Link
                       href={link.path}
-                      onClick={() => setIsOpen(false)}
+                      onClick={closeSidebar}
                       className="block text-[#505050] hover:text-[#53A2EB]"
                     >
                       {link.name}
@@ -114,7 +122,9 @@ export function MobileSidebar({
                     </Link>
                   )
                 ) : (
-                  data && <ProfileDropdown user={data.data} />
+                  data && (
+                    <ProfileDropdown user={data.data} onClick={closeSidebar} />
+                  )
                 )}
               </div>
             </motion.div>
@@ -124,7 +134,7 @@ export function MobileSidebar({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
+              onClick={closeSidebar}
             />
           </>
         )}
