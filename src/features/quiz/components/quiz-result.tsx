@@ -63,10 +63,10 @@ export function QuizResult() {
       .map((item) => ({ ...item.data[0] }));
 
     return (
-      <section className="py-5">
+      <section className="px-5 py-5 xl:px-0">
         <div className="container mx-auto">
           <div className="grid grid-cols-6">
-            <div className="col-span-1">
+            <div className="order-2 col-span-6 mb-5 md:order-1 md:col-span-1 md:mb-0">
               <div className="flex items-center justify-between">
                 <div className="hed">
                   <h3 className="text-2xl font-semibold">Questions</h3>
@@ -82,18 +82,18 @@ export function QuizResult() {
                 <div className="load h-2 w-full rounded-2xl bg-[#EDEDED]" />
               </div>
             </div>
-            <div className="bg_shp relative col-span-4">
+            <div className="bg_shp relative col-span-4 hidden md:order-2 md:block">
               <div className="lgo relative mx-auto flex size-[160px] items-center justify-center rounded-full border border-[#f7f7f7] bg-white shadow-xl">
                 <RevisionBee />
               </div>
             </div>
-            <div className="col-span-1" />
-            <div className="col-span-6 -mt-[50px] grid rounded-xl bg-[#F6F6F6] px-10 py-4 pt-40">
+            <div className="order-1 col-span-6 md:order-3 md:col-span-1" />
+            <div className="order-4 col-span-6 grid justify-items-center rounded-xl bg-[#F6F6F6] p-4 md:-mt-[50px] md:min-h-[75vh]">
               {questions.map(({ question, id, answer, questionVideo }, idx) => (
-                <div key={id} className="grid grid-cols-12">
+                <div key={id} className="grid grid-cols-12 2xl:w-auto w-8/12">
                   <div
                     className={cn(
-                      "itm relative col-span-7 col-start-4 mb-5 cursor-pointer rounded-xl bg-white p-5 shadow-md",
+                      "itm relative 2xl:col-span-7 2xl:col-start-4 col-span-12 mb-5 cursor-pointer rounded-xl bg-white p-5 shadow-md",
                       result[idx].selectedOption === result[idx].correctOption
                         ? "bg-[#FBBE1B]"
                         : "bg-[#ff77774a] text-[#cb3c3c]"
@@ -200,7 +200,7 @@ export function QuizResult() {
               ))}
             </div>
 
-            <div className="col-span-6">
+            <div className="order-5 col-span-6">
               <div className="btn flex justify-center">
                 <Link
                   href={paths.quiz()}

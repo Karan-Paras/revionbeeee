@@ -22,9 +22,6 @@ export default function PrivacyPolicy() {
       <section className="py-10 px-10 xl:px-20 2xl:px-0">
         <div className="container mx-auto">
           <div className="rw mb-8 space-y-8">
-            <p className="text-sm text-gray-500">
-              Effective Date: July 1, 2025
-            </p>
             <p>
               At RevisionBee, your privacy is important to us. This policy
               explains what data we collect, how we use it, and what your rights
@@ -121,7 +118,7 @@ export default function PrivacyPolicy() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="container mx-auto ">
           <h3 className="mb-2 text-2xl font-bold">📧 Contact Us</h3>
           <p>
             If you have any questions about this policy or your data, please

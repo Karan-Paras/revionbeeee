@@ -22,11 +22,11 @@ export function SettingsTab() {
 
   return (
     <div className="mx-auto mt-10 w-full">
-      <div className="flex border-b border-gray-300">
+      <div className="flex border-b border-gray-300 md:flex-nowrap flex-wrap md:gap-0 gap-4 md:pb-0 pb-4">
         <button
           onClick={() => setActiveTab("changePassword")}
           className={cn(
-            "px-4 py-2 font-medium focus:outline-none",
+            "md:px-4 px-2 py-2 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
             activeTab === "changePassword"
               ? "border-b-2 border-[#53A2EB] text-[#53A2EB]"
               : "text-gray-500"
@@ -37,7 +37,7 @@ export function SettingsTab() {
         <button
           onClick={() => setActiveTab("aboutUs")}
           className={cn(
-            "px-4 py-2 font-medium focus:outline-none",
+            "md:px-4 px-2 py-2 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
             activeTab === "aboutUs"
               ? "border-b-2 border-[#53A2EB] text-[#53A2EB]"
               : "text-gray-500"
@@ -48,7 +48,7 @@ export function SettingsTab() {
         <button
           onClick={() => setActiveTab("contactUs")}
           className={cn(
-            "px-4 py-2 font-medium focus:outline-none",
+            "md:px-4 px-2 py-2 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
             activeTab === "contactUs"
               ? "border-b-2 border-[#53A2EB] text-[#53A2EB]"
               : "text-gray-500"
@@ -59,7 +59,7 @@ export function SettingsTab() {
         <button
           onClick={() => setActiveTab("termsAndPolicy")}
           className={cn(
-            "px-4 py-2 font-medium focus:outline-none",
+            "md:px-4 px-2 py-2 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
             activeTab === "termsAndPolicy"
               ? "border-b-2 border-[#53A2EB] text-[#53A2EB]"
               : "text-gray-500"

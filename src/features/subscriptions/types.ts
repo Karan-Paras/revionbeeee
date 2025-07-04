@@ -21,7 +21,7 @@ export const FEATURES = [
 ];
 
 export const FREE_PLAN: Plan = {
-  title: "Free Plan (Trial - 3 Days Only)",
+  title: "Free Plan",
   type: SubscriptionType.FREE,
   description: "Try the full platform with no limitations for 3 days!",
   price: "Free",

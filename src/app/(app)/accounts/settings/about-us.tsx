@@ -3,11 +3,11 @@ import { RevisionBee } from "@/lib/icons";
 export function AboutUs() {
   return (
     <>
-      <div className="img mx-auto mt-10 flex size-40 items-center justify-center rounded-full bg-[#FFFAEB]">
+      <div className="flex size-40 items-center justify-center rounded-full bg-[#FFFAEB]">
         <RevisionBee width={100} />
       </div>
       <div className="desc">
-        <h4 className="text-xl font-bold">About Us</h4>
+        <h4 className="text-xl font-bold text-start">About Us</h4>
         <p>
           Welcome to Revision Bee, your go-to destination for fun and engaging
           math quizzes designed specifically for students! Our mission is to

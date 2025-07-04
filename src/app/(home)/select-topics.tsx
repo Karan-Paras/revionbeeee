@@ -21,7 +21,7 @@ export function SelectTopics() {
   return (
     <section
       id={paths.home.topics().split("#")[1]}
-      className="mths_bg relative px-10 py-20 xl:px-20 2xl:px-0"
+      className="mths_bg relative px-10 2xl:py-20 py-10 xl:px-20 2xl:px-0"
     >
       <div className="relative container mx-auto">
         <div className="mb:mb-8 mb-5 flex flex-wrap justify-between gap-7 md:flex-nowrap lg:gap-4">

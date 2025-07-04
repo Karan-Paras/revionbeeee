@@ -22,7 +22,7 @@ export default function Quiz() {
       />
       <section
         id="topics"
-        className="mths_bg relative px-10 py-20 md:px-0 lg:px-20 2xl:px-0"
+        className="mths_bg relative px-10 2xl:py-20 py-10 md:px-0 lg:px-20 2xl:px-0"
       >
         <div className="relative container mx-auto">
           <SelectTopics href={paths.quizDetails} />
