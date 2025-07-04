@@ -4,7 +4,7 @@ import { Faq, Faq2 } from "@/lib/assets";
 import { paths } from "@/routes";
 import Image from "next/image";
 
-const faqs = [
+const FAQs = [
   {
     id: 1,
     title: "What is RevisionBee?",
@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     id: 2,
-    title: "What’s included in the free trial?",
+    title: "What's included in the free trial?",
     content: (
       <>
         <p>The 3-day free trial gives you full access to everything:</p>
@@ -30,7 +30,8 @@ const faqs = [
           <li>✅ Video solutions with hints</li>
         </ul>
         <p>
-          After 3 days, you’ll need to subscribe to continue accessing content.
+          After 3 days, you&apos;ll need to subscribe to continue accessing
+          content.
         </p>
       </>
     ),
@@ -89,7 +90,7 @@ const faqs = [
   },
   {
     id: 7,
-    title: "Do you offer support if I’m stuck on a question?",
+    title: "Do you offer support if I'm stuck on a question?",
     content: (
       <p>
         Yes! Many questions come with hints and step-by-step video solutions.
@@ -106,13 +107,13 @@ const faqs = [
         <p>We offer:</p>
         <ul>
           <li>
-            🐝 <strong>Free Trial</strong> – 3 days full access
+            🐝 <strong>Free Trial</strong> - 3 days full access
           </li>
           <li>
-            🐝 <strong>Monthly Plan</strong> – $19/month
+            🐝 <strong>Monthly Plan</strong> - $19/month
           </li>
           <li>
-            🐝 <strong>Yearly Plan</strong> – $99/year
+            🐝 <strong>Yearly Plan</strong> - $99/year
           </li>
         </ul>
         <p>All plans include the same features.</p>
@@ -160,7 +161,7 @@ export default function FaqPage() {
       <section className="bg-[#F6F6F6] px-10 py-20 xl:px-20 2xl:px-0">
         <div className="container mx-auto">
           <div className="grid grid-cols-3 gap-7">
-            <div className="2xl:col-span-2 col-span-3">
+            <div className="2xl:col-span-2 xl:col-span-2 lg:col-span-2 col-span-3">
               <div className="itm flex items-center gap-1.5 uppercase">
                 <p className="text-[#53A2EB]">Questions Related To</p>
               </div>
@@ -168,25 +169,20 @@ export default function FaqPage() {
                 <h3 className="text-3xl 2xl:leading-20 leading-normal font-bold">
                   Answer you need to know
                 </h3>
-                <p className="leading-8">
-                  Metus dictum at tempor commodo ullamcorper a lacus vestibulum.
-                  In hendrerit gravida rutrum quisque non tellus. Egestas sed
-                  sed risus pretium quam vulputate.
-                </p>
               </div>
-              <Accordion faqs={faqs.slice(0, faqs.length / 2)} />
+              <Accordion FAQs={FAQs.slice(0, FAQs.length / 2)} />
             </div>
-            <div className="2xl:col-span-1 col-span-3">
+            <div className="2xl:col-span-1 xl:col-span-1 lg:col-span-1 col-span-3">
               <div className="img overflow-hidden rounded-xl border-4 border-white shadow-xl/5">
                 <Image src={Faq} alt="Faq" />
               </div>
             </div>
-            <div className="2xl:col-span-1 col-span-3">
+            <div className="2xl:col-span-1 xl:col-span-1 lg:col-span-1 col-span-3">
               <div className="img overflow-hidden rounded-xl border-4 border-white shadow-xl/5">
                 <Image src={Faq2} alt="Faq2" />
               </div>
             </div>
-            <div className="2xl:col-span-2 col-span-3">
+            <div className="2xl:col-span-2 xl:col-span-2 lg:col-span-2 col-span-3">
               <div className="itm flex items-center gap-1.5 uppercase">
                 <p className="text-[#53A2EB]">Ask questions</p>
               </div>
@@ -194,14 +190,9 @@ export default function FaqPage() {
                 <h3 className="text-3xl 2xl:leading-20 leading-normal font-bold">
                   How Can We Help You?
                 </h3>
-                <p className="leading-8">
-                  Quisque id diam vel quam elementum pulvinar et netus et
-                  malesuada fames ac turpis et malesuada fames ac ante ipsum
-                  primis in faucibus. Vestibu tium.
-                </p>
               </div>
               <Accordion
-                faqs={faqs.slice((faqs.length + 1) / 2, faqs.length)}
+                FAQs={FAQs.slice((FAQs.length + 1) / 2, FAQs.length)}
               />
             </div>
           </div>

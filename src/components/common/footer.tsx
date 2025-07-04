@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Facebook, Instagram, RevisionBee, TikTok, YouTube } from "@/lib/icons";
+import { RevisionBee } from "@/lib/icons";
 
 import { paths } from "@/routes";
 
@@ -24,11 +24,11 @@ export function Footer({ variant = "compact" }: FooterProps) {
                 About Revision Bee
               </h3>
               <p className="leading-normal font-normal text-white">
-                Quisque fermentum arcu dolor, vitae pharetra arcu efficitur in.
-                Nulla sed dui in tortor suscipit pulvinar. In rhoncus, orci
-                blandit tincidunt.
+                Learning is most effective when it&apos;s focused, structured,
+                and supported. At RevisionBee, we turn practice into real
+                progress with tools that work for everyone.
               </p>
-              <div className="mt-3 flex items-center gap-2">
+              {/* <div className="mt-3 flex items-center gap-2">
                 <p className="text-white">Follow Us :-</p>
                 <div className="spc_itms flex gap-2">
                   <div className="items">
@@ -44,7 +44,7 @@ export function Footer({ variant = "compact" }: FooterProps) {
                     <YouTube color="#53A2EB" />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="col-span-4 md:col-span-1">
               <div className="mx-auto w-full md:w-8/12">
