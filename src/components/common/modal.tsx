@@ -84,7 +84,6 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
                 restDelta: 0.001,
               }}
             >
-              {/* Modal Content */}
               {title && (
                 <div className="txt_hed mt-5 flex items-center justify-center border-b border-[#ffffff26] p-4">
                   <h2 className="text-lg font-semibold text-[#232323]">
