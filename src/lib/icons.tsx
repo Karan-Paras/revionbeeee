@@ -435,6 +435,12 @@ export const Minus = ({ width = 42, height = 2, color = "black" }) => (
   </svg>
 );
 
+export const Minus2 = () => (
+  <svg width="15" height="5" viewBox="0 0 24 5" fill="none">
+    <rect y="0.763428" width="24" height="4" fill="#53A2EB" />
+  </svg>
+);
+
 export const MapPin = ({ width = 18, height = 22, color = "black" }) => (
   <svg width={width} height={height} viewBox="0 0 18 25" fill="none">
     <path

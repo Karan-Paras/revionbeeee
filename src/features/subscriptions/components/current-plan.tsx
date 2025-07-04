@@ -4,7 +4,7 @@ import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscr
 import { FREE_PLAN } from "@/features/subscriptions/types";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { BadgeCheck } from "@/lib/icons";
-import { addDays, format, isAfter } from "date-fns";
+import { addDays, format, isFuture } from "date-fns";
 import Skeleton from "react-loading-skeleton";
 
 export function CurrentPlan() {
@@ -23,9 +23,8 @@ export function CurrentPlan() {
     if (profile) {
       const createdAt = new Date(profile.data.created_at);
       const expiryDate = addDays(createdAt, 3);
-      const today = new Date();
 
-      if (isAfter(today, expiryDate)) {
+      if (!isFuture(expiryDate)) {
         return (
           <div className="col-span-2 px-6 py-8">
             <span className="text-lg font-bold text-[#FB4F1B]">Expired</span>

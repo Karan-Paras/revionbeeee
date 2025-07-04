@@ -1,5 +1,6 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { paths } from "@/routes";
+import Link from "next/link";
 
 export default function TermsAndConditions() {
   return (
@@ -18,113 +19,115 @@ export default function TermsAndConditions() {
         ]}
       />
       <section className="px-10 py-20 xl:px-20 2xl:px-0">
-        <div className="container mx-auto">
-          <div className="rw mb-8">
-            <h3 className="mb-2 text-2xl font-bold">AGREEMENT TO TERMS</h3>
-            <p className="mb-5">
-              These Terms and Conditions constitute a legally binding agreement
-              made between you, whether personally or on behalf of an entity
-              (“you”) and [business entity name] (“we,” “us” or “our”),
-              concerning your access to and use of the [website name.com]
-              website as well as any other media form, media channel, mobile
-              website or mobile application related, linked, or otherwise
-              connected thereto (collectively, the “Site”).
-            </p>
-            <p className="mb-5">
-              You agree that by accessing the Site, you have read, understood,
-              and agree to be bound by all of these Terms and Conditions. If you
-              do not agree with all of these Terms and Conditions, then you are
-              expressly prohibited from using the Site and you must discontinue
-              use immediately.
-            </p>
-            <p className="mb-5">
-              Supplemental terms and conditions or documents that may be posted
-              on the Site from time to time are hereby expressly incorporated
-              herein by reference. We reserve the right, in our sole discretion,
-              to make changes or modifications to these Terms and Conditions at
-              any time and for any reason.
-            </p>
-            <p className="mb-5">
-              Supplemental terms and conditions or documents that may be posted
-              on the Site from time to time are hereby expressly incorporated
-              herein by reference. We reserve the right, in our sole discretion,
-              to make changes or modifications to these Terms and Conditions at
-              any time and for any reason.
-            </p>
-            <p className="mb-5">
-              We will alert you about any changes by updating the “Last updated”
-              date of these Terms and Conditions, and you waive any right to
-              receive specific notice of each such change.
-            </p>
-            <p className="mb-5">
-              It is your responsibility to periodically review these Terms and
-              Conditions to stay informed of updates. You will be subject to,
-              and will be deemed to have been made aware of and to have
-              accepted, the changes in any revised Terms and Conditions by your
-              continued use of the Site after the date such revised Terms and
-              Conditions are posted.
-            </p>
-            <p className="mb-5">
-              The information provided on the Site is not intended for
-              distribution to or use by any person or entity in any jurisdiction
-              or country where such distribution or use would be contrary to law
-              or regulation or which would subject us to any registration
-              requirement within such jurisdiction or country.
-            </p>
-            <p className="mb-5">
-              Accordingly, those persons who choose to access the Site from
-              other locations do so on their own initiative and are solely
-              responsible for compliance with local laws, if and to the extent
-              local laws are applicable.
-            </p>
-            <p className="mb-5">
-              These terms and conditions were created by Termly’s Terms and
-              Conditions Generator.
-            </p>
-          </div>
-          <div className="rw mb-8">
-            <h3 className="mb-2 text-2xl font-bold">
-              INTELLECTUAL PROPERTY RIGHTS
-            </h3>
-            <p className="mb-5">
-              Unless otherwise indicated, the Site is our proprietary property
-              and all source code, databases, functionality, software, website
-              designs, audio, video, text, photographs, and graphics on the Site
-              (collectively, the “Content”) and the trademarks, service marks,
-              and logos contained therein (the “Marks”) are owned or controlled
-              by us or licensed to us, and are protected by copyright and
-              trademark laws and various other intellectual property rights and
-              unfair competition laws of the United States, foreign
-              jurisdictions, and international conventions.
-            </p>
-            <p className="mb-5">
-              The Content and the Marks are provided on the Site “AS IS” for
-              your information and personal use only. Except as expressly
-              provided in these Terms and Conditions, no part of the Site and no
-              Content or Marks may be copied, reproduced, aggregated,
-              republished, uploaded, posted, publicly displayed, encoded,
-              translated, transmitted, distributed, sold, licensed, or otherwise
-              exploited for any commercial purpose whatsoever, without our
-              express prior written permission.
-            </p>
-            <p className="mb-5">
-              Provided that you are eligible to use the Site, you are granted a
-              limited license to access and use the Site and to download or
-              print a copy of any portion of the Content to which you have
-              properly gained access solely for your personal, non-commercial
-              use. We reserve all rights not expressly granted to you in and to
-              the Site, the Content and the Marks.
-            </p>
-          </div>
-          <div className="rw mb-8">
-            <h3 className="mb-2 text-2xl font-bold">USER REGISTRATION</h3>
+        <div className="container mx-auto space-y-8">
+          <p className="text-sm text-gray-500">Effective Date: July 1, 2025</p>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">1. Acceptance of Terms</h3>
             <p>
-              You may be required to register with the Site. You agree to keep
-              your password confidential and will be responsible for all use of
-              your account and password. We reserve the right to remove,
-              reclaim, or change a username you select if we determine, in our
-              sole discretion, that such username is inappropriate, obscene, or
-              otherwise objectionable.
+              By accessing or using RevisionBee, you agree to be bound by these
+              Terms and Conditions and our Privacy Policy. If you do not agree
+              to any part of these terms, you must not use the platform.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">2. User Accounts</h3>
+            <p>
+              To access certain features, you must register for an account. You
+              are responsible for safeguarding your login credentials and all
+              activities that occur under your account. Sharing your account
+              details with others is strictly prohibited.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">
+              3. Subscription and Payment
+            </h3>
+            <p>
+              <strong>Free Trial:</strong> RevisionBee offers a 3-day free trial
+              with full access to all features.
+            </p>
+            <p>
+              <strong>Paid Plans:</strong> After the trial ends, continued use
+              requires a paid subscription (monthly or yearly).
+            </p>
+            <p>
+              <strong>Billing:</strong> Subscriptions are billed in advance. All
+              payments are non-refundable.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">4. Use of Content</h3>
+            <p>
+              All content on RevisionBee, including quizzes, question banks,
+              video explanations, and video solutions, is the intellectual
+              property of the platform. The materials are provided for personal,
+              non-commercial use only. Reproduction, distribution, or resale of
+              any content without permission is strictly prohibited.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">5. Cancellation Policy</h3>
+            <p>
+              You may cancel your subscription at any time through your account
+              settings. You will retain access until the end of your current
+              billing period. No refunds will be provided for partial usage
+              periods.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">6. Code of Conduct</h3>
+            <p>
+              Users are expected to behave respectfully on the platform. Any
+              attempt to misuse, hack, share unauthorized content, or violate
+              academic integrity may result in account suspension or permanent
+              termination.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">
+              7. Modifications to the Service
+            </h3>
+            <p>
+              We reserve the right to modify or discontinue any part of the
+              platform, including features, pricing, or content, at any time.
+              Updates will be communicated on the site or via email when
+              necessary.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">
+              8. Limitation of Liability
+            </h3>
+            <p>
+              RevisionBee is not liable for any indirect, incidental, or
+              consequential damages resulting from your use of the platform. All
+              services and materials are provided “as is” without warranties of
+              any kind.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-2 text-2xl font-bold">9. Contact</h3>
+            <p>
+              If you have questions about these terms, please contact us at:
+              <br />
+              📧&nbsp;
+              <Link
+                href="mailto:support@revisionbee.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                support@revisionbee.com
+              </Link>
             </p>
           </div>
         </div>

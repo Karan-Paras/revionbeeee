@@ -25,7 +25,7 @@ export default function FaqPage() {
           <div className="grid grid-cols-3 gap-7">
             <div className="2xl:col-span-2 col-span-3">
               <div className="itm flex items-center gap-1.5 uppercase">
-                <p className="text-[#53A2EB]">Select your Subject</p>
+                <p className="text-[#53A2EB]">Questions Related To</p>
               </div>
               <div className="hed mb-8">
                 <h3 className="text-3xl 2xl:leading-20 leading-normal font-bold">

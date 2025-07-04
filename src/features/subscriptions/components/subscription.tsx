@@ -11,7 +11,7 @@ import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { BadgeCheck } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { addDays, differenceInCalendarDays, isAfter } from "date-fns";
+import { addDays, differenceInCalendarDays, isFuture } from "date-fns";
 import { getSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
@@ -58,9 +58,9 @@ export function Subscription({
       const createdDate = new Date(createdAt);
       // the free plan lasts for 3 days from the creation date
       const expiryDate = addDays(createdDate, 3);
-      const now = new Date();
 
-      if (isAfter(now, expiryDate)) return "Expired";
+      const now = new Date();
+      if (!isFuture(expiryDate)) return "Expired";
 
       const remainingDays = differenceInCalendarDays(expiryDate, now);
       return `${remainingDays} day${remainingDays > 1 ? "s" : ""} left`;
