@@ -21,9 +21,7 @@ export function Support() {
                 We&apos;re Here To <br /> Provide 24X7 Support
               </h3>
               <p className="my-4 leading-8 font-light">
-                Sit amet dictum sit amet justo donec enim. Posuere lorem ipsum
-                dolor sit amet consectetur. Tristique senectus et netus et
-                malesuada fames ac.
+                Our team is available at all times to assist you.
               </p>
             </div>
             <div className="addrs my-5">
