@@ -17,7 +17,7 @@ export function LogoutModal() {
   const onLogout = () => {
     queryClient.clear();
 
-    logout().then(() =>
+    logout().finally(() =>
       signOut({
         redirectTo: paths.login(),
       })
