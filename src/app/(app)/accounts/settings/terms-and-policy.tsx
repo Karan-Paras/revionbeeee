@@ -72,7 +72,7 @@ export function TermsAndPolicy() {
         improving the Site, feel free to reach out:
       </p>
       <p className="mb-3 text-base font-normal text-[#505050]">
-        📧
+        <span className="emoji">📧</span>
         <Link
           href={`mailto:${EMAIL}`}
           target="_blank"

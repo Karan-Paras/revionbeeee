@@ -3,6 +3,9 @@
 body {
   @apply overflow-x-hidden scroll-smooth text-[#0b0b0b];
 }
+.emoji {
+  font-family: "Noto Color Emoji", sans-serif;
+}
 .icn_bg::before {
   content: "";
   @apply absolute top-0 bottom-0 left-4.5 z-[999] h-full w-6 bg-center bg-no-repeat;

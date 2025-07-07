@@ -24,10 +24,18 @@ const FAQs = [
       <>
         <p>The 3-day free trial gives you full access to everything:</p>
         <ul>
-          <li>✅ Quizzes with progress tracking</li>
-          <li>✅ Full question bank</li>
-          <li>✅ Video topic explanations</li>
-          <li>✅ Video solutions with hints</li>
+          <li>
+            <span className="emoji">✅</span> Quizzes with progress tracking
+          </li>
+          <li>
+            <span className="emoji">✅</span> Full question bank
+          </li>
+          <li>
+            <span className="emoji">✅</span> Video topic explanations
+          </li>
+          <li>
+            <span className="emoji">✅</span> Video solutions with hints
+          </li>
         </ul>
         <p>
           After 3 days, you&apos;ll need to subscribe to continue accessing
@@ -107,13 +115,16 @@ const FAQs = [
         <p>We offer:</p>
         <ul>
           <li>
-            🐝 <strong>Free Trial</strong> - 3 days full access
+            <span className="emoji">🐝</span> <strong>Free Trial</strong> - 3
+            days full access
           </li>
           <li>
-            🐝 <strong>Monthly Plan</strong> - $19/month
+            <span className="emoji">🐝</span> <strong>Monthly Plan</strong> -
+            $19/month
           </li>
           <li>
-            🐝 <strong>Yearly Plan</strong> - $99/year
+            <span className="emoji">🐝</span> <strong>Yearly Plan</strong> -
+            $99/year
           </li>
         </ul>
         <p>All plans include the same features.</p>
