@@ -1,12 +1,11 @@
+import { AboutUs } from "@/app/(app)/accounts/settings/about-us";
 import {
   SettingsTab,
   TabDefinition,
 } from "@/app/(app)/accounts/settings/settings-tab";
+import { TermsAndPolicy } from "@/app/(app)/accounts/settings/terms-and-policy";
 import { ChangePasswordForm } from "@/features/auth/components/change-password-form";
-import { AboutUs } from "@/features/support/components/about-us";
 import { ContactUsForm } from "@/features/support/components/contact-us-form";
-import { PrivacyPolicy } from "@/features/support/components/privacy-policy";
-import { TermsAndConditions } from "@/features/support/components/terms-and-conditions";
 import { paths } from "@/routes";
 
 const TABS: TabDefinition[] = [
@@ -16,24 +15,19 @@ const TABS: TabDefinition[] = [
     content: <ChangePasswordForm />,
   },
   {
-    key: "contactUs",
-    label: "Contact Us",
-    content: <ContactUsForm />,
-  },
-  {
     key: "aboutUs",
     label: "About Us",
     content: <AboutUs />,
   },
   {
-    key: "privacyPolicy",
-    label: "Privacy Policy",
-    content: <PrivacyPolicy />,
+    key: "contactUs",
+    label: "Contact Us",
+    content: <ContactUsForm />,
   },
   {
-    key: "termsAndConditions",
-    label: "Term & Conditions",
-    content: <TermsAndConditions />,
+    key: "termsAndPolicy",
+    label: "Terms & Policy",
+    content: <TermsAndPolicy />,
   },
 ];
 

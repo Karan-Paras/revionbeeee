@@ -34,7 +34,12 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <form className="frm" onSubmit={handleFormSubmit} ref={formRef}>
+    <form
+      className="frm"
+      onSubmit={handleFormSubmit}
+      ref={formRef}
+      autoComplete="on"
+    >
       <input
         type="email"
         className="hidden"

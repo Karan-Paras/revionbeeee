@@ -4,12 +4,7 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, type ReactNode } from "react";
 
-type TabKey =
-  | "changePassword"
-  | "aboutUs"
-  | "contactUs"
-  | "termsAndConditions"
-  | "privacyPolicy";
+type TabKey = "changePassword" | "aboutUs" | "contactUs" | "termsAndPolicy";
 
 export interface TabDefinition {
   key: TabKey;
