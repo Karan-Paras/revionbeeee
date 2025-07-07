@@ -88,116 +88,128 @@ export function QuizResult() {
               </div>
             </div>
             <div className="order-1 col-span-6 md:order-3 md:col-span-1" />
-            <div className="order-4 col-span-6 grid justify-items-center rounded-xl bg-[#F6F6F6] p-4 md:-mt-[50px] md:min-h-[75vh]">
-              {questions.map(({ question, id, answer, questionVideo }, idx) => (
-                <div key={id} className="grid grid-cols-12 2xl:w-auto w-8/12">
-                  <div
-                    className={cn(
-                      "itm relative 2xl:col-span-7 2xl:col-start-4 col-span-12 mb-5 cursor-pointer rounded-xl bg-white p-5 shadow-md",
-                      result[idx].selectedOption === result[idx].correctOption
-                        ? "bg-[#FBBE1B]"
-                        : "bg-[#ff77774a] text-[#cb3c3c]"
-                    )}
-                    onClick={() => handleToggle(idx)}
-                  >
-                    <span className="absolute -left-14 size-10 content-center rounded-full bg-white text-center font-bold text-black shadow-sm">
-                      {idx + 1}
-                    </span>
-                    <h3 className="text-xl font-semibold">
-                      <span
-                        className="img_spc"
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(question),
-                        }}
-                      />
-                    </h3>
-
-                    {questionVideo && (
-                      <VideoPlayer
-                        src={getQuizQuestionVideoUrl(questionVideo)}
-                      />
-                    )}
-
-                    <button className="absolute top-7 right-3 cursor-pointer">
-                      <ChevronUp
-                        color="#000"
+            <div className="order-4 col-span-6 grid justify-items-center rounded-xl  bg-[#F6F6F6] p-4 md:-mt-[50px] md:min-h-[75vh]">
+              <div className="pt-32">
+                {questions.map(
+                  ({ question, id, answer, questionVideo }, idx) => (
+                    <div
+                      key={id}
+                      className="grid grid-cols-12 2xl:w-auto w-8/12 min-w-[800px]"
+                    >
+                      <div
                         className={cn(
-                          "transition-transform duration-300",
-                          state.visible === idx ? "rotate-0" : "rotate-180"
+                          "itm relative 2xl:col-span-7 2xl:col-start-4 col-span-12 mb-5 cursor-pointer rounded-xl bg-white p-5 shadow-md",
+                          result[idx].selectedOption ===
+                            result[idx].correctOption
+                            ? "bg-[#FBBE1B]"
+                            : "bg-[#ff77774a] text-[#cb3c3c]"
                         )}
-                      />
-                    </button>
-                  </div>
-                  {state.visible === idx && (
-                    <div className="relative col-span-7 col-start-4 mb-5 rounded-xl bg-white p-5 shadow-md">
-                      <div className="desc_blk p-5">
-                        <p className="mb-2 text-lg font-semibold">
-                          Your Answer:
-                        </p>
-                        {result[idx].selectedOption === -1 ? (
-                          <p className="text-red-500">
-                            You did not attempt this question.
-                          </p>
-                        ) : (
-                          <>
+                        onClick={() => handleToggle(idx)}
+                      >
+                        <span className="absolute -left-14 size-10 content-center rounded-full bg-white text-center font-bold text-black shadow-sm">
+                          {idx + 1}
+                        </span>
+                        <h3 className="text-xl font-semibold">
+                          <span
+                            className="img_spc"
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(question),
+                            }}
+                          />
+                        </h3>
+
+                        {questionVideo && (
+                          <VideoPlayer
+                            src={getQuizQuestionVideoUrl(questionVideo)}
+                          />
+                        )}
+
+                        <button className="absolute top-7 right-3 cursor-pointer">
+                          <ChevronUp
+                            color="#000"
+                            className={cn(
+                              "transition-transform duration-300",
+                              state.visible === idx ? "rotate-0" : "rotate-180"
+                            )}
+                          />
+                        </button>
+                      </div>
+                      {state.visible === idx && (
+                        <div className="relative col-span-7 col-start-4 mb-5 rounded-xl bg-white p-5 shadow-md">
+                          <div className="desc_blk p-5">
+                            <p className="mb-2 text-lg font-semibold">
+                              Your Answer:
+                            </p>
+                            {result[idx].selectedOption === -1 ? (
+                              <p className="text-red-500">
+                                You did not attempt this question.
+                              </p>
+                            ) : (
+                              <>
+                                <p className="mb-2 font-semibold">
+                                  option:&nbsp;
+                                  {String.fromCharCode(
+                                    65 + result[idx].selectedOption
+                                  )}
+                                </p>
+                                <p>
+                                  <span
+                                    className="img_spc"
+                                    dangerouslySetInnerHTML={{
+                                      __html: DOMPurify.sanitize(
+                                        answer[result[idx].selectedOption]
+                                          .answer
+                                      ),
+                                    }}
+                                  />
+                                </p>
+                                {answer[result[idx].selectedOption]
+                                  .answerVideo && (
+                                  <VideoPlayer
+                                    src={getQuizAnswerVideoUrl(
+                                      answer[result[idx].selectedOption]
+                                        .answerVideo as string
+                                    )}
+                                  />
+                                )}
+                              </>
+                            )}
+                            <hr className="my-3 border-gray-300" />
+                            <p className="mt-4 mb-2 text-lg font-semibold">
+                              Correct Answer:
+                            </p>
                             <p className="mb-2 font-semibold">
                               option:&nbsp;
                               {String.fromCharCode(
-                                65 + result[idx].selectedOption
+                                65 + result[idx].correctOption
                               )}
                             </p>
+
                             <p>
                               <span
                                 className="img_spc"
                                 dangerouslySetInnerHTML={{
                                   __html: DOMPurify.sanitize(
-                                    answer[result[idx].selectedOption].answer
+                                    answer[result[idx].correctOption].answer
                                   ),
                                 }}
                               />
                             </p>
-                            {answer[result[idx].selectedOption].answerVideo && (
+                            {answer[result[idx].correctOption].answerVideo && (
                               <VideoPlayer
                                 src={getQuizAnswerVideoUrl(
-                                  answer[result[idx].selectedOption]
+                                  answer[result[idx].correctOption]
                                     .answerVideo as string
                                 )}
                               />
                             )}
-                          </>
-                        )}
-                        <hr className="my-3 border-gray-300" />
-                        <p className="mt-4 mb-2 text-lg font-semibold">
-                          Correct Answer:
-                        </p>
-                        <p className="mb-2 font-semibold">
-                          option:&nbsp;
-                          {String.fromCharCode(65 + result[idx].correctOption)}
-                        </p>
-
-                        <p>
-                          <span
-                            className="img_spc"
-                            dangerouslySetInnerHTML={{
-                              __html: DOMPurify.sanitize(
-                                answer[result[idx].correctOption].answer
-                              ),
-                            }}
-                          />
-                        </p>
-                        {answer[result[idx].correctOption].answerVideo && (
-                          <VideoPlayer
-                            src={getQuizAnswerVideoUrl(
-                              answer[result[idx].correctOption]
-                                .answerVideo as string
-                            )}
-                          />
-                        )}
-                      </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  )
+                )}
+              </div>
             </div>
 
             <div className="order-5 col-span-6">
