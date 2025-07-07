@@ -99,7 +99,8 @@ export function Footer({ variant = "compact" }: FooterProps) {
             <div className="col-span-4 md:col-span-4">
               <div className="border-t border-[#5D98CF]">
                 <p className="mt-8 text-center text-sm font-light text-white md:text-lg">
-                  © {currentYear} Revision Bee All rights reserved
+                  <span className="emoji">©</span> {currentYear} Revision Bee
+                  All rights reserved
                 </p>
               </div>
             </div>
@@ -107,7 +108,8 @@ export function Footer({ variant = "compact" }: FooterProps) {
         ) : (
           <div>
             <p className="text-center text-sm font-light text-white md:text-lg">
-              © {currentYear} Revision Bee All rights reserved
+              <span className="emoji">©</span> {currentYear} Revision Bee All
+              rights reserved
             </p>
           </div>
         )}
