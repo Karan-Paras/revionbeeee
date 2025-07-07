@@ -113,7 +113,7 @@ export function Subscription({
               Best Value
             </div>
           )}
-          <div className="upr border-b border-[#D5D5D5] p-6">
+          <div className="upr border-b border-[#D5D5D5] p-6 xl:min-h-36 lg:min-h-38">
             <h3 className="pb-3.5 text-2xl font-semibold text-black">
               {title}&nbsp;
               {type === SubscriptionType.FREE && (
