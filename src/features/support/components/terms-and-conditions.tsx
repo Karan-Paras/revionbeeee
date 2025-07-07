@@ -102,7 +102,7 @@ export function TermsAndConditions() {
           <p>
             If you have questions about these terms, please contact us at:
             <br />
-            📧&nbsp;
+            <span className="emoji">📧</span>&nbsp;
             <Link
               href={`mailto:${EMAIL}`}
               target="_blank"

@@ -11,7 +11,9 @@ export function AboutUs() {
         </div>
 
         <div>
-          <h3 className="mb-4 text-2xl font-bold">🐝 About Us - RevisionBee</h3>
+          <h3 className="mb-4 text-2xl font-bold">
+            <span className="emoji">🐝</span> About Us - RevisionBee
+          </h3>
           <p className="mb-5">
             At RevisionBee, we believe every student deserves access to
             high-quality math resources. Our mission is to make IB Math
@@ -23,24 +25,26 @@ export function AboutUs() {
           </p>
           <ul className="list-disc pl-6 mb-5 space-y-2">
             <li>
-              🧠 A vast question bank filled with IB-style problems tailored to
-              your syllabus
+              <span className="emoji">🧠</span> A vast question bank filled with
+              IB-style problems tailored to your syllabus
             </li>
             <li>
-              🧪 Interactive quizzes that adapt to your progress and skill level
+              <span className="emoji">🧪</span> Interactive quizzes that adapt
+              to your progress and skill level
             </li>
             <li>
               📈 Real-time progress tracking to monitor your growth and identify
               areas for improvement
             </li>
             <li>
-              🎥 Topic explanation videos and strategy breakdowns created by our
-              team to help you master even the trickiest concepts step-by-step
+              <span className="emoji">🎥</span> Topic explanation videos and
+              strategy breakdowns created by our team to help you master even
+              the trickiest concepts step-by-step
             </li>
           </ul>
 
           <h4 className="text-xl font-semibold mt-8 mb-2">
-            🐝 Track Your Progress
+            <span className="emoji">🐝</span> Track Your Progress
           </h4>
           <p className="mb-5">
             As you complete quizzes and challenges, RevisionBee keeps track of
@@ -48,7 +52,7 @@ export function AboutUs() {
           </p>
 
           <h4 className="text-xl font-semibold mt-8 mb-2">
-            🐝 Three Difficulty Levels
+            <span className="emoji">🐝</span> Three Difficulty Levels
           </h4>
           <p className="mb-4">
             Every learner in our hive works at their own pace — that&apos;s why
@@ -57,23 +61,33 @@ export function AboutUs() {
           </p>
           <ul className="pl-6 mb-5 space-y-2">
             <li>
-              🟢 <strong>🐝 BuzzEasy (Easy)</strong> — Great for quick warm-ups,
-              building confidence, and reinforcing core skills.
+              <span className="emoji">🟢</span>&nbsp;
+              <strong>
+                <span className="emoji">🐝</span> BuzzEasy (Easy)
+              </strong>
+              &nbsp; — Great for quick warm-ups, building confidence, and
+              reinforcing core skills.
             </li>
             <li>
-              🟡 <strong>🐝 HoneyChallenge (Intermediate)</strong> — A good
-              challenge with multi-step problems, combining ideas, and questions
-              designed to deepen your understanding.
+              <span className="emoji">🟡</span>&nbsp;
+              <strong>
+                <span className="emoji">🐝</span> HoneyChallenge (Intermediate)
+              </strong>
+              &nbsp; — A good challenge with multi-step problems, combining
+              ideas, and questions designed to deepen your understanding.
             </li>
             <li>
-              🔴 <strong>🐝 HiveMaster (Advanced)</strong> — Thought-provoking
-              and demanding questions for those ready to test themselves with
-              complex reasoning and problem-solving.
+              <span className="emoji">🔴</span>&nbsp;
+              <strong>
+                <span className="emoji">🐝</span> HiveMaster (Advanced)
+              </strong>
+              &nbsp; — Thought-provoking and demanding questions for those ready
+              to test themselves with complex reasoning and problem-solving.
             </li>
           </ul>
 
           <h4 className="text-xl font-semibold mt-8 mb-2">
-            🎥 Coming Soon: Video Tutorials
+            <span className="emoji">🎥</span> Coming Soon: Video Tutorials
           </h4>
           <p className="mb-5">
             We know some topics need a little extra explanation — so we&apos;re
@@ -83,7 +97,7 @@ export function AboutUs() {
           </p>
           <p>
             Join our buzzing community today and take your IB Math revision to
-            the next level. 🐝✨
+            the next level. <span className="emoji">🐝✨</span>
             <br />
             <strong>RevisionBee — Smart Math. Sweet Success.</strong>
           </p>

@@ -101,7 +101,9 @@ export function PrivacyPolicy() {
         </div>
       </div>
       <div className="container mx-auto ">
-        <h3 className="mb-2 text-2xl font-bold">📧 Contact Us</h3>
+        <h3 className="mb-2 text-2xl font-bold">
+          <span className="emoji">📧</span> Contact Us
+        </h3>
         <p>
           If you have any questions about this policy or your data, please
           contact:&nbsp;
