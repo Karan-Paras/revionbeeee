@@ -1,3 +1,5 @@
+"use client";
+
 import { ErrorBlock } from "@/components/errors/error-block";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";

@@ -1,3 +1,5 @@
+"use client";
+
 import { ErrorBlock } from "@/components/errors/error-block";
 import { InputError } from "@/components/errors/input-error";
 import { Button } from "@/components/ui/button";
