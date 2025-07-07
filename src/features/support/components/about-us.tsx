@@ -34,8 +34,8 @@ export function AboutUs() {
               areas for improvement
             </li>
             <li>
-              🎥 Topic explanation videos and strategy breakdowns to help you
-              master even the trickiest concepts step-by-step
+              🎥 Topic explanation videos and strategy breakdowns created by our
+              team to help you master even the trickiest concepts step-by-step
             </li>
           </ul>
 
@@ -62,13 +62,13 @@ export function AboutUs() {
             </li>
             <li>
               🟡 <strong>🐝 HoneyChallenge (Intermediate)</strong> — A good
-              challenge with multi-step problems and questions designed to
-              deepen understanding.
+              challenge with multi-step problems, combining ideas, and questions
+              designed to deepen your understanding.
             </li>
             <li>
-              🔴 <strong>🐝 HiveMaster (Advanced)</strong> — Demanding questions
-              for those ready to test themselves with complex reasoning and
-              problem-solving.
+              🔴 <strong>🐝 HiveMaster (Advanced)</strong> — Thought-provoking
+              and demanding questions for those ready to test themselves with
+              complex reasoning and problem-solving.
             </li>
           </ul>
 

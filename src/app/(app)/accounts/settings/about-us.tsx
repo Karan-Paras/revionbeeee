@@ -30,8 +30,8 @@ export function AboutUs() {
             areas for improvement
           </li>
           <li>
-            🎥 Topic explanation videos and strategy breakdowns to help you
-            master even the trickiest concepts step-by-step
+            🎥 Topic explanation videos and strategy breakdowns created by our
+            team to help you master even the trickiest concepts step-by-step
           </li>
         </ul>
         <h5 className="font-semibold mt-4">🐝 Track Your Progress</h5>
@@ -53,13 +53,13 @@ export function AboutUs() {
           </li>
           <li>
             🟡 <strong>🐝 HoneyChallenge (Intermediate)</strong> — A good
-            challenge with multi-step problems and questions designed to deepen
-            understanding.
+            challenge with multi-step problems, combining ideas, and questions
+            designed to deepen your understanding.
           </li>
           <li>
-            🔴 <strong>🐝 HiveMaster (Advanced)</strong> — Demanding questions
-            for those ready to test themselves with complex reasoning and
-            problem-solving.
+            🔴 <strong>🐝 HiveMaster (Advanced)</strong> — Thought-provoking and
+            demanding questions for those ready to test themselves with complex
+            reasoning and problem-solving.
           </li>
         </ul>
 
@@ -69,6 +69,12 @@ export function AboutUs() {
           creating exclusive RevisionBee video tutorials for select topics.
           These videos will walk you through key strategies, worked examples,
           and revision tips to give you that extra boost before your exams.
+        </p>
+        <p>
+          Join our buzzing community today and take your IB Math revision to the
+          next level. 🐝✨
+          <br />
+          <strong>RevisionBee — Smart Math. Sweet Success.</strong>
         </p>
       </div>
     </>
