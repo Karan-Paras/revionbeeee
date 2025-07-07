@@ -1,5 +1,41 @@
-import { SettingsTab } from "@/app/(app)/accounts/settings/settings-tabs";
+import {
+  SettingsTab,
+  TabDefinition,
+} from "@/app/(app)/accounts/settings/settings-tab";
+import { ChangePasswordForm } from "@/features/auth/components/change-password-form";
+import { AboutUs } from "@/features/support/components/about-us";
+import { ContactUsForm } from "@/features/support/components/contact-us-form";
+import { PrivacyPolicy } from "@/features/support/components/privacy-policy";
+import { TermsAndConditions } from "@/features/support/components/terms-and-conditions";
 import { paths } from "@/routes";
+
+const TABS: TabDefinition[] = [
+  {
+    key: "changePassword",
+    label: "Change Password",
+    content: <ChangePasswordForm />,
+  },
+  {
+    key: "contactUs",
+    label: "Contact Us",
+    content: <ContactUsForm />,
+  },
+  {
+    key: "aboutUs",
+    label: "About Us",
+    content: <AboutUs />,
+  },
+  {
+    key: "privacyPolicy",
+    label: "Privacy Policy",
+    content: <PrivacyPolicy />,
+  },
+  {
+    key: "termsAndConditions",
+    label: "Term & Conditions",
+    content: <TermsAndConditions />,
+  },
+];
 
 export default function Settings() {
   return (
@@ -11,7 +47,7 @@ export default function Settings() {
         Settings
       </h3>
       <div className="tbs">
-        <SettingsTab />
+        <SettingsTab defaultActiveKey="changePassword" tabs={TABS} />
       </div>
     </div>
   );
