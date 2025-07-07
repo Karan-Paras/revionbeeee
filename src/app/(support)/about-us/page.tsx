@@ -102,6 +102,12 @@ export default function AboutUs() {
               worked examples, and revision tips to give you that extra boost
               before your exams.
             </p>
+            <p>
+              Join our buzzing community today and take your IB Math revision to
+              the next level. 🐝✨
+              <br />
+              <strong>RevisionBee — Smart Math. Sweet Success.</strong>
+            </p>
           </div>
         </div>
       </section>

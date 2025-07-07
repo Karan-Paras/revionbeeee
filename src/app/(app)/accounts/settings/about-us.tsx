@@ -70,6 +70,12 @@ export function AboutUs() {
           These videos will walk you through key strategies, worked examples,
           and revision tips to give you that extra boost before your exams.
         </p>
+        <p className="mt-4">
+          Join our buzzing community today and take your IB Math revision to the
+          next level. 🐝✨
+          <br />
+          <strong>RevisionBee — Smart Math. Sweet Success.</strong>
+        </p>
       </div>
     </>
   );
