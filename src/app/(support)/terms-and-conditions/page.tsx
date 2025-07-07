@@ -1,6 +1,7 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { EMAIL } from "@/features/support/types";
 import { paths } from "@/routes";
+import Link from "next/link";
 
 export default function TermsAndConditions() {
   return (
@@ -118,7 +119,14 @@ export default function TermsAndConditions() {
               If you have questions about these terms, please contact us at:
               <br />
               📧&nbsp;
-              {EMAIL}
+              <Link
+                href={`mailto:${EMAIL}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {EMAIL}
+              </Link>
             </p>
           </div>
         </div>

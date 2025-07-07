@@ -43,10 +43,10 @@ const FAQs = [
       <>
         <p>We focus purely on IB Math and combine:</p>
         <ul>
-          <li>✔️ Real-time feedback on quizzes</li>
-          <li>✔️ Detailed video solutions with strategic hints</li>
-          <li>✔️ Structured topic coverage</li>
-          <li>✔️ Video topic explanation</li>
+          <li>• Real-time feedback on quizzes</li>
+          <li>• Detailed video solutions with strategic hints</li>
+          <li>• Structured topic coverage</li>
+          <li>• Video topic explanation</li>
         </ul>
       </>
     ),
