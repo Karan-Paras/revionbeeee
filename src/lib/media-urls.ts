@@ -1,5 +1,5 @@
 export const MEDIA_URL =
-  "https://saurabh.parastechnologies.in/revisionbee/storage/app/public/uploads/revisionbee";
+  "https://admin.revisionbee.com/storage/app/public/uploads/revisionbee";
 
 export function getUserImageUrl(image: string): string {
   const url = `${MEDIA_URL}/profilePicture/`;
