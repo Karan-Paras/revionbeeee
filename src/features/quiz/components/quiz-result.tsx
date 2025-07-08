@@ -89,12 +89,12 @@ export function QuizResult() {
             </div>
             <div className="order-1 col-span-6 md:order-3 md:col-span-1" />
             <div className="order-4 col-span-6 grid justify-items-center rounded-xl  bg-[#F6F6F6] p-4 md:-mt-[50px] md:min-h-[75vh]">
-              <div className="pt-32">
+              <div className="md:pt-32">
                 {questions.map(
                   ({ question, id, answer, questionVideo }, idx) => (
                     <div
                       key={id}
-                      className="grid grid-cols-12 2xl:w-auto w-8/12 min-w-[800px]"
+                      className="grid grid-cols-12 2xl:w-auto xl:w-8/12 lg:w-7/12  xl:min-w-[800px] lg:min-w-[600px] w-[85%] md:mx-auto ms-auto"
                     >
                       <div
                         className={cn(

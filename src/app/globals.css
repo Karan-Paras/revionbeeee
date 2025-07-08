@@ -205,4 +205,12 @@ body {
   .bg_shp::before {
     width: auto;
   }
+
+  .img_spc p {
+    font-size: 16px;
+  }
+
+  .img_spc {
+    word-break: break-word;
+  }
 }
