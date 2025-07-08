@@ -2,7 +2,6 @@
 
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
-import { logout } from "@/features/auth/api/logout";
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,11 +16,9 @@ export function LogoutModal() {
   const onLogout = () => {
     queryClient.clear();
 
-    logout().finally(() =>
-      signOut({
-        redirectTo: paths.login(),
-      })
-    );
+    signOut({
+      redirectTo: paths.login(),
+    });
   };
 
   return (
