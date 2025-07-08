@@ -2,6 +2,7 @@
 
 import { contactUs as contactUsApi } from "@/features/support/api/contact-us";
 import { ContactUsSchema } from "@/features/support/schemas";
+import { isDisposableEmail } from "@/lib/utils";
 import type { ApiErrorResponse } from "@/types/api";
 
 type ContactUsFormState = {
@@ -28,6 +29,14 @@ export const contactUs = async (
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  if (isDisposableEmail(validatedFields.data.email)) {
+    return {
+      errors: {
+        email: ["Please use a valid email address."],
+      },
+    };
   }
 
   const payload = validatedFields.data;

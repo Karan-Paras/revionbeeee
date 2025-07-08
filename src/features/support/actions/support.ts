@@ -2,6 +2,7 @@
 
 import { support as supportApi } from "@/features/support/api/support";
 import { SupportSchema } from "@/features/support/schemas";
+import { isDisposableEmail } from "@/lib/utils";
 import type { ApiErrorResponse } from "@/types/api";
 
 type SupportFormState = {
@@ -30,6 +31,14 @@ export const support = async (
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
+  }
+
+  if (isDisposableEmail(validatedFields.data.email)) {
+    return {
+      errors: {
+        email: ["Please use a valid email address."],
+      },
+    };
   }
 
   try {
