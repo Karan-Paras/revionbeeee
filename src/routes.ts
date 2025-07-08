@@ -74,7 +74,9 @@ export const paths = {
     settings: Object.assign(() => "/settings", {
       scroll: () => "/settings/#settings",
     }),
-    editProfile: () => "/my-profile/edit",
+    editProfile: Object.assign(() => "/my-profile/edit", {
+      scroll: () => "/my-profile/edit/#edit-profile",
+    }),
   }),
   aboutUs: () => "/about-us",
   privacyPolicy: () => "/privacy-policy",

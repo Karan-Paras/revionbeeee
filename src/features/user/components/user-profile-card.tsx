@@ -118,7 +118,7 @@ export function UserProfileCard() {
           </div>
 
           <div className="btn flex justify-center">
-            <Link href={paths.accounts.editProfile()}>
+            <Link href={paths.accounts.editProfile.scroll()}>
               <Button
                 className="flex w-auto cursor-pointer gap-2 px-10 py-5"
                 variant="rounded"
