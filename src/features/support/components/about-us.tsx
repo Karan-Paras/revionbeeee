@@ -5,7 +5,7 @@ export function AboutUs() {
     <section className="px-10 py-20 xl:px-20 2xl:px-0">
       <div className="container mx-auto space-y-10">
         <div className="flex">
-          <div className="flex size-40 items-center justify-center rounded-full bg-[#FFFAEB]">
+          <div className="flex size-40 items-center justify-center rounded-full bg-[#FFFAEB] mb-4">
             <RevisionBee width={65} />
           </div>
         </div>

@@ -31,7 +31,7 @@ export function SupportForm() {
   }
 
   return (
-    <div className="col-span-6 md:col-span-3">
+    <div className="col-span-6 lg:col-span-3">
       <div className="crd rounded-xl bg-white px-4 py-5 shadow-md lg:py-10">
         <form className="grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
           <div className="col-span-2 md:col-span-1">

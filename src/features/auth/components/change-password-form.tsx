@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { changePassword } from "@/features/auth/actions/change-password";
+import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { startTransition, useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -50,6 +51,7 @@ export function ChangePasswordForm() {
       <div className="itm mb-3">
         <FormLabel htmlFor="current-password">Current Password</FormLabel>
         <Input
+          className={cn("pe-12")}
           placeholder="Enter Current password"
           variant="bordered"
           id="current-password"
@@ -63,6 +65,7 @@ export function ChangePasswordForm() {
       <div className="itm mb-3">
         <FormLabel htmlFor="new-password">New Password</FormLabel>
         <Input
+          className={cn("pe-12")}
           placeholder="Enter New password"
           variant="bordered"
           id="new-password"
@@ -76,6 +79,7 @@ export function ChangePasswordForm() {
       <div className="itm mb-3">
         <FormLabel htmlFor="confirm-password">Re-Type New Password</FormLabel>
         <Input
+          className={cn("pe-12")}
           placeholder="Enter Re-Type New Password "
           variant="bordered"
           id="confirm-password"
