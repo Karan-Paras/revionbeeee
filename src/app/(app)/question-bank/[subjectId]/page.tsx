@@ -22,7 +22,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Question Bank - ${subjectName} | Revision Bee`,
+    title: `${subjectName} | Question Bank - Revision Bee`,
     description: `Explore subject-wise practice questions and video solutions for ${subjectName}.`,
     robots: {
       index: false,
