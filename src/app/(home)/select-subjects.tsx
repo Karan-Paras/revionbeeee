@@ -1,17 +1,17 @@
 import { MoveUpRight } from "@/assets/icons";
 import { DataLoader } from "@/components/loaders/data-loader";
-import { getTopicsOnServer } from "@/features/subjects/api/get-topics-on-server";
-import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
+import { getSubjectsOnServer } from "@/features/subjects/api/get-subjects-on-server";
+import { SelectSubjects as SelectSubjectsComponent } from "@/features/subjects/components/select-subjects";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { Suspense, use } from "react";
 
-function TopicsList() {
-  const topics = use(getTopicsOnServer());
-  return <SelectTopicsComponent maxLength={6} initialData={topics} />;
+function SubjectsList() {
+  const subjects = use(getSubjectsOnServer());
+  return <SelectSubjectsComponent maxLength={6} initialData={subjects} />;
 }
 
-export function SelectTopics() {
+export function SelectSubjects() {
   return (
     <section
       id={paths.home.topics().split("#")[1]}
@@ -41,7 +41,7 @@ export function SelectTopics() {
           </div>
         </div>
         <Suspense fallback={<DataLoader />}>
-          <TopicsList />
+          <SubjectsList />
         </Suspense>
       </div>
     </section>

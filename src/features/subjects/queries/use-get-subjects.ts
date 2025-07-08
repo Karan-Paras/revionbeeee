@@ -1,14 +1,14 @@
-import { getTopicsOnClient } from "@/features/subjects/api/get-topics-on-client";
+import { getSubjectsOnClient } from "@/features/subjects/api/get-subjects-on-client";
 import type { Topic } from "@/features/subjects/types";
 import type { ApiSuccessResponse } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetTopics = (
+export const useGetSubjects = (
   initialData?: ApiSuccessResponse<Array<Topic>>
 ) => {
   return useQuery({
-    queryKey: ["topic"],
-    queryFn: getTopicsOnClient,
+    queryKey: ["subject"],
+    queryFn: getSubjectsOnClient,
     initialData,
   });
 };

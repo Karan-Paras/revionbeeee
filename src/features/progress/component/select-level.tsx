@@ -1,7 +1,7 @@
 "use client";
 
 import { DataLoader } from "@/components/loaders/data-loader";
-import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
+import { useGetSubjects } from "@/features/subjects/queries/use-get-subjects";
 import { cn } from "@/lib/utils";
 import type { ID } from "@/types/globals";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function SelectLevel({ selectedTopicId, setSelectedTopicId }: Props) {
-  const { data, isPending, error } = useGetTopics();
+  const { data, isPending, error } = useGetSubjects();
 
   useEffect(() => {
     if (data?.data && !selectedTopicId) {
