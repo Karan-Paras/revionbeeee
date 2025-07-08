@@ -7,6 +7,16 @@ import { TermsAndPolicy } from "@/app/(app)/accounts/settings/terms-and-policy";
 import { ChangePasswordForm } from "@/features/auth/components/change-password-form";
 import { ContactUsForm } from "@/features/support/components/contact-us-form";
 import { paths } from "@/routes";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Settings - Revision Bee",
+  description: "Customize your account settings and preferences.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const TABS: TabDefinition[] = [
   {

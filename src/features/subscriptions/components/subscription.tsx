@@ -109,7 +109,6 @@ export function Subscription({
         <div className="crd relative rounded-3xl border border-[#D5D5D5] bg-white shadow-lg xl:min-h-auto lg:min-h-[490px]">
           {type === SubscriptionType.YEARLY && (
             <div className="absolute -top-6 right-3 rounded-2xl border-4 border-white bg-[#ffefc6] px-4 py-3 text-center text-sm font-semibold text-[#765708] opacity-100">
-              {" "}
               Best Value
             </div>
           )}

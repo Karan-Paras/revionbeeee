@@ -1,6 +1,6 @@
-import { getTopics } from "@/features/subjects/api/get-topics";
+import { getTopicsOnClient } from "@/features/subjects/api/get-topics-on-client";
 import type { Topic } from "@/features/subjects/types";
-import { ApiSuccessResponse } from "@/types/api";
+import type { ApiSuccessResponse } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetTopics = (
@@ -8,7 +8,7 @@ export const useGetTopics = (
 ) => {
   return useQuery({
     queryKey: ["topic"],
-    queryFn: getTopics,
+    queryFn: getTopicsOnClient,
     initialData,
   });
 };

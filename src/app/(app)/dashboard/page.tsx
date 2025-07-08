@@ -1,5 +1,15 @@
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DashboardCard } from "@/features/dashboard/components/dashboard-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard - Revision Bee",
+  description: "View your learning statistics.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function Dashboard() {
   return (

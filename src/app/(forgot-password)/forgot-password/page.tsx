@@ -2,8 +2,15 @@ import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-f
 import { EmailService } from "@/lib/assets";
 import { ArrowBack } from "@/lib/icons";
 import { paths } from "@/routes";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Forgot Password - Revision Bee",
+  description:
+    "Recover your Revision Bee account with a secure password reset link.",
+};
 
 export default function ForgetPassword() {
   return (

@@ -1,39 +1,31 @@
+"use client";
+
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { SelectTopics } from "@/features/subjects/components/select-topics";
 import { paths } from "@/routes";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Subjects - Revision Bee",
-  description: "Browse all subjects to start revising efficiently.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
-export default function Subjects() {
+export default function Quiz() {
   return (
     <>
       <BreadcrumbBanner
-        title="Subjects"
+        title="Quiz"
         breadcrumbs={[
           {
             label: "Home",
             href: paths.dashboard(),
           },
           {
-            label: "Subjects",
-            href: paths.subjects(),
+            label: "Quiz",
+            href: paths.quiz(),
           },
         ]}
       />
       <section
         id="topics"
-        className="mths_bg relative px-10 py-20 md:px-0 lg:px-20 2xl:px-0"
+        className="mths_bg relative px-10 2xl:py-20 py-10 md:px-0 lg:px-20 2xl:px-0"
       >
         <div className="relative container mx-auto">
-          <SelectTopics />
+          <SelectTopics href={paths.quizDetails} />
         </div>
       </section>
     </>

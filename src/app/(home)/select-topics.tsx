@@ -1,19 +1,13 @@
 import { DataLoader } from "@/components/loaders/data-loader";
+import { getTopicsOnServer } from "@/features/subjects/api/get-topics-on-server";
 import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
-import type { Topic } from "@/features/subjects/types";
-import api from "@/lib/api";
 import { MoveUpRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { Suspense, use } from "react";
 
-async function getTopics() {
-  const apiUrl = "/topic/list";
-  return await api<Array<Topic>>(apiUrl, "GET");
-}
-
 function TopicsList() {
-  const topics = use(getTopics());
+  const topics = use(getTopicsOnServer());
   return <SelectTopicsComponent maxLength={6} initialData={topics} />;
 }
 

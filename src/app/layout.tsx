@@ -21,6 +21,8 @@ const notoEmoji = Noto_Color_Emoji({
 
 export const metadata: Metadata = {
   title: "Revision Bee",
+  description:
+    "Revise smarter with personalized quizzes, subject insights, and progress tracking.",
 };
 
 export default function RootLayout({

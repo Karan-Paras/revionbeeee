@@ -1,4 +1,14 @@
 import { CreateProfileForm } from "@/features/user/components/create-profile-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Complete Profile - Revision Bee",
+  description: "Complete your profile to personalize your learning experience.",
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function CreateProfile() {
   return (

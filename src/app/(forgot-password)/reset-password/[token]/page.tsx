@@ -1,7 +1,17 @@
 import { verifyToken } from "@/features/auth/api/forgot-password";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
 import { PassIcn } from "@/lib/assets";
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Reset Password - Revision Bee",
+  description: "Enter a new password for your Revision Bee account.",
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 interface ResetPasswordProps {
   params: Promise<{
