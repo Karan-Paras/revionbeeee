@@ -77,7 +77,7 @@ export function ContactUsForm() {
           name="attachment"
           disabled={isPending}
           type="file"
-          className="w-4/12 rounded-xl bg-[#EFF7FF] px-5 py-5 text-[#6CB5F9]"
+          className="md:w-4/12 w-full rounded-xl bg-[#EFF7FF] px-5 py-5 text-[#6CB5F9]"
         />
         {!!formState.errors.attachment && (
           <InputError error={formState.errors.attachment?.join(", ")} />

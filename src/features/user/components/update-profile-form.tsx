@@ -122,7 +122,7 @@ function Form({ userData }: FormProps) {
           />
         )}
         <div className="my-5 grid grid-cols-2 gap-10">
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="first-name" variant="bold">
                 First Name
@@ -139,7 +139,7 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="last-name" variant="bold">
                 Last name
@@ -156,7 +156,7 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="city" variant="bold">
                 City
@@ -173,7 +173,7 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="state" variant="bold">
                 State
@@ -190,12 +190,12 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="flex h-full flex-wrap items-center justify-between">
               <FormLabel htmlFor="gender" variant="bold">
                 Gender
               </FormLabel>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 mt-0.5">
                 <div className="relative col-span-1">
                   <input
                     type="radio"
@@ -259,7 +259,7 @@ function Form({ userData }: FormProps) {
               )}
             </div>
           </div>
-          <div className="col-span-1">
+          <div className="lg:col-span-1 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="phone-number" variant="bold">
                 Mobile
@@ -280,7 +280,7 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-2">
+          <div className="lg:col-span-2 col-span-2">
             <div className="itm relative grid gap-1.5">
               <FormLabel htmlFor="address" variant="bold">
                 Address
@@ -296,7 +296,7 @@ function Form({ userData }: FormProps) {
               />
             </div>
           </div>
-          <div className="col-span-2">
+          <div className="lg:col-span-2 col-span-2">
             <div className="flex justify-center">
               <Button
                 className="w-auto px-16 shadow-xl/10"

@@ -26,13 +26,13 @@ export function SettingsTab({ tabs, defaultActiveKey }: TabsProps) {
 
   return (
     <div className="mx-auto mt-10 w-full">
-      <div className="flex border-b border-gray-300 md:flex-nowrap flex-wrap md:gap-0 gap-4 md:pb-0 pb-4">
+      <div className="flex border-b border-gray-300 lg:flex-nowrap flex-wrap md:gap-0 gap-4  md:pb-0  pb-4">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveKey(tab.key)}
             className={cn(
-              "md:px-4 px-2 py-2 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
+              "md:px-4 px-2 lg:py-2 py-4 font-medium focus:outline-none md:w-auto w-full md:text-center text-left",
               activeKey === tab.key
                 ? "border-b-2 border-[#53A2EB] text-[#53A2EB]"
                 : "text-gray-500"
@@ -42,7 +42,7 @@ export function SettingsTab({ tabs, defaultActiveKey }: TabsProps) {
           </button>
         ))}
       </div>
-      <div className="px-3 py-5">
+      <div className="md:px-3 px-1 py-5">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeKey}

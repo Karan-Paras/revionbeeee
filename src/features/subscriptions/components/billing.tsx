@@ -18,7 +18,7 @@ export function Billing() {
 
   return (
     <div className="container mx-auto h-full">
-      <div className="grid h-full content-center p-10">
+      <div className="grid h-full content-center md:p-10 p-5">
         <div className="img flex justify-center">
           <BillingIcon />
         </div>
@@ -35,7 +35,7 @@ export function Billing() {
           <button
             onClick={onClick}
             disabled={isPending || mutation.isPending}
-            className="w-5/12 cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white"
+            className="md:w-5/12 w-full cursor-pointer rounded-xl bg-[#53A2EB] p-4 font-medium text-white"
           >
             {isPending
               ? "Processing..."

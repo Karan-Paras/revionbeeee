@@ -76,7 +76,7 @@ export function UserProfileCard() {
               <p>{email}</p>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>Mobile Number</p>
             </div>
@@ -84,7 +84,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{phoneNumber || "-"}</h3>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>Gender</p>
             </div>
@@ -92,7 +92,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{gender || "-"}</h3>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>City</p>
             </div>
@@ -100,7 +100,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{city || "-"}</h3>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>State</p>
             </div>
@@ -108,7 +108,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{state || "-"}</h3>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050]">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>Address</p>
             </div>

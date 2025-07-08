@@ -3,7 +3,7 @@ import { RevisionBee } from "@/lib/icons";
 export function AboutUs() {
   return (
     <>
-      <div className="flex size-40 items-center justify-center rounded-full bg-[#FFFAEB]">
+      <div className="flex size-40 items-center justify-center rounded-full bg-[#FFFAEB] mb-4">
         <RevisionBee width={100} />
       </div>
       <div className="desc">

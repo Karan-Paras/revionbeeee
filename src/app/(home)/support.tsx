@@ -12,7 +12,7 @@ export function Support() {
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-6 gap-8">
-          <div className="col-span-6 md:col-span-3">
+          <div className="col-span-6  lg:col-span-3">
             <div className="itm mb-5 flex items-center gap-1.5 capitalize">
               <p className="text-[#53A2EB]">Contact us</p>
             </div>

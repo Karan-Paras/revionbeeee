@@ -77,16 +77,16 @@ export function QuizFinished() {
             </div>
           </div>
           <div className="order-5 col-span-6">
-            <div className="btn flex justify-center gap-3">
+            <div className="btn flex justify-center gap-3 md:px-0 px-10 md:flex-nowrap flex-wrap md:mt-0 mt-6">
               <Link
                 href={paths.quiz()}
-                className="mt-8 cursor-pointer rounded-2xl bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
+                className="md:mt-8 cursor-pointer rounded-2xl text-center w-full bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
               >
                 View All Quizzes
               </Link>
               <Link
                 href={paths.quizResult(subjectId)}
-                className="mt-8 cursor-pointer rounded-2xl bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
+                className="md:mt-8 cursor-pointer rounded-2xl text-center w-full bg-[#53A2EB] p-4 px-16 font-medium text-white hover:shadow-sm"
               >
                 View Result
               </Link>

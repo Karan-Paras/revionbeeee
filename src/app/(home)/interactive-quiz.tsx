@@ -13,7 +13,7 @@ export function InteractiveQuiz() {
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-10">
-          <div className="col-span-2 md:col-span-2 lg:col-span-1">
+          <div className="col-span-2 md:col-span-2 xl:col-span-1">
             <div className="flex flex-wrap justify-center gap-4 md:flex-nowrap">
               <div className="lft flex w-full flex-col justify-center gap-5 md:w-6/12">
                 <div className="img h-80 overflow-hidden rounded-xl">
@@ -69,7 +69,7 @@ export function InteractiveQuiz() {
               </div>
             </div>
           </div>
-          <div className="col-span-2 md:col-span-2 lg:col-span-1">
+          <div className="col-span-2 md:col-span-2 xl:col-span-1">
             <div className="itm flex items-center gap-1.5">
               <p className="text-[#53A2EB] capitalize">
                 Flexible supported learning

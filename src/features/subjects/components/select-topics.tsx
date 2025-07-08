@@ -62,7 +62,7 @@ export function SelectTopics({
                   {topicName}
                 </h3>
               </div>
-              <ul className="max-h-[410px] min-h-[400px] overflow-y-auto">
+              <ul className="xl:max-h-[400px] lg:max-h-[300px] md:max-h-[250px] xl:min-h-[420px] lg:min-h-[300px] md:min-h-[250px] overflow-y-auto">
                 {subjects && subjects.length > 0 ? (
                   subjects?.map(({ id, subjectName }) => (
                     <li
