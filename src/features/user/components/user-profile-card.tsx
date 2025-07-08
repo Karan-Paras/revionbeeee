@@ -108,7 +108,7 @@ export function UserProfileCard() {
               <h3 className="font-bold">{state || "-"}</h3>
             </div>
           </div>
-          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] md:flex-row flex-col md:gap-0 gap-2">
+          <div className="mb-7 flex justify-between border-b border-[#E6E6E6] pb-3 text-[#505050] lg:flex-row flex-col md:gap-0 gap-2">
             <div className="lbl">
               <p>Address</p>
             </div>
