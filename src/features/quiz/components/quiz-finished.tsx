@@ -1,8 +1,8 @@
 "use client";
 
+import { RevisionBee } from "@/assets/icons";
+import { OnlineQuiz } from "@/assets/images";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { OnlineQuiz } from "@/lib/assets";
-import { RevisionBee } from "@/lib/icons";
 import { paths } from "@/routes";
 import Image from "next/image";
 import Link from "next/link";

@@ -10,7 +10,7 @@ import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 
-import { Logo } from "@/lib/assets";
+import { Logo } from "@/assets/images";
 import { Menu, X } from "lucide-react";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";

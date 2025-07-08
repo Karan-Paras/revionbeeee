@@ -1,8 +1,8 @@
+import { Cancel } from "@/assets/icons";
 import { Modal } from "@/components/common/modal";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useFailModal } from "@/features/subscriptions/stores/use-fail-modal";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
-import { Cancel } from "@/lib/icons";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";

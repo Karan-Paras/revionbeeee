@@ -1,8 +1,8 @@
 import type { User } from "@/features/user/types";
-import fetcher from "@/lib/fetcher";
+import { fetchClient } from "@/lib/fetch-client";
 
 export async function getProfile() {
   const apiUrl = "/profile";
 
-  return await fetcher<User>(apiUrl, "GET");
+  return await fetchClient<User>(apiUrl, "GET");
 }

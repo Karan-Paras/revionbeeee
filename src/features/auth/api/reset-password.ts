@@ -1,5 +1,5 @@
 import { ResetPasswordSchema } from "@/features/auth/schemas";
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 import { z } from "zod";
 
 export async function resetPassword(
@@ -7,7 +7,7 @@ export async function resetPassword(
   token: string
 ) {
   const apiUrl = "/reset/password";
-  return await api(apiUrl, "POST", {
+  return await fetchServer(apiUrl, "POST", {
     token,
     password: data.password,
   });

@@ -1,10 +1,10 @@
 "use client";
 
+import { Play } from "@/assets/icons";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
-import { Play } from "@/lib/icons";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { useParams } from "next/navigation";

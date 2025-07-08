@@ -1,7 +1,7 @@
 "use client";
 
-import { Hero } from "@/lib/assets";
-import { MoveUpRight } from "@/lib/icons";
+import { MoveUpRight } from "@/assets/icons";
+import { Hero } from "@/assets/videos";
 import { paths } from "@/routes";
 import { motion, useAnimationControls } from "framer-motion";
 import { useRouter } from "next/navigation";

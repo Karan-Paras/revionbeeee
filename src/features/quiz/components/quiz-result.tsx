@@ -1,10 +1,10 @@
 "use client";
 
+import { ChevronUp, RevisionBee } from "@/assets/icons";
 import { VideoPlayer } from "@/components/common/video-player";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
-import { ChevronUp, RevisionBee } from "@/lib/icons";
 import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,

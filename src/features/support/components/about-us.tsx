@@ -1,4 +1,4 @@
-import { RevisionBee } from "@/lib/icons";
+import { RevisionBee } from "@/assets/icons";
 
 export function AboutUs() {
   return (

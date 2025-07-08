@@ -1,6 +1,6 @@
+import { Mail, MapPin, Phone } from "@/assets/icons";
 import { SupportForm } from "@/features/support/components/support-form";
 import { ADDRESS, CONTACT_NUMBER, EMAIL } from "@/features/support/types";
-import { Mail, MapPin, Phone } from "@/lib/icons";
 import { paths } from "@/routes";
 import Link from "next/link";
 

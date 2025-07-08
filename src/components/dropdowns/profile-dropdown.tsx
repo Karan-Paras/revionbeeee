@@ -1,11 +1,11 @@
 "use client";
 
+import { ChevronDown, Crown } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { User } from "@/features/user/types";
-import { ChevronDown, Crown } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import { AnimatePresence, motion } from "framer-motion";

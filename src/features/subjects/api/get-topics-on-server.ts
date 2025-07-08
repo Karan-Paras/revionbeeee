@@ -1,8 +1,8 @@
 import { Topic } from "@/features/subjects/types";
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 
 export async function getTopicsOnServer() {
   const apiUrl = "/topic/list";
 
-  return await api<Array<Topic>>(apiUrl, "GET");
+  return await fetchServer<Array<Topic>>(apiUrl, "GET");
 }

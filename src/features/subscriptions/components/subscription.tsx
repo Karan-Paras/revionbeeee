@@ -1,5 +1,6 @@
 "use client";
 
+import { BadgeCheck } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { useCheckout } from "@/features/subscriptions/queries/use-checkout";
 import {
@@ -8,7 +9,6 @@ import {
   SubscriptionType,
 } from "@/features/subscriptions/types";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { BadgeCheck } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import { addDays, differenceInCalendarDays, isFuture } from "date-fns";

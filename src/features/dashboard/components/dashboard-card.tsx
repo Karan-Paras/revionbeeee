@@ -1,7 +1,7 @@
 "use client";
 
+import { ClockFading, HelpLightBulb, SyncCheck } from "@/assets/icons";
 import { useGetDashboardAnalytics } from "@/features/dashboard/queries/use-dashboard-analytics";
-import { ClockFading, HelpLightBulb, SyncCheck } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import Skeleton from "react-loading-skeleton";
 

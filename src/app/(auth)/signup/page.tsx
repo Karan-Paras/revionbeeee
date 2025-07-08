@@ -1,5 +1,5 @@
+import { RevisionBee } from "@/assets/icons";
 import { RegisterForm } from "@/features/auth/components/register-form";
-import { RevisionBee } from "@/lib/icons";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

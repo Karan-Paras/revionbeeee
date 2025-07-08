@@ -1,9 +1,9 @@
 "use client";
 
+import { Crown, SquarePencil } from "@/assets/icons";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { Button } from "@/components/ui/button";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { Crown, SquarePencil } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import Image from "next/image";
