@@ -1,8 +1,8 @@
 "use client";
 
+import { PassChng } from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-import { PassChng } from "@/lib/assets";
 import { paths } from "@/routes";
 import Image from "next/image";
 import Link from "next/link";

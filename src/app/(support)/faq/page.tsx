@@ -1,6 +1,6 @@
 import { Accordion } from "@/app/(support)/faq/accordion";
+import { Faq, Faq2 } from "@/assets/images";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
-import { Faq, Faq2 } from "@/lib/assets";
 import { paths } from "@/routes";
 import type { Metadata } from "next";
 import Image from "next/image";

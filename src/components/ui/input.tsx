@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { InputError } from "@/components/errors/input-error";
 
-import { Eye, EyeOff } from "@/lib/icons";
+import { Eye, EyeOff } from "@/assets/icons";
 
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";

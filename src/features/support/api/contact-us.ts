@@ -1,5 +1,5 @@
 import { ContactUsSchema } from "@/features/support/schemas";
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 import { z } from "zod";
 
 type ContactUsInput = z.infer<typeof ContactUsSchema>;
@@ -20,8 +20,8 @@ export async function contactUs(data: ContactUsInput) {
       }
     }
 
-    return await api(apiUrl, "POST", formData);
+    return await fetchServer(apiUrl, "POST", formData);
   } else {
-    return await api(apiUrl, "POST", data);
+    return await fetchServer(apiUrl, "POST", data);
   }
 }

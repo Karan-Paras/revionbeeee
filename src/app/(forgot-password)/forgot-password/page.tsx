@@ -1,6 +1,6 @@
+import { ArrowBack } from "@/assets/icons";
+import { EmailService } from "@/assets/images";
 import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-form";
-import { EmailService } from "@/lib/assets";
-import { ArrowBack } from "@/lib/icons";
 import { paths } from "@/routes";
 import { Metadata } from "next";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 import { SupportSchema } from "@/features/support/schemas";
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 import { z } from "zod";
 
 export async function support({
@@ -11,7 +11,7 @@ export async function support({
 }: z.infer<typeof SupportSchema>) {
   const apiUrl = "/support";
 
-  return await api(apiUrl, "POST", {
+  return await fetchServer(apiUrl, "POST", {
     firstName,
     lastName,
     email,

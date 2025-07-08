@@ -15,17 +15,12 @@ import Sub from "public/images/sub.png";
 import SubTwo from "public/images/sub_two.png";
 import Yara from "public/images/yara.png";
 
-const Intro = "/videos/introduction-video.mov";
-const Hero = "/videos/hero-video.mp4";
-
 export {
   Camille,
   EmailService,
   Faq,
   Faq2,
-  Hero,
   HeroImg,
-  Intro,
   Jisso,
   Lft,
   LogBg,

@@ -1,7 +1,7 @@
 "use client";
 
+import { CircleUser, LogOut, Settings } from "@/assets/icons";
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
-import { CircleUser, LogOut, Settings } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import { CreditCard } from "lucide-react";

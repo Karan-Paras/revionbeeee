@@ -1,16 +1,16 @@
 "use client";
 
+import {
+  CircleCheckFading,
+  HelpLightBulb,
+  MessageCircleQuestion,
+} from "@/assets/icons";
 import { BreadcrumbBanner } from "@/components/common/breadcrumb-banner";
 import { VideoPlayer } from "@/components/common/video-player";
 import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetSubjectDetails } from "@/features/subjects/queries/use-get-subject-details";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
-import {
-  CircleCheckFading,
-  HelpLightBulb,
-  MessageCircleQuestion,
-} from "@/lib/icons";
 import { getSubjectVideoUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import DOMPurify from "dompurify";

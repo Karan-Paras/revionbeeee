@@ -1,6 +1,6 @@
 "use client";
 
-import { Camille, Jisso, Yara } from "@/lib/assets";
+import { Camille, Jisso, Yara } from "@/assets/images";
 import Image from "next/image";
 import Slider from "react-slick";
 

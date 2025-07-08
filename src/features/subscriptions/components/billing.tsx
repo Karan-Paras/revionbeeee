@@ -1,10 +1,10 @@
 "use client";
 
+import { Billing as BillingIcon } from "@/assets/icons";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { CurrentPlan } from "@/features/subscriptions/components/current-plan";
 import { useBilling } from "@/features/subscriptions/queries/use-billing";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { Billing as BillingIcon } from "@/lib/icons";
 import { paths } from "@/routes";
 import { usePathname } from "next/navigation";
 

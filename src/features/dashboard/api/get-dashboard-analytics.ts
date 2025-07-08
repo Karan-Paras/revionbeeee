@@ -1,8 +1,8 @@
 import { Home } from "@/features/subjects/types";
-import fetcher from "@/lib/fetcher";
+import { fetchClient } from "@/lib/fetch-client";
 
 export async function getDashboardAnalytics() {
   const apiUrl = "/home";
 
-  return await fetcher<Home>(apiUrl, "GET");
+  return await fetchClient<Home>(apiUrl, "GET");
 }

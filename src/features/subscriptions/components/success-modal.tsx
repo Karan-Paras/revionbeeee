@@ -1,3 +1,4 @@
+import { PassChng } from "@/assets/images";
 import { Modal } from "@/components/common/modal";
 import { ConfettiCelebration } from "@/components/feedback/confetti-celebration";
 import PaymentProcessing from "@/features/subscriptions/components/payment-processing";
@@ -7,7 +8,6 @@ import { useSessionStore } from "@/features/subscriptions/stores/use-session-sto
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { useSuccessModal } from "@/features/subscriptions/stores/use-success-modal";
 import { useStore } from "@/hooks/use-store";
-import { PassChng } from "@/lib/assets";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";

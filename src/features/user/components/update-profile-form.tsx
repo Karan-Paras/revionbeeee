@@ -1,5 +1,6 @@
 "use client";
 
+import { Camera, Mars, Venus } from "@/assets/icons";
 import { ErrorBlock } from "@/components/errors/error-block";
 import { InputError } from "@/components/errors/input-error";
 import { DataLoader } from "@/components/loaders/data-loader";
@@ -9,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { updateProfile } from "@/features/user/actions/update-profile";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { Camera, Mars, Venus } from "@/lib/icons";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";

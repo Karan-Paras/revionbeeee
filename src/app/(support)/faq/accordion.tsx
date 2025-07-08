@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus2, Plus } from "@/lib/icons";
+import { Minus2, Plus } from "@/assets/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { type JSX, useState } from "react";
 

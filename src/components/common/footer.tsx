@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { RevisionBee } from "@/lib/icons";
+import { RevisionBee } from "@/assets/icons";
 
 import { paths } from "@/routes";
 

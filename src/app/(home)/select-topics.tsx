@@ -1,7 +1,7 @@
+import { MoveUpRight } from "@/assets/icons";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { getTopicsOnServer } from "@/features/subjects/api/get-topics-on-server";
 import { SelectTopics as SelectTopicsComponent } from "@/features/subjects/components/select-topics";
-import { MoveUpRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { Suspense, use } from "react";

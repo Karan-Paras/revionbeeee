@@ -1,5 +1,17 @@
-import { HeroImg, Lft, LogBg, ProfileJordan, Sub, SubTwo } from "@/lib/assets";
-import { Certificate, LaptopUser, LibraryBig, MessageStar } from "@/lib/icons";
+import {
+  Certificate,
+  LaptopUser,
+  LibraryBig,
+  MessageStar,
+} from "@/assets/icons";
+import {
+  HeroImg,
+  Lft,
+  LogBg,
+  ProfileJordan,
+  Sub,
+  SubTwo,
+} from "@/assets/images";
 import { paths } from "@/routes";
 import Image from "next/image";
 

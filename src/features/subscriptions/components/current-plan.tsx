@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 
+import { BadgeCheck } from "@/assets/icons";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import { FREE_PLAN, SubscriptionType } from "@/features/subscriptions/types";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { BadgeCheck } from "@/lib/icons";
 import { addDays, format, isFuture } from "date-fns";
 import Skeleton from "react-loading-skeleton";
 

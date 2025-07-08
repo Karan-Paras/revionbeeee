@@ -1,7 +1,7 @@
 "use client";
 
+import { PassChng } from "@/assets/images";
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
-import { PassChng } from "@/lib/assets";
 import { paths } from "@/routes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

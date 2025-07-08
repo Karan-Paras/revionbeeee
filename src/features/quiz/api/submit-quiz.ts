@@ -1,4 +1,4 @@
-import fetcher from "@/lib/fetcher";
+import { fetchClient } from "@/lib/fetch-client";
 import type { ID } from "@/types/globals";
 
 export async function submitQuiz({
@@ -12,7 +12,7 @@ export async function submitQuiz({
 }) {
   const apiUrl = "/submit/quiz/result";
 
-  return await fetcher(apiUrl, "POST", {
+  return await fetchClient(apiUrl, "POST", {
     quizID: quizId,
     total_attempts: totalAttempts,
     progress,

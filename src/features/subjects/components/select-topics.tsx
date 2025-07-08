@@ -1,10 +1,10 @@
 "use client";
 
+import { ChevronRight } from "@/assets/icons";
 import { DataLoader } from "@/components/loaders/data-loader";
 import { useGetTopics } from "@/features/subjects/queries/use-get-topics";
 import { useActiveSubjectStore } from "@/features/subjects/stores/use-active-subject-store";
 import type { Topic } from "@/features/subjects/types";
-import { ChevronRight } from "@/lib/icons";
 import { paths } from "@/routes";
 import type { ApiSuccessResponse } from "@/types/api";
 import type { ID } from "@/types/globals";

@@ -11,7 +11,7 @@ import { NavLink } from "@/components/ui/nav-link";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { isUserProfileComplete } from "@/features/user/utils";
 
-import { Logo } from "@/lib/assets";
+import { Logo } from "@/assets/images";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";

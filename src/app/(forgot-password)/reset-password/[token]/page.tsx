@@ -1,6 +1,6 @@
+import { PassIcn } from "@/assets/images";
 import { verifyToken } from "@/features/auth/api/forgot-password";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
-import { PassIcn } from "@/lib/assets";
 import type { Metadata } from "next";
 import Image from "next/image";
 

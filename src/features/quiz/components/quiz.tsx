@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/assets/icons";
 import { VideoPlayer } from "@/components/common/video-player";
 import { ApiError } from "@/components/errors/api-error";
 import { DataLoader } from "@/components/loaders/data-loader";
@@ -7,7 +8,6 @@ import { useGetQuiz } from "@/features/quiz/queries/use-get-quiz";
 import { useSubmitQuiz } from "@/features/quiz/queries/use-submit-quiz";
 import { useQuizResult } from "@/features/quiz/stores/use-quiz-result";
 import type { Option, Result } from "@/features/quiz/types";
-import { ArrowLeft, ArrowRight, Exit, RevisionBee } from "@/lib/icons";
 import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,

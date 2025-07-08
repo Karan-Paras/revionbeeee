@@ -1,4 +1,4 @@
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 
 export async function purchaseSubscription(data: {
   subscriptionID: string;
@@ -7,7 +7,7 @@ export async function purchaseSubscription(data: {
   amount: number | null;
 }) {
   const apiUrl = "/subscription/purchase";
-  return await api(apiUrl, "POST", {
+  return await fetchServer(apiUrl, "POST", {
     subscriptionID: data.subscriptionID,
     customerID: data.customerID,
     planType: data.planType === "monthly" ? 1 : 2,

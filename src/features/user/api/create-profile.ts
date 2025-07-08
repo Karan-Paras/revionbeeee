@@ -1,6 +1,6 @@
 import { CreateProfileSchema } from "@/features/user/schemas";
 import type { User } from "@/features/user/types";
-import api from "@/lib/api";
+import { fetchServer } from "@/lib/fetch-server";
 import { z } from "zod";
 
 type CreateProfileInput = z.infer<typeof CreateProfileSchema>;
@@ -18,5 +18,5 @@ export async function createProfile(data: CreateProfileInput) {
     }
   }
 
-  return await api<User>(apiUrl, "POST", formData);
+  return await fetchServer<User>(apiUrl, "POST", formData);
 }

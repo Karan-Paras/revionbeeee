@@ -1,6 +1,6 @@
 "use client";
 
-import { TriangleAlert } from "@/lib/icons";
+import { TriangleAlert } from "@/assets/icons";
 
 export default function PaymentProcessing() {
   return (

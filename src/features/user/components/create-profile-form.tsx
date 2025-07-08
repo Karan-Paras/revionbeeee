@@ -1,5 +1,6 @@
 "use client";
 
+import { Camera } from "@/assets/icons";
 import { ErrorBlock } from "@/components/errors/error-block";
 import { InputError } from "@/components/errors/input-error";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,6 @@ import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { createProfile } from "@/features/user/actions/create-profile";
 import { isUserProfileComplete } from "@/features/user/utils";
-import { Camera } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
