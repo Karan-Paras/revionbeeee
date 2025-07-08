@@ -116,7 +116,7 @@ export function Subscription({
             <h3 className="pb-3.5 text-2xl font-semibold text-black">
               {title}&nbsp;
               {type === SubscriptionType.FREE && (
-                <span className="font-normal text-[#9D9D9D] text-sm">
+                <span className="font-normal text-[#9D9D9D] text-sm relative bottom-0.5">
                   (Trial - 3 Days Only)
                 </span>
               )}
@@ -126,7 +126,9 @@ export function Subscription({
           <div className="lwr p-6">
             <div className="flex items-center gap-2.5">
               <h4 className="text-3xl font-bold text-black">{price}</h4>
-              <span className="font-normal text-[#9D9D9D]">{periodText()}</span>
+              <span className="font-normal text-[#9D9D9D] relative top-0.5">
+                {periodText()}
+              </span>
             </div>
             <div className="lst my-8">
               <ul>
@@ -161,7 +163,7 @@ export function Subscription({
 
   if (variant === "compact") {
     return (
-      <div className="col-span-1">
+      <div className="md:col-span-1 col-span-3">
         <div
           className={cn(
             "crd rounded-xl border border-[#DADADA] px-6 py-7 lg:min-h-[490px]",

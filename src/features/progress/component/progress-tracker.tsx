@@ -13,7 +13,7 @@ export function ProgressTracker({ topicId }: Props) {
   const { data, isLoading, error } = useGetProgress(topicId);
 
   return (
-    <div className="col-span-12 md:col-span-8">
+    <div className="col-span-12 lg:col-span-8 md:col-span-7">
       <div className="h-[90vh] overflow-y-auto rounded-2xl border border-[#CECECE] bg-white p-8">
         <h3 className="mb-3.5 text-xl font-bold">Progress Tracker</h3>
 
@@ -39,7 +39,7 @@ export function ProgressTracker({ topicId }: Props) {
                   className="itm mb-4 rounded-xl border border-[#E0E0E0] p-5"
                 >
                   <div className="grid grid-cols-12 items-end justify-between gap-4">
-                    <div className="col-span-9 md:col-span-11">
+                    <div className="col-span-9 md:col-span-10">
                       <h2>{subjectName}</h2>
                       <div className="prog relative">
                         <div
@@ -53,9 +53,9 @@ export function ProgressTracker({ topicId }: Props) {
                         <div className="relative mt-3.5 h-2 w-full rounded-xl bg-[#F4F4F4]" />
                       </div>
                     </div>
-                    <div className="col-span-3 md:col-span-1">
+                    <div className="col-span-3 md:col-span-2">
                       <div className="pro_load text-center">
-                        <h4 className="text-xl font-bold lg:text-2xl">
+                        <h4 className="text-xl font-bold lg:text-2xl md:text-xl">
                           {progress}
                         </h4>
                       </div>

@@ -26,7 +26,7 @@ export function SelectLevel({ selectedTopicId, setSelectedTopicId }: Props) {
   ]);
 
   return (
-    <div className="col-span-12 md:col-span-4">
+    <div className="col-span-12 lg:col-span-4 md:col-span-5">
       <div className="lvl">
         <div className="h-[90vh] overflow-y-auto rounded-2xl border border-[#CECECE] bg-white px-5 py-6">
           <h3 className="mb-3.5 text-xl font-bold">Select From Level</h3>
