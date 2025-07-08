@@ -18,7 +18,7 @@ export async function generateMetadata({
     const result = await getSubjectDetailsOnServer(quizId);
     const subjectName = result?.data?.subjectName;
     if (subjectName) {
-      title = `${subjectName} Quiz - Revision Bee`;
+      title = `${subjectName} | Quiz - Revision Bee`;
       description = `Details and practice quizzes for ${subjectName}.`;
     }
   } catch {
