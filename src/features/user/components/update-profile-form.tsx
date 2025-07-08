@@ -54,7 +54,9 @@ function Form({ userData }: FormProps) {
       queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
-      getSession().then(() => router.replace(paths.accounts.myProfile()));
+      getSession().then(() =>
+        router.replace(paths.accounts.myProfile.scroll())
+      );
     }
   }, [formState, queryClient, router]);
 
