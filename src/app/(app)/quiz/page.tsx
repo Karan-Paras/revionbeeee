@@ -3,7 +3,7 @@ import Quiz from "@/app/(app)/quiz/quiz";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Start Quiz - Revision Bee",
+  title: "Quiz - Revision Bee",
   description: "Practice quizzes curated from your selected subjects.",
   robots: {
     index: false,
