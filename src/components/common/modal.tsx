@@ -32,7 +32,10 @@ export function Modal({ title, children, onClose, className }: ModalProps) {
     <>
       <div onClick={onClose} />
       <dialog open>
-        <div id="add_modal" className="fixed inset-0 z-[9999] overflow-y-auto">
+        <div
+          id="add_modal"
+          className="fixed inset-0 z-[999999] overflow-y-auto"
+        >
           <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" onClick={onClose}>
               <div className="absolute inset-0 bg-gray-950 opacity-75" />
