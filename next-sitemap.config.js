@@ -6,12 +6,13 @@ module.exports = {
   priority: 0.7,
   sitemapSize: 7000,
 
-  // Exclude pages that are auth protected or transitional
   exclude: [
+    // Auth transitional pages (not useful for SEO)
+    "/email-sent",
     "/reset-password",
     "/password-changed",
-    "/email-sent",
 
+    // Protected app routes
     "/dashboard",
     "/progress",
     "/quiz",
@@ -19,8 +20,9 @@ module.exports = {
     "/subscription-plans",
     "/payment-method",
     "/payment-complete",
+    "/subjects",
 
-    // Dynamic routes - exclude all under these paths
+    // Dynamic content
     "/question-bank",
     "/question-bank/*",
     "/quiz",
@@ -32,26 +34,22 @@ module.exports = {
     "/quiz-result",
     "/quiz-result/*",
 
-    // Account related protected pages
-    "/accounts/my-profile",
-    "/accounts/my-profile/*",
-    "/accounts/billing",
-    "/accounts/billing/*",
-    "/accounts/settings",
-    "/accounts/settings/*",
-    "/accounts/my-profile/edit",
+    // Account-related (private)
+    "/accounts",
+    "/accounts/*",
+
+    // API routes
+    "/api/*",
   ],
 
   robotsTxtOptions: {
     policies: [
       {
         userAgent: "*",
-        allow: "/",
         disallow: [
+          "/email-sent",
           "/reset-password",
           "/password-changed",
-          "/email-sent",
-
           "/dashboard",
           "/progress",
           "/quiz",
@@ -59,7 +57,7 @@ module.exports = {
           "/subscription-plans",
           "/payment-method",
           "/payment-complete",
-
+          "/subjects",
           "/question-bank",
           "/question-bank/*",
           "/quiz",
@@ -70,14 +68,9 @@ module.exports = {
           "/quiz-finished/*",
           "/quiz-result",
           "/quiz-result/*",
-
-          "/accounts/my-profile",
-          "/accounts/my-profile/*",
-          "/accounts/billing",
-          "/accounts/billing/*",
-          "/accounts/settings",
-          "/accounts/settings/*",
-          "/accounts/my-profile/edit",
+          "/accounts",
+          "/accounts/*",
+          "/api/*",
         ],
       },
     ],
