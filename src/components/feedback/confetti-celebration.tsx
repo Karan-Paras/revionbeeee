@@ -7,7 +7,7 @@ export const ConfettiCelebration = () => {
   const [width, height] = useWindowSize();
 
   return (
-    <div className="fixed inset-0 z-[99999] pointer-events-none">
+    <div className="fixed inset-0 z-[9999999] pointer-events-none">
       <Confetti
         width={width}
         height={height}

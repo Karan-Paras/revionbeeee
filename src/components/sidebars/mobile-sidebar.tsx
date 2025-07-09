@@ -66,7 +66,7 @@ export function MobileSidebar({
         {isOpen && (
           <>
             <motion.div
-              className="fixed top-0 left-0 z-[1000] h-full w-10/12 bg-white p-6 shadow-lg lg:w-64"
+              className="fixed top-0 left-0 z-[99999] h-full w-10/12 bg-white p-6 shadow-lg lg:w-64"
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
