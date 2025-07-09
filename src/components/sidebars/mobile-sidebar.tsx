@@ -46,6 +46,15 @@ export function MobileSidebar({
 
   return (
     <>
+      {isOpen && (
+        <style jsx global>{`
+          body {
+            overflow: hidden;
+            height: 100vh;
+          }
+        `}</style>
+      )}
+
       <button
         onClick={openSidebar}
         className="absolute top-0 right-5 bottom-0 text-[#53A2EB] lg:hidden"
