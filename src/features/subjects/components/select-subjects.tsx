@@ -58,7 +58,7 @@ export function SelectSubjects({
           <div key={id} className="col-span-3 md:col-span-1">
             <div className="itm rounded-xl bg-white p-2 shadow-xl">
               <div className="hed min-h-24 content-center rounded-xl bg-[#F5F5F5] px-5 text-center">
-                <h3 className="font-bold lg:text-xl xl:text-2xl">
+                <h3 className="font-bold lg:text-xl xl:text-2xl md:text-2xl text-xl">
                   {topicName}
                 </h3>
               </div>
@@ -70,12 +70,12 @@ export function SelectSubjects({
                       className="flex items-center justify-between border-b border-[#DEDEDE] p-5"
                     >
                       <button
-                        className="flex w-full cursor-pointer items-center justify-between"
+                        className="flex w-full cursor-pointer items-center justify-between gap-2.5"
                         onClick={() =>
                           onSubjectClick(id, topicName, subjectName)
                         }
                       >
-                        <p className="font-semibold uppercase text-start">
+                        <p className="font-semibold uppercase text-start md:text-base text-sm">
                           {subjectName}
                         </p>
                         <span>
