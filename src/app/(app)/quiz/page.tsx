@@ -1,4 +1,4 @@
-import Quiz from "@/app/(app)/quiz/quiz";
+import { Quiz } from "@/app/(app)/quiz/quiz";
 
 import type { Metadata } from "next";
 
