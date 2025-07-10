@@ -1,5 +1,5 @@
 import { getQuizOnServer } from "@/features/quiz/api/get-quiz-on-server";
-import { Quiz } from "@/features/quiz/components/quiz";
+import { QuizBank } from "@/features/quiz/components/quiz-bank";
 
 import type { Metadata } from "next";
 
@@ -31,9 +31,9 @@ export async function generateMetadata({
     title,
     description,
     robots: {
-      index: false, // if auth-protected or personalized page
+      index: false,
       follow: false,
     },
   };
 }
-export default Quiz;
+export default QuizBank;

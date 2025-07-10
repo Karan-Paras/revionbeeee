@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export function Quiz() {
+export function QuizBank() {
   const [displayQuestionIdx, setDisplayQuestionIdx] = useState(0);
 
   const [options, setOptions] = useState<Result[]>([]);
