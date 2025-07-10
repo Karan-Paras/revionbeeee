@@ -116,13 +116,16 @@ export function Quiz() {
         options
       );
 
-      mutation
-        .mutateAsync({
+      mutation.mutate(
+        {
           quizId: quizID,
           totalAttempts: totalAttempted,
           progress: percentage,
-        })
-        .then(() => router.replace(paths.quizFinished(subjectId)));
+        },
+        {
+          onSuccess: () => router.replace(paths.quizFinished(subjectId)),
+        }
+      );
     };
 
     return (
