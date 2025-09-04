@@ -17,7 +17,10 @@ export default {
           ...user,
           id: user.id.toString(),
           image: user.profilePicture,
-          name: `${user.firstName} ${user.lastName}`,
+          name:
+            user.firstName && user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : "",
           token,
         };
       },

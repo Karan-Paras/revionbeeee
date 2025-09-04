@@ -8,15 +8,21 @@ type CreateProfileInput = z.infer<typeof CreateProfileSchema>;
 export async function createProfile(data: CreateProfileInput) {
   const apiUrl = "/profile/create";
 
-  const formData = new FormData();
+  if (data.profilePicture instanceof File) {
+    const formData = new FormData();
 
-  for (const key in data) {
-    if (key === "profilePicture") {
-      formData.append(key, data[key]);
-    } else {
-      formData.append(key, data[key as keyof CreateProfileInput] as string);
+    for (const key in data) {
+      if (key === "profilePicture") {
+        if (data.profilePicture) {
+          formData.append(key, data.profilePicture);
+        }
+      } else {
+        formData.append(key, data[key as keyof CreateProfileInput] as string);
+      }
     }
-  }
 
-  return await fetchServer<User>(apiUrl, "POST", formData);
+    return await fetchServer<User>(apiUrl, "POST", formData);
+  } else {
+    return await fetchServer<User>(apiUrl, "POST", data);
+  }
 }

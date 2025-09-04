@@ -8,8 +8,8 @@ import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscr
 import { User } from "@/features/user/types";
 import { getUserImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
-import { AnimatePresence, motion } from "framer-motion";
 import { CrownIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -88,8 +88,8 @@ export function ProfileDropdown({ user, onClick }: ProfileDropdownProps) {
               />
             </div>
           ) : (
-            <div className="mx-auto size-14 overflow-hidden rounded-full border-2 border-white bg-blue-500">
-              <div className="bg-muted flex h-full w-full items-center justify-center rounded-full font-bold text-white">
+            <div className="mx-auto size-14 overflow-hidden rounded-full border-2 border-white usr_grd">
+              <div className="bg-white/20 flex h-full w-full items-center justify-center rounded-full font-bold text-black">
                 {user.firstName?.charAt(0).toUpperCase() || "R"}
               </div>
             </div>

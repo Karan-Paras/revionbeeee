@@ -54,7 +54,7 @@ export function UserProfileCard() {
               </div>
             )}
             {profilePicture ? (
-              <div className="relative mx-auto size-40 overflow-hidden rounded-full border-2 border-white">
+              <div className="relative mx-auto size-30 overflow-hidden rounded-full border-2 border-white">
                 <Image
                   src={getUserImageUrl(profilePicture)}
                   alt="ProfilePicture"
@@ -63,8 +63,8 @@ export function UserProfileCard() {
                 />
               </div>
             ) : (
-              <div className="mx-auto size-40 overflow-hidden rounded-full border-2 border-white bg-blue-500">
-                <div className="bg-muted flex h-full w-full items-center justify-center rounded-full text-4xl font-bold text-white">
+              <div className="mx-auto size-30 overflow-hidden rounded-full border-2 border-white usr_grd">
+                <div className="bg-white/20 flex h-full w-full items-center justify-center rounded-full text-4xl font-bold text-black">
                   {firstName?.charAt(0).toUpperCase() || "R"}
                 </div>
               </div>

@@ -32,10 +32,25 @@ export const createProfile = async (
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
+  const payload = validatedFields.data;
+
+  if (
+    !(payload.profilePicture instanceof File) ||
+    payload.profilePicture.size === 0 ||
+    !payload.profilePicture.name ||
+    payload.profilePicture.type === "application/octet-stream"
+  ) {
+    delete payload.profilePicture;
+  }
+
+  if (!payload.phoneNumber) {
+    payload.phoneNumber = "";
+  }
+
   let user = null;
 
   try {
-    const json = await createProfileApi(validatedFields.data);
+    const json = await createProfileApi(payload);
     user = json.data;
   } catch (error: unknown) {
     if ((error as ApiErrorResponse)?.message) {

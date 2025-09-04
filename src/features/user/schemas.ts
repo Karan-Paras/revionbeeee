@@ -1,20 +1,28 @@
-import { firstName, lastName, phoneNumber } from "@/lib/schemas";
+import { firstName, lastName } from "@/lib/schemas";
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
+const phoneNumber = z
+  .string()
+  .trim()
+  .transform((val) => (val === "" ? undefined : val))
+  .optional()
+  .refine(
+    (val) => val === undefined || (val.length >= 10 && val.length <= 16),
+    { message: "Phone number must be between 10 and 16 digits" }
+  );
+
 export const CreateProfileSchema = z.object({
   profilePicture: z
     .instanceof(File)
-    .refine((file) => file.size > 0, {
-      message: "Profile picture is required",
-    })
     .refine((file) => file.size <= MAX_FILE_SIZE, {
       message: "Profile picture must be less than or equal to 4MB",
-    }),
+    })
+    .optional(),
   firstName,
   lastName,
-  phoneNumber,
+  phoneNumber: phoneNumber.optional(),
 });
 
 export const UpdateProfileSchema = z.object({
@@ -51,7 +59,7 @@ export const UpdateProfileSchema = z.object({
     .refine((val) => val === undefined || val === "male" || val === "female", {
       message: "Gender must be either 'male' or 'female'",
     }),
-  phoneNumber,
+  phoneNumber: phoneNumber.optional(),
   address: z
     .string()
     .transform((val) => (val === "" ? undefined : val))
