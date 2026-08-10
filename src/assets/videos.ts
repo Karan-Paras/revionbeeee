@@ -1,4 +1,4 @@
-const Intro = "../../public/videos/introduction-video.mov";
-const Hero = "../../public/videos/hero-video.mp4";
+const Intro = "/videos/introduction-video.mov";
+const Hero = "/videos/hero-video.mp4";
 
 export { Hero, Intro };
