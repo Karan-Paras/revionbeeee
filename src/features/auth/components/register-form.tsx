@@ -12,7 +12,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect } from "react";
 
-export function RegisterForm() {
+type RegisterFormProps = {
+  signInHref?: string;
+  userType?: "student" | "teacher";
+  successRedirect?: string;
+};
+
+export function RegisterForm({
+  signInHref = paths.login(),
+  userType = "student",
+  successRedirect = paths.createProfile(),
+}: RegisterFormProps) {
   const router = useRouter();
 
   const [formState, action, isPending] = useActionState(register, {
@@ -21,9 +31,9 @@ export function RegisterForm() {
 
   useEffect(() => {
     if (formState.success) {
-      getSession().then(() => router.replace(paths.createProfile()));
+      getSession().then(() => router.replace(successRedirect));
     }
-  }, [formState, router]);
+  }, [formState, router, successRedirect]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,6 +47,7 @@ export function RegisterForm() {
   return (
     <div className="spc_frm mt-9">
       <form onSubmit={handleFormSubmit}>
+        <input type="hidden" name="userType" value={userType} />
         <div className="itm relative mb-3.5">
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
@@ -116,7 +127,7 @@ export function RegisterForm() {
             Not registered yet?&nbsp;
             <Link
               className="font-semibold text-[#53A2EB] underline underline-offset-5"
-              href={paths.login()}
+              href={signInHref}
             >
               Sign in
             </Link>

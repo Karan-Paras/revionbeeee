@@ -3,7 +3,6 @@
 import { signIn } from "@/auth";
 import { register as registerApi } from "@/features/auth/api/register";
 import { RegisterSchema } from "@/features/auth/schemas";
-import { isDisposableEmail } from "@/lib/utils";
 import type { ApiErrorResponse } from "@/types/api";
 
 type RegisterFormState = {
@@ -24,6 +23,7 @@ export const register = async (
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirm-password"),
+    userType: formData.get("userType"),
   });
 
   if (!validatedFields.success) {
@@ -38,14 +38,6 @@ export const register = async (
         _form: [
           "You must agree to the Terms & Conditions and Privacy Policy before registering.",
         ],
-      },
-    };
-  }
-
-  if (isDisposableEmail(validatedFields.data.email)) {
-    return {
-      errors: {
-        email: ["Please use a valid email address."],
       },
     };
   }

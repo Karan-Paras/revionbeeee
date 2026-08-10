@@ -147,8 +147,11 @@ export function CreateProfileForm() {
                 disabled={isPending}
                 errors={formState.errors.phoneNumber}
                 autoComplete="tel"
-                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /[^0-9]/g,
+                    ""
+                  );
                 }}
               />
             </div>

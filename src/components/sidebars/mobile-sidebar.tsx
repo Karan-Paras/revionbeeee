@@ -14,6 +14,7 @@ import { Logo } from "@/assets/images";
 import { Menu, X } from "lucide-react";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
+import { getPostLoginPath } from "@/features/auth/utils";
 import { paths } from "@/routes";
 
 interface MobileSidebarProps {
@@ -32,7 +33,7 @@ export function MobileSidebar({
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data } = useGetProfile();
+  const { data } = useGetProfile(variant !== "home");
 
   const { onOpen } = useLogoutModal();
 
@@ -100,12 +101,19 @@ export function MobileSidebar({
                 {variant === "home" ? (
                   session ? (
                     <>
-                      {session.user.image ? (
+                      {session.user.userType === "teacher" ||
+                      session.user.image ? (
                         <Link
-                          href={paths.dashboard()}
+                          href={getPostLoginPath(
+                            session.user.userType,
+                            session.user.teacherProfileStatus
+                          )}
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
-                          Go to Dashboard
+                          {session.user.userType === "teacher" &&
+                          Number(session.user.teacherProfileStatus) < 6
+                            ? "Continue Profile"
+                            : "Go to Dashboard"}
                         </Link>
                       ) : (
                         <Link

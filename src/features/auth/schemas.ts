@@ -21,6 +21,7 @@ export const RegisterSchema = z
     email,
     password: newPassword,
     confirmPassword,
+    userType: z.enum(["student", "teacher"]),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",

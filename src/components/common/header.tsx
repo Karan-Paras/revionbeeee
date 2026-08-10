@@ -14,6 +14,7 @@ import { isUserProfileComplete } from "@/features/user/utils";
 import { Logo } from "@/assets/images";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
+import { getPostLoginPath } from "@/features/auth/utils";
 import { paths } from "@/routes";
 
 interface HeaderProps {
@@ -23,7 +24,7 @@ interface HeaderProps {
 export function Header({ variant = "dashboard" }: HeaderProps) {
   const { data: session, status } = useSession();
 
-  const { data, isPending } = useGetProfile();
+  const { data, isPending } = useGetProfile(variant === "dashboard");
 
   const { onOpen } = useLogoutModal();
 
@@ -52,16 +53,33 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       if (session) {
         const { user } = session;
         const isProfileComplete = isUserProfileComplete(user);
+        const isTeacher = user.userType === "teacher";
+        const isTeacherProfileComplete =
+          isTeacher && Number(user.teacherProfileStatus) >= 6;
+        const dashboardPath = getPostLoginPath(
+          user.userType,
+          user.teacherProfileStatus
+        );
 
         return (
           <div className="flex gap-5">
             <Link
               href={
-                isProfileComplete ? paths.dashboard() : paths.createProfile()
+                isTeacher
+                  ? dashboardPath
+                  : isProfileComplete
+                    ? paths.dashboard()
+                    : paths.createProfile()
               }
               className="flex cursor-pointer rounded-xl border-2 border-[#53A2EB] px-5 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
             >
-              {isProfileComplete ? "Go to Dashboard" : "Complete Profile"}
+              {isTeacher
+                ? isTeacherProfileComplete
+                  ? "Go to Dashboard"
+                  : "Continue Profile"
+                : isProfileComplete
+                  ? "Go to Dashboard"
+                  : "Complete Profile"}
             </Link>
             <button
               onClick={onOpen}

@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-export const email = z.string().email({ message: "Invalid email address" });
+export const email = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email({ message: "Invalid email address" });
 
 export const firstName = z.string().superRefine((val, ctx) => {
   const trimmed = val.trim();

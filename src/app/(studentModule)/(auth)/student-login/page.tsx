@@ -1,0 +1,29 @@
+import { RevisionBee } from "@/assets/icons";
+import { LoginForm } from "@/features/auth/components/login-form";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Student Login - Revision Bee",
+  description:
+    "Access your Revision Bee student account to track progress and take quizzes.",
+};
+
+export default function StudentLogin() {
+  return (
+    <div className="mx-auto h-full w-full max-w-md content-center md:w-11/12">
+      <div className="flex justify-center">
+        <RevisionBee />
+      </div>
+      <div className="my-3.5 text-center">
+        <h1 className="mb-2 text-xl font-bold md:text-2xl">
+          Welcome to Revision Bee
+        </h1>
+        <p className="text-sm text-[#505050]">
+          Master your exams with smart, simple, and engaging revision tools and
+          tips
+        </p>
+      </div>
+      <LoginForm />
+    </div>
+  );
+}
