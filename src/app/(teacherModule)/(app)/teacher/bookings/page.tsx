@@ -172,6 +172,7 @@ export default function TeacherBookingsPage() {
 
   return (
     <main className="min-h-full bg-[#f5f6f8] p-4 sm:p-8 lg:px-9 lg:py-9">
+      <h1>karan</h1>
       <div className="mx-auto max-w-[1440px]">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
           <div>
