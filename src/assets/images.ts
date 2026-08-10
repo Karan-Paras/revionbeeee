@@ -1,5 +1,5 @@
 import Camille from "../../public/images/camille.png";
-import EmailService from "../../public/images/email_service.svg";
+import EmailService from "../../public/images/emailservice.svg";
 import Faq from "../../public/images/faq.jpg";
 import Faq2 from "../../public/images/faq2.png";
 import HeroImg from "../../public/images/hero_img.jpg";
