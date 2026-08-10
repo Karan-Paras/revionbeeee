@@ -6,9 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "admin.revisionbee.com",
+        // hostname: "saurabh.parastechnologies.in",
+        hostname: "ankitadev.parastechnologies.in",
         port: "",
-        pathname: "/storage/app/public/**",
+        pathname: "/admin.revisionbee.com/storage/app/public/**",
       },
     ],
   },

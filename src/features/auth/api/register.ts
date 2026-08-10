@@ -8,6 +8,7 @@ export async function register(data: z.infer<typeof RegisterSchema>) {
   return await fetchServer<User>(apiUrl, "POST", {
     email: data.email,
     password: data.password,
+    userType: data.userType,
     deviceType: "web",
     deviceToken: "",
   });

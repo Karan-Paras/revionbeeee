@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
-import { isUserProfileComplete } from "@/features/user/utils";
+import { getPostLoginPath } from "@/features/auth/utils";
 import { paths } from "@/routes";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
@@ -19,24 +19,21 @@ export function LoginForm() {
   const [formState, action, isPending] = useActionState(login, {
     errors: {},
   });
+  const formErrors = formState?.errors ?? {};
 
   useEffect(() => {
-    if (formState.success) {
+    if (formState?.success) {
       getSession().then((data) => {
         if (!data?.user) {
           return router.replace(paths.login());
         }
 
-        const isProfileComplete = isUserProfileComplete(data?.user);
-
-        const redirectPath = isProfileComplete
-          ? paths.dashboard()
-          : paths.createProfile();
-
-        router.replace(redirectPath);
+        router.replace(
+          getPostLoginPath(data.user.userType, data.user.teacherProfileStatus)
+        );
       });
     }
-  }, [formState, router]);
+  }, [formState?.success, router]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -58,7 +55,7 @@ export function LoginForm() {
             iconClassName="mail_bg"
             placeholder="john@example.com"
             disabled={isPending}
-            errors={formState.errors.email}
+            errors={formErrors.email}
             autoComplete="email"
           />
         </div>
@@ -71,7 +68,7 @@ export function LoginForm() {
             iconClassName="pass_bg"
             placeholder="Enter password"
             disabled={isPending}
-            errors={formState.errors.password}
+            errors={formErrors.password}
             autoComplete="current-password"
           />
         </div>
@@ -97,7 +94,7 @@ export function LoginForm() {
         <div className="btn">
           <Button disabled={isPending}>Sign In</Button>
         </div>
-        <ErrorBlock errors={formState.errors._form} />
+        <ErrorBlock errors={formErrors._form} />
         <div className="lnk my-10">
           <p className="text-center text-[#505050]">
             Not registered yet?&nbsp;

@@ -3,8 +3,6 @@
 import { signIn } from "@/auth";
 import { login as loginApi } from "@/features/auth/api/login";
 import { LoginSchema } from "@/features/auth/schemas";
-import type { ApiErrorResponse } from "@/types/api";
-
 type LoginFormState = {
   errors: {
     email?: string[];
@@ -32,19 +30,26 @@ export const login = async (
   try {
     json = await loginApi(validatedFields.data);
   } catch (error: unknown) {
-    if ((error as ApiErrorResponse)?.message) {
-      return {
-        errors: {
-          _form: [(error as ApiErrorResponse)?.message || "An error occurred!"],
-        },
-      };
-    }
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unable to sign in. Please try again.";
+
+    return { errors: { _form: [message] } };
+  }
+
+  if (!json?.data || !json.token) {
+    return {
+      errors: {
+        _form: ["The login API returned an invalid response."],
+      },
+    };
   }
 
   try {
     await signIn("credentials", {
-      user: JSON.stringify(json?.data),
-      token: json?.token,
+      user: JSON.stringify(json.data),
+      token: json.token,
       redirect: false,
     });
   } catch (error: unknown) {

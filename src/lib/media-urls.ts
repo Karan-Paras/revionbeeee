@@ -1,9 +1,46 @@
-export const MEDIA_URL =
-  "https://admin.revisionbee.com/storage/app/public/uploads/revisionbee";
-
+export const MEDIA_URL = process.env.NEXT_PUBLIC_MEDIA_URL!;
 export function getUserImageUrl(image: string): string {
-  const url = `${MEDIA_URL}/profilePicture/`;
-  return `${url}${image}`;
+  const normalizedImage = image.trim().replace(/\\/g, "/");
+
+  if (/^https?:\/\//i.test(normalizedImage)) return normalizedImage;
+  if (normalizedImage.startsWith("/images/")) return normalizedImage;
+  if (!MEDIA_URL) return `${MEDIA_URL}/profilePicture/${normalizedImage}`;
+
+  const mediaBaseUrl = MEDIA_URL.replace(/\/+$/, "");
+  const mediaUrl = new URL(mediaBaseUrl);
+
+  if (normalizedImage.startsWith("/")) {
+    return `${mediaUrl.origin}${normalizedImage}`;
+  }
+
+  if (normalizedImage.startsWith("profilePicture/")) {
+    return `${mediaBaseUrl}/${normalizedImage}`;
+  }
+
+  return `${mediaBaseUrl}/profilePicture/${normalizedImage}`;
+}
+
+export function getTeacherImageUrl(image: string): string {
+  const normalizedImage = image.trim().replace(/\\/g, "/");
+
+  if (/^https?:\/\//i.test(normalizedImage)) return normalizedImage;
+  if (normalizedImage.startsWith("/images/")) return normalizedImage;
+  if (!MEDIA_URL) {
+    return `${MEDIA_URL}/teacherProfilePicture/${normalizedImage}`;
+  }
+
+  const mediaBaseUrl = MEDIA_URL.replace(/\/+$/, "");
+  const mediaUrl = new URL(mediaBaseUrl);
+
+  if (normalizedImage.startsWith("/")) {
+    return `${mediaUrl.origin}${normalizedImage}`;
+  }
+
+  if (normalizedImage.startsWith("teacherProfilePicture/")) {
+    return `${mediaBaseUrl}/${normalizedImage}`;
+  }
+
+  return `${mediaBaseUrl}/teacherProfilePicture/${normalizedImage}`;
 }
 
 export function getSubjectVideoUrl(video: string): string {

@@ -26,6 +26,35 @@ export default auth((req) => {
     return;
   }
 
+  const isTeacherOnboardingRoute = [
+    paths.teacherPersonalInfo(),
+    paths.teacherEducation(),
+    paths.teacherAddQualification(),
+    paths.teacherCertifications(),
+    paths.teacherAddCertification(),
+    paths.teacherAvailability(),
+    paths.teacherBankDetails(),
+    paths.teacherAddBank(),
+    paths.teacherProfileCreated(),
+  ].includes(nextUrl.pathname);
+
+  const isTeacherAtSignupStep =
+    nextUrl.pathname === paths.teacherSignup() &&
+    isLoggedIn &&
+    req.auth?.user?.userType === "teacher" &&
+    Number(req.auth.user.teacherProfileStatus) === 1;
+
+  if (isTeacherAtSignupStep) {
+    return;
+  }
+
+  if (isTeacherOnboardingRoute) {
+    if (!isLoggedIn) {
+      return Response.redirect(new URL(paths.login(), nextUrl));
+    }
+    return;
+  }
+
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));

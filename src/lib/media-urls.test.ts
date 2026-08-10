@@ -3,6 +3,7 @@ import {
   getQuizAnswerVideoUrl,
   getQuizQuestionVideoUrl,
   getSubjectVideoUrl,
+  getTeacherImageUrl,
   getUserImageUrl,
   MEDIA_URL,
 } from "@/lib/media-urls";
@@ -16,6 +17,22 @@ describe("getUserImageUrl()", () => {
     const result = getUserImageUrl(image);
 
     expect(result).toBe(expectedUrl);
+  });
+});
+
+describe("getTeacherImageUrl()", () => {
+  it("should use the teacher profile picture directory", () => {
+    const image = "teacher.webp";
+
+    expect(getTeacherImageUrl(image)).toBe(
+      `${MEDIA_URL}/teacherProfilePicture/${image}`
+    );
+  });
+
+  it("should preserve an absolute teacher image URL", () => {
+    const image = "https://example.com/teacher.webp";
+
+    expect(getTeacherImageUrl(image)).toBe(image);
   });
 });
 

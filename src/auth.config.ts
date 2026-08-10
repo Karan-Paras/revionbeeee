@@ -18,9 +18,10 @@ export default {
           id: user.id.toString(),
           image: user.profilePicture,
           name:
-            user.firstName && user.lastName
+            user.fullName?.trim() ||
+            (user.firstName && user.lastName
               ? `${user.firstName} ${user.lastName}`
-              : "",
+              : ""),
           token,
         };
       },
