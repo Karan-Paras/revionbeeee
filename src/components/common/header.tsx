@@ -32,6 +32,8 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     variant === "dashboard"
       ? [
           { name: "Dashboard", path: paths.dashboard() },
+          { name: "Lessons", path: paths.lessons() },
+          { name: "My Lessons", path: paths.myLessons() },
           { name: "Progress", path: paths.progress() },
           { name: "Subjects", path: paths.subjects() },
           { name: "Quiz", path: paths.quiz() },
@@ -55,7 +57,7 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
         const isProfileComplete = isUserProfileComplete(user);
         const isTeacher = user.userType === "teacher";
         const isTeacherProfileComplete =
-          isTeacher && Number(user.teacherProfileStatus) >= 6;
+          isTeacher && Number(user.teacherProfileStatus) >= 7;
         const dashboardPath = getPostLoginPath(
           user.userType,
           user.teacherProfileStatus

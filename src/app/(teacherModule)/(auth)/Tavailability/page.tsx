@@ -80,7 +80,7 @@ export default function TeacherAvailabilityPage() {
         return;
       }
 
-      router.push(paths.teacherProfileCreated());
+      router.push(paths.teacherBankDetails());
     });
   }
 
@@ -158,15 +158,20 @@ export default function TeacherAvailabilityPage() {
 
             <div
               className="mt-6 flex justify-center gap-1.5"
-              aria-label="Step 5 of 6"
+              aria-label="Step 4 of 6"
             >
-              {Array.from({ length: 5 }).map((_, index) => (
+              {Array.from({ length: 4 }).map((_, index) => (
                 <span
                   key={index}
                   className="h-1.5 w-12 rounded-full bg-[#fbbe1b]"
                 />
               ))}
-              <span className="h-1.5 w-12 rounded-full bg-[#d1d1d1]" />
+              {Array.from({ length: 2 }).map((_, index) => (
+                <span
+                  key={`remaining-${index}`}
+                  className="h-1.5 w-12 rounded-full bg-[#d1d1d1]"
+                />
+              ))}
             </div>
 
             <div className="mt-6 min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
@@ -271,7 +276,7 @@ export default function TeacherAvailabilityPage() {
                 </p>
               )}
               <Link
-                href={paths.teacherProfileCreated()}
+                href={paths.teacherBankDetails()}
                 className="grid h-12 w-full place-items-center rounded-lg border border-[#53a2eb] bg-white text-sm font-medium text-[#53a2eb] transition hover:bg-[#53a2eb]/5"
               >
                 Skip

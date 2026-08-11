@@ -9,7 +9,8 @@ describe("getPostLoginPath", () => {
     [3, "/Teducation"],
     [4, "/Tcertifications"],
     [5, "/Tavailability"],
-    [6, "/teacher/dashboard"],
+    [6, "/Tbank-details"],
+    [7, "/teacher/dashboard"],
   ])("routes teacher status %s to %s", (status, expectedPath) => {
     expect(getPostLoginPath("teacher", status)).toBe(expectedPath);
   });

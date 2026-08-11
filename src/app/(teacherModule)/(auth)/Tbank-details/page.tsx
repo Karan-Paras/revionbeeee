@@ -1,14 +1,33 @@
 "use client";
 
+import { connectTeacherStripe } from "@/features/teacher/actions/connect-stripe";
 import { useBankAccountStore } from "@/features/teacher/stores/use-bank-account-store";
 import { paths } from "@/routes";
 import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function TeacherBankDetails() {
   const accounts = useBankAccountStore((state) => state.accounts);
   const removeAccount = useBankAccountStore((state) => state.removeAccount);
+  const [isConnectingStripe, setIsConnectingStripe] = useState(false);
+
+  async function handleConnectStripe() {
+    if (isConnectingStripe) return;
+
+    setIsConnectingStripe(true);
+    const result = await connectTeacherStripe();
+
+    if (!result.success) {
+      toast.error(result.error);
+      setIsConnectingStripe(false);
+      return;
+    }
+
+    window.location.assign(result.url);
+  }
 
   return (
     <main className="h-dvh overflow-hidden bg-[#444] p-1.5">
@@ -24,19 +43,14 @@ export default function TeacherBankDetails() {
               </p>
             </div>
 
-            <div className="mt-7 flex gap-1.5" aria-label="Step 4 of 6">
-              {Array.from({ length: 4 }).map((_, index) => (
+            <div className="mt-7 flex gap-1.5" aria-label="Step 5 of 6">
+              {Array.from({ length: 5 }).map((_, index) => (
                 <span
                   key={`complete-${index}`}
                   className="h-1.5 w-12 rounded-full bg-[#fbbe1b]"
                 />
               ))}
-              {Array.from({ length: 2 }).map((_, index) => (
-                <span
-                  key={`remaining-${index}`}
-                  className="h-1.5 w-12 rounded-full bg-[#d1d1d1]"
-                />
-              ))}
+              <span className="h-1.5 w-12 rounded-full bg-[#d1d1d1]" />
             </div>
 
             {accounts.length === 0 ? (
@@ -102,17 +116,19 @@ export default function TeacherBankDetails() {
               </div>
             )}
 
-            <Link
-              href={paths.teacherAddBank()}
-              className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb]"
+            <button
+              type="button"
+              onClick={handleConnectStripe}
+              disabled={isConnectingStripe}
+              className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Plus size={17} strokeWidth={1.5} />
-              Add
-            </Link>
+              {isConnectingStripe ? "Connecting..." : "Add"}
+            </button>
 
             <div className="mt-20 sm:mt-24">
               <Link
-                href={paths.teacherAvailability()}
+                href={paths.teacherProfileCreated()}
                 aria-disabled={accounts.length === 0}
                 className={`grid h-12 w-full place-items-center rounded-lg text-sm font-medium ${accounts.length === 0 ? "pointer-events-none bg-[#d2d2d2] text-[#777]" : "bg-[#53a2eb] text-white hover:bg-[#4395df]"}`}
               >

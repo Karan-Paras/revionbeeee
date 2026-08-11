@@ -19,6 +19,8 @@ export function getPostLoginPath(
       case 5:
         return paths.teacherAvailability();
       case 6:
+        return paths.teacherBankDetails();
+      case 7:
       default:
         return paths.teacherDashboard();
     }

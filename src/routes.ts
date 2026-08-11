@@ -76,6 +76,8 @@ export const paths = {
   resetPassword: () => "/reset-password",
   passwordChanged: () => "/password-changed",
   dashboard: () => "/dashboard",
+  lessons: () => "/lessons",
+  myLessons: () => "/my-lessons",
   progress: () => "/progress",
   quiz: () => "/quiz",
   accounts: withPrefix("/accounts", {
