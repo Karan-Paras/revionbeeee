@@ -1,33 +1,14 @@
 "use client";
 
-import { connectTeacherStripe } from "@/features/teacher/actions/connect-stripe";
 import { useBankAccountStore } from "@/features/teacher/stores/use-bank-account-store";
 import { paths } from "@/routes";
 import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export default function TeacherBankDetails() {
   const accounts = useBankAccountStore((state) => state.accounts);
   const removeAccount = useBankAccountStore((state) => state.removeAccount);
-  const [isConnectingStripe, setIsConnectingStripe] = useState(false);
-
-  async function handleConnectStripe() {
-    if (isConnectingStripe) return;
-
-    setIsConnectingStripe(true);
-    const result = await connectTeacherStripe();
-
-    if (!result.success) {
-      toast.error(result.error);
-      setIsConnectingStripe(false);
-      return;
-    }
-
-    window.location.assign(result.url);
-  }
 
   return (
     <main className="h-dvh overflow-hidden bg-[#444] p-1.5">
@@ -116,15 +97,13 @@ export default function TeacherBankDetails() {
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={handleConnectStripe}
-              disabled={isConnectingStripe}
-              className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb] disabled:cursor-not-allowed disabled:opacity-60"
+            <Link
+              href={paths.teacherAddBank()}
+              className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb]"
             >
               <Plus size={17} strokeWidth={1.5} />
-              {isConnectingStripe ? "Connecting..." : "Add"}
-            </button>
+              Add
+            </Link>
 
             <div className="mt-20 sm:mt-24">
               <Link
