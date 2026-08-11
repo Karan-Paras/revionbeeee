@@ -43,19 +43,14 @@ export default function TeacherBankDetails() {
               </p>
             </div>
 
-            <div className="mt-7 flex gap-1.5" aria-label="Step 4 of 6">
-              {Array.from({ length: 4 }).map((_, index) => (
+            <div className="mt-7 flex gap-1.5" aria-label="Step 5 of 6">
+              {Array.from({ length: 5 }).map((_, index) => (
                 <span
                   key={`complete-${index}`}
                   className="h-1.5 w-12 rounded-full bg-[#fbbe1b]"
                 />
               ))}
-              {Array.from({ length: 2 }).map((_, index) => (
-                <span
-                  key={`remaining-${index}`}
-                  className="h-1.5 w-12 rounded-full bg-[#d1d1d1]"
-                />
-              ))}
+              <span className="h-1.5 w-12 rounded-full bg-[#d1d1d1]" />
             </div>
 
             {accounts.length === 0 ? (
@@ -133,7 +128,7 @@ export default function TeacherBankDetails() {
 
             <div className="mt-20 sm:mt-24">
               <Link
-                href={paths.teacherAvailability()}
+                href={paths.teacherProfileCreated()}
                 aria-disabled={accounts.length === 0}
                 className={`grid h-12 w-full place-items-center rounded-lg text-sm font-medium ${accounts.length === 0 ? "pointer-events-none bg-[#d2d2d2] text-[#777]" : "bg-[#53a2eb] text-white hover:bg-[#4395df]"}`}
               >

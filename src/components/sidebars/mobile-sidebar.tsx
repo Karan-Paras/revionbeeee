@@ -111,7 +111,7 @@ export function MobileSidebar({
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
                           {session.user.userType === "teacher" &&
-                          Number(session.user.teacherProfileStatus) < 6
+                          Number(session.user.teacherProfileStatus) < 7
                             ? "Continue Profile"
                             : "Go to Dashboard"}
                         </Link>

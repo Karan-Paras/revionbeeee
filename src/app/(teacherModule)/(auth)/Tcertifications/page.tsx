@@ -133,13 +133,13 @@ export default function TeacherCertifications() {
 
             <div className="mt-12 space-y-3">
               <Link
-                href={paths.teacherBankDetails()}
+                href={paths.teacherAvailability()}
                 className="grid h-12 w-full place-items-center rounded-lg border border-[#53a2eb] bg-white text-sm font-medium text-[#53a2eb] transition hover:bg-[#53a2eb]/5"
               >
                 Skip
               </Link>
               <Link
-                href={paths.teacherBankDetails()}
+                href={paths.teacherAvailability()}
                 aria-disabled={certifications.length === 0}
                 className={`grid h-12 w-full place-items-center rounded-lg text-sm font-medium transition ${certifications.length === 0 ? "pointer-events-none bg-[#d2d2d2] text-[#777]" : "bg-[#53a2eb] text-white hover:bg-[#4395df]"}`}
               >

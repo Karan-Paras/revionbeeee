@@ -137,6 +137,7 @@ export default function TeacherEducation() {
             <div className="mt-10 space-y-3">
               <button
                 type="button"
+                onClick={() => router.push(paths.teacherCertifications())}
                 className="grid h-12 w-full place-items-center rounded-lg border border-[#53a2eb] bg-white text-sm font-medium text-[#53a2eb] transition hover:bg-[#53a2eb]/5"
               >
                 Skip
