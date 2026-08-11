@@ -1,6 +1,7 @@
 "use client";
 
 import { RevisionBee } from "@/assets/icons";
+import { logoutTeacher } from "@/features/teacher/actions/logout";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import {
@@ -14,8 +15,11 @@ import {
   UsersRound,
   WalletCards,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const navigation = [
   { label: "Dashboard", href: paths.teacherDashboard(), icon: LayoutDashboard },
@@ -32,6 +36,22 @@ const navigation = [
 
 export function TeacherSidebar() {
   const pathname = usePathname();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+    const result = await logoutTeacher();
+
+    if (!result.success) {
+      toast.error(result.error);
+      setIsLoggingOut(false);
+      return;
+    }
+
+    await signOut({ redirectTo: paths.teacherLogin() });
+  }
 
   return (
     <aside className="hidden h-dvh w-[230px] shrink-0 border-r border-[#e5e8ec] bg-white lg:block">
@@ -77,10 +97,12 @@ export function TeacherSidebar() {
         <div className="mt-2 border-t border-[#edf0f3] pt-3">
           <button
             type="button"
-            className="flex h-12 w-full items-center gap-3 rounded-lg bg-[#fff0f0] px-3.5 text-sm font-medium text-[#ff3c45] transition hover:bg-[#ffe4e4]"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="flex h-12 w-full items-center gap-3 rounded-lg bg-[#fff0f0] px-3.5 text-sm font-medium text-[#ff3c45] transition hover:bg-[#ffe4e4] disabled:cursor-not-allowed disabled:opacity-60"
           >
             <LogOut size={20} strokeWidth={1.8} />
-            Log Out
+            {isLoggingOut ? "Logging Out..." : "Log Out"}
           </button>
         </div>
 
