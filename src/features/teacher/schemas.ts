@@ -33,14 +33,20 @@ export const CreateTeacherProfileSchema = z.object({
       return digitCount >= 10 && digitCount <= 15;
     }, "Mobile number must contain 10 to 15 digits"),
   country: z
-    .string()
+    .string({
+      required_error: "Please select a country",
+      invalid_type_error: "Please select a country",
+    })
     .trim()
-    .min(1, "Country is required")
+    .min(1, "Please select a country")
     .max(100, "Country must be at most 100 characters"),
   city: z
-    .string()
+    .string({
+      required_error: "Please select a city",
+      invalid_type_error: "Please select a city",
+    })
     .trim()
-    .min(1, "City is required")
+    .min(1, "Please select a city")
     .max(100, "City must be at most 100 characters"),
   hourlyRate: z.coerce
     .number({ invalid_type_error: "Enter a valid rate per minute" })
@@ -62,22 +68,38 @@ export const CreateTeacherProfileSchema = z.object({
 
 export const AddTeacherQualificationSchema = z.object({
   institutionName: z
-    .string()
+    .string({
+      required_error: "Please enter an institution name",
+      invalid_type_error: "Please enter an institution name",
+    })
     .trim()
+    .min(1, "Please enter an institution name")
     .min(2, "Institution name must be at least 2 characters")
     .max(150, "Institution name must be at most 150 characters"),
   degree: z
-    .string()
+    .string({
+      required_error: "Please select a degree",
+      invalid_type_error: "Please select a degree",
+    })
     .trim()
+    .min(1, "Please select a degree")
     .min(2, "Degree must be at least 2 characters")
     .max(100, "Degree must be at most 100 characters"),
   fieldOfStudy: z
-    .string()
+    .string({
+      required_error: "Please select a field of study",
+      invalid_type_error: "Please select a field of study",
+    })
     .trim()
+    .min(1, "Please select a field of study")
     .min(2, "Field of study must be at least 2 characters")
     .max(100, "Field of study must be at most 100 characters"),
   graduationYear: z
-    .string()
+    .string({
+      required_error: "Please select a graduation year",
+      invalid_type_error: "Please select a graduation year",
+    })
+    .min(1, "Please select a graduation year")
     .regex(/^\d{4}$/, "Enter a valid graduation year")
     .refine((year) => {
       const numericYear = Number(year);
@@ -106,18 +128,29 @@ const ALLOWED_CERTIFICATE_TYPES = [
 
 export const AddTeacherCertificationSchema = z.object({
   certificationName: z
-    .string()
+    .string({
+      required_error: "Please enter a certification name",
+      invalid_type_error: "Please enter a certification name",
+    })
     .trim()
+    .min(1, "Please enter a certification name")
     .min(2, "Certification name must be at least 2 characters")
     .max(150, "Certification name must be at most 150 characters"),
   issuingAuthority: z
-    .string()
+    .string({
+      required_error: "Please select an issuing authority",
+      invalid_type_error: "Please select an issuing authority",
+    })
     .trim()
+    .min(1, "Please select an issuing authority")
     .min(2, "Issuing authority must be at least 2 characters")
     .max(150, "Issuing authority must be at most 150 characters"),
   issueDate: z
-    .string()
-    .min(1, "Issue date is required")
+    .string({
+      required_error: "Please select an issue date",
+      invalid_type_error: "Please select an issue date",
+    })
+    .min(1, "Please select an issue date")
     .refine(
       (date) => !Number.isNaN(Date.parse(date)),
       "Enter a valid issue date"
@@ -127,8 +160,8 @@ export const AddTeacherCertificationSchema = z.object({
       "Issue date cannot be in the future"
     ),
   certificationFile: z
-    .instanceof(File, { message: "Certification file is required" })
-    .refine((file) => file.size > 0, "Certification file is required")
+    .instanceof(File, { message: "Please upload a certificate" })
+    .refine((file) => file.size > 0, "Please upload a certificate")
     .refine(
       (file) => file.size <= MAX_CERTIFICATE_SIZE,
       "Certification file must be 10MB or smaller"
