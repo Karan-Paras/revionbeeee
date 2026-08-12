@@ -1,5 +1,6 @@
 "use client";
 
+import { ConnectStripeButton } from "@/features/teacher/components/connect-stripe-button";
 import { useBankAccountStore } from "@/features/teacher/stores/use-bank-account-store";
 import { paths } from "@/routes";
 import { Plus, Trash2 } from "lucide-react";
@@ -97,13 +98,10 @@ export default function TeacherBankDetails() {
               </div>
             )}
 
-            <Link
-              href={paths.teacherAddBank()}
-              className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb]"
-            >
+            <ConnectStripeButton className="mt-5 flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-dashed border-[#bdbdbd] bg-white text-sm text-[#777] transition hover:border-[#53a2eb] hover:text-[#53a2eb] disabled:cursor-not-allowed disabled:opacity-60">
               <Plus size={17} strokeWidth={1.5} />
               Add
-            </Link>
+            </ConnectStripeButton>
 
             <div className="mt-20 sm:mt-24">
               <Link

@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  getVerifiedTeachers,
+  type VerifiedTeacher,
+} from "@/features/lessons/api/get-verified-teachers";
+import { useQuery } from "@tanstack/react-query";
+import {
   CalendarDays,
   Check,
   ChevronDown,
@@ -14,31 +19,40 @@ import {
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
-const teachers = [
-  { name: "Wade Warren", image: "/images/yara.png" },
-  { name: "Marvin McKinney", image: "/images/jisso.png" },
-  { name: "Kristin Watson", image: "/images/camille.png" },
-  { name: "Jerome Bell", image: "/images/profile_jordan.png" },
-  { name: "Darlene Robertson", image: "/images/pro_img.jpg" },
-  { name: "Bessie Cooper", image: "/images/yara.png" },
-  { name: "Guy Hawkins", image: "/images/jisso.png" },
-  { name: "Kathryn Murphy", image: "/images/camille.png" },
-  { name: "Leslie Alexander", image: "/images/profile_jordan.png" },
-];
+function detailText(record: Record<string, unknown>, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" || typeof value === "number")
+      return String(value);
+  }
+  return "";
+}
 
 export function TeacherList() {
   const [query, setQuery] = useState("");
-  const [selectedTeacher, setSelectedTeacher] = useState<
-    (typeof teachers)[number] | null
-  >(null);
+  const [selectedTeacher, setSelectedTeacher] =
+    useState<VerifiedTeacher | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const {
+    data: teachers = [],
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ["verified-teachers"],
+    queryFn: getVerifiedTeachers,
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: false,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+  });
   const visibleTeachers = useMemo(
     () =>
       teachers.filter(({ name }) =>
         name.toLowerCase().includes(query.trim().toLowerCase())
       ),
-    [query]
+    [query, teachers]
   );
 
   useEffect(() => {
@@ -54,47 +68,66 @@ export function TeacherList() {
   }, [selectedTeacher]);
 
   return (
-    <section className="bg-white px-5 py-10 sm:px-8 lg:px-12 lg:py-12">
-      <div className="mx-auto max-w-[1240px]">
-        <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-2xl font-bold text-[#121212]">
+    <section className="bg-white px-5 py-12 sm:px-8 lg:px-12 lg:py-14">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="mb-9 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-2xl font-bold text-[#121212] lg:text-[28px]">
             List of all Teachers
           </h2>
-          <label className="flex h-9 w-full items-center rounded-lg border border-[#7e7e7e] bg-white px-3 sm:w-[285px]">
-            <Search size={16} className="shrink-0 text-[#6f6f6f]" />
+          <label className="flex h-11 w-full items-center rounded-lg border border-[#7e7e7e] bg-white px-4 sm:w-[320px]">
+            <Search size={18} className="shrink-0 text-[#6f6f6f]" />
             <input
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search..."
-              className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
+              className="min-w-0 flex-1 bg-transparent px-2.5 text-sm outline-none"
             />
-            <SlidersHorizontal size={17} className="text-[#555]" />
+            <SlidersHorizontal size={19} className="text-[#555]" />
           </label>
         </div>
 
-        {visibleTeachers.length ? (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {isPending ? (
+          <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-[235px] animate-pulse rounded-2xl bg-[#eef2f5]"
+              />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="rounded-xl border border-dashed border-red-200 py-16 text-center text-sm text-red-500">
+            {error instanceof Error
+              ? error.message
+              : "Unable to load teachers."}
+          </div>
+        ) : visibleTeachers.length ? (
+          <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
             {visibleTeachers.map((teacher) => (
               <article
-                key={teacher.name}
-                className="rounded-xl border border-[#dedede] bg-white p-4 shadow-[0_12px_28px_rgba(37,65,92,0.08)]"
+                key={teacher.id}
+                className="rounded-2xl border border-[#dedede] bg-white p-5 shadow-[0_12px_28px_rgba(37,65,92,0.08)]"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <Image
                     src={teacher.image}
                     alt={teacher.name}
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full object-cover"
+                    width={64}
+                    height={64}
+                    className="h-16 w-16 shrink-0 rounded-full object-cover shadow-sm"
                   />
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-sm font-bold">
+                    <h3 className="truncate text-base font-bold">
                       {teacher.name}
                     </h3>
-                    <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#19bd57]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#19bd57]" />
-                      Online
+                    <p
+                      className={`mt-1 flex items-center gap-1.5 text-xs ${teacher.isOnline ? "text-[#19bd57]" : "text-[#8a929a]"}`}
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-full ${teacher.isOnline ? "bg-[#19bd57]" : "bg-[#aeb4ba]"}`}
+                      />
+                      {teacher.isOnline ? "Online" : "Offline"}
                     </p>
                   </div>
                   <button
@@ -103,25 +136,29 @@ export function TeacherList() {
                       setSelectedTeacher(teacher);
                       setIsScheduling(false);
                     }}
-                    className="h-8 shrink-0 rounded bg-[#53a2eb] px-4 text-[10px] font-semibold text-white hover:bg-[#398fdc]"
+                    className="h-10 shrink-0 rounded-md bg-[#53a2eb] px-4 text-xs font-semibold text-white hover:bg-[#398fdc]"
                   >
                     View Details
                   </button>
                 </div>
-                <p className="mt-4 line-clamp-2 text-[11px] leading-5 text-[#77808f]">
-                  We are seeking an experienced Instructional Designer to create
-                  engaging and accessible learning materials for health and
-                  education.
+                <p className="mt-5 line-clamp-2 text-[13px] leading-6 text-[#667388]">
+                  {teacher.bio ||
+                    teacher.professionalTitle ||
+                    "No profile description available."}
                 </p>
-                <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-md bg-[#f1f6fa] text-[11px] text-[#68748a]">
-                  <div className="border-r border-[#d7e0e8] px-3 py-2">
+                <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-lg bg-[#f1f6fa] text-xs text-[#68748a]">
+                  <div className="border-r border-[#d7e0e8] px-4 py-3">
                     Subject:{" "}
-                    <strong className="ml-2 text-[#202734]">Physics</strong>
+                    <strong className="ml-2 text-[#202734]">
+                      {teacher.subjects.join(", ") || "—"}
+                    </strong>
                   </div>
-                  <div className="flex justify-between px-3 py-2">
+                  <div className="flex justify-between px-4 py-3">
                     <span>Price:</span>
                     <strong className="font-medium text-[#202734]">
-                      $10 per hour
+                      {teacher.hourlyRate
+                        ? `$${teacher.hourlyRate} per min`
+                        : "—"}
                     </strong>
                   </div>
                 </div>
@@ -207,15 +244,21 @@ export function TeacherList() {
                       <h2 className="truncate text-sm font-bold">
                         {selectedTeacher.name}
                       </h2>
-                      <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#19bd57]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#19bd57]" />
-                        Online
+                      <p
+                        className={`mt-0.5 flex items-center gap-1 text-[11px] ${selectedTeacher.isOnline ? "text-[#19bd57]" : "text-[#8a929a]"}`}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${selectedTeacher.isOnline ? "bg-[#19bd57]" : "bg-[#aeb4ba]"}`}
+                        />
+                        {selectedTeacher.isOnline ? "Online" : "Offline"}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-base font-bold">
-                        $10
-                        <span className="text-[10px] font-normal">/hour</span>
+                        {selectedTeacher.hourlyRate
+                          ? `$${selectedTeacher.hourlyRate}`
+                          : "—"}
+                        <span className="text-[10px] font-normal">/min</span>
                       </p>
                       <p className="text-[9px] text-[#929292]">Lesson Price</p>
                     </div>
@@ -237,14 +280,10 @@ export function TeacherList() {
                 <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
                   <h3 className="text-sm font-bold">About me</h3>
                   <p className="mt-3 text-[10px] leading-[1.55] text-[#898989]">
-                    Lorem ipsum dolor sit amet consectetur. Amet egestas arcu
-                    consectetur augue neque aenean ut eget arcu. Mauris
-                    vestibulum sem velit quisque nunc. Elementum est scelerisque
-                    aliquam diam. Vitae consectetur nibh nulla est facilisis
-                    massa ultrices.
+                    {selectedTeacher.bio || "No profile description available."}
                   </p>
                   <div className="mt-4 flex gap-2">
-                    {["Physics", "Math"].map((subject) => (
+                    {selectedTeacher.subjects.map((subject) => (
                       <span
                         key={subject}
                         className="rounded bg-[#e8f4ff] px-2 py-1 text-[10px] font-medium text-[#278bdc]"
@@ -255,76 +294,121 @@ export function TeacherList() {
                   </div>
                 </section>
 
-                <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
-                  <h3 className="text-sm font-bold">
-                    Education &amp; Qualification
-                  </h3>
-                  <div className="mt-3 space-y-3">
-                    {[0, 1].map((item) => (
+                {selectedTeacher.qualifications.length > 0 && (
+                  <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
+                    <h3 className="text-sm font-bold">
+                      Education &amp; Qualification
+                    </h3>
+                    <div className="mt-3 space-y-3">
+                      {selectedTeacher.qualifications.map((item, index) => (
+                        <div
+                          key={detailText(item, "id") || index}
+                          className="grid grid-cols-[84px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
+                        >
+                          <Image
+                            src="/images/teacher-certifications.png"
+                            alt="Qualification certificate"
+                            width={84}
+                            height={72}
+                            className="h-[72px] w-[84px] rounded-md bg-white object-cover"
+                          />
+                          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
+                            <div>
+                              <dt>Institution Name</dt>
+                              <dd className="font-bold text-[#111]">
+                                {detailText(
+                                  item,
+                                  "institutionName",
+                                  "institution_name",
+                                  "institution"
+                                ) || "—"}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>Graduation Year</dt>
+                              <dd className="font-bold text-[#111]">
+                                {detailText(
+                                  item,
+                                  "graduationYear",
+                                  "graduation_year",
+                                  "year"
+                                ) || "—"}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>Field of Study</dt>
+                              <dd className="font-bold text-[#111]">
+                                {detailText(
+                                  item,
+                                  "fieldOfStudy",
+                                  "field_of_study",
+                                  "field"
+                                ) || "—"}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>Degree</dt>
+                              <dd className="font-bold text-[#111]">
+                                {detailText(item, "degree") || "—"}
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {selectedTeacher.certifications.length > 0 && (
+                  <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
+                    <h3 className="text-sm font-bold">Certifications</h3>
+                    {selectedTeacher.certifications.map((item, index) => (
                       <div
-                        key={item}
-                        className="grid grid-cols-[84px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
+                        key={detailText(item, "id") || index}
+                        className="mt-3 grid grid-cols-[100px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
                       >
                         <Image
-                          src="/images/teacher-certifications.png"
-                          alt="Qualification certificate"
-                          width={84}
-                          height={72}
-                          className="h-[72px] w-[84px] rounded-md bg-white object-cover"
+                          src="/images/teacher-education.png"
+                          alt="Professional certification"
+                          width={100}
+                          height={78}
+                          className="h-[78px] w-[100px] rounded-md object-cover"
                         />
                         <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
                           <div>
-                            <dt>Institution Name</dt>
+                            <dt>Certification Name</dt>
                             <dd className="font-bold text-[#111]">
-                              BA Mechanical Engineering
+                              {detailText(
+                                item,
+                                "certificationName",
+                                "certification_name",
+                                "name"
+                              ) || "—"}
                             </dd>
                           </div>
                           <div>
-                            <dt>Graduation Year</dt>
-                            <dd className="font-bold text-[#111]">2012</dd>
+                            <dt>Issuing Authority</dt>
+                            <dd className="font-bold text-[#111]">
+                              {detailText(
+                                item,
+                                "issuingAuthority",
+                                "issuing_authority",
+                                "authority"
+                              ) || "—"}
+                            </dd>
                           </div>
                           <div>
-                            <dt>Field of Study</dt>
-                            <dd className="font-bold text-[#111]">Civil</dd>
-                          </div>
-                          <div>
-                            <dt>Degree</dt>
-                            <dd className="font-bold text-[#111]">B.Tech</dd>
+                            <dt>Issue Date</dt>
+                            <dd className="font-bold text-[#111]">
+                              {detailText(item, "issueDate", "issue_date") ||
+                                "—"}
+                            </dd>
                           </div>
                         </dl>
                       </div>
                     ))}
-                  </div>
-                </section>
-
-                <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
-                  <h3 className="text-sm font-bold">Certifications</h3>
-                  <div className="mt-3 grid grid-cols-[100px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3">
-                    <Image
-                      src="/images/teacher-education.png"
-                      alt="Professional certification"
-                      width={100}
-                      height={78}
-                      className="h-[78px] w-[100px] rounded-md object-cover"
-                    />
-                    <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
-                      <div>
-                        <dt>Certification Name</dt>
-                        <dd className="font-bold text-[#111]">
-                          Engineer Of The Year
-                        </dd>
-                      </div>
-                      <div>
-                        <dt>Issuing Authority</dt>
-                        <dd className="font-bold text-[#111]">Company Name</dd>
-                      </div>
-                      <div>
-                        <dt>Issue Date</dt>
-                        <dd className="font-bold text-[#111]">20 Nov 2012</dd>
-                      </div>
-                    </dl>
-                  </div>
-                </section>
+                  </section>
+                )}
               </>
             )}
           </div>
@@ -338,7 +422,7 @@ function ScheduleLesson({
   teacher,
   onSubmit,
 }: {
-  teacher: (typeof teachers)[number];
+  teacher: VerifiedTeacher;
   onSubmit: () => void;
 }) {
   const slots = [
@@ -364,26 +448,31 @@ function ScheduleLesson({
           />
           <div className="min-w-0 flex-1">
             <h2 className="truncate text-sm font-bold">{teacher.name}</h2>
-            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#19bd57]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#19bd57]" />
-              Online
+            <p
+              className={`mt-0.5 flex items-center gap-1 text-[11px] ${teacher.isOnline ? "text-[#19bd57]" : "text-[#8a929a]"}`}
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${teacher.isOnline ? "bg-[#19bd57]" : "bg-[#aeb4ba]"}`}
+              />
+              {teacher.isOnline ? "Online" : "Offline"}
             </p>
           </div>
           <div className="text-right">
             <p className="text-base font-bold">
-              $10<span className="text-[10px] font-normal">/hour</span>
+              {teacher.hourlyRate ? `$${teacher.hourlyRate}` : "—"}
+              <span className="text-[10px] font-normal">/min</span>
             </p>
             <p className="text-[9px] text-[#929292]">Lesson Price</p>
           </div>
         </div>
         <p className="mt-4 border-t border-[#ececec] pt-4 text-[10px] leading-[1.55] text-[#969696]">
-          Lorem ipsum dolor sit amet consectetur. Amet egestas arcu consectetur
-          augue neque aenean ut eget arcu. Mauris vestibulum sem velit quisque
-          nunc. Elementum est scelerisque aliquam diam.
+          {teacher.bio || "No profile description available."}
         </p>
         <div className="mt-3 flex justify-between rounded bg-[#f2f7fb] px-3 py-2 text-[10px] text-[#718096]">
           <span>Subject:</span>
-          <strong className="text-[#343b44]">Physics, Math</strong>
+          <strong className="text-[#343b44]">
+            {teacher.subjects.join(", ") || "—"}
+          </strong>
         </div>
       </section>
 
@@ -438,7 +527,7 @@ function ScheduleLesson({
       <FormSection title="Payable Amount">
         <div className="flex h-12 items-center rounded-lg border border-[#53a2eb] bg-[#f1f8ff] px-3 text-xs">
           <CircleDollarSign size={19} className="mr-3 text-[#53a2eb]" />
-          <strong>$120</strong>
+          <strong>{teacher.hourlyRate ? `$${teacher.hourlyRate}` : "—"}</strong>
           <Landmark
             size={20}
             className="ml-auto rounded bg-[#53a2eb] p-1 text-white"

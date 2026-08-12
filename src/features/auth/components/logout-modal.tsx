@@ -7,17 +7,23 @@ import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, X } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 
 export function LogoutModal() {
   const { onClose } = useLogoutModal();
-
   const queryClient = useQueryClient();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+
     queryClient.clear();
+    onClose();
 
-    signOut({
-      redirectTo: paths.login(),
+    await signOut({
+      redirectTo: paths.home(),
     });
   };
 
@@ -43,11 +49,11 @@ export function LogoutModal() {
         </p>
 
         <div className="flex gap-3">
-          <Button variant="secondary" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose} disabled={isLoggingOut}>
             No
           </Button>
-          <Button variant="rounded" onClick={onLogout}>
-            Yes
+          <Button variant="rounded" onClick={onLogout} disabled={isLoggingOut}>
+            {isLoggingOut ? "Logging Out..." : "Yes"}
           </Button>
         </div>
       </div>

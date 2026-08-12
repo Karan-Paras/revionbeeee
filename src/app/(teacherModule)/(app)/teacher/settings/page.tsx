@@ -1,5 +1,6 @@
 "use client";
 
+import { ConnectStripeButton } from "@/features/teacher/components/connect-stripe-button";
 import {
   ChevronRight,
   CircleHelp,
@@ -55,18 +56,11 @@ export default function TeacherSettingsPage() {
             : "Bank Details";
   const [activeSection, setActiveSection] =
     useState<SettingsSection>(routeSection);
-  const [showBankForm, setShowBankForm] = useState(false);
   const [visiblePasswords, setVisiblePasswords] = useState({
     current: false,
     new: false,
     confirm: false,
   });
-
-  function saveBankAccount(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setShowBankForm(false);
-    toast.success("Bank account added successfully");
-  }
 
   function changeSection(section: SettingsSection) {
     const destination =
@@ -88,7 +82,6 @@ export default function TeacherSettingsPage() {
     }
 
     setActiveSection(section);
-    setShowBankForm(false);
   }
 
   function updatePassword(event: FormEvent<HTMLFormElement>) {
@@ -142,82 +135,21 @@ export default function TeacherSettingsPage() {
             </h2>
 
             {activeSection === "Bank Details" ? (
-              showBankForm ? (
-                <form
-                  onSubmit={saveBankAccount}
-                  className="mt-5 grid gap-4 rounded-xl border border-[#e3e6e9] bg-[#fcfcfd] p-5 sm:grid-cols-2"
-                >
-                  <label className="text-xs font-medium text-[#333]">
-                    Account Holder
-                    <input
-                      required
-                      name="accountHolder"
-                      placeholder="Enter account holder"
-                      className={`${inputClassName} mt-2`}
-                    />
-                  </label>
-                  <label className="text-xs font-medium text-[#333]">
-                    Bank Name
-                    <input
-                      required
-                      name="bankName"
-                      placeholder="Enter bank name"
-                      className={`${inputClassName} mt-2`}
-                    />
-                  </label>
-                  <label className="text-xs font-medium text-[#333]">
-                    Account Number
-                    <input
-                      required
-                      name="accountNumber"
-                      inputMode="numeric"
-                      placeholder="Enter account number"
-                      className={`${inputClassName} mt-2`}
-                    />
-                  </label>
-                  <label className="text-xs font-medium text-[#333]">
-                    Routing / SWIFT Code
-                    <input
-                      required
-                      name="routingCode"
-                      placeholder="Enter routing code"
-                      className={`${inputClassName} mt-2`}
-                    />
-                  </label>
-                  <div className="flex gap-3 sm:col-span-2 sm:justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setShowBankForm(false)}
-                      className="h-10 flex-1 rounded-lg border border-[#d8dde1] bg-white px-5 text-xs font-medium text-[#555] sm:flex-none"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="h-10 flex-1 rounded-lg bg-[#53a2eb] px-7 text-xs font-semibold text-white hover:bg-[#4395df] sm:flex-none"
-                    >
-                      Save Account
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setShowBankForm(true)}
-                  className="mt-5 flex min-h-[145px] w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#d9dde0] bg-[#fcfcfc] px-5 text-center transition hover:border-[#53a2eb] hover:bg-[#f8fbff]"
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[#eceeef] text-[#a6aaae]">
-                    <Plus size={25} strokeWidth={1.8} />
-                  </span>
-                  <span className="mt-5 text-sm font-semibold text-[#222]">
-                    Add Bank Account
-                  </span>
-                  <span className="mt-2 text-[11px] text-[#999]">
-                    Lorem ipsum dolor sit amet consectetur. Mattis faucibus
-                    dictum turpis quam facilisi duis.
-                  </span>
-                </button>
-              )
+              <ConnectStripeButton
+                className="mt-5 flex min-h-[145px] w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#d9dde0] bg-[#fcfcfc] px-5 text-center transition hover:border-[#53a2eb] hover:bg-[#f8fbff] disabled:cursor-not-allowed disabled:opacity-60"
+                loadingText="Connecting to Stripe..."
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-[#eceeef] text-[#a6aaae]">
+                  <Plus size={25} strokeWidth={1.8} />
+                </span>
+                <span className="mt-5 text-sm font-semibold text-[#222]">
+                  Add Bank Account
+                </span>
+                <span className="mt-2 text-[11px] text-[#999]">
+                  Lorem ipsum dolor sit amet consectetur. Mattis faucibus dictum
+                  turpis quam facilisi duis.
+                </span>
+              </ConnectStripeButton>
             ) : activeSection === "Change Password" ? (
               <form
                 onSubmit={updatePassword}

@@ -34,7 +34,6 @@ export default auth((req) => {
     paths.teacherAddCertification(),
     paths.teacherAvailability(),
     paths.teacherBankDetails(),
-    paths.teacherAddBank(),
     paths.teacherProfileCreated(),
   ].includes(nextUrl.pathname);
 

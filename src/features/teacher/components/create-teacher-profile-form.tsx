@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 const initialState: CreateTeacherProfileFormState = { errors: {} };
 
@@ -42,12 +42,6 @@ export function CreateTeacherProfileForm() {
       router.replace(paths.teacherEducation());
     }
   }, [formState?.success, router]);
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    startTransition(() => action(formData));
-  }
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -80,7 +74,7 @@ export function CreateTeacherProfileForm() {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-3">
+      <form action={action} noValidate className="space-y-3">
         <div className="mb-4 text-center">
           <label className="relative mx-auto grid h-20 w-20 cursor-pointer place-items-center overflow-visible rounded-full border border-dashed border-[#333] bg-white">
             {imagePreview ? (
@@ -220,7 +214,7 @@ export function CreateTeacherProfileForm() {
         </div>
 
         <label className="block text-xs font-medium text-[#222]">
-          Hourly Rate
+          Rate per minute
           <span className="relative mt-1.5 block">
             <CircleDollarSign
               className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#999]"
@@ -234,10 +228,11 @@ export function CreateTeacherProfileForm() {
             <input
               name="hourlyRate"
               type="number"
-              min="0"
+              min="0.01"
+              max="500"
               step="0.01"
               inputMode="decimal"
-              placeholder="Enter Amount"
+              placeholder="Enter amount (max 500)"
               required
               disabled={isPending}
               className={`${inputClassName} pl-16`}
@@ -246,6 +241,7 @@ export function CreateTeacherProfileForm() {
           <FieldError errors={errors.hourlyRate} />
         </label>
 
+        <ErrorBlock errors={errors._form} />
         <button
           type="submit"
           disabled={isPending}
@@ -253,7 +249,6 @@ export function CreateTeacherProfileForm() {
         >
           {isPending ? "Saving..." : "Continue"}
         </button>
-        <ErrorBlock errors={errors._form} />
       </form>
     </>
   );

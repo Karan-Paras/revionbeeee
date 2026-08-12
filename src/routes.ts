@@ -62,7 +62,6 @@ export const paths = {
   teacherAddCertification: () => "/Tadd-certification",
   teacherAvailability: () => "/Tavailability",
   teacherBankDetails: () => "/Tbank-details",
-  teacherAddBank: () => "/Tadd-bank",
   teacherProfileCreated: () => "/Tprofile-created",
   teacherDashboard: () => "/teacher/dashboard",
   signup: () => "/signup",

@@ -2,6 +2,7 @@
 
 import { addTeacherAvailability as addTeacherAvailabilityApi } from "@/features/teacher/api/add-availability";
 import { AddTeacherAvailabilitySchema } from "@/features/teacher/schemas";
+import { revalidatePath } from "next/cache";
 
 export type AddTeacherAvailabilityResult =
   | { success: true }
@@ -21,6 +22,8 @@ export async function addTeacherAvailability(
 
   try {
     await addTeacherAvailabilityApi(validatedFields.data);
+    revalidatePath("/teacher/profile/availability");
+    revalidatePath("/teacher/profile/availability/update");
     return { success: true };
   } catch (error: unknown) {
     return {
