@@ -54,6 +54,8 @@ export function TeacherNavbar() {
         result.data.onlineStatus ??
         result.data.online_status;
       if (typeof onlineStatus === "boolean") setIsOnline(onlineStatus);
+      else if (typeof onlineStatus === "number")
+        setIsOnline(onlineStatus === 1);
     });
   }, []);
 

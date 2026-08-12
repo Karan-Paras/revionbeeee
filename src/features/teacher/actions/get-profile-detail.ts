@@ -143,6 +143,16 @@ export async function getTeacherProfileDetail(): Promise<GetTeacherProfileDetail
     const lastName = String(raw.lastName ?? raw.last_name ?? "");
     const normalizedData: TeacherProfileDetail = {
       ...data,
+      isOnline: Boolean(
+        (directTeacherRecord?.isOnline ??
+          directTeacherRecord?.is_online ??
+          raw.isOnline ??
+          raw.is_online) === true ||
+          (directTeacherRecord?.isOnline ??
+            directTeacherRecord?.is_online ??
+            raw.isOnline ??
+            raw.is_online) === 1
+      ),
       fullName:
         String(raw.fullName ?? raw.full_name ?? raw.name ?? "").trim() ||
         [firstName, lastName].filter(Boolean).join(" ").trim(),

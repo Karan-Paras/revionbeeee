@@ -13,10 +13,10 @@ export type TeacherProfileDetail = {
   hourlyRate?: number | string;
   profileImage?: string;
   profilePicture?: string;
-  isOnline?: boolean;
-  is_online?: boolean;
-  onlineStatus?: boolean;
-  online_status?: boolean;
+  isOnline?: boolean | number;
+  is_online?: boolean | number;
+  onlineStatus?: boolean | number;
+  online_status?: boolean | number;
   availabilities?: Array<{
     id?: number | string;
     dayOfWeek?: number;
