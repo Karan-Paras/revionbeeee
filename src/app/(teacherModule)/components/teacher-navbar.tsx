@@ -2,11 +2,13 @@
 
 import { ProfileJordan } from "@/assets/images";
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
+import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
 import { getTeacherImageUrl } from "@/lib/media-urls";
 import { Bell, Menu } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 function resolveProfileImage(image: string) {
   return getTeacherImageUrl(image);
@@ -18,6 +20,8 @@ export function TeacherNavbar() {
   const [teacherImage, setTeacherImage] = useState<string | StaticImageData>(
     ProfileJordan
   );
+  const [isOnline, setIsOnline] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   useEffect(() => {
     const sessionName = session?.user?.name?.trim();
@@ -43,8 +47,33 @@ export function TeacherNavbar() {
 
       const image = result.data.profileImage ?? result.data.profilePicture;
       if (image) setTeacherImage(resolveProfileImage(image));
+
+      const onlineStatus =
+        result.data.isOnline ??
+        result.data.is_online ??
+        result.data.onlineStatus ??
+        result.data.online_status;
+      if (typeof onlineStatus === "boolean") setIsOnline(onlineStatus);
     });
   }, []);
+
+  async function handleOnlineStatusChange() {
+    if (isUpdatingStatus) return;
+
+    const nextStatus = !isOnline;
+    setIsUpdatingStatus(true);
+    const result = await updateTeacherOnlineStatus(nextStatus);
+
+    if (!result.success) {
+      toast.error(result.error);
+      setIsUpdatingStatus(false);
+      return;
+    }
+
+    setIsOnline(result.isOnline);
+    setIsUpdatingStatus(false);
+    toast.success(result.isOnline ? "You are online" : "You are offline");
+  }
 
   const currentHour = new Date().getHours();
   const greeting =
@@ -88,14 +117,28 @@ export function TeacherNavbar() {
       </div>
 
       <div className="flex items-center gap-5">
-        <div className="flex items-center gap-2 rounded-full border border-[#dce3e8] bg-[#f7fafc] px-2.5 py-1.5">
-          <span className="relative h-5 w-9 rounded-full bg-[#71df69]">
-            <span className="absolute top-0.5 right-0.5 h-4 w-4 rounded-full bg-white shadow" />
+        <button
+          type="button"
+          role="switch"
+          aria-checked={isOnline}
+          aria-label={`Set status ${isOnline ? "offline" : "online"}`}
+          disabled={isUpdatingStatus}
+          onClick={handleOnlineStatusChange}
+          className="flex items-center gap-2 rounded-full border border-[#dce3e8] bg-[#f7fafc] px-2.5 py-1.5 transition disabled:cursor-wait disabled:opacity-60"
+        >
+          <span
+            className={`relative h-5 w-9 rounded-full transition-colors ${isOnline ? "bg-[#71df69]" : "bg-[#c6cbd0]"}`}
+          >
+            <span
+              className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${isOnline ? "right-0.5" : "left-0.5"}`}
+            />
           </span>
-          <span className="hidden text-xs font-medium text-[#38b44a] sm:inline">
-            Online
+          <span
+            className={`hidden text-xs font-medium sm:inline ${isOnline ? "text-[#38b44a]" : "text-[#7b8187]"}`}
+          >
+            {isUpdatingStatus ? "Updating..." : isOnline ? "Online" : "Offline"}
           </span>
-        </div>
+        </button>
         <button
           type="button"
           aria-label="Notifications"

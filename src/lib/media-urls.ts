@@ -26,7 +26,7 @@ export function getTeacherImageUrl(image: string): string {
   if (/^https?:\/\//i.test(normalizedImage)) return normalizedImage;
   if (normalizedImage.startsWith("/images/")) return normalizedImage;
   if (!MEDIA_URL) {
-    return `${MEDIA_URL}/teacherProfilePicture/${normalizedImage}`;
+    return "/images/teacher-personal-info.svg";
   }
 
   const mediaBaseUrl = MEDIA_URL.replace(/\/+$/, "");
@@ -41,6 +41,28 @@ export function getTeacherImageUrl(image: string): string {
   }
 
   return `${mediaBaseUrl}/teacherProfilePicture/${normalizedImage}`;
+}
+
+export function getTeacherCertificationUrl(image: string): string {
+  const normalizedImage = image.trim().replace(/\\/g, "/");
+
+  if (!normalizedImage) return "/images/teacher-certifications.png";
+  if (/^https?:\/\//i.test(normalizedImage)) return normalizedImage;
+  if (normalizedImage.startsWith("/images/")) return normalizedImage;
+  if (!MEDIA_URL) return "/images/teacher-certifications.png";
+
+  const mediaBaseUrl = MEDIA_URL.replace(/\/+$/, "");
+  const mediaUrl = new URL(mediaBaseUrl);
+
+  if (normalizedImage.startsWith("/")) {
+    return `${mediaUrl.origin}${normalizedImage}`;
+  }
+
+  if (normalizedImage.includes("/")) {
+    return `${mediaBaseUrl}/${normalizedImage}`;
+  }
+
+  return `${mediaBaseUrl}/teacherCertification/${normalizedImage}`;
 }
 
 export function getSubjectVideoUrl(video: string): string {

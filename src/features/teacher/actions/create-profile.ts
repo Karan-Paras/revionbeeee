@@ -42,16 +42,23 @@ export async function createTeacherProfile(
     const response = await createTeacherProfileApi(validatedFields.data);
     const user = response.data;
 
-    await unstable_update({
-      user: {
-        name:
-          user.firstName && user.lastName
-            ? `${user.firstName} ${user.lastName}`
-            : validatedFields.data.fullName,
-        image: user.profilePicture,
-        teacherProfileStatus: user.teacherProfileStatus ?? 3,
-      },
-    });
+    try {
+      await unstable_update({
+        user: {
+          name:
+            user?.firstName && user?.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : validatedFields.data.fullName,
+          image: user?.profilePicture,
+          teacherProfileStatus: user?.teacherProfileStatus ?? 3,
+        },
+      });
+    } catch (sessionError) {
+      console.error(
+        "Teacher profile was created, but session refresh failed:",
+        sessionError
+      );
+    }
 
     return { errors: {}, success: true };
   } catch (error: unknown) {

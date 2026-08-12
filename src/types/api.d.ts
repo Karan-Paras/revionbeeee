@@ -1,4 +1,4 @@
-export type Method = "POST" | "GET";
+export type Method = "POST" | "GET" | "DELETE";
 
 export interface ApiSuccessResponse<T> {
   token?: string;

@@ -1,7 +1,6 @@
 "use client";
 
 import { RevisionBee } from "@/assets/icons";
-import { logoutTeacher } from "@/features/teacher/actions/logout";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import {
@@ -19,7 +18,6 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
 
 const navigation = [
   { label: "Dashboard", href: paths.teacherDashboard(), icon: LayoutDashboard },
@@ -42,15 +40,7 @@ export function TeacherSidebar() {
     if (isLoggingOut) return;
 
     setIsLoggingOut(true);
-    const result = await logoutTeacher();
-
-    if (!result.success) {
-      toast.error(result.error);
-      setIsLoggingOut(false);
-      return;
-    }
-
-    await signOut({ redirectTo: paths.teacherLogin() });
+    await signOut({ redirectTo: paths.home() });
   }
 
   return (

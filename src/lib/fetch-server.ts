@@ -33,7 +33,7 @@ export async function fetchServer<T>(
       requestHeaders.Authorization = `Bearer ${token}`;
     }
 
-    if (!isFormData && method !== "GET") {
+    if (body && !isFormData && method !== "GET") {
       requestHeaders["Content-Type"] = "application/json";
     }
 
@@ -51,6 +51,14 @@ export async function fetchServer<T>(
 
     const contentType = response.headers.get("content-type") ?? "";
     const responseBody = await response.text();
+
+    if (response.ok && !responseBody.trim()) {
+      return {
+        status: 200,
+        message: "Request completed successfully.",
+        data: null as T,
+      };
+    }
 
     if (!contentType.toLowerCase().includes("application/json")) {
       const reason =
@@ -73,7 +81,7 @@ export async function fetchServer<T>(
       );
     }
 
-    if (!response.ok || json.status !== 200) {
+    if (!response.ok || json.status >= 400) {
       throw new Error(
         json.message || `Request failed with status ${response.status}.`
       );

@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
-import TeacherProfilePage from "../../profile/page";
-
-export const metadata: Metadata = {
-  title: "Certifications - Revision Bee",
-  description: "Manage your professional teaching certifications.",
-};
+import { redirect } from "next/navigation";
 
 export default function TeacherCertificationsPage() {
-  return <TeacherProfilePage />;
+  redirect("/teacher/profile/certifications");
 }

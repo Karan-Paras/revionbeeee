@@ -51,6 +51,15 @@ describe("CreateTeacherProfileSchema", () => {
 
     expect(result.success).toBe(false);
   });
+
+  it("rejects a rate per minute above 500", () => {
+    const result = CreateTeacherProfileSchema.safeParse({
+      ...validProfile,
+      hourlyRate: 500.01,
+    });
+
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("AddTeacherQualificationSchema", () => {

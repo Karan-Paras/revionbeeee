@@ -5,7 +5,7 @@ import { useCertificationStore } from "@/features/teacher/stores/use-certificati
 import { paths } from "@/routes";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 
 const inputClassName =
@@ -13,6 +13,12 @@ const inputClassName =
 
 export default function TeacherAddCertification() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedReturnPath = searchParams.get("returnTo");
+  const returnPath =
+    requestedReturnPath === "/teacher/profile/certifications"
+      ? requestedReturnPath
+      : paths.teacherCertifications();
   const addCertification = useCertificationStore(
     (state) => state.addCertification
   );
@@ -52,7 +58,7 @@ export default function TeacherAddCertification() {
         certificateUrl: certificate?.url,
       });
 
-      router.push(paths.teacherCertifications());
+      router.push(returnPath);
     });
   }
 
@@ -60,7 +66,7 @@ export default function TeacherAddCertification() {
     <main className="mths_bg relative grid min-h-dvh place-items-center overflow-hidden bg-cover bg-center bg-no-repeat p-5 before:absolute before:inset-0 before:bg-white/45">
       <section className="relative z-10 w-full max-w-[540px] rounded-2xl bg-white p-6 shadow-[0_20px_55px_rgba(53,67,87,0.14)] sm:p-7">
         <Link
-          href={paths.teacherCertifications()}
+          href={returnPath}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-[#222] transition hover:text-[#53a2eb]"
         >
           <ArrowLeft size={16} />
@@ -141,18 +147,39 @@ export default function TeacherAddCertification() {
               {certificate?.name ?? "Upload Certificate"}
             </span>
             <span className="mt-2 text-[10px] leading-4 text-[#aaa]">
-              Supported Formats: PDF, JPG, PNG
+              Supported Documents: PDF, JPG, PNG
               <br />
               Maximum File Size: 10 MB
             </span>
             <input
               type="file"
               name="certificationFile"
-              accept=".pdf,.jpg,.jpeg,.png"
+              accept="application/pdf,image/jpeg,image/png"
               className="absolute inset-0 cursor-pointer opacity-0"
               onChange={(event) => {
                 const file = event.target.files?.[0];
                 if (!file) return;
+
+                if (
+                  !["application/pdf", "image/jpeg", "image/png"].includes(
+                    file.type
+                  )
+                ) {
+                  event.target.value = "";
+                  setCertificate(undefined);
+                  setFieldErrors((errors) => ({
+                    ...errors,
+                    certificationFile: [
+                      "Please upload a PDF, JPG, or PNG document",
+                    ],
+                  }));
+                  return;
+                }
+
+                setFieldErrors((errors) => ({
+                  ...errors,
+                  certificationFile: undefined,
+                }));
 
                 if (certificate?.url) URL.revokeObjectURL(certificate.url);
 

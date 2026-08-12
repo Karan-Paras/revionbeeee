@@ -43,9 +43,10 @@ export const CreateTeacherProfileSchema = z.object({
     .min(1, "City is required")
     .max(100, "City must be at most 100 characters"),
   hourlyRate: z.coerce
-    .number({ invalid_type_error: "Enter a valid hourly rate" })
-    .positive("Hourly rate must be greater than 0")
-    .max(100000, "Hourly rate is too high"),
+    .number({ invalid_type_error: "Enter a valid rate per minute" })
+    .finite("Enter a valid rate per minute")
+    .positive("Rate per minute must be greater than 0")
+    .max(500, "Rate per minute must not exceed 500"),
   profileImage: z
     .instanceof(File)
     .refine((file) => file.size > 0, "Profile image is required")
@@ -146,7 +147,7 @@ export const AddTeacherAvailabilitySchema = z.object({
   availabilities: z
     .array(
       z.object({
-        dayOfWeek: z.number().int().min(1).max(7),
+        dayOfWeek: z.number().int().min(0).max(6),
         startTime: availabilityTime,
         startMeridiem: z.enum(["AM", "PM"]),
         endTime: availabilityTime,

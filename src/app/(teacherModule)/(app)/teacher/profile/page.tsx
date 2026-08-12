@@ -1,9 +1,18 @@
 "use client";
 
 import { ProfileJordan } from "@/assets/images";
+import { Modal } from "@/components/common/modal";
+import { deleteTeacherProfileItem } from "@/features/teacher/actions/delete-profile-item";
+import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availabilities";
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
-import { getTeacherImageUrl } from "@/lib/media-urls";
+import { updateTeacherProfile } from "@/features/teacher/actions/update-profile";
 import {
+  getTeacherCertificationUrl,
+  getTeacherImageUrl,
+} from "@/lib/media-urls";
+import { paths } from "@/routes";
+import {
+  Award,
   Camera,
   ChevronDown,
   CircleDollarSign,
@@ -14,7 +23,13 @@ import {
 } from "lucide-react";
 import Image, { type StaticImageData } from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { toast } from "sonner";
 
 const tabs = [
@@ -41,30 +56,35 @@ type Certification = {
   image: string;
 };
 
-const initialQualifications: Qualification[] = Array.from(
-  { length: 4 },
-  (_, index) => ({
-    id: index + 1,
-    institution: "BA Mechanical Engineering",
-    degree: "B.Tech",
-    field: "Civil",
-    year: "2012",
-  })
-);
+type DeleteTarget = {
+  type: "qualification" | "certification";
+  id: number | string;
+};
 
-const initialCertifications: Certification[] = Array.from(
-  { length: 4 },
-  (_, index) => ({
-    id: index + 1,
-    name: "Engineer Of The Year",
-    authority: "Company Name",
-    issueDate: "20 Nov 2012",
-    image:
-      index < 2
-        ? "/images/teacher-certifications.png"
-        : "/images/teacher-education.png",
-  })
-);
+type AvailabilitySlot = { id: string; startTime: string; endTime: string };
+type DayAvailability = { enabled: boolean; slots: AvailabilitySlot[] };
+const availabilityDays = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+] as const;
+
+function emptyAvailability(): Record<string, DayAvailability> {
+  return Object.fromEntries(
+    availabilityDays.map((day) => [day, { enabled: false, slots: [] }])
+  );
+}
+
+function formatAvailabilityTime(value: string) {
+  const [hourText, minute = "00"] = value.split(":");
+  const hour = Number(hourText);
+  if (!Number.isInteger(hour) || hour < 0 || hour > 23) return value;
+  return `${hour % 12 || 12}:${minute} ${hour >= 12 ? "PM" : "AM"}`;
+}
 
 const inputClassName =
   "h-12 w-full rounded-lg border border-[#dbe0e5] bg-[#fbfcfd] px-4 text-xs text-[#242424] outline-none transition placeholder:text-[#a1a5aa] focus:border-[#53a2eb] focus:bg-white focus:ring-4 focus:ring-[#53a2eb]/10";
@@ -75,9 +95,11 @@ export default function TeacherProfilePage() {
   const routeTab: ProfileTab =
     pathname === "/teacher/profile/qualification"
       ? "Qualification"
-      : pathname === "/teacher/settings/certifications"
+      : pathname === "/teacher/profile/certifications"
         ? "Certifications"
-        : "Edit Profile";
+        : pathname === "/teacher/profile/availability"
+          ? "Availability"
+          : "Edit Profile";
   const [activeTab, setActiveTab] = useState<ProfileTab>(routeTab);
   const [profileImage, setProfileImage] = useState<string | StaticImageData>(
     ProfileJordan
@@ -91,8 +113,16 @@ export default function TeacherProfilePage() {
     city: "",
     hourlyRate: "",
   });
-  const [qualifications, setQualifications] = useState(initialQualifications);
-  const [certifications, setCertifications] = useState(initialCertifications);
+  const [qualifications, setQualifications] = useState<Qualification[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [failedCertificationImages, setFailedCertificationImages] = useState<
+    Set<number | string>
+  >(new Set());
+  const [isUpdating, startUpdateTransition] = useTransition();
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>();
+  const [isDeleting, startDeleteTransition] = useTransition();
+  const [availability, setAvailability] =
+    useState<Record<string, DayAvailability>>(emptyAvailability);
 
   useEffect(() => {
     getTeacherProfileDetail().then((result) => {
@@ -122,10 +152,18 @@ export default function TeacherProfilePage() {
           detail.qualifications.map((qualification, index) => ({
             id: qualification.id ?? `qualification-${index}`,
             institution:
-              qualification.institutionName ?? qualification.institution ?? "",
+              qualification.institutionName ??
+              qualification.institution_name ??
+              qualification.institution ??
+              "",
             degree: qualification.degree ?? "",
-            field: qualification.fieldOfStudy ?? "",
-            year: String(qualification.graduationYear ?? ""),
+            field:
+              qualification.fieldOfStudy ?? qualification.field_of_study ?? "",
+            year: String(
+              qualification.graduationYear ??
+                qualification.graduation_year ??
+                ""
+            ),
           }))
         );
       }
@@ -134,18 +172,71 @@ export default function TeacherProfilePage() {
         setCertifications(
           detail.certifications.map((certification, index) => ({
             id: certification.id ?? `certification-${index}`,
-            name: certification.certificationName ?? certification.name ?? "",
+            name:
+              certification.certificationName ??
+              certification.certification_name ??
+              certification.name ??
+              "",
             authority:
-              certification.issuingAuthority ?? certification.authority ?? "",
-            issueDate: certification.issueDate ?? "",
-            image:
+              certification.issuingAuthority ??
+              certification.issuing_authority ??
+              certification.authority ??
+              "",
+            issueDate:
+              certification.issueDate ?? certification.issue_date ?? "",
+            image: getTeacherCertificationUrl(
               certification.certificationFile ??
-              certification.image ??
-              "/images/teacher-certifications.png",
+                certification.certification_file ??
+                certification.image ??
+                ""
+            ),
           }))
         );
       }
     });
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadAvailability = () =>
+      getTeacherAvailabilities().then((result) => {
+        if (!isActive) return;
+        if (!result.success) {
+          toast.error(result.error);
+          return;
+        }
+        const nextAvailability = emptyAvailability();
+        result.data.forEach((item, index) => {
+          const day = availabilityDays[item.dayOfWeek];
+          if (!day || !item.isAvailable) return;
+          nextAvailability[day].enabled = true;
+          nextAvailability[day].slots.push({
+            id: String(item.id ?? `availability-${index}`),
+            startTime: item.startTime.slice(0, 5),
+            endTime: item.endTime.slice(0, 5),
+          });
+        });
+        setAvailability(nextAvailability);
+      });
+
+    void loadAvailability();
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible") void loadAvailability();
+    }, 10_000);
+    const refetchOnFocus = () => void loadAvailability();
+    const refetchOnVisibility = () => {
+      if (document.visibilityState === "visible") void loadAvailability();
+    };
+    window.addEventListener("focus", refetchOnFocus);
+    document.addEventListener("visibilitychange", refetchOnVisibility);
+
+    return () => {
+      isActive = false;
+      window.clearInterval(interval);
+      window.removeEventListener("focus", refetchOnFocus);
+      document.removeEventListener("visibilitychange", refetchOnVisibility);
+    };
   }, []);
 
   function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -161,7 +252,19 @@ export default function TeacherProfilePage() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    toast.success("Profile updated successfully");
+    const formData = new FormData(event.currentTarget);
+
+    startUpdateTransition(async () => {
+      const result = await updateTeacherProfile(formData);
+
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("Profile updated successfully");
+      router.refresh();
+    });
   }
 
   function changeTab(tab: ProfileTab) {
@@ -171,8 +274,10 @@ export default function TeacherProfilePage() {
         : tab === "Qualification"
           ? "/teacher/profile/qualification"
           : tab === "Certifications"
-            ? "/teacher/settings/certifications"
-            : undefined;
+            ? "/teacher/profile/certifications"
+            : tab === "Availability"
+              ? "/teacher/profile/availability"
+              : undefined;
 
     if (destination && destination !== pathname) {
       router.push(destination);
@@ -182,45 +287,54 @@ export default function TeacherProfilePage() {
     setActiveTab(tab);
   }
 
-  function removeQualification(id: number | string) {
-    setQualifications((items) => items.filter((item) => item.id !== id));
-  }
-
   function addQualification() {
-    setQualifications((items) => [
-      ...items,
-      {
-        id: crypto.randomUUID(),
-        institution: "BA Mechanical Engineering",
-        degree: "B.Tech",
-        field: "Civil",
-        year: "2012",
-      },
-    ]);
+    router.push(
+      `${paths.teacherAddQualification()}?returnTo=${encodeURIComponent("/teacher/profile/qualification")}`
+    );
   }
 
-  function removeCertification(id: number | string) {
-    setCertifications((items) => items.filter((item) => item.id !== id));
+  function confirmDelete() {
+    if (!deleteTarget) return;
+
+    startDeleteTransition(async () => {
+      const result = await deleteTeacherProfileItem(
+        deleteTarget.type,
+        deleteTarget.id
+      );
+
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+
+      if (deleteTarget.type === "qualification") {
+        setQualifications((items) =>
+          items.filter((item) => item.id !== deleteTarget.id)
+        );
+      } else {
+        setCertifications((items) =>
+          items.filter((item) => item.id !== deleteTarget.id)
+        );
+      }
+
+      toast.success(
+        `${deleteTarget.type === "qualification" ? "Qualification" : "Certification"} deleted successfully`
+      );
+      setDeleteTarget(undefined);
+    });
   }
 
   function addCertification() {
-    setCertifications((items) => [
-      ...items,
-      {
-        id: crypto.randomUUID(),
-        name: "Engineer Of The Year",
-        authority: "Company Name",
-        issueDate: "20 Nov 2012",
-        image: "/images/teacher-certifications.png",
-      },
-    ]);
+    router.push(
+      `${paths.teacherAddCertification()}?returnTo=${encodeURIComponent("/teacher/profile/certifications")}`
+    );
   }
 
   return (
     <main className="min-h-full bg-[#f5f6f8] p-4 sm:p-8 lg:px-9 lg:py-9">
       <div className="mx-auto max-w-[1440px]">
         <h1 className="text-[22px] font-bold leading-tight text-[#111]">
-          {activeTab === "Edit Profile" ? "My Profile" : "Settings"}
+          My Profile
         </h1>
         <p className="mt-2 text-xs text-[#6f7378] sm:text-sm">
           Lorem ipsum dolor sit amet consectetur. Varius eu fermentum arcu lacus
@@ -266,6 +380,7 @@ export default function TeacherProfilePage() {
                     <Camera size={15} strokeWidth={2} />
                   </span>
                   <input
+                    name="profileImage"
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
@@ -390,7 +505,7 @@ export default function TeacherProfilePage() {
                 </div>
 
                 <label className="block text-xs font-medium text-[#222]">
-                  Hourly Rate
+                  Rate per minute
                   <span className="relative mt-2 block">
                     <CircleDollarSign
                       className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#a0a4a8]"
@@ -405,8 +520,12 @@ export default function TeacherProfilePage() {
                       name="hourlyRate"
                       defaultValue={profileDetails.hourlyRate}
                       type="number"
-                      min="0"
-                      placeholder="Enter Amount"
+                      min="0.01"
+                      max="500"
+                      step="0.01"
+                      inputMode="decimal"
+                      required
+                      placeholder="Enter amount (max 500)"
                       className={`${inputClassName} pl-[70px]`}
                     />
                   </span>
@@ -415,9 +534,10 @@ export default function TeacherProfilePage() {
                 <div className="flex justify-end pt-1">
                   <button
                     type="submit"
-                    className="h-12 w-full rounded-lg bg-[#53a2eb] text-xs font-semibold text-white shadow-[0_8px_20px_rgba(83,162,235,0.2)] transition hover:bg-[#4395df] sm:w-[290px]"
+                    disabled={isUpdating}
+                    className="h-12 w-full rounded-lg bg-[#53a2eb] text-xs font-semibold text-white shadow-[0_8px_20px_rgba(83,162,235,0.2)] transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:opacity-60 sm:w-[290px]"
                   >
-                    Update
+                    {isUpdating ? "Updating..." : "Update"}
                   </button>
                 </div>
               </div>
@@ -432,7 +552,12 @@ export default function TeacherProfilePage() {
                   >
                     <button
                       type="button"
-                      onClick={() => removeQualification(qualification.id)}
+                      onClick={() =>
+                        setDeleteTarget({
+                          type: "qualification",
+                          id: qualification.id,
+                        })
+                      }
                       aria-label="Remove qualification"
                       className="absolute -top-2 -right-2 grid h-5 w-5 place-items-center rounded-full border-2 border-white bg-[#ff3643] text-white shadow-sm transition hover:scale-110"
                     >
@@ -504,21 +629,47 @@ export default function TeacherProfilePage() {
                   >
                     <button
                       type="button"
-                      onClick={() => removeCertification(certification.id)}
+                      onClick={() =>
+                        setDeleteTarget({
+                          type: "certification",
+                          id: certification.id,
+                        })
+                      }
                       aria-label="Remove certification"
                       className="absolute -top-2 -right-2 z-10 grid h-5 w-5 place-items-center rounded-full border-2 border-white bg-[#ff3643] text-white shadow-sm transition hover:scale-110"
                     >
                       <X size={11} strokeWidth={3} />
                     </button>
 
-                    <div className="relative min-h-[74px] overflow-hidden rounded-md bg-[#ece8df]">
-                      <Image
-                        src={certification.image}
-                        alt="Certification document"
-                        fill
-                        sizes="112px"
-                        className="object-cover"
-                      />
+                    <div className="relative min-h-[74px] overflow-hidden rounded-md bg-gradient-to-br from-[#edf7ff] via-white to-[#e7f2fb]">
+                      {!failedCertificationImages.has(certification.id) &&
+                      !/\.pdf(?:$|[?#])/i.test(certification.image) ? (
+                        <Image
+                          src={certification.image}
+                          alt=""
+                          fill
+                          sizes="112px"
+                          className="object-cover"
+                          onError={() =>
+                            setFailedCertificationImages((failedImages) => {
+                              const nextFailedImages = new Set(failedImages);
+                              nextFailedImages.add(certification.id);
+                              return nextFailedImages;
+                            })
+                          }
+                        />
+                      ) : (
+                        <div
+                          className="absolute inset-0 grid place-items-center border border-[#d9eaf8]"
+                          aria-label="Certificate cover"
+                        >
+                          <span className="absolute inset-x-3 top-3 h-px bg-[#b9d9f2]" />
+                          <span className="absolute inset-x-3 bottom-3 h-px bg-[#b9d9f2]" />
+                          <span className="grid h-10 w-10 place-items-center rounded-full border border-[#aad0ed] bg-white/90 text-[#53a2eb] shadow-sm">
+                            <Award size={22} strokeWidth={1.7} />
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <dl className="grid content-center grid-cols-[1fr_auto] gap-x-2 gap-y-2 text-[9px] leading-tight">
@@ -561,22 +712,107 @@ export default function TeacherProfilePage() {
               </div>
             </div>
           ) : (
-            <div className="grid min-h-[390px] place-items-center px-6 text-center">
-              <div>
-                <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#edf7ff] text-[#53a2eb]">
-                  <UserRound size={22} />
-                </span>
-                <h2 className="mt-4 text-sm font-semibold text-[#333]">
-                  {activeTab}
-                </h2>
-                <p className="mt-1 text-xs text-[#999]">
-                  Your {activeTab.toLowerCase()} details will appear here.
-                </p>
+            <div className="flex min-h-[440px] flex-col py-5">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-semibold text-[#222]">
+                    Your availability
+                  </h2>
+                  <p className="mt-1 text-xs text-[#888]">
+                    Days and times currently available for bookings.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push("/teacher/profile/availability/update")
+                  }
+                  className="h-10 rounded-lg bg-[#53a2eb] px-7 text-xs font-semibold text-white transition hover:bg-[#4395df]"
+                >
+                  Update
+                </button>
+              </div>
+              <div className="grid gap-x-8 gap-y-4 md:grid-cols-2">
+                {availabilityDays.map((day) => {
+                  const dayAvailability = availability[day];
+                  return (
+                    <div
+                      key={day}
+                      className="rounded-xl border border-[#e1e5e9] bg-[#fafbfc] p-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[#222]">
+                          {day}
+                        </span>
+                        <span
+                          className={`text-[10px] ${dayAvailability.enabled ? "text-[#25ad56]" : "text-[#ff3547]"}`}
+                        >
+                          {dayAvailability.enabled
+                            ? "Available"
+                            : "Unavailable"}
+                        </span>
+                      </div>
+
+                      {dayAvailability.enabled && (
+                        <div className="mt-3 space-y-2">
+                          {dayAvailability.slots.map((slot) => (
+                            <div
+                              key={slot.id}
+                              className="rounded-lg bg-white px-3 py-2 text-xs text-[#667085]"
+                            >
+                              {formatAvailabilityTime(slot.startTime)} –{" "}
+                              {formatAvailabilityTime(slot.endTime)}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
         </section>
       </div>
+
+      {deleteTarget && (
+        <Modal
+          onClose={() => {
+            if (!isDeleting) setDeleteTarget(undefined);
+          }}
+          className="sm:max-w-md"
+        >
+          <div className="p-7 text-center">
+            <h2 className="text-lg font-semibold text-[#222]">
+              Delete{" "}
+              {deleteTarget.type === "qualification"
+                ? "Qualification"
+                : "Certification"}
+            </h2>
+            <p className="mt-3 text-sm text-[#666]">
+              Do you really want to delete this {deleteTarget.type}?
+            </p>
+            <div className="mt-7 flex gap-3">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setDeleteTarget(undefined)}
+                className="h-11 flex-1 rounded-lg border border-[#d8dde1] text-sm font-medium text-[#555] disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={confirmDelete}
+                className="h-11 flex-1 rounded-lg bg-[#ff3643] text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }
