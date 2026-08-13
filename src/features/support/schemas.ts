@@ -2,7 +2,18 @@ import { email } from "@/lib/schemas";
 import { z } from "zod";
 
 export const ContactUsSchema = z.object({
-  attachment: z.instanceof(File).optional(),
+  attachment: z.preprocess(
+    (value) => (value instanceof File && value.size === 0 ? undefined : value),
+    z
+      .instanceof(File)
+      .refine((file) => file.size <= 5 * 1024 * 1024, {
+        message: "Image must be 5 MB or smaller",
+      })
+      .refine((file) => file.type.startsWith("image/"), {
+        message: "Only image files are allowed",
+      })
+      .optional()
+  ),
   email,
   subject: z
     .string()

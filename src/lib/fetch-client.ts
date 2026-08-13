@@ -8,7 +8,14 @@ export async function fetchClient<T>(
   next?: RequestInit["next"],
   headers?: RequestInit["headers"]
 ): Promise<ApiSuccessResponse<T>> {
-  const api = `${process.env.NEXT_PUBLIC_API_URL}${url}`;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const isAbsoluteUrl = /^https?:\/\//i.test(url);
+
+  if (!isAbsoluteUrl && !apiBaseUrl) {
+    throw new Error("NEXT_PUBLIC_API_URL is not configured.");
+  }
+
+  const api = isAbsoluteUrl ? url : `${apiBaseUrl}${url}`;
 
   const session = await getSession();
   const token = session?.user?.token;
@@ -17,9 +24,12 @@ export async function fetchClient<T>(
 
   try {
     const requestHeaders: Record<string, string> = {
-      Authorization: `Bearer ${token}`,
       ...(headers as Record<string, string>),
     };
+
+    if (token) {
+      requestHeaders.Authorization = `Bearer ${token}`;
+    }
 
     if (!isFormData && method !== "GET") {
       requestHeaders["Content-Type"] = "application/json";
@@ -37,10 +47,42 @@ export async function fetchClient<T>(
       ...(next ? { next } : {}),
     });
 
-    const json: ApiResponse<T> = await response.json();
+    const contentType = response.headers.get("content-type") ?? "";
+    const responseBody = await response.text();
 
-    if (json.status != 200) {
-      throw new Error(json.message);
+    if (response.ok && !responseBody.trim()) {
+      return {
+        status: 200,
+        message: "Request completed successfully.",
+        data: null as T,
+      };
+    }
+
+    if (!contentType.toLowerCase().includes("application/json")) {
+      const reason =
+        response.status === 404
+          ? `API endpoint not found: ${url}`
+          : `API returned a non-JSON response (${response.status} ${response.statusText})`;
+
+      throw new Error(
+        `${reason}. Check NEXT_PUBLIC_API_URL and the backend route.`
+      );
+    }
+
+    let json: ApiResponse<T>;
+
+    try {
+      json = JSON.parse(responseBody) as ApiResponse<T>;
+    } catch {
+      throw new Error(
+        `API returned invalid JSON (${response.status} ${response.statusText}) for ${url}.`
+      );
+    }
+
+    if (!response.ok || json.status >= 400) {
+      throw new Error(
+        json.message || `Request failed with status ${response.status}.`
+      );
     }
 
     return json as ApiSuccessResponse<T>;
