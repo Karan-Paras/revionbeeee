@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useState, type ReactNode } from "react";
 
 type TabKey = "changePassword" | "aboutUs" | "contactUs" | "termsAndPolicy";
