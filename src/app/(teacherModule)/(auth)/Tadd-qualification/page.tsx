@@ -6,12 +6,20 @@ import { paths } from "@/routes";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 
 const selectClassName =
   "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 pr-10 text-sm text-[#999] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
 
-export default function TeacherAddQualification() {
+export default function TeacherAddQualificationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-dvh bg-[#f4f4f4]" />}>
+      <TeacherAddQualification />
+    </Suspense>
+  );
+}
+
+function TeacherAddQualification() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedReturnPath = searchParams.get("returnTo");
