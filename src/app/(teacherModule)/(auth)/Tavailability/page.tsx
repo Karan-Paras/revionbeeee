@@ -1,13 +1,12 @@
 "use client";
 
 import { addTeacherAvailability } from "@/features/teacher/actions/add-availability";
-import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { paths } from "@/routes";
 import { Clock3, Plus, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
 type TimeSlot = {
   id: string;
@@ -42,39 +41,10 @@ const initialAvailability: Record<string, DayAvailability> = Object.fromEntries(
 
 export default function TeacherAvailabilityPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const returnTo = searchParams.get("returnTo");
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState("");
   const [availability, setAvailability] =
     useState<Record<string, DayAvailability>>(initialAvailability);
-
-  useEffect(() => {
-    if (searchParams.get("edit") !== "1") return;
-    getTeacherProfileDetail().then((result) => {
-      if (!result.success) return setSubmitError(result.error);
-      const nextAvailability: Record<string, DayAvailability> =
-        Object.fromEntries(
-          days.map((day) => [day, { enabled: false, slots: [] }])
-        );
-      result.data.availabilities?.forEach((item, index) => {
-        const dayIndex = Number(item.dayOfWeek ?? item.day_of_week);
-        const day = days[dayIndex];
-        const isAvailable = item.isAvailable ?? item.is_available;
-        if (!day || isAvailable === false || isAvailable === 0) return;
-        nextAvailability[day].enabled = true;
-        nextAvailability[day].slots.push({
-          id: String(item.id ?? `slot-${index}`),
-          startTime: String(item.startTime ?? item.start_time ?? "").slice(
-            0,
-            5
-          ),
-          endTime: String(item.endTime ?? item.end_time ?? "").slice(0, 5),
-        });
-      });
-      setAvailability(nextAvailability);
-    });
-  }, [searchParams]);
 
   function toTwelveHourTime(time: string) {
     const [hourText, minute] = time.split(":");
@@ -118,9 +88,7 @@ export default function TeacherAvailabilityPage() {
         return;
       }
 
-      router.push(
-        returnTo?.startsWith("/") ? returnTo : paths.teacherBankDetails()
-      );
+      router.push(paths.teacherBankDetails());
     });
   }
 
@@ -316,14 +284,10 @@ export default function TeacherAvailabilityPage() {
                 </p>
               )}
               <Link
-                href={
-                  returnTo?.startsWith("/")
-                    ? returnTo
-                    : paths.teacherBankDetails()
-                }
+                href={paths.teacherBankDetails()}
                 className="grid h-12 w-full place-items-center rounded-lg border border-[#53a2eb] bg-white text-sm font-medium text-[#53a2eb] transition hover:bg-[#53a2eb]/5"
               >
-                {returnTo ? "Cancel" : "Skip"}
+                Skip
               </Link>
               <button
                 type="button"
@@ -331,7 +295,7 @@ export default function TeacherAvailabilityPage() {
                 disabled={isPending}
                 className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isPending ? "Saving..." : returnTo ? "Update" : "Save & Next"}
+                {isPending ? "Saving..." : "Save & Next"}
               </button>
             </div>
           </div>

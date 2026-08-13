@@ -137,7 +137,10 @@ export default function UpdateTeacherAvailabilityPage() {
       return toast.error("Select at least one day and time slot.");
     startTransition(async () => {
       const result = await addTeacherAvailability({ availabilities: items });
-      if (!result.success) return toast.error(result.error);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
       toast.success("Availability updated successfully");
       router.push("/teacher/profile/availability");
       router.refresh();
