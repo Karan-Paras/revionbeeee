@@ -1,6 +1,7 @@
 "use client";
 
 import { addTeacherQualification as submitTeacherQualification } from "@/features/teacher/actions/add-qualification";
+import { AddTeacherQualificationSchema } from "@/features/teacher/schemas";
 import { useQualificationStore } from "@/features/teacher/stores/use-qualification-store";
 import { paths } from "@/routes";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
@@ -44,6 +45,19 @@ function TeacherAddQualification() {
   const addQualification = useQualificationStore(
     (state) => state.addQualification
   );
+
+  function validateField(
+    field: keyof typeof AddTeacherQualificationSchema.shape,
+    value: unknown
+  ) {
+    const result = AddTeacherQualificationSchema.shape[field].safeParse(value);
+    setFieldErrors((current) => ({
+      ...current,
+      [field]: result.success
+        ? undefined
+        : result.error.issues.map((issue) => issue.message),
+    }));
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,6 +117,9 @@ function TeacherAddQualification() {
                 <select
                   name="institutionName"
                   defaultValue=""
+                  onChange={(event) =>
+                    validateField("institutionName", event.target.value)
+                  }
                   className={selectClassName}
                 >
                   <option value="" disabled>
@@ -130,6 +147,9 @@ function TeacherAddQualification() {
                 <select
                   name="degree"
                   defaultValue=""
+                  onChange={(event) =>
+                    validateField("degree", event.target.value)
+                  }
                   className={selectClassName}
                 >
                   <option value="" disabled>
@@ -159,6 +179,9 @@ function TeacherAddQualification() {
                 <select
                   name="fieldOfStudy"
                   defaultValue=""
+                  onChange={(event) =>
+                    validateField("fieldOfStudy", event.target.value)
+                  }
                   className={selectClassName}
                 >
                   <option value="" disabled>
@@ -186,6 +209,9 @@ function TeacherAddQualification() {
                 <select
                   name="graduationYear"
                   defaultValue=""
+                  onChange={(event) =>
+                    validateField("graduationYear", event.target.value)
+                  }
                   className={selectClassName}
                 >
                   <option value="" disabled>
@@ -230,6 +256,7 @@ function TeacherAddQualification() {
                 const file = event.target.files?.[0];
 
                 if (!file) return;
+                validateField("degreeDocument", file);
 
                 if (
                   !["application/pdf", "image/jpeg", "image/png"].includes(

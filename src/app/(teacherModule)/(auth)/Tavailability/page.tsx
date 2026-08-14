@@ -1,6 +1,7 @@
 "use client";
 
 import { addTeacherAvailability } from "@/features/teacher/actions/add-availability";
+import { AddTeacherAvailabilitySchema } from "@/features/teacher/schemas";
 import { paths } from "@/routes";
 import { Clock3, Plus, X } from "lucide-react";
 import Image from "next/image";
@@ -80,8 +81,20 @@ export default function TeacherAvailabilityPage() {
         });
     });
 
+    const validation = AddTeacherAvailabilitySchema.safeParse({
+      availabilities,
+    });
+
+    if (!validation.success) {
+      setSubmitError(
+        validation.error.issues[0]?.message ??
+          "Please check your availability details."
+      );
+      return;
+    }
+
     startTransition(async () => {
-      const result = await addTeacherAvailability({ availabilities });
+      const result = await addTeacherAvailability(validation.data);
 
       if (!result.success) {
         setSubmitError(result.error);
@@ -152,7 +165,7 @@ export default function TeacherAvailabilityPage() {
 
   return (
     <main className="h-dvh overflow-hidden bg-[#444] p-1.5">
-      <div className="mx-auto grid h-full max-w-[1440px] overflow-hidden rounded-xl bg-[#f4f4f4] lg:grid-cols-2">
+      <div className="grid h-full w-full overflow-hidden rounded-xl bg-[#f4f4f4] lg:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-6 py-5 sm:px-12">
           <div className="flex max-h-full w-full max-w-[470px] flex-col py-2">
             <div className="text-center">

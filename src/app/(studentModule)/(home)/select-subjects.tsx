@@ -4,11 +4,16 @@ import { getSubjectsOnServer } from "@/features/subjects/api/get-subjects-on-ser
 import { SelectSubjects as SelectSubjectsComponent } from "@/features/subjects/components/select-subjects";
 import { paths } from "@/routes";
 import Link from "next/link";
-import { Suspense, use } from "react";
+import { Suspense } from "react";
 
-function SubjectsList() {
-  const subjects = use(getSubjectsOnServer());
-  return <SelectSubjectsComponent maxLength={6} initialData={subjects} />;
+async function SubjectsList() {
+  try {
+    const subjects = await getSubjectsOnServer();
+    return <SelectSubjectsComponent maxLength={6} initialData={subjects} />;
+  } catch (error) {
+    console.error("Unable to preload subjects on the server:", error);
+    return <SelectSubjectsComponent maxLength={6} />;
+  }
 }
 
 export function SelectSubjects() {

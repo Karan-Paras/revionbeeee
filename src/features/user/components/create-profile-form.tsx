@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { createProfile } from "@/features/user/actions/create-profile";
+import { phoneNumber as phoneNumberSchema } from "@/features/user/schemas";
 import { isUserProfileComplete } from "@/features/user/utils";
+import {
+  firstName as firstNameSchema,
+  lastName as lastNameSchema,
+} from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,9 +20,14 @@ import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
+import { PhoneInput } from "react-international-phone";
 
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState<string>();
+  const [firstNameError, setFirstNameError] = useState<string>();
+  const [lastNameError, setLastNameError] = useState<string>();
 
   const [formState, action, isPending] = useActionState(createProfile, {
     errors: {},
@@ -53,6 +63,36 @@ export function CreateProfileForm() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const parsedFirstName = firstNameSchema.safeParse(
+      formData.get("first-name")
+    );
+    const parsedLastName = lastNameSchema.safeParse(formData.get("last-name"));
+    const parsedPhoneNumber = phoneNumberSchema.safeParse(phoneNumber);
+
+    setFirstNameError(
+      parsedFirstName.success
+        ? undefined
+        : parsedFirstName.error.issues[0]?.message
+    );
+    setLastNameError(
+      parsedLastName.success
+        ? undefined
+        : parsedLastName.error.issues[0]?.message
+    );
+
+    if (
+      !parsedFirstName.success ||
+      !parsedLastName.success ||
+      !parsedPhoneNumber.success ||
+      phoneNumberError
+    ) {
+      if (!parsedPhoneNumber.success) {
+        setPhoneNumberError(parsedPhoneNumber.error.issues[0]?.message);
+      }
+      return;
+    }
+
+    setPhoneNumberError(undefined);
     startTransition(() => {
       action(formData);
     });
@@ -116,8 +156,16 @@ export function CreateProfileForm() {
                 iconClassName="user_bg"
                 placeholder="Enter your First Name"
                 disabled={isPending}
-                errors={formState.errors.firstName}
+                errors={
+                  firstNameError ? [firstNameError] : formState.errors.firstName
+                }
                 autoComplete="given-name"
+                onChange={(event) => {
+                  const result = firstNameSchema.safeParse(event.target.value);
+                  setFirstNameError(
+                    result.success ? undefined : result.error.issues[0]?.message
+                  );
+                }}
               />
             </div>
           </div>
@@ -130,30 +178,64 @@ export function CreateProfileForm() {
                 iconClassName="user_bg"
                 placeholder="Enter your Last Name"
                 disabled={isPending}
-                errors={formState.errors.lastName}
+                errors={
+                  lastNameError ? [lastNameError] : formState.errors.lastName
+                }
                 autoComplete="family-name"
+                onChange={(event) => {
+                  const result = lastNameSchema.safeParse(event.target.value);
+                  setLastNameError(
+                    result.success ? undefined : result.error.issues[0]?.message
+                  );
+                }}
               />
             </div>
           </div>
           <div className="col-span-2">
             <div className="itm relative mb-16">
               <FormLabel htmlFor="phone-number">Mobile Number</FormLabel>
-              <Input
-                id="phone-number"
-                name="phone-number"
-                iconClassName="mob_bg"
-                type="tel"
-                placeholder="Enter Mobile Number"
-                disabled={isPending}
-                errors={formState.errors.phoneNumber}
-                autoComplete="tel"
-                onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ""
-                  );
-                }}
-              />
+              <input type="hidden" name="phone-number" value={phoneNumber} />
+              <span className="teacher-phone-input profile-phone-input mt-1.5 block">
+                <PhoneInput
+                  defaultCountry="in"
+                  value={phoneNumber}
+                  placeholder="Enter Mobile Number"
+                  disabled={isPending}
+                  inputProps={{
+                    id: "phone-number",
+                    autoComplete: "tel",
+                    "aria-invalid": !!phoneNumberError,
+                  }}
+                  onChange={(phone, { country, inputValue }) => {
+                    const dialCodeDigits = country.dialCode.replace(/\D/g, "");
+                    const compactInput = inputValue.replace(/[\s()-]/g, "");
+                    const dialPrefix = `+${dialCodeDigits}`;
+                    const subscriberInput = compactInput.startsWith(dialPrefix)
+                      ? compactInput.slice(dialPrefix.length)
+                      : compactInput;
+                    const hasSubscriberNumber = subscriberInput.length > 0;
+                    const value = hasSubscriberNumber ? phone : "";
+
+                    setPhoneNumber(value);
+                    if (!hasSubscriberNumber) {
+                      setPhoneNumberError(undefined);
+                      return;
+                    }
+
+                    const result = phoneNumberSchema.safeParse(phone);
+                    const containsOnlyDigits = /^\d+$/.test(subscriberInput);
+                    setPhoneNumberError(
+                      result.success && containsOnlyDigits
+                        ? undefined
+                        : "Enter a valid mobile number for the selected country"
+                    );
+                  }}
+                />
+              </span>
+              {!!phoneNumberError && <InputError error={phoneNumberError} />}
+              {!!formState.errors.phoneNumber && !phoneNumberError && (
+                <InputError error={formState.errors.phoneNumber.join(", ")} />
+              )}
             </div>
           </div>
           <div className="col-span-2">

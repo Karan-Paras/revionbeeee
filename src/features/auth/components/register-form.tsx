@@ -6,11 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { register } from "@/features/auth/actions/register";
+import { newPassword } from "@/features/auth/schemas";
+import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 
 type RegisterFormProps = {
   signInHref?: string;
@@ -24,6 +26,8 @@ export function RegisterForm({
   successRedirect = paths.createProfile(),
 }: RegisterFormProps) {
   const router = useRouter();
+  const [emailError, setEmailError] = useState<string>();
+  const [passwordError, setPasswordError] = useState<string>();
 
   const [formState, action, isPending] = useActionState(register, {
     errors: {},
@@ -38,6 +42,21 @@ export function RegisterForm({
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const parsedEmail = emailSchema.safeParse(formData.get("email"));
+    const parsedPassword = newPassword.safeParse(formData.get("password"));
+
+    if (!parsedEmail.success) {
+      setEmailError(parsedEmail.error.issues[0]?.message);
+      return;
+    }
+
+    if (!parsedPassword.success) {
+      setPasswordError(parsedPassword.error.issues[0]?.message);
+      return;
+    }
+
+    setEmailError(undefined);
+    setPasswordError(undefined);
 
     startTransition(() => {
       action(formData);
@@ -57,8 +76,21 @@ export function RegisterForm({
             type="email"
             placeholder="john@example.com"
             disabled={isPending}
-            errors={formState.errors.email}
+            errors={emailError ? [emailError] : formState.errors.email}
             autoComplete="email"
+            required
+            onBlur={(event) => {
+              const result = emailSchema.safeParse(event.currentTarget.value);
+              setEmailError(
+                result.success ? undefined : result.error.issues[0]?.message
+              );
+            }}
+            onChange={(event) => {
+              const result = emailSchema.safeParse(event.currentTarget.value);
+              setEmailError(
+                result.success ? undefined : result.error.issues[0]?.message
+              );
+            }}
           />
         </div>
         <div className="itm relative mb-5">
@@ -70,8 +102,15 @@ export function RegisterForm({
             type="password"
             placeholder="Enter password"
             disabled={isPending}
-            errors={formState.errors.password}
+            errors={passwordError ? [passwordError] : formState.errors.password}
             autoComplete="new-password"
+            required
+            onChange={(event) => {
+              const result = newPassword.safeParse(event.currentTarget.value);
+              setPasswordError(
+                result.success ? undefined : result.error.issues[0]?.message
+              );
+            }}
           />
         </div>
         <div className="itm relative mb-5">

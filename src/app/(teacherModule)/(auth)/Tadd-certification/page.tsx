@@ -1,6 +1,7 @@
 "use client";
 
 import { addTeacherCertification as submitTeacherCertification } from "@/features/teacher/actions/add-certification";
+import { AddTeacherCertificationSchema } from "@/features/teacher/schemas";
 import { useCertificationStore } from "@/features/teacher/stores/use-certification-store";
 import { paths } from "@/routes";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
@@ -40,6 +41,19 @@ function TeacherAddCertification() {
     type: string;
     url: string;
   }>();
+
+  function validateField(
+    field: keyof typeof AddTeacherCertificationSchema.shape,
+    value: unknown
+  ) {
+    const result = AddTeacherCertificationSchema.shape[field].safeParse(value);
+    setFieldErrors((current) => ({
+      ...current,
+      [field]: result.success
+        ? undefined
+        : result.error.issues.map((issue) => issue.message),
+    }));
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -96,6 +110,9 @@ function TeacherAddCertification() {
             <input
               name="certificationName"
               type="text"
+              onChange={(event) =>
+                validateField("certificationName", event.target.value)
+              }
               placeholder="Enter Certification Name"
               className={inputClassName}
             />
@@ -112,6 +129,9 @@ function TeacherAddCertification() {
               <select
                 name="issuingAuthority"
                 defaultValue=""
+                onChange={(event) =>
+                  validateField("issuingAuthority", event.target.value)
+                }
                 className={`${inputClassName} appearance-none pr-10 text-[#999]`}
               >
                 <option value="" disabled>
@@ -140,6 +160,9 @@ function TeacherAddCertification() {
             <input
               name="issueDate"
               type="date"
+              onChange={(event) =>
+                validateField("issueDate", event.target.value)
+              }
               className={`${inputClassName} text-[#999]`}
             />
             {fieldErrors.issueDate?.[0] && (
@@ -167,6 +190,7 @@ function TeacherAddCertification() {
               onChange={(event) => {
                 const file = event.target.files?.[0];
                 if (!file) return;
+                validateField("certificationFile", file);
 
                 if (
                   !["application/pdf", "image/jpeg", "image/png"].includes(

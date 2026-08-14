@@ -1,16 +1,18 @@
 import { firstName, lastName } from "@/lib/schemas";
+import { isValidPhoneNumber } from "libphonenumber-js/max";
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
-const phoneNumber = z
+export const phoneNumber = z
   .string()
   .trim()
   .transform((val) => (val === "" ? undefined : val))
   .optional()
   .refine(
-    (val) => val === undefined || (val.length >= 10 && val.length <= 16),
-    { message: "Phone number must be between 10 and 16 digits" }
+    (val) =>
+      val === undefined || (val.startsWith("+") && isValidPhoneNumber(val)),
+    { message: "Enter a valid mobile number for the selected country" }
   );
 
 export const CreateProfileSchema = z.object({

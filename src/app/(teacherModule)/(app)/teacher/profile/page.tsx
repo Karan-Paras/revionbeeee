@@ -1,35 +1,37 @@
 "use client";
 
-import { ProfileJordan } from "@/assets/images";
 import { Modal } from "@/components/common/modal";
 import { deleteTeacherProfileItem } from "@/features/teacher/actions/delete-profile-item";
 import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availabilities";
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherProfile } from "@/features/teacher/actions/update-profile";
+import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 import {
   getTeacherCertificationUrl,
   getTeacherImageUrl,
 } from "@/lib/media-urls";
 import { paths } from "@/routes";
+import { City, Country } from "country-state-city";
 import {
   Award,
   Camera,
   ChevronDown,
   CircleDollarSign,
-  Phone,
   Plus,
   UserRound,
   X,
 } from "lucide-react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   type ChangeEvent,
   type FormEvent,
   useEffect,
+  useRef,
   useState,
   useTransition,
 } from "react";
+import { PhoneInput, type PhoneInputRefType } from "react-international-phone";
 import { toast } from "sonner";
 
 const tabs = [
@@ -61,6 +63,15 @@ type DeleteTarget = {
   id: number | string;
 };
 
+type EditableProfileField =
+  | "fullName"
+  | "professionalTitle"
+  | "bio"
+  | "mobileNumber"
+  | "country"
+  | "city"
+  | "hourlyRate";
+
 type AvailabilitySlot = { id: string; startTime: string; endTime: string };
 type DayAvailability = { enabled: boolean; slots: AvailabilitySlot[] };
 const availabilityDays = [
@@ -88,10 +99,12 @@ function formatAvailabilityTime(value: string) {
 
 const inputClassName =
   "h-12 w-full rounded-lg border border-[#dbe0e5] bg-[#fbfcfd] px-4 text-xs text-[#242424] outline-none transition placeholder:text-[#a1a5aa] focus:border-[#53a2eb] focus:bg-white focus:ring-4 focus:ring-[#53a2eb]/10";
+const countries = Country.getAllCountries();
 
 export default function TeacherProfilePage() {
   const pathname = usePathname();
   const router = useRouter();
+  const phoneInputRef = useRef<PhoneInputRefType>(null);
   const routeTab: ProfileTab =
     pathname === "/teacher/profile/qualification"
       ? "Qualification"
@@ -101,9 +114,7 @@ export default function TeacherProfilePage() {
           ? "Availability"
           : "Edit Profile";
   const [activeTab, setActiveTab] = useState<ProfileTab>(routeTab);
-  const [profileImage, setProfileImage] = useState<string | StaticImageData>(
-    ProfileJordan
-  );
+  const [profileImage, setProfileImage] = useState<string>();
   const [profileDetails, setProfileDetails] = useState({
     fullName: "",
     professionalTitle: "",
@@ -113,6 +124,13 @@ export default function TeacherProfilePage() {
     city: "",
     hourlyRate: "",
   });
+  const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [mobileNumberError, setMobileNumberError] = useState<string>();
+  const [profileErrors, setProfileErrors] = useState<
+    Partial<Record<EditableProfileField, string>>
+  >({});
+  const cities = City.getCitiesOfCountry(selectedCountryCode) ?? [];
   const [qualifications, setQualifications] = useState<Qualification[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [failedCertificationImages, setFailedCertificationImages] = useState<
@@ -132,6 +150,11 @@ export default function TeacherProfilePage() {
       }
 
       const detail = result.data;
+      const countryCode =
+        countries.find((country) => country.name === detail.country)?.isoCode ??
+        "IN";
+      setSelectedCountryCode(countryCode);
+      setMobileNumber(detail.mobileNumber ?? "");
       setProfileDetails({
         fullName: detail.fullName ?? "",
         professionalTitle: detail.professionalTitle ?? "",
@@ -250,9 +273,49 @@ export default function TeacherProfilePage() {
     reader.readAsDataURL(file);
   }
 
+  function validateProfileField(field: EditableProfileField, value: unknown) {
+    const result = CreateTeacherProfileSchema.shape[field].safeParse(value);
+    const message = result.success
+      ? undefined
+      : result.error.issues[0]?.message;
+    setProfileErrors((current) => ({ ...current, [field]: message }));
+    return message;
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const values: Record<EditableProfileField, FormDataEntryValue | string> = {
+      fullName: formData.get("fullName") ?? "",
+      professionalTitle: formData.get("professionalTitle") ?? "",
+      bio: formData.get("bio") ?? "",
+      mobileNumber,
+      country: formData.get("country") ?? "",
+      city: formData.get("city") ?? "",
+      hourlyRate: formData.get("hourlyRate") ?? "",
+    };
+    const nextErrors = Object.fromEntries(
+      (Object.keys(values) as EditableProfileField[])
+        .map((field) => {
+          const result = CreateTeacherProfileSchema.shape[field].safeParse(
+            values[field]
+          );
+          return [
+            field,
+            result.success ? undefined : result.error.issues[0]?.message,
+          ];
+        })
+        .filter(([, message]) => message)
+    ) as Partial<Record<EditableProfileField, string>>;
+
+    setProfileErrors(nextErrors);
+    setMobileNumberError(nextErrors.mobileNumber);
+    if (Object.keys(nextErrors).length) {
+      toast.error("Please fix the highlighted fields");
+      return;
+    }
+
+    setMobileNumberError(undefined);
 
     startUpdateTransition(async () => {
       const result = await updateTeacherProfile(formData);
@@ -365,17 +428,27 @@ export default function TeacherProfilePage() {
             <form
               key={JSON.stringify(profileDetails)}
               onSubmit={handleSubmit}
+              noValidate
               className="grid gap-8 py-7 lg:grid-cols-[150px_1fr] lg:px-5"
             >
               <div className="flex justify-center lg:justify-start">
-                <label className="relative block h-[116px] w-[116px] cursor-pointer rounded-full">
-                  <Image
-                    src={profileImage}
-                    alt="Teacher profile"
-                    fill
-                    sizes="116px"
-                    className="rounded-full object-cover"
-                  />
+                <label className="relative grid h-[116px] w-[116px] cursor-pointer place-items-center rounded-full bg-[#eef1f4]">
+                  {profileImage ? (
+                    <Image
+                      src={profileImage}
+                      alt="Teacher profile"
+                      fill
+                      sizes="116px"
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <UserRound
+                      aria-label="No profile picture"
+                      size={64}
+                      strokeWidth={1.2}
+                      className="text-[#b8bec5]"
+                    />
+                  )}
                   <span className="absolute right-0 bottom-1 grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-[#53a2eb] text-white shadow-sm">
                     <Camera size={15} strokeWidth={2} />
                   </span>
@@ -404,9 +477,17 @@ export default function TeacherProfilePage() {
                         name="fullName"
                         defaultValue={profileDetails.fullName}
                         placeholder="Enter Name"
+                        onChange={(event) =>
+                          validateProfileField("fullName", event.target.value)
+                        }
                         className={`${inputClassName} pl-11`}
                       />
                     </span>
+                    {profileErrors.fullName && (
+                      <span className="mt-1 block text-[11px] text-red-500">
+                        {profileErrors.fullName}
+                      </span>
+                    )}
                   </label>
 
                   <label className="block text-xs font-medium text-[#222]">
@@ -421,9 +502,20 @@ export default function TeacherProfilePage() {
                         name="professionalTitle"
                         defaultValue={profileDetails.professionalTitle}
                         placeholder="Enter Title"
+                        onChange={(event) =>
+                          validateProfileField(
+                            "professionalTitle",
+                            event.target.value
+                          )
+                        }
                         className={`${inputClassName} pl-11`}
                       />
                     </span>
+                    {profileErrors.professionalTitle && (
+                      <span className="mt-1 block text-[11px] text-red-500">
+                        {profileErrors.professionalTitle}
+                      </span>
+                    )}
                   </label>
                 </div>
 
@@ -434,26 +526,16 @@ export default function TeacherProfilePage() {
                     defaultValue={profileDetails.bio}
                     placeholder="Write about yourself"
                     rows={4}
+                    onChange={(event) =>
+                      validateProfileField("bio", event.target.value)
+                    }
                     className="mt-2 min-h-[100px] w-full resize-none rounded-lg border border-[#dbe0e5] bg-[#fbfcfd] px-4 py-3 text-xs text-[#242424] outline-none transition placeholder:text-[#a1a5aa] focus:border-[#53a2eb] focus:bg-white focus:ring-4 focus:ring-[#53a2eb]/10"
                   />
-                </label>
-
-                <label className="block text-xs font-medium text-[#222]">
-                  Mobile Number
-                  <span className="relative mt-2 block">
-                    <Phone
-                      className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#a0a4a8]"
-                      size={16}
-                      strokeWidth={1.7}
-                    />
-                    <input
-                      name="mobileNumber"
-                      defaultValue={profileDetails.mobileNumber}
-                      type="tel"
-                      placeholder="Enter Mobile Number"
-                      className={`${inputClassName} pl-11`}
-                    />
-                  </span>
+                  {profileErrors.bio && (
+                    <span className="mt-1 block text-[11px] text-red-500">
+                      {profileErrors.bio}
+                    </span>
+                  )}
                 </label>
 
                 <div className="grid gap-4 md:grid-cols-2">
@@ -462,47 +544,140 @@ export default function TeacherProfilePage() {
                     <span className="relative mt-2 block">
                       <select
                         name="country"
-                        defaultValue={profileDetails.country}
+                        value={
+                          countries.find(
+                            (country) => country.isoCode === selectedCountryCode
+                          )?.name ?? ""
+                        }
+                        onChange={(event) => {
+                          const countryCode =
+                            event.currentTarget.selectedOptions[0]?.dataset
+                              .isoCode ?? "";
+                          setSelectedCountryCode(countryCode);
+                          setMobileNumberError(undefined);
+                          validateProfileField("country", event.target.value);
+                          setProfileErrors((current) => ({
+                            ...current,
+                            city: undefined,
+                          }));
+                          phoneInputRef.current?.setCountry(
+                            countryCode.toLowerCase()
+                          );
+                        }}
                         className={`${inputClassName} appearance-none pr-10`}
                       >
                         <option value="" disabled>
                           Choose Country
                         </option>
-                        <option value="India">India</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="United States">United States</option>
-                        <option value="Canada">Canada</option>
+                        {countries.map((country) => (
+                          <option
+                            key={country.isoCode}
+                            value={country.name}
+                            data-iso-code={country.isoCode}
+                          >
+                            {country.name}
+                          </option>
+                        ))}
                       </select>
                       <ChevronDown
                         className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#999]"
                         size={16}
                       />
                     </span>
+                    {profileErrors.country && (
+                      <span className="mt-1 block text-[11px] text-red-500">
+                        {profileErrors.country}
+                      </span>
+                    )}
                   </label>
 
                   <label className="block text-xs font-medium text-[#222]">
                     City
                     <span className="relative mt-2 block">
                       <select
+                        key={`${selectedCountryCode}-${profileDetails.city}`}
                         name="city"
                         defaultValue={profileDetails.city}
+                        onChange={(event) =>
+                          validateProfileField("city", event.target.value)
+                        }
                         className={`${inputClassName} appearance-none pr-10`}
                       >
                         <option value="" disabled>
                           Choose City
                         </option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="London">London</option>
-                        <option value="New York">New York</option>
-                        <option value="Toronto">Toronto</option>
+                        {cities.map((city) => (
+                          <option
+                            key={`${city.stateCode}-${city.name}-${city.latitude}-${city.longitude}`}
+                            value={city.name}
+                          >
+                            {city.name}
+                          </option>
+                        ))}
                       </select>
                       <ChevronDown
                         className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#999]"
                         size={16}
                       />
                     </span>
+                    {profileErrors.city && (
+                      <span className="mt-1 block text-[11px] text-red-500">
+                        {profileErrors.city}
+                      </span>
+                    )}
                   </label>
                 </div>
+
+                <label className="block text-xs font-medium text-[#222]">
+                  Mobile Number
+                  <input
+                    type="hidden"
+                    name="mobileNumber"
+                    value={mobileNumber}
+                  />
+                  <span className="teacher-phone-input teacher-phone-input-bordered mt-2 block">
+                    <PhoneInput
+                      ref={phoneInputRef}
+                      defaultCountry={selectedCountryCode.toLowerCase()}
+                      value={mobileNumber}
+                      disabled={isUpdating}
+                      inputProps={{
+                        required: true,
+                        "aria-label": "Mobile number",
+                        "aria-invalid": !!mobileNumberError,
+                      }}
+                      onChange={(phone, { country }) => {
+                        setMobileNumber(phone);
+                        const countryCode = country.iso2.toUpperCase();
+                        setSelectedCountryCode(countryCode);
+
+                        const phoneDigits = phone.replace(/\D/g, "");
+                        const dialCodeDigits = country.dialCode.replace(
+                          /\D/g,
+                          ""
+                        );
+                        if (phoneDigits.length > dialCodeDigits.length) {
+                          const result =
+                            CreateTeacherProfileSchema.shape.mobileNumber.safeParse(
+                              phone
+                            );
+                          setMobileNumberError(
+                            result.success
+                              ? undefined
+                              : result.error.issues[0]?.message
+                          );
+                        } else {
+                          setMobileNumberError(undefined);
+                        }
+                      }}
+                    />
+                  </span>
+                  {mobileNumberError && (
+                    <span className="mt-1 block text-[11px] text-red-500">
+                      {mobileNumberError}
+                    </span>
+                  )}
+                </label>
 
                 <label className="block text-xs font-medium text-[#222]">
                   Rate per minute
@@ -526,9 +701,17 @@ export default function TeacherProfilePage() {
                       inputMode="decimal"
                       required
                       placeholder="Enter amount (max 500)"
+                      onChange={(event) =>
+                        validateProfileField("hourlyRate", event.target.value)
+                      }
                       className={`${inputClassName} pl-[70px]`}
                     />
                   </span>
+                  {profileErrors.hourlyRate && (
+                    <span className="mt-1 block text-[11px] text-red-500">
+                      {profileErrors.hourlyRate}
+                    </span>
+                  )}
                 </label>
 
                 <div className="flex justify-end pt-1">

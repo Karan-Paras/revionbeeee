@@ -1,4 +1,73 @@
 @import "tailwindcss";
+@import "react-international-phone/style.css";
+
+.teacher-phone-input .react-international-phone-input-container {
+  width: 100%;
+}
+
+.teacher-phone-input .react-international-phone-country-selector-button,
+.teacher-phone-input .react-international-phone-input {
+  height: 44px;
+  border-color: transparent;
+  background: white;
+}
+
+.teacher-phone-input .react-international-phone-country-selector-button {
+  border-radius: 8px 0 0 8px;
+  padding-inline: 12px;
+}
+
+.teacher-phone-input .react-international-phone-input {
+  width: 100%;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+
+.teacher-phone-input .react-international-phone-country-selector-dropdown {
+  z-index: 50;
+  max-height: 260px;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 14%);
+}
+
+.teacher-phone-input-bordered .react-international-phone-input-container {
+  overflow: hidden;
+  border: 1px solid #dbe0e5;
+  border-radius: 8px;
+  background: #fbfcfd;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms,
+    background-color 150ms;
+}
+
+.teacher-phone-input-bordered
+  .react-international-phone-input-container:focus-within {
+  border-color: #53a2eb;
+  background: white;
+  box-shadow: 0 0 0 4px rgb(83 162 235 / 10%);
+}
+
+.teacher-phone-input-bordered
+  .react-international-phone-country-selector-button,
+.teacher-phone-input-bordered .react-international-phone-input {
+  height: 46px;
+  background: transparent;
+}
+
+.profile-phone-input .react-international-phone-country-selector-button,
+.profile-phone-input .react-international-phone-input {
+  height: 64px;
+}
+
+.profile-phone-input .react-international-phone-country-selector-button {
+  border-radius: 12px 0 0 12px;
+}
+
+.profile-phone-input .react-international-phone-input {
+  border-radius: 0 12px 12px 0;
+  font-size: 16px;
+}
 
 body {
   @apply overflow-x-hidden scroll-smooth text-[#0b0b0b];

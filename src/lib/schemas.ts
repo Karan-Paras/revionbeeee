@@ -17,6 +17,14 @@ export const firstName = z.string().superRefine((val, ctx) => {
     return;
   }
 
+  if (trimmed.length < 2) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "First name must be at least 2 characters",
+    });
+    return;
+  }
+
   if (trimmed.length > 20) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -40,6 +48,14 @@ export const lastName = z.string().superRefine((val, ctx) => {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Last name is required",
+    });
+    return;
+  }
+
+  if (trimmed.length < 2) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Last name must be at least 2 characters",
     });
     return;
   }
