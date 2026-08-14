@@ -4,7 +4,7 @@ import { z } from "zod";
 const password = z.string().trim().min(1, { message: "Password is required" });
 
 // new password validation
-const newPassword = z
+export const newPassword = z
   .string()
   .regex(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/,

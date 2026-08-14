@@ -19,7 +19,7 @@ export default function TeacherCertifications() {
 
   return (
     <main className="h-dvh overflow-hidden bg-[#444] p-1.5">
-      <div className="mx-auto grid h-full max-w-[1440px] overflow-hidden rounded-xl bg-[#f4f4f4] lg:grid-cols-2">
+      <div className="grid h-full w-full overflow-hidden rounded-xl bg-[#f4f4f4] lg:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-6 py-5 sm:px-12">
           <div className="w-full max-w-[470px]">
             <div>

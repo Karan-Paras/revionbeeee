@@ -5,7 +5,9 @@ import {
   createTeacherProfile,
   type CreateTeacherProfileFormState,
 } from "@/features/teacher/actions/create-profile";
+import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 import { paths } from "@/routes";
+import { City, Country } from "country-state-city";
 import {
   Camera,
   ChevronDown,
@@ -14,9 +16,21 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { PhoneInput, type PhoneInputRefType } from "react-international-phone";
 
 const initialState: CreateTeacherProfileFormState = { errors: {} };
+
+type ProfileField = Exclude<
+  keyof CreateTeacherProfileFormState["errors"],
+  "_form"
+>;
 
 const inputClassName =
   "h-11 w-full rounded-lg border border-transparent bg-white px-4 text-sm outline-none transition placeholder:text-[#9b9b9b] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10 disabled:cursor-not-allowed disabled:opacity-60";
@@ -30,12 +44,39 @@ function FieldError({ errors }: { errors?: string[] }) {
 
 export function CreateTeacherProfileForm() {
   const router = useRouter();
+  const phoneInputRef = useRef<PhoneInputRefType>(null);
   const [imagePreview, setImagePreview] = useState<string>();
+  const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [liveErrors, setLiveErrors] = useState<
+    Partial<Record<ProfileField, string[] | undefined>>
+  >({});
+  const countries = Country.getAllCountries();
+  const cities = selectedCountryCode
+    ? City.getCitiesOfCountry(selectedCountryCode)
+    : [];
   const [formState, action, isPending] = useActionState(
     createTeacherProfile,
     initialState
   );
   const errors = formState?.errors ?? {};
+  const profileImageErrors = fieldErrors("profileImage");
+
+  function validateField(field: ProfileField, value: unknown) {
+    const result = CreateTeacherProfileSchema.shape[field].safeParse(value);
+    setLiveErrors((current) => ({
+      ...current,
+      [field]: result.success
+        ? undefined
+        : result.error.issues.map((issue) => issue.message),
+    }));
+  }
+
+  function fieldErrors(field: ProfileField) {
+    return Object.prototype.hasOwnProperty.call(liveErrors, field)
+      ? liveErrors[field]
+      : errors[field];
+  }
 
   useEffect(() => {
     if (formState?.success) {
@@ -45,6 +86,7 @@ export function CreateTeacherProfileForm() {
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
+    validateField("profileImage", file);
     if (!file) {
       setImagePreview(undefined);
       return;
@@ -55,6 +97,15 @@ export function CreateTeacherProfileForm() {
       if (typeof reader.result === "string") setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    startTransition(() => {
+      action(formData);
+    });
   }
 
   return (
@@ -74,9 +125,11 @@ export function CreateTeacherProfileForm() {
         ))}
       </div>
 
-      <form action={action} noValidate className="space-y-3">
+      <form onSubmit={handleSubmit} noValidate className="space-y-3">
         <div className="mb-4 text-center">
-          <label className="relative mx-auto grid h-20 w-20 cursor-pointer place-items-center overflow-visible rounded-full border border-dashed border-[#333] bg-white">
+          <label
+            className={`relative mx-auto grid h-20 w-20 cursor-pointer place-items-center overflow-visible rounded-full border border-dashed bg-white transition ${profileImageErrors?.length ? "border-2 border-red-500" : "border-[#333]"}`}
+          >
             {imagePreview ? (
               <Image
                 src={imagePreview}
@@ -103,11 +156,15 @@ export function CreateTeacherProfileForm() {
               disabled={isPending}
               onChange={handleImageChange}
               aria-label="Upload your image"
+              aria-invalid={!!profileImageErrors?.length}
+              aria-describedby="profile-image-error"
               className="absolute inset-0 z-20 cursor-pointer opacity-0"
             />
           </label>
           <p className="mt-1.5 text-xs text-[#555]">Upload your image</p>
-          <FieldError errors={errors.profileImage} />
+          <span id="profile-image-error">
+            <FieldError errors={profileImageErrors} />
+          </span>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -118,9 +175,12 @@ export function CreateTeacherProfileForm() {
               name="fullName"
               placeholder="Enter Name"
               disabled={isPending}
+              onChange={(event) =>
+                validateField("fullName", event.target.value)
+              }
               className={`${inputClassName} mt-1.5`}
             />
-            <FieldError errors={errors.fullName} />
+            <FieldError errors={fieldErrors("fullName")} />
           </label>
           <label className="text-xs font-medium text-[#222]">
             Professional Title
@@ -129,9 +189,12 @@ export function CreateTeacherProfileForm() {
               name="professionalTitle"
               placeholder="Enter Title"
               disabled={isPending}
+              onChange={(event) =>
+                validateField("professionalTitle", event.target.value)
+              }
               className={`${inputClassName} mt-1.5`}
             />
-            <FieldError errors={errors.professionalTitle} />
+            <FieldError errors={fieldErrors("professionalTitle")} />
           </label>
         </div>
 
@@ -142,24 +205,11 @@ export function CreateTeacherProfileForm() {
             name="bio"
             placeholder="Write about yourself"
             disabled={isPending}
+            onChange={(event) => validateField("bio", event.target.value)}
             rows={2}
             className="mt-1.5 min-h-16 w-full resize-none rounded-lg border border-transparent bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9b9b9b] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10 disabled:opacity-60"
           />
-          <FieldError errors={errors.bio} />
-        </label>
-
-        <label className="block text-xs font-medium text-[#222]">
-          Mobile Number
-          <input
-            required
-            name="mobileNumber"
-            type="tel"
-            inputMode="tel"
-            placeholder="Enter Mobile Number"
-            disabled={isPending}
-            className={`${inputClassName} mt-1.5`}
-          />
-          <FieldError errors={errors.mobileNumber} />
+          <FieldError errors={fieldErrors("bio")} />
         </label>
 
         <div className="grid grid-cols-2 gap-3">
@@ -169,49 +219,130 @@ export function CreateTeacherProfileForm() {
               <select
                 required
                 name="country"
-                defaultValue=""
+                value={
+                  countries.find(
+                    (country) => country.isoCode === selectedCountryCode
+                  )?.name ?? ""
+                }
+                onChange={(event) => {
+                  const countryCode =
+                    event.currentTarget.selectedOptions[0]?.dataset.isoCode ??
+                    "";
+                  setSelectedCountryCode(countryCode);
+                  const selectedCountry = countries.find(
+                    (country) => country.isoCode === countryCode
+                  );
+                  if (selectedCountry?.phonecode) {
+                    phoneInputRef.current?.setCountry(
+                      countryCode.toLowerCase()
+                    );
+                  }
+                  validateField("country", event.target.value);
+                  setLiveErrors((current) => ({
+                    ...current,
+                    city: undefined,
+                    mobileNumber: undefined,
+                  }));
+                }}
                 disabled={isPending}
                 className={`${inputClassName} appearance-none pr-10`}
               >
                 <option value="" disabled>
                   Choose Country
                 </option>
-                <option value="India">India</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="United States">United States</option>
+                {countries.map((country) => (
+                  <option
+                    key={country.isoCode}
+                    value={country.name}
+                    data-iso-code={country.isoCode}
+                  >
+                    {country.name}
+                  </option>
+                ))}
               </select>
               <ChevronDown
                 className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
                 size={16}
               />
             </span>
-            <FieldError errors={errors.country} />
+            <FieldError errors={fieldErrors("country")} />
           </label>
           <label className="text-xs font-medium text-[#222]">
             City
             <span className="relative mt-1.5 block">
               <select
+                key={selectedCountryCode}
                 required
                 name="city"
                 defaultValue=""
-                disabled={isPending}
+                disabled={isPending || !selectedCountryCode}
+                onChange={(event) => validateField("city", event.target.value)}
                 className={`${inputClassName} appearance-none pr-10`}
               >
                 <option value="" disabled>
                   Choose City
                 </option>
-                <option value="Delhi">Delhi</option>
-                <option value="London">London</option>
-                <option value="New York">New York</option>
+                {cities?.map((city) => (
+                  <option
+                    key={`${city.stateCode}-${city.name}-${city.latitude}-${city.longitude}`}
+                    value={city.name}
+                  >
+                    {city.name}
+                  </option>
+                ))}
               </select>
               <ChevronDown
                 className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
                 size={16}
               />
             </span>
-            <FieldError errors={errors.city} />
+            <FieldError errors={fieldErrors("city")} />
           </label>
         </div>
+
+        <label className="block text-xs font-medium text-[#222]">
+          Mobile Number
+          <input type="hidden" name="mobileNumber" value={mobileNumber} />
+          <span className="teacher-phone-input mt-1.5 block">
+            <PhoneInput
+              ref={phoneInputRef}
+              defaultCountry="in"
+              value={mobileNumber}
+              disabled={isPending}
+              inputProps={{
+                required: true,
+                "aria-label": "Mobile number",
+              }}
+              onChange={(phone, { country }) => {
+                setMobileNumber(phone);
+                const countryCode = country.iso2.toUpperCase();
+
+                setSelectedCountryCode((currentCountryCode) => {
+                  if (currentCountryCode !== countryCode) {
+                    setLiveErrors((current) => ({
+                      ...current,
+                      country: undefined,
+                      city: undefined,
+                    }));
+                  }
+                  return countryCode;
+                });
+
+                const phoneDigits = phone.replace(/\D/g, "");
+                const dialCodeDigits = country.dialCode.replace(/\D/g, "");
+                if (phoneDigits.length > dialCodeDigits.length) {
+                  validateField("mobileNumber", phone);
+                } else {
+                  setLiveErrors((current) => ({
+                    ...current,
+                    mobileNumber: undefined,
+                  }));
+                }
+              }}
+            />
+          </span>
+          <FieldError errors={fieldErrors("mobileNumber")} />
+        </label>
 
         <label className="block text-xs font-medium text-[#222]">
           Rate per minute
@@ -235,10 +366,13 @@ export function CreateTeacherProfileForm() {
               placeholder="Enter amount (max 500)"
               required
               disabled={isPending}
+              onChange={(event) =>
+                validateField("hourlyRate", event.target.value)
+              }
               className={`${inputClassName} pl-16`}
             />
           </span>
-          <FieldError errors={errors.hourlyRate} />
+          <FieldError errors={fieldErrors("hourlyRate")} />
         </label>
 
         <ErrorBlock errors={errors._form} />

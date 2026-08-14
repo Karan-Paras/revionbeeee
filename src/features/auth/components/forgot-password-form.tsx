@@ -6,11 +6,13 @@ import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { forgotPassword } from "@/features/auth/actions/forgot-password";
 import { useForgotPasswordStore } from "@/features/auth/stores/use-forgot-password-store";
+import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 
 export function ForgotPasswordForm() {
+  const [emailError, setEmailError] = useState<string>();
   const [formState, action, isPending] = useActionState(forgotPassword, {
     errors: {},
   });
@@ -29,6 +31,14 @@ export function ForgotPasswordForm() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const parsedEmail = emailSchema.safeParse(formData.get("email"));
+
+    if (!parsedEmail.success) {
+      setEmailError(parsedEmail.error.issues[0]?.message);
+      return;
+    }
+
+    setEmailError(undefined);
     startTransition(() => {
       action(formData);
     });
@@ -47,8 +57,15 @@ export function ForgotPasswordForm() {
         placeholder="john@example.com"
         iconClassName="mail_bg"
         variant="bordered"
-        errors={formState.errors.email}
+        errors={emailError ? [emailError] : formState.errors.email}
         autoComplete="email"
+        required
+        onChange={(event) => {
+          const result = emailSchema.safeParse(event.currentTarget.value);
+          setEmailError(
+            result.success ? undefined : result.error.issues[0]?.message
+          );
+        }}
       />
       <Button variant="rounded" className="mt-5" disabled={isPending}>
         Submit

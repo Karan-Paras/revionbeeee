@@ -91,6 +91,16 @@ export async function fetchServer<T>(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "An error occurred!";
+    const isNetworkError =
+      error instanceof TypeError &&
+      error.message.toLowerCase() === "fetch failed";
+
+    if (isNetworkError) {
+      throw new Error(
+        `Unable to connect to the API endpoint ${apiPath}. Check the backend server and API URL configuration.`
+      );
+    }
+
     throw new Error(message);
   }
 }

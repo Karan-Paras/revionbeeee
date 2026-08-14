@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from "libphonenumber-js/max";
 import { z } from "zod";
 
 const MAX_PROFILE_IMAGE_SIZE = 4 * 1024 * 1024;
@@ -27,11 +28,11 @@ export const CreateTeacherProfileSchema = z.object({
   mobileNumber: z
     .string()
     .trim()
-    .regex(/^\+?[0-9\s()-]+$/, "Enter a valid mobile number")
-    .refine((value) => {
-      const digitCount = value.replace(/\D/g, "").length;
-      return digitCount >= 10 && digitCount <= 15;
-    }, "Mobile number must contain 10 to 15 digits"),
+    .min(1, "Mobile number is required")
+    .refine(
+      (value) => value.startsWith("+") && isValidPhoneNumber(value),
+      "Enter a valid mobile number for the selected country"
+    ),
   country: z
     .string({
       required_error: "Please select a country",
