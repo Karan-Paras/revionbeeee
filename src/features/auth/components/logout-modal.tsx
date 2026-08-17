@@ -2,15 +2,18 @@
 
 import { Modal } from "@/components/common/modal";
 import { Button } from "@/components/ui/button";
+import { logout } from "@/features/auth/actions/logout";
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, X } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function LogoutModal() {
   const { onClose } = useLogoutModal();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -19,12 +22,18 @@ export function LogoutModal() {
 
     setIsLoggingOut(true);
 
+    const result = await logout();
+
+    if (!result.success) {
+      toast.error(result.error);
+      setIsLoggingOut(false);
+      return;
+    }
+
     queryClient.clear();
     onClose();
-
-    await signOut({
-      redirectTo: paths.home(),
-    });
+    router.replace(paths.home());
+    router.refresh();
   };
 
   return (
