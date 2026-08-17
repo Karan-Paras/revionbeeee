@@ -1,6 +1,7 @@
 "use client";
 
 import { RevisionBee } from "@/assets/icons";
+import { logout } from "@/features/auth/actions/logout";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
 import {
@@ -14,10 +15,10 @@ import {
   UsersRound,
   WalletCards,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const navigation = [
   { label: "Dashboard", href: paths.teacherDashboard(), icon: LayoutDashboard },
@@ -34,13 +35,23 @@ const navigation = [
 
 export function TeacherSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   async function handleLogout() {
     if (isLoggingOut) return;
 
     setIsLoggingOut(true);
-    await signOut({ redirectTo: paths.home() });
+    const result = await logout();
+
+    if (!result.success) {
+      toast.error(result.error);
+      setIsLoggingOut(false);
+      return;
+    }
+
+    router.replace(paths.home());
+    router.refresh();
   }
 
   return (

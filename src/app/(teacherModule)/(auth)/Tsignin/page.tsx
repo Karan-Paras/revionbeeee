@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function TeacherSignIn() {
   return (
-    <main className="h-dvh overflow-hidden bg-[#f4f4f4] p-3 sm:p-4">
-      <div className="mx-auto grid h-full max-w-[1440px] lg:grid-cols-2">
+    <main className="h-dvh w-full overflow-hidden bg-[#f4f4f4]">
+      <div className="grid h-full w-full lg:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-4 py-3 sm:px-10">
           <div className="w-full max-w-[475px]">
             <div className="mb-3 flex justify-center">
@@ -67,7 +67,7 @@ export default function TeacherSignIn() {
           </div>
         </section>
 
-        <section className="relative hidden h-full overflow-hidden rounded-2xl border-2 border-white lg:block">
+        <section className="relative hidden h-full overflow-hidden lg:block">
           <Image
             src="/images/teacher-signin.png"
             alt="Teacher holding a tablet in a classroom"

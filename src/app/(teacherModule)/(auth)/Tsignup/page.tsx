@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function TeacherSignup() {
   return (
-    <main className="h-dvh overflow-hidden bg-[#f3f3f3] p-3 sm:p-4">
+    <main className="h-dvh w-full overflow-hidden bg-[#f3f3f3]">
       <div className="grid h-full w-full md:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-4 py-2 sm:px-10">
           <div className="w-full max-w-md [&_.spc_frm]:mt-4 [&_.spc_frm_.itm]:mb-2.5 [&_.spc_frm_.mb-8]:mb-4 [&_.spc_frm_.my-10]:my-4 [&_.spc_frm_button]:p-3 [&_.spc_frm_input]:py-3">
@@ -34,7 +34,7 @@ export default function TeacherSignup() {
           </div>
         </section>
 
-        <section className="relative hidden h-full overflow-hidden rounded-xl border-2 border-white bg-white md:block">
+        <section className="relative hidden h-full overflow-hidden bg-white md:block">
           <Image
             src="/images/teacher-signup.png"
             alt="Teacher presenting a lesson in a classroom"
@@ -42,7 +42,7 @@ export default function TeacherSignup() {
             height={908}
             priority
             sizes="50vw"
-            className="mx-auto h-full w-auto max-w-full"
+            className="h-full w-full object-cover"
           />
         </section>
       </div>

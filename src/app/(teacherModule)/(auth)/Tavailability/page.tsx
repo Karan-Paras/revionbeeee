@@ -164,8 +164,8 @@ export default function TeacherAvailabilityPage() {
   }
 
   return (
-    <main className="h-dvh overflow-hidden bg-[#444] p-1.5">
-      <div className="grid h-full w-full overflow-hidden rounded-xl bg-[#f4f4f4] lg:grid-cols-2">
+    <main className="h-dvh w-full overflow-hidden bg-[#f4f4f4]">
+      <div className="grid h-full w-full overflow-hidden bg-[#f4f4f4] lg:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-6 py-5 sm:px-12">
           <div className="flex max-h-full w-full max-w-[470px] flex-col py-2">
             <div className="text-center">
@@ -314,7 +314,7 @@ export default function TeacherAvailabilityPage() {
           </div>
         </section>
 
-        <section className="relative hidden h-full overflow-hidden rounded-xl border-2 border-white lg:block">
+        <section className="relative hidden h-full overflow-hidden lg:block">
           <Image
             src="/images/teacher-personal-info.svg"
             alt="Teacher presenting a lesson at a whiteboard"
