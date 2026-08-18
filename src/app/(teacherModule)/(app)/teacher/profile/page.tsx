@@ -6,6 +6,7 @@ import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availab
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherProfile } from "@/features/teacher/actions/update-profile";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
+import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
 import {
   getTeacherCertificationUrl,
   getTeacherImageUrl,
@@ -102,6 +103,7 @@ const inputClassName =
 const countries = Country.getAllCountries();
 
 export default function TeacherProfilePage() {
+  useDismissPhoneCountryDropdown();
   const pathname = usePathname();
   const router = useRouter();
   const phoneInputRef = useRef<PhoneInputRefType>(null);

@@ -1,0 +1,251 @@
+import { fetchClient } from "@/lib/fetch-client";
+import { getTeacherImageUrl } from "@/lib/media-urls";
+
+const myBookingsUrl =
+  "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/user/myBooking";
+
+type ApiRecord = Record<string, unknown>;
+
+export type MyBookingFilter = "upcoming" | "pending" | "cancelled";
+
+export type MyBooking = {
+  id: string | number;
+  teacherName: string;
+  teacherImage: string;
+  teacherBio: string;
+  isOnline: boolean;
+  subject: string;
+  durationMinutes: number;
+  amount: string;
+  status: string;
+  rejectionReason: string;
+};
+
+type GetMyBookingsParams = {
+  filter: MyBookingFilter;
+  search: string;
+  perPage: number;
+};
+
+function isRecord(value: unknown): value is ApiRecord {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function text(record: ApiRecord, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" || typeof value === "number") {
+      return String(value).trim();
+    }
+  }
+  return "";
+}
+
+function findItems(value: unknown): ApiRecord[] {
+  if (Array.isArray(value)) return value.filter(isRecord);
+  if (!isRecord(value)) return [];
+
+  for (const key of ["bookings", "lessons", "items", "results", "data"]) {
+    if (Array.isArray(value[key])) return value[key].filter(isRecord);
+  }
+  for (const nested of Object.values(value)) {
+    const items = findItems(nested);
+    if (items.length) return items;
+  }
+  return [];
+}
+
+function findRecordWithName(value: unknown): ApiRecord | undefined {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const match = findRecordWithName(item);
+      if (match) return match;
+    }
+    return undefined;
+  }
+  if (!isRecord(value)) return undefined;
+
+  if (
+    text(
+      value,
+      "teacherName",
+      "teacher_name",
+      "fullName",
+      "full_name",
+      "firstName",
+      "first_name",
+      "name"
+    )
+  ) {
+    return value;
+  }
+
+  for (const nested of Object.values(value)) {
+    const match = findRecordWithName(nested);
+    if (match) return match;
+  }
+  return undefined;
+}
+
+function findRejectionReason(value: unknown): string {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const reason = findRejectionReason(item);
+      if (reason) return reason;
+    }
+    return "";
+  }
+  if (!isRecord(value)) return "";
+
+  for (const [key, fieldValue] of Object.entries(value)) {
+    const normalizedKey = key.toLowerCase();
+    if (
+      normalizedKey.includes("reason") &&
+      (normalizedKey === "reason" ||
+        normalizedKey.includes("reject") ||
+        normalizedKey.includes("cancel")) &&
+      typeof fieldValue === "string" &&
+      fieldValue.trim()
+    ) {
+      return fieldValue.trim();
+    }
+  }
+
+  for (const nested of Object.values(value)) {
+    const reason = findRejectionReason(nested);
+    if (reason) return reason;
+  }
+  return "";
+}
+
+function capitalizeName(name: string) {
+  return name.replace(/(^|[\s'-])\p{L}/gu, (letter) => letter.toUpperCase());
+}
+
+export async function getMyBookings(
+  params: GetMyBookingsParams
+): Promise<MyBooking[]> {
+  const response = await fetchClient<unknown>(myBookingsUrl, "POST", params);
+
+  return findItems(response.data).map((booking, index) => {
+    const namedTeacherContainer = Object.entries(booking).find(
+      ([key, value]) => key.toLowerCase().includes("teacher") && isRecord(value)
+    )?.[1];
+    const teacher = isRecord(booking.teacher)
+      ? booking.teacher
+      : isRecord(booking.teacherDetail)
+        ? booking.teacherDetail
+        : isRecord(booking.teacherDetails)
+          ? booking.teacherDetails
+          : isRecord(booking.teacher_details)
+            ? booking.teacher_details
+            : isRecord(booking.teacherData)
+              ? booking.teacherData
+              : isRecord(booking.teacher_data)
+                ? booking.teacher_data
+                : isRecord(namedTeacherContainer)
+                  ? namedTeacherContainer
+                  : {};
+    const nameRecord =
+      findRecordWithName(teacher) ?? findRecordWithName(booking) ?? {};
+    const user = isRecord(teacher.user) ? teacher.user : {};
+    const profile = isRecord(teacher.profile)
+      ? teacher.profile
+      : isRecord(teacher.teacherProfile)
+        ? teacher.teacherProfile
+        : isRecord(teacher.teacher_profile)
+          ? teacher.teacher_profile
+          : {};
+    const person = {
+      ...booking,
+      ...teacher,
+      ...user,
+      ...profile,
+      ...nameRecord,
+    };
+    const firstName = text(person, "firstName", "first_name");
+    const lastName = text(person, "lastName", "last_name");
+    const image = text(
+      person,
+      "profileImage",
+      "profile_image",
+      "profilePicture",
+      "profile_picture",
+      "image"
+    );
+    const onlineValue =
+      person.isOnline ??
+      person.is_online ??
+      person.onlineStatus ??
+      person.online_status;
+    const rawAmount = text(
+      booking,
+      "payableAmount",
+      "payable_amount",
+      "totalAmount",
+      "total_amount",
+      "amount"
+    );
+    const numericAmount = Number(rawAmount.replace(/[^\d.-]/g, ""));
+
+    return {
+      id: text(booking, "id", "lessonID", "lessonId", "lesson_id") || index,
+      teacherName: capitalizeName(
+        text(
+          person,
+          "fullName",
+          "full_name",
+          "teacherName",
+          "teacher_name",
+          "name"
+        ) ||
+          [firstName, lastName].filter(Boolean).join(" ") ||
+          "Name not provided"
+      ),
+      teacherImage: image
+        ? getTeacherImageUrl(image)
+        : "/images/teacher-personal-info.svg",
+      teacherBio:
+        text(person, "bio", "biography", "about", "description") ||
+        "No teacher description available.",
+      isOnline:
+        onlineValue === true ||
+        onlineValue === 1 ||
+        onlineValue === "1" ||
+        String(onlineValue).toLowerCase() === "online",
+      subject:
+        text(
+          booking,
+          "subjectName",
+          "subject_name",
+          "subject",
+          "topic",
+          "professionalTitle",
+          "professional_title"
+        ) || "—",
+      durationMinutes: Number(
+        text(booking, "durationMinutes", "duration_minutes", "duration")
+      ),
+      amount:
+        rawAmount && Number.isFinite(numericAmount)
+          ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
+          : rawAmount || "—",
+      status: text(booking, "status", "bookingStatus", "booking_status"),
+      rejectionReason:
+        text(
+          booking,
+          "rejectionReason",
+          "rejection_reason",
+          "rejectReason",
+          "reject_reason",
+          "cancellationReason",
+          "cancellation_reason",
+          "rejectionRemarks",
+          "rejection_remarks",
+          "remarks",
+          "comment",
+          "note"
+        ) || findRejectionReason(booking),
+    };
+  });
+}

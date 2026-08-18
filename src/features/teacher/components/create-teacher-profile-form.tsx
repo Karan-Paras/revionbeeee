@@ -6,6 +6,7 @@ import {
   type CreateTeacherProfileFormState,
 } from "@/features/teacher/actions/create-profile";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
+import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
 import { paths } from "@/routes";
 import { City, Country } from "country-state-city";
 import {
@@ -43,6 +44,7 @@ function FieldError({ errors }: { errors?: string[] }) {
 }
 
 export function CreateTeacherProfileForm() {
+  useDismissPhoneCountryDropdown();
   const router = useRouter();
   const phoneInputRef = useRef<PhoneInputRefType>(null);
   const [imagePreview, setImagePreview] = useState<string>();

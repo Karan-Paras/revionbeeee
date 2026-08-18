@@ -1,23 +1,25 @@
 "use client";
 
+import { bookInstantLesson } from "@/features/lessons/api/book-instant-lesson";
+import { bookScheduledLesson } from "@/features/lessons/api/book-scheduled-lesson";
+import { getAvailableSlots } from "@/features/lessons/api/get-available-slots";
 import {
   getVerifiedTeachers,
   type VerifiedTeacher,
 } from "@/features/lessons/api/get-verified-teachers";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CalendarDays,
   Check,
   ChevronDown,
   CircleDollarSign,
   Clock3,
-  Landmark,
   Search,
   SlidersHorizontal,
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function detailText(record: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
@@ -28,11 +30,33 @@ function detailText(record: Record<string, unknown>, ...keys: string[]) {
   return "";
 }
 
+function formatSlotTime(time: string) {
+  const [hourText, minute = "00"] = time.split(":");
+  const hour = Number(hourText);
+  if (!Number.isInteger(hour) || hour < 0 || hour > 23) return time;
+
+  const period = hour >= 12 ? "PM" : "AM";
+  const displayHour = hour % 12 || 12;
+  return `${displayHour}:${minute} ${period}`;
+}
+
+function formatSelectedDate(date: string) {
+  if (!date) return "Choose Date";
+
+  const [year, month, day] = date.split("-").map(Number);
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
+}
+
 export function TeacherList() {
   const [query, setQuery] = useState("");
   const [selectedTeacher, setSelectedTeacher] =
     useState<VerifiedTeacher | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
+  const [isInstantBooking, setIsInstantBooking] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     data: teachers = [],
@@ -54,6 +78,18 @@ export function TeacherList() {
       ),
     [query, teachers]
   );
+
+  useEffect(() => {
+    setSelectedTeacher((currentTeacher) => {
+      if (!currentTeacher) return null;
+
+      return (
+        teachers.find(
+          (teacher) => String(teacher.id) === String(currentTeacher.id)
+        ) ?? currentTeacher
+      );
+    });
+  }, [teachers]);
 
   useEffect(() => {
     if (!selectedTeacher) return;
@@ -135,6 +171,7 @@ export function TeacherList() {
                     onClick={() => {
                       setSelectedTeacher(teacher);
                       setIsScheduling(false);
+                      setIsInstantBooking(false);
                     }}
                     className="h-10 shrink-0 rounded-md bg-[#53a2eb] px-4 text-xs font-semibold text-white hover:bg-[#398fdc]"
                   >
@@ -148,9 +185,9 @@ export function TeacherList() {
                 </p>
                 <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-lg bg-[#f1f6fa] text-xs text-[#68748a]">
                   <div className="border-r border-[#d7e0e8] px-4 py-3">
-                    Subject:{" "}
-                    <strong className="ml-2 text-[#202734]">
-                      {teacher.subjects.join(", ") || "—"}
+                    <span className="block">Professional Title:</span>
+                    <strong className="mt-1 block leading-4 text-[#202734]">
+                      {teacher.professionalTitle || "—"}
                     </strong>
                   </div>
                   <div className="flex justify-between px-4 py-3">
@@ -207,13 +244,13 @@ export function TeacherList() {
           onMouseDown={(event) =>
             event.target === event.currentTarget && setSelectedTeacher(null)
           }
-          className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/55 p-3 sm:p-6"
+          className={`fixed inset-0 z-[100000] flex bg-black/55 ${isInstantBooking ? "justify-end" : "items-center justify-center p-3 sm:p-6"}`}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-label={`${selectedTeacher.name} profile details`}
-            className="relative max-h-[94dvh] w-full max-w-[540px] overflow-y-auto rounded-xl bg-[#f3f4f6] p-4 shadow-2xl sm:p-5"
+            className={`relative w-full overflow-y-auto bg-[#f3f4f6] p-4 shadow-2xl sm:p-5 ${isInstantBooking ? "h-dvh max-w-[440px]" : "max-h-[94dvh] max-w-[540px] rounded-xl"}`}
           >
             <button
               type="button"
@@ -224,7 +261,12 @@ export function TeacherList() {
               <X size={17} />
             </button>
 
-            {isScheduling ? (
+            {isInstantBooking ? (
+              <InstantLesson
+                teacher={selectedTeacher}
+                onSubmit={() => setIsSubmitted(true)}
+              />
+            ) : isScheduling ? (
               <ScheduleLesson
                 teacher={selectedTeacher}
                 onSubmit={() => setIsSubmitted(true)}
@@ -263,10 +305,18 @@ export function TeacherList() {
                       <p className="text-[9px] text-[#929292]">Lesson Price</p>
                     </div>
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#ececec] pt-4">
-                    <button className="h-11 rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc]">
-                      Instant Lesson
-                    </button>
+                  <div
+                    className={`mt-4 grid gap-3 border-t border-[#ececec] pt-4 ${selectedTeacher.isOnline ? "grid-cols-2" : "grid-cols-1"}`}
+                  >
+                    {selectedTeacher.isOnline && (
+                      <button
+                        type="button"
+                        onClick={() => setIsInstantBooking(true)}
+                        className="h-11 rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc]"
+                      >
+                        Instant Lesson
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => setIsScheduling(true)}
@@ -418,6 +468,114 @@ export function TeacherList() {
   );
 }
 
+function InstantLesson({
+  teacher,
+  onSubmit,
+}: {
+  teacher: VerifiedTeacher;
+  onSubmit: () => void;
+}) {
+  const [selectedDuration, setSelectedDuration] = useState("");
+  const ratePerMinute = Number(teacher.hourlyRate.replace(/[^\d.]/g, ""));
+  const payableAmount =
+    selectedDuration && teacher.hourlyRate && Number.isFinite(ratePerMinute)
+      ? Number(selectedDuration) * ratePerMinute
+      : null;
+  const bookLesson = useMutation({
+    mutationFn: () =>
+      bookInstantLesson({
+        teacherID: teacher.id,
+        durationMinutes: Number(selectedDuration),
+        paymentMethodId: null,
+      }),
+    onSuccess: onSubmit,
+  });
+
+  return (
+    <div className="space-y-5 pt-1">
+      <section className="rounded-xl border border-[#d9dce0] bg-white p-4">
+        <div className="flex items-center gap-3 pr-8">
+          <Image
+            src={teacher.image}
+            alt={teacher.name}
+            width={54}
+            height={54}
+            className="h-14 w-14 rounded-full object-cover"
+          />
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-sm font-bold">{teacher.name}</h2>
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#19bd57]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#19bd57]" />
+              Online
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-base font-bold">
+              {teacher.hourlyRate ? `$${teacher.hourlyRate}` : "—"}
+              <span className="text-[10px] font-normal">/min</span>
+            </p>
+            <p className="text-[9px] text-[#929292]">Lesson Price</p>
+          </div>
+        </div>
+        <p className="mt-4 border-t border-[#ececec] pt-4 text-[10px] leading-[1.55] text-[#969696]">
+          {teacher.bio || "No profile description available."}
+        </p>
+        <div className="mt-3 flex justify-between rounded bg-[#f2f7fb] px-3 py-2 text-[10px] text-[#718096]">
+          <span>Professional Title:</span>
+          <strong className="text-[#343b44]">
+            {teacher.professionalTitle || "—"}
+          </strong>
+        </div>
+      </section>
+
+      <FormSection title="Set your time limit">
+        <label className="flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
+          <Clock3 size={17} className="mr-3" />
+          <select
+            aria-label="Choose lesson duration"
+            value={selectedDuration}
+            onChange={(event) => setSelectedDuration(event.target.value)}
+            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
+          >
+            <option value="" disabled>
+              Choose your time range
+            </option>
+            <option value="20">20 minutes</option>
+            <option value="40">40 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+          <ChevronDown size={16} />
+        </label>
+      </FormSection>
+
+      <FormSection title="Payable Amount">
+        <div className="flex h-12 items-center rounded-lg border border-[#53a2eb] bg-[#f1f8ff] px-3 text-xs">
+          <CircleDollarSign size={19} className="mr-3 text-[#53a2eb]" />
+          <strong>
+            {payableAmount === null ? "—" : `$${payableAmount.toFixed(2)}`}
+          </strong>
+        </div>
+      </FormSection>
+
+      <button
+        type="button"
+        disabled={!selectedDuration || bookLesson.isPending}
+        onClick={() => bookLesson.mutate()}
+        className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {bookLesson.isPending ? "Booking..." : "Pay Now"}
+      </button>
+      {bookLesson.error && (
+        <p className="text-center text-xs text-red-500">
+          {bookLesson.error instanceof Error
+            ? bookLesson.error.message
+            : "Unable to book the lesson."}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function ScheduleLesson({
   teacher,
   onSubmit,
@@ -425,15 +583,39 @@ function ScheduleLesson({
   teacher: VerifiedTeacher;
   onSubmit: () => void;
 }) {
-  const slots = [
-    "12:00 PM - 1:00 PM",
-    "1:00 PM - 2:00 PM",
-    "3:00 PM - 4:00 PM",
-    "4:00 PM - 5:00 PM",
-    "5:00 PM - 6:00 PM",
-    "6:00 PM - 7:00 PM",
-  ];
-  const [selectedSlot, setSelectedSlot] = useState(slots[1]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [selectedDuration, setSelectedDuration] = useState("");
+  const dateInputRef = useRef<HTMLInputElement>(null);
+  const ratePerMinute = Number(teacher.hourlyRate.replace(/[^\d.]/g, ""));
+  const payableAmount =
+    selectedDuration && teacher.hourlyRate && Number.isFinite(ratePerMinute)
+      ? Number(selectedDuration) * ratePerMinute
+      : null;
+  const bookLesson = useMutation({
+    mutationFn: () =>
+      bookScheduledLesson({
+        teacherID: teacher.id,
+        scheduledDate: selectedDate,
+        scheduledStartTime: selectedSlot.split("-")[0],
+        durationMinutes: Number(selectedDuration),
+        paymentMethodId: null,
+      }),
+    onSuccess: onSubmit,
+  });
+  const {
+    data: slots = [],
+    isFetching: areSlotsLoading,
+    error: slotsError,
+  } = useQuery({
+    queryKey: ["available-lesson-slots", teacher.id, selectedDate],
+    queryFn: () => getAvailableSlots(teacher.id, selectedDate),
+    enabled: Boolean(selectedDate),
+  });
+
+  useEffect(() => {
+    setSelectedSlot("");
+  }, [selectedDate]);
 
   return (
     <div className="space-y-5">
@@ -469,40 +651,89 @@ function ScheduleLesson({
           {teacher.bio || "No profile description available."}
         </p>
         <div className="mt-3 flex justify-between rounded bg-[#f2f7fb] px-3 py-2 text-[10px] text-[#718096]">
-          <span>Subject:</span>
+          <span>Professional Title:</span>
           <strong className="text-[#343b44]">
-            {teacher.subjects.join(", ") || "—"}
+            {teacher.professionalTitle || "—"}
           </strong>
         </div>
       </section>
 
       <FormSection title="Set Date">
-        <label className="relative flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
-          <CalendarDays size={17} className="mr-3" />
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => dateInputRef.current?.showPicker()}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              dateInputRef.current?.showPicker();
+            }
+          }}
+          className={`relative flex h-12 cursor-pointer items-center rounded-lg border px-3 transition-colors hover:border-[#53a2eb] hover:bg-[#f8fbff] ${selectedDate ? "border-[#53a2eb] bg-[#f8fbff] text-[#283544]" : "border-[#d5dce4] text-[#9a9a9a]"}`}
+        >
+          <span className="mr-3 grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#eaf5ff] text-[#53a2eb]">
+            <CalendarDays size={16} />
+          </span>
           <input
+            ref={dateInputRef}
             type="date"
             aria-label="Choose lesson date"
-            className="absolute inset-0 cursor-pointer opacity-0"
+            value={selectedDate}
+            min={new Date().toISOString().slice(0, 10)}
+            onChange={(event) => setSelectedDate(event.target.value)}
+            tabIndex={-1}
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
           />
-          <span className="text-xs">Choose Date</span>
-          <ChevronDown size={16} className="ml-auto" />
-        </label>
+          <span className="pointer-events-none text-xs font-medium">
+            {formatSelectedDate(selectedDate)}
+          </span>
+          <ChevronDown
+            size={16}
+            className="pointer-events-none ml-auto text-[#8a96a3]"
+          />
+        </div>
       </FormSection>
 
       <FormSection title="Choose Slot">
-        <div className="grid grid-cols-2 gap-2">
-          {slots.map((slot) => (
-            <button
-              key={slot}
-              type="button"
-              onClick={() => setSelectedSlot(slot)}
-              className={`flex h-11 items-center justify-center gap-2 rounded-lg border text-[11px] ${selectedSlot === slot ? "border-[#53a2eb] bg-[#eef7ff] font-semibold text-[#3598ed]" : "border-[#d5dce4] text-[#9a9a9a]"}`}
-            >
-              <Clock3 size={16} />
-              <span>{slot.replace(" - ", "  -  ")}</span>
-            </button>
-          ))}
-        </div>
+        {!selectedDate ? (
+          <p className="py-3 text-center text-xs text-[#9a9a9a]">
+            Please choose a date to view available slots.
+          </p>
+        ) : areSlotsLoading ? (
+          <p className="py-3 text-center text-xs text-[#9a9a9a]">
+            Loading available slots...
+          </p>
+        ) : slotsError ? (
+          <p className="py-3 text-center text-xs text-red-500">
+            {slotsError instanceof Error
+              ? slotsError.message
+              : "Unable to load available slots."}
+          </p>
+        ) : slots.length ? (
+          <div className="grid grid-cols-2 gap-2">
+            {slots.map((slot) => {
+              const slotValue = `${slot.startTime}-${slot.endTime}`;
+              return (
+                <button
+                  key={slotValue}
+                  type="button"
+                  onClick={() => setSelectedSlot(slotValue)}
+                  className={`flex h-11 items-center justify-center gap-2 rounded-lg border text-[11px] ${selectedSlot === slotValue ? "border-[#53a2eb] bg-[#eef7ff] font-semibold text-[#3598ed]" : "border-[#d5dce4] text-[#9a9a9a]"}`}
+                >
+                  <Clock3 size={16} />
+                  <span>
+                    {formatSlotTime(slot.startTime)} -{" "}
+                    {formatSlotTime(slot.endTime)}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="py-3 text-center text-xs text-[#9a9a9a]">
+            No slots are available for this date.
+          </p>
+        )}
       </FormSection>
 
       <FormSection title="Set your time limit">
@@ -510,15 +741,16 @@ function ScheduleLesson({
           <Clock3 size={17} className="mr-3" />
           <select
             aria-label="Choose lesson duration"
-            defaultValue=""
-            className="h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none"
+            value={selectedDuration}
+            onChange={(event) => setSelectedDuration(event.target.value)}
+            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
           >
             <option value="" disabled>
               Choose your time range
             </option>
-            <option>1 hour</option>
-            <option>2 hours</option>
-            <option>3 hours</option>
+            <option value="20">20 minutes</option>
+            <option value="40">40 minutes</option>
+            <option value="60">60 minutes</option>
           </select>
           <ChevronDown size={16} />
         </label>
@@ -527,23 +759,32 @@ function ScheduleLesson({
       <FormSection title="Payable Amount">
         <div className="flex h-12 items-center rounded-lg border border-[#53a2eb] bg-[#f1f8ff] px-3 text-xs">
           <CircleDollarSign size={19} className="mr-3 text-[#53a2eb]" />
-          <strong>{teacher.hourlyRate ? `$${teacher.hourlyRate}` : "—"}</strong>
-          <Landmark
-            size={20}
-            className="ml-auto rounded bg-[#53a2eb] p-1 text-white"
-          />
-          <span className="ml-2 text-[10px]">••• 456</span>
-          <ChevronDown size={15} className="ml-2" />
+          <strong className="mr-auto">
+            {payableAmount === null ? "—" : `$${payableAmount.toFixed(2)}`}
+          </strong>
         </div>
       </FormSection>
 
       <button
         type="button"
-        onClick={onSubmit}
-        className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc]"
+        disabled={
+          !selectedDate ||
+          !selectedSlot ||
+          !selectedDuration ||
+          bookLesson.isPending
+        }
+        onClick={() => bookLesson.mutate()}
+        className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Confirm &amp; Pay
+        {bookLesson.isPending ? "Booking..." : "Confirm & Pay"}
       </button>
+      {bookLesson.error && (
+        <p className="text-center text-xs text-red-500">
+          {bookLesson.error instanceof Error
+            ? bookLesson.error.message
+            : "Unable to schedule the lesson."}
+        </p>
+      )}
     </div>
   );
 }
