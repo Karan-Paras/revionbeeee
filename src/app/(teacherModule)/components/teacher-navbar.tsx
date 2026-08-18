@@ -1,12 +1,11 @@
 "use client";
 
-import { ProfileJordan } from "@/assets/images";
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
 import { getTeacherImageUrl } from "@/lib/media-urls";
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -17,17 +16,18 @@ function resolveProfileImage(image: string) {
 export function TeacherNavbar() {
   const { data: session } = useSession();
   const [teacherName, setTeacherName] = useState("Teacher");
-  const [teacherImage, setTeacherImage] = useState<string | StaticImageData>(
-    ProfileJordan
-  );
+  const [teacherEmail, setTeacherEmail] = useState("");
+  const [teacherImage, setTeacherImage] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   useEffect(() => {
     const sessionName = session?.user?.name?.trim();
+    const sessionEmail = session?.user?.email?.trim();
     const sessionImage = session?.user?.image;
 
     if (sessionName) setTeacherName(sessionName);
+    if (sessionEmail) setTeacherEmail(sessionEmail);
     if (sessionImage) setTeacherImage(resolveProfileImage(sessionImage));
   }, [session]);
 
@@ -101,19 +101,30 @@ export function TeacherNavbar() {
         >
           <Menu size={22} />
         </button>
-        <Image
-          src={teacherImage}
-          alt={teacherName}
-          width={42}
-          height={42}
-          className="h-10 w-10 rounded-full object-cover"
-        />
+        {teacherImage ? (
+          <Image
+            src={teacherImage}
+            alt={teacherName}
+            width={42}
+            height={42}
+            onError={() => setTeacherImage(null)}
+            className="h-10 w-10 rounded-full border border-[#dce7ef] object-cover"
+          />
+        ) : (
+          <span
+            role="img"
+            aria-label="Profile image not available"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#d7e3ec] bg-gradient-to-br from-[#edf6fd] to-[#dcecf8] text-[#7e9bb1]"
+          >
+            <UserRound size={21} strokeWidth={1.7} />
+          </span>
+        )}
         <div>
           <p className="text-sm font-semibold text-[#171717] sm:text-base">
             {greeting}, {teacherName}
           </p>
           <p className="mt-0.5 hidden text-[11px] text-[#777] sm:block">
-            {currentDate}
+            {teacherEmail ? `${teacherEmail} • ${currentDate}` : currentDate}
           </p>
         </div>
       </div>

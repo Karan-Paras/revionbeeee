@@ -50,6 +50,10 @@ function text(record: ApiRecord, ...keys: string[]) {
   return "";
 }
 
+function capitalizeName(name: string) {
+  return name.replace(/(^|[\s'-])\p{L}/gu, (letter) => letter.toUpperCase());
+}
+
 function list(record: ApiRecord, ...keys: string[]): ApiRecord[] {
   for (const key of keys) {
     if (Array.isArray(record[key])) return record[key].filter(isRecord);
@@ -107,10 +111,11 @@ export async function getVerifiedTeachers(): Promise<VerifiedTeacher[]> {
       id:
         text(teacher, "id", "teacherId", "teacher_id", "uuid") ||
         `teacher-${index}`,
-      name:
+      name: capitalizeName(
         text(profile, "fullName", "full_name", "name") ||
-        [firstName, lastName].filter(Boolean).join(" ") ||
-        "Teacher",
+          [firstName, lastName].filter(Boolean).join(" ") ||
+          "Teacher"
+      ),
       image: image
         ? getTeacherImageUrl(image)
         : "/images/teacher-personal-info.svg",

@@ -1,39 +1,47 @@
 "use client";
 
-import { Clock3, Search, SlidersHorizontal, X } from "lucide-react";
+import {
+  getMyBookings,
+  type MyBookingFilter,
+} from "@/features/lessons/api/get-my-bookings";
+import { useQuery } from "@tanstack/react-query";
+import {
+  CheckCircle2,
+  Clock3,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-type LessonStatus = "upcoming" | "pending" | "cancelled";
-
-const lessons = [
-  { name: "Wade Warren", image: "/images/yara.png" },
-  { name: "Robert Fox", image: "/images/jisso.png" },
-  { name: "Albert Flores", image: "/images/profile_jordan.png" },
-  { name: "Theresa Webb", image: "/images/camille.png" },
-  { name: "Courtney Henry", image: "/images/pro_img.jpg" },
-  { name: "Darrell Steward", image: "/images/jisso.png" },
-  { name: "Bessie Cooper", image: "/images/profile_jordan.png" },
-  { name: "Darlene Robertson", image: "/images/yara.png" },
-  { name: "Jenny Wilson", image: "/images/camille.png" },
-];
-
-const tabs: Array<{ label: string; value: LessonStatus }> = [
+const tabs: Array<{ label: string; value: MyBookingFilter }> = [
   { label: "Upcoming", value: "upcoming" },
   { label: "Pending Approval", value: "pending" },
   { label: "Cancelled", value: "cancelled" },
 ];
 
 export function MyLessonsList() {
-  const [activeTab, setActiveTab] = useState<LessonStatus>("pending");
+  const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
-  const visibleLessons = useMemo(
-    () =>
-      lessons.filter(({ name }) =>
-        name.toLowerCase().includes(query.trim().toLowerCase())
-      ),
-    [query]
-  );
+  const {
+    data: lessons = [],
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ["my-bookings", activeTab, query.trim()],
+    queryFn: () =>
+      getMyBookings({
+        filter: activeTab,
+        search: query.trim(),
+        perPage: 8,
+      }),
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+  });
 
   return (
     <section className="min-h-[500px] bg-white px-5 py-10 sm:px-8 lg:px-12">
@@ -65,73 +73,109 @@ export function MyLessonsList() {
           </label>
         </div>
 
-        {activeTab !== "upcoming" ? (
-          visibleLessons.length ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {visibleLessons.map((lesson) => (
-                <article
-                  key={lesson.name}
-                  className="rounded-xl border border-[#dedede] bg-white p-4 shadow-[0_12px_28px_rgba(37,65,92,0.08)]"
-                >
-                  <div className="flex items-center gap-3">
-                    <Image
-                      src={lesson.image}
-                      alt={lesson.name}
-                      width={46}
-                      height={46}
-                      className="h-11 w-11 rounded-full object-cover"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate text-sm font-bold text-[#111]">
-                        {lesson.name}
-                      </h3>
-                      <p className="mt-0.5 flex items-center gap-1 text-[10px] text-[#19bd57]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#19bd57]" />
-                        Online
-                      </p>
-                    </div>
-                    <span
-                      className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
+        {isPending ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-[174px] animate-pulse rounded-xl bg-[#eef2f5]"
+              />
+            ))}
+          </div>
+        ) : error ? (
+          <EmptyState
+            message={
+              error instanceof Error
+                ? error.message
+                : "Unable to load your lessons."
+            }
+          />
+        ) : lessons.length ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {lessons.map((lesson) => (
+              <article
+                key={lesson.id}
+                className="rounded-xl border border-[#dedede] bg-white p-4 shadow-[0_12px_28px_rgba(37,65,92,0.08)]"
+              >
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={lesson.teacherImage}
+                    alt={lesson.teacherName}
+                    width={46}
+                    height={46}
+                    className="h-11 w-11 rounded-full object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-sm font-bold text-[#111]">
+                      {lesson.teacherName}
+                    </h3>
+                    <p
+                      className={`mt-0.5 flex items-center gap-1 text-[10px] ${lesson.isOnline ? "text-[#19bd57]" : "text-[#90979e]"}`}
                     >
-                      {activeTab === "cancelled" ? (
-                        <>
-                          <X size={11} /> Rejected
-                        </>
-                      ) : (
-                        <>
-                          <Clock3 size={11} /> Pending Approval
-                        </>
-                      )}
-                    </span>
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${lesson.isOnline ? "bg-[#19bd57]" : "bg-[#aab0b5]"}`}
+                      />
+                      {lesson.isOnline ? "Online" : "Offline"}
+                    </p>
                   </div>
-                  <p className="mt-4 line-clamp-2 text-[10px] leading-4 text-[#77808f]">
-                    We are seeking an experienced Instructional Designer to
-                    create engaging and accessible learning materials for health
-                    and education.
-                  </p>
-                  <div className="mt-4 grid grid-cols-2 rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
-                    <div className="border-r border-[#d7e0e8] px-3 py-2">
-                      Subject:{" "}
-                      <strong className="ml-2 text-[#202734]">Physics</strong>
-                    </div>
-                    <div className="flex justify-between px-3 py-2">
-                      <span>
-                        {activeTab === "cancelled" ? "Price:" : "Session Time:"}
-                      </span>
-                      <strong className="text-[#202734]">
-                        {activeTab === "cancelled" ? "$10 per hour" : "1 hour"}
-                      </strong>
-                    </div>
+                  <span
+                    className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
+                  >
+                    {activeTab === "cancelled" ? (
+                      <>
+                        <X size={11} /> Rejected
+                      </>
+                    ) : activeTab === "upcoming" ? (
+                      <>
+                        <CheckCircle2 size={11} /> Upcoming
+                      </>
+                    ) : (
+                      <>
+                        <Clock3 size={11} /> Pending Approval
+                      </>
+                    )}
+                  </span>
+                </div>
+                <p className="mt-4 line-clamp-2 text-[10px] leading-4 text-[#77808f]">
+                  {lesson.teacherBio}
+                </p>
+                {activeTab === "cancelled" && (
+                  <div className="mt-3 rounded-md border border-[#ffd1d5] bg-[#fff5f6] px-3 py-2">
+                    <p className="text-[10px] font-semibold text-[#d93645]">
+                      Reason for rejection
+                    </p>
+                    <p className="mt-1 text-[10px] leading-4 text-[#7c5559]">
+                      {lesson.rejectionReason ||
+                        "No rejection reason was provided."}
+                    </p>
                   </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <EmptyState message={`No lessons found for “${query}”.`} />
-          )
+                )}
+                <div className="mt-4 grid grid-cols-2 rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
+                  <div className="border-r border-[#d7e0e8] px-3 py-2">
+                    Subject:{" "}
+                    <strong className="ml-2 text-[#202734]">
+                      {lesson.subject}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between px-3 py-2">
+                    <span>Session Time:</span>
+                    <strong className="text-[#202734]">
+                      {lesson.durationMinutes
+                        ? `${lesson.durationMinutes} minutes`
+                        : "—"}
+                    </strong>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         ) : (
           <EmptyState
-            message={`You don't have any ${activeTab} lessons yet.`}
+            message={
+              query
+                ? `No lessons found for “${query}”.`
+                : `You don't have any ${activeTab} lessons yet.`
+            }
           />
         )}
       </div>

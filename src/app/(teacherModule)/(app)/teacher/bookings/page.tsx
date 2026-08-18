@@ -1,120 +1,25 @@
 "use client";
 
-import { Camille, Jisso, ProfileJordan, Yara } from "@/assets/images";
+import {
+  getBookings,
+  type BookingStatus,
+  type TeacherBooking,
+} from "@/features/lessons/api/get-bookings";
+import {
+  respondToLesson,
+  type RespondToLessonParams,
+} from "@/features/lessons/api/respond-to-lesson";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-
-type Status = "Pending" | "Accepted" | "Rejected" | "Completed";
-
-type Booking = {
-  id: number;
-  name: string;
-  email: string;
-  image: StaticImageData;
-  date: string;
-  time: string;
-  topic: string;
-  status: Status;
-  amount: string;
-};
-
-const initialBookings: Booking[] = [
-  {
-    id: 1,
-    name: "Robert Fox",
-    email: "robert.fox@example.com",
-    image: ProfileJordan,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Pending",
-    amount: "$2,500",
-  },
-  {
-    id: 2,
-    name: "Theresa Webb",
-    email: "theresa.webb@example.com",
-    image: Jisso,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Pending",
-    amount: "$750",
-  },
-  {
-    id: 3,
-    name: "Esther Howard",
-    email: "esther.howard@example.com",
-    image: Camille,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Accepted",
-    amount: "$150",
-  },
-  {
-    id: 4,
-    name: "Cody Fisher",
-    email: "cody.fisher@example.com",
-    image: Yara,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Rejected",
-    amount: "$1,050",
-  },
-  {
-    id: 5,
-    name: "Albert Flores",
-    email: "albert.flores@example.com",
-    image: Jisso,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Accepted",
-    amount: "$840",
-  },
-  {
-    id: 6,
-    name: "Robert Fox",
-    email: "robert.fox@example.com",
-    image: ProfileJordan,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Pending",
-    amount: "$2,500",
-  },
-  {
-    id: 7,
-    name: "Theresa Webb",
-    email: "theresa.webb@example.com",
-    image: Jisso,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Accepted",
-    amount: "$750",
-  },
-  {
-    id: 8,
-    name: "Esther Howard",
-    email: "esther.howard@example.com",
-    image: Camille,
-    date: "12 Jan 2026",
-    time: "12:00 PM - 2:00 PM",
-    topic: "Vector Calculus & 3D Geometry Equations",
-    status: "Pending",
-    amount: "$150",
-  },
-];
+import { toast } from "sonner";
 
 const tabs = ["All", "Accepted", "Pending", "Completed"] as const;
 type Tab = (typeof tabs)[number];
 
-const statusColor: Record<Status, string> = {
+const statusColor: Record<BookingStatus, string> = {
   Pending: "text-[#f39a1e]",
   Accepted: "text-[#00c98d]",
   Rejected: "text-[#ff3d4d]",
@@ -124,21 +29,47 @@ const statusColor: Record<Status, string> = {
 export default function TeacherBookingsPage() {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const routeTab: Tab =
     pathname === "/teacher/bookings/pending"
       ? "Pending"
       : pathname === "/teacher/bookings/accepted"
         ? "Accepted"
         : "All";
-  const [bookings, setBookings] = useState(() =>
-    routeTab !== "All"
-      ? initialBookings.map((booking) => ({
-          ...booking,
-          status: routeTab,
-        }))
-      : initialBookings
-  );
   const [activeTab, setActiveTab] = useState<Tab>(routeTab);
+  const {
+    data: fetchedBookings = [],
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ["teacher-bookings", activeTab],
+    queryFn: () =>
+      getBookings({
+        filter: activeTab.toLowerCase(),
+        search: "",
+        perPage: 8,
+      }),
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+  });
+  const [localStatuses, setLocalStatuses] = useState<
+    Record<string, BookingStatus>
+  >({});
+  const [rejectingLessonID, setRejectingLessonID] = useState<
+    TeacherBooking["id"] | null
+  >(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const bookings = useMemo(
+    () =>
+      fetchedBookings.map((booking) => ({
+        ...booking,
+        status: localStatuses[String(booking.id)] ?? booking.status,
+      })),
+    [fetchedBookings, localStatuses]
+  );
 
   const visibleBookings = useMemo(
     () =>
@@ -148,10 +79,46 @@ export default function TeacherBookingsPage() {
     [activeTab, bookings]
   );
 
-  function updateStatus(id: number, status: Status) {
-    setBookings((items) =>
-      items.map((item) => (item.id === id ? { ...item, status } : item))
-    );
+  function updateStatus(id: TeacherBooking["id"], status: BookingStatus) {
+    setLocalStatuses((current) => ({ ...current, [String(id)]: status }));
+  }
+
+  const respondMutation = useMutation({
+    mutationFn: respondToLesson,
+    onSuccess: async (_, variables) => {
+      updateStatus(
+        variables.lessonID,
+        variables.action === "accept" ? "Accepted" : "Rejected"
+      );
+      await queryClient.invalidateQueries({ queryKey: ["teacher-bookings"] });
+      toast.success(
+        variables.action === "accept"
+          ? "Lesson approved successfully."
+          : "Lesson rejected successfully."
+      );
+      if (variables.action === "reject") {
+        setRejectingLessonID(null);
+        setRejectionReason("");
+      }
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  function respondToBooking(
+    lessonID: TeacherBooking["id"],
+    action: RespondToLessonParams["action"],
+    reason?: string
+  ) {
+    if (action === "accept") {
+      respondMutation.mutate({ lessonID, action });
+      return;
+    }
+
+    respondMutation.mutate({
+      lessonID,
+      action,
+      rejectionReason: reason?.trim() ?? "",
+    });
   }
 
   function changeTab(tab: Tab) {
@@ -206,6 +173,25 @@ export default function TeacherBookingsPage() {
             <span>Amount</span>
             <span className="text-right">Action</span>
           </div>
+
+          {isPending && (
+            <div className="space-y-3 py-5">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-14 animate-pulse rounded-lg bg-[#f1f3f5]"
+                />
+              ))}
+            </div>
+          )}
+
+          {error && (
+            <div className="grid min-h-64 place-items-center text-center text-sm text-red-500">
+              {error instanceof Error
+                ? error.message
+                : "Unable to load bookings."}
+            </div>
+          )}
 
           <div className="divide-y divide-[#e9ecef]">
             {visibleBookings.map((booking) => (
@@ -271,14 +257,19 @@ export default function TeacherBookingsPage() {
                   {booking.status === "Pending" && (
                     <>
                       <button
-                        onClick={() => updateStatus(booking.id, "Accepted")}
-                        className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3]"
+                        disabled={respondMutation.isPending}
+                        onClick={() => respondToBooking(booking.id, "accept")}
+                        className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-wait disabled:opacity-50"
                       >
                         Accept
                       </button>
                       <button
-                        onClick={() => updateStatus(booking.id, "Rejected")}
-                        className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7]"
+                        disabled={respondMutation.isPending}
+                        onClick={() => {
+                          setRejectingLessonID(booking.id);
+                          setRejectionReason("");
+                        }}
+                        className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-wait disabled:opacity-50"
                       >
                         Reject
                       </button>
@@ -326,7 +317,7 @@ export default function TeacherBookingsPage() {
             ))}
           </div>
 
-          {visibleBookings.length === 0 && (
+          {!isPending && !error && visibleBookings.length === 0 && (
             <div className="grid min-h-64 place-items-center text-center">
               <div>
                 <X className="mx-auto mb-3 text-[#bbb]" />
@@ -337,19 +328,67 @@ export default function TeacherBookingsPage() {
             </div>
           )}
 
-          <footer className="flex items-center justify-between border-t border-[#e9ecef] py-5 text-[10px] text-[#777] sm:text-xs">
-            <span>Viewing {visibleBookings.length} out of 12</span>
-            <div className="flex items-center gap-4">
-              <button className="hover:text-[#53a2eb]">Previous</button>
-              <button className="grid h-7 w-7 place-items-center rounded-md bg-[#53a2eb] font-semibold text-white">
-                1
-              </button>
-              <button className="hover:text-[#53a2eb]">2</button>
-              <button className="hover:text-[#53a2eb]">Next</button>
-            </div>
-          </footer>
+          {!isPending && !error && (
+            <footer className="border-t border-[#e9ecef] py-5 text-[10px] text-[#777] sm:text-xs">
+              Viewing {visibleBookings.length} out of {bookings.length}
+            </footer>
+          )}
         </section>
       </div>
+
+      {rejectingLessonID !== null && (
+        <div className="fixed inset-0 z-[100000] grid place-items-center bg-black/50 p-4">
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reject-lesson-title"
+            className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl"
+          >
+            <div className="flex items-center justify-between">
+              <h2 id="reject-lesson-title" className="text-base font-bold">
+                Reject Lesson
+              </h2>
+              <button
+                type="button"
+                aria-label="Close rejection dialog"
+                onClick={() => setRejectingLessonID(null)}
+                className="grid h-8 w-8 place-items-center rounded-full hover:bg-[#f1f3f5]"
+              >
+                <X size={17} />
+              </button>
+            </div>
+            <label className="mt-4 block text-xs font-medium text-[#444]">
+              Rejection reason
+              <textarea
+                value={rejectionReason}
+                onChange={(event) => setRejectionReason(event.target.value)}
+                placeholder="Enter a reason for rejecting this lesson"
+                rows={4}
+                className="mt-2 w-full resize-none rounded-lg border border-[#d7dde3] p-3 text-sm outline-none focus:border-[#53a2eb]"
+              />
+            </label>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setRejectingLessonID(null)}
+                className="h-10 rounded-lg border border-[#d7dde3] px-4 text-xs font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!rejectionReason.trim() || respondMutation.isPending}
+                onClick={() =>
+                  respondToBooking(rejectingLessonID, "reject", rejectionReason)
+                }
+                className="h-10 rounded-lg bg-[#ff3d4d] px-4 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {respondMutation.isPending ? "Rejecting..." : "Reject Lesson"}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
