@@ -62,24 +62,42 @@ export default function TeacherAvailabilityPage() {
 
     const availabilities = days.flatMap((day, dayIndex) => {
       const dayAvailability = availability[day];
-      if (!dayAvailability.enabled) return [];
+      if (!dayAvailability.enabled) {
+        return [{ dayOfWeek: dayIndex, isAvailable: 0 as const }];
+      }
 
-      return dayAvailability.slots
-        .filter((slot) => slot.startTime && slot.endTime)
-        .map((slot) => {
-          const start = toTwelveHourTime(slot.startTime);
-          const end = toTwelveHourTime(slot.endTime);
+      const completeSlots = dayAvailability.slots.filter(
+        (slot) => slot.startTime && slot.endTime
+      );
+      if (completeSlots.length !== dayAvailability.slots.length) return [];
 
-          return {
-            dayOfWeek: dayIndex,
-            startTime: start.time,
-            startMeridiem: start.meridiem,
-            endTime: end.time,
-            endMeridiem: end.meridiem,
-            isAvailable: 1 as const,
-          };
-        });
+      return completeSlots.map((slot) => {
+        const start = toTwelveHourTime(slot.startTime);
+        const end = toTwelveHourTime(slot.endTime);
+
+        return {
+          dayOfWeek: dayIndex,
+          startTime: start.time,
+          startMeridiem: start.meridiem,
+          endTime: end.time,
+          endMeridiem: end.meridiem,
+          isAvailable: 1 as const,
+        };
+      });
     });
+
+    const hasIncompleteEnabledDay = days.some(
+      (day) =>
+        availability[day].enabled &&
+        (availability[day].slots.length === 0 ||
+          availability[day].slots.some(
+            (slot) => !slot.startTime || !slot.endTime
+          ))
+    );
+    if (hasIncompleteEnabledDay) {
+      setSubmitError("Enter a start and end time for every checked day.");
+      return;
+    }
 
     const validation = AddTeacherAvailabilitySchema.safeParse({
       availabilities,

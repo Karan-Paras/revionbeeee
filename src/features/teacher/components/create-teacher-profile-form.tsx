@@ -5,8 +5,15 @@ import {
   createTeacherProfile,
   type CreateTeacherProfileFormState,
 } from "@/features/teacher/actions/create-profile";
+import {
+  getInternationalPhoneNumber,
+  getNationalPhoneNumber,
+} from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
-import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
+import {
+  closePhoneCountryDropdown,
+  useDismissPhoneCountryDropdown,
+} from "@/hooks/use-dismiss-phone-country-dropdown";
 import { paths } from "@/routes";
 import { City, Country } from "country-state-city";
 import {
@@ -50,6 +57,7 @@ export function CreateTeacherProfileForm() {
   const [imagePreview, setImagePreview] = useState<string>();
   const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+91");
   const [liveErrors, setLiveErrors] = useState<
     Partial<Record<ProfileField, string[] | undefined>>
   >({});
@@ -104,6 +112,34 @@ export function CreateTeacherProfileForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const validation = CreateTeacherProfileSchema.safeParse({
+      fullName: formData.get("fullName"),
+      professionalTitle: formData.get("professionalTitle"),
+      bio: formData.get("bio"),
+      mobileNumber: getInternationalPhoneNumber(
+        formData.get("mobileNumber"),
+        formData.get("countryCode")
+      ),
+      countryCode: formData.get("countryCode"),
+      country: formData.get("country"),
+      city: formData.get("city"),
+      hourlyRate: formData.get("hourlyRate"),
+      profileImage: formData.get("profileImage"),
+    });
+
+    if (!validation.success) {
+      const fieldValidationErrors = validation.error.flatten().fieldErrors;
+      setLiveErrors(fieldValidationErrors);
+
+      const firstInvalidField = validation.error.issues[0]?.path[0];
+      if (firstInvalidField === "mobileNumber") {
+        phoneInputRef.current?.focus();
+      } else if (typeof firstInvalidField === "string") {
+        const field = event.currentTarget.elements.namedItem(firstInvalidField);
+        if (field instanceof HTMLElement) field.focus();
+      }
+      return;
+    }
 
     startTransition(() => {
       action(formData);
@@ -235,9 +271,16 @@ export function CreateTeacherProfileForm() {
                     (country) => country.isoCode === countryCode
                   );
                   if (selectedCountry?.phonecode) {
-                    phoneInputRef.current?.setCountry(
-                      countryCode.toLowerCase()
+                    const nextPhoneCountryCode = `+${selectedCountry.phonecode.replace(
+                      /\D/g,
+                      ""
+                    )}`;
+                    const nationalNumber = getNationalPhoneNumber(
+                      mobileNumber,
+                      phoneCountryCode
                     );
+                    setPhoneCountryCode(nextPhoneCountryCode);
+                    setMobileNumber(`${nextPhoneCountryCode}${nationalNumber}`);
                   }
                   validateField("country", event.target.value);
                   setLiveErrors((current) => ({
@@ -304,7 +347,12 @@ export function CreateTeacherProfileForm() {
 
         <label className="block text-xs font-medium text-[#222]">
           Mobile Number
-          <input type="hidden" name="mobileNumber" value={mobileNumber} />
+          <input
+            type="hidden"
+            name="mobileNumber"
+            value={getNationalPhoneNumber(mobileNumber, phoneCountryCode)}
+          />
+          <input type="hidden" name="countryCode" value={phoneCountryCode} />
           <span className="teacher-phone-input mt-1.5 block">
             <PhoneInput
               ref={phoneInputRef}
@@ -317,6 +365,8 @@ export function CreateTeacherProfileForm() {
               }}
               onChange={(phone, { country }) => {
                 setMobileNumber(phone);
+                setPhoneCountryCode(`+${country.dialCode.replace(/\D/g, "")}`);
+                closePhoneCountryDropdown(phoneInputRef.current);
                 const countryCode = country.iso2.toUpperCase();
 
                 setSelectedCountryCode((currentCountryCode) => {

@@ -8,6 +8,7 @@ export type TeacherProfileDetail = {
   professionalTitle?: string;
   bio?: string;
   mobileNumber?: string;
+  countryCode?: string;
   country?: string;
   city?: string;
   hourlyRate?: number | string;
