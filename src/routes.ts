@@ -66,6 +66,7 @@ export const paths = {
   teacherDashboard: () => "/teacher/dashboard",
   signup: () => "/signup",
   studentSignup: () => "/student-signup",
+  socialLoginComplete: () => "/social-login-complete",
   createProfile: () => "/create-profile",
   subscriptionPlans: () => "/subscription-plans",
   paymentMethod: () => "/payment-method",

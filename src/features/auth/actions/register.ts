@@ -22,7 +22,7 @@ export const register = async (
   const validatedFields = RegisterSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
-    confirmPassword: formData.get("confirm-password"),
+    confirmPassword: formData.get("confirmPassword"),
     userType: formData.get("userType"),
   });
 
@@ -43,9 +43,10 @@ export const register = async (
   }
 
   let json;
+  const deviceToken = String(formData.get("deviceToken") ?? "").trim();
 
   try {
-    json = await registerApi(validatedFields.data);
+    json = await registerApi(validatedFields.data, deviceToken);
   } catch (error: unknown) {
     if ((error as ApiErrorResponse)?.message) {
       return {

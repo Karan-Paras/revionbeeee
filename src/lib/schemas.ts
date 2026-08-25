@@ -3,8 +3,11 @@ import { z } from "zod";
 export const email = z
   .string()
   .trim()
+  .min(1, { message: "Email address is required" })
   .toLowerCase()
-  .email({ message: "Invalid email address" });
+  .email({
+    message: "Enter a valid email address (for example, name@example.com)",
+  });
 
 export const firstName = z.string().superRefine((val, ctx) => {
   const trimmed = val.trim();

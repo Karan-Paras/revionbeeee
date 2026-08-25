@@ -31,8 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overflow-x-hidden">
-      <body className={cn(sora.className, notoEmoji.variable)}>
+    <html lang="en" className="overflow-x-hidden" suppressHydrationWarning>
+      <body
+        className={cn(sora.className, notoEmoji.variable)}
+        suppressHydrationWarning
+      >
         <Providers>
           <Toaster />
           {children}

@@ -1,0 +1,111 @@
+import { socialLogin } from "../actions/social-login";
+import { DeviceTokenField } from "./device-token-field";
+
+type SocialRegisterButtonsProps = {
+  compact?: boolean;
+  error?: string;
+  mode?: "login" | "register";
+  userType: "student" | "teacher";
+};
+
+export function SocialRegisterButtons({
+  compact = false,
+  error,
+  mode = "register",
+  userType,
+}: SocialRegisterButtonsProps) {
+  const googleConfigured = Boolean(
+    (process.env.GOOGLE_CLIENT_ID ?? process.env.AUTH_GOOGLE_ID) &&
+      (process.env.GOOGLE_CLIENT_SECRET ?? process.env.AUTH_GOOGLE_SECRET)
+  );
+  const outlookConfigured = Boolean(
+    process.env.AUTH_MICROSOFT_ENTRA_ID_ID &&
+      process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET
+  );
+  const googleAction = socialLogin.bind(null, "google", userType, mode);
+  const outlookAction = socialLogin.bind(
+    null,
+    "microsoft-entra-id",
+    userType,
+    mode
+  );
+  const actionLabel = mode === "login" ? "Continue" : "Register";
+
+  return (
+    <div className={compact ? "mt-2" : "mt-4"}>
+      <div
+        className={`flex items-center text-xs text-[#9a9a9a] sm:text-sm ${
+          compact ? "mb-2 gap-3" : "mb-3 gap-4"
+        }`}
+      >
+        <span className="h-px flex-1 bg-[#d7d7d7]" />
+        <span>Or {mode === "login" ? "continue" : "register"} with</span>
+        <span className="h-px flex-1 bg-[#d7d7d7]" />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <form action={googleAction}>
+          <DeviceTokenField />
+          <button
+            type="submit"
+            disabled={!googleConfigured}
+            title={
+              googleConfigured
+                ? `${actionLabel} with Google`
+                : "Google authentication is not configured"
+            }
+            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white text-sm font-medium transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 ${compact ? "h-10" : "h-11"}`}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
+              <path
+                fill="#4285F4"
+                d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.92h5.38a4.6 4.6 0 0 1-2 3.02v2.54h3.24c1.9-1.75 2.98-4.33 2.98-7.41Z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 22c2.7 0 4.97-.9 6.62-2.43l-3.24-2.54c-.9.6-2.05.96-3.38.96-2.61 0-4.82-1.76-5.61-4.13H3.05v2.62A10 10 0 0 0 12 22Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M6.39 13.86A6 6 0 0 1 6.08 12c0-.65.11-1.28.31-1.86V7.52H3.05A10 10 0 0 0 2 12c0 1.61.39 3.14 1.05 4.48l3.34-2.62Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 6.01c1.47 0 2.79.5 3.82 1.5l2.87-2.87A9.63 9.63 0 0 0 12 2a10 10 0 0 0-8.95 5.52l3.34 2.62C7.18 7.77 9.39 6.01 12 6.01Z"
+              />
+            </svg>
+            Google
+          </button>
+        </form>
+        <form action={outlookAction}>
+          <DeviceTokenField />
+          <button
+            type="submit"
+            disabled={!outlookConfigured}
+            title={
+              outlookConfigured
+                ? `${actionLabel} with Outlook`
+                : "Outlook authentication is not configured"
+            }
+            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white text-sm font-medium transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 ${compact ? "h-10" : "h-11"}`}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
+              <path fill="#F35325" d="M2 2h9v9H2z" />
+              <path fill="#81BC06" d="M13 2h9v9h-9z" />
+              <path fill="#05A6F0" d="M2 13h9v9H2z" />
+              <path fill="#FFBA08" d="M13 13h9v9h-9z" />
+            </svg>
+            Outlook
+          </button>
+        </form>
+      </div>
+      {error && (
+        <p
+          role="alert"
+          className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-center text-sm text-red-700"
+        >
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}

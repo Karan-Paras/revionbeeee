@@ -2,6 +2,8 @@
 
 import { ErrorBlock } from "@/components/errors/error-block";
 import { login } from "@/features/auth/actions/login";
+import { DeviceTokenField } from "@/features/auth/components/device-token-field";
+import { newPassword } from "@/features/auth/schemas";
 import { getPostLoginPath } from "@/features/auth/utils";
 import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
@@ -15,6 +17,7 @@ export function TeacherLoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState<string>();
+  const [passwordError, setPasswordError] = useState<string>();
   const [formState, action, isPending] = useActionState(login, { errors: {} });
   const formErrors = formState?.errors ?? {};
 
@@ -37,18 +40,27 @@ export function TeacherLoginForm() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const parsedEmail = emailSchema.safeParse(formData.get("email"));
+    const parsedPassword = newPassword.safeParse(formData.get("password"));
 
-    if (!parsedEmail.success) {
-      setEmailError(parsedEmail.error.issues[0]?.message);
+    setEmailError(
+      parsedEmail.success ? undefined : parsedEmail.error.issues[0]?.message
+    );
+    setPasswordError(
+      parsedPassword.success
+        ? undefined
+        : parsedPassword.error.issues[0]?.message
+    );
+
+    if (!parsedEmail.success || !parsedPassword.success) {
       return;
     }
 
-    setEmailError(undefined);
     startTransition(() => action(formData));
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3.5">
+      <DeviceTokenField />
       <div>
         <label
           htmlFor="teacher-email"
@@ -111,6 +123,22 @@ export function TeacherLoginForm() {
             disabled={isPending}
             autoComplete="current-password"
             placeholder="Enter password"
+            aria-invalid={!!passwordError}
+            aria-describedby={
+              passwordError ? "login-password-error" : undefined
+            }
+            onBlur={(event) => {
+              const result = newPassword.safeParse(event.currentTarget.value);
+              setPasswordError(
+                result.success ? undefined : result.error.issues[0]?.message
+              );
+            }}
+            onChange={(event) => {
+              const result = newPassword.safeParse(event.currentTarget.value);
+              setPasswordError(
+                result.success ? undefined : result.error.issues[0]?.message
+              );
+            }}
             className="h-12 w-full rounded-lg border border-transparent bg-white pr-12 pl-12 text-sm outline-none transition placeholder:text-[#a5a5a5] focus:border-[#56a5e9] focus:ring-4 focus:ring-[#56a5e9]/10"
           />
           <button
@@ -126,6 +154,11 @@ export function TeacherLoginForm() {
             )}
           </button>
         </div>
+        {passwordError && (
+          <p id="login-password-error" className="mt-1 text-sm text-red-600">
+            {passwordError}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center justify-between gap-4 text-xs sm:text-sm">
@@ -156,7 +189,7 @@ export function TeacherLoginForm() {
       <ErrorBlock
         errors={[
           ...(!emailError ? (formErrors.email ?? []) : []),
-          ...(formErrors.password ?? []),
+          ...(!passwordError ? (formErrors.password?.slice(0, 1) ?? []) : []),
           ...(formErrors._form ?? []),
         ]}
       />

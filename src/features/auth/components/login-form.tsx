@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
+import { DeviceTokenField } from "@/features/auth/components/device-token-field";
 import { getPostLoginPath } from "@/features/auth/utils";
 import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
@@ -56,6 +57,7 @@ export function LoginForm() {
   return (
     <div className="spc_frm mt-9">
       <form onSubmit={handleFormSubmit}>
+        <DeviceTokenField />
         <div className="itm relative mb-3.5">
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input
