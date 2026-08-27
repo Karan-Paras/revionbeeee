@@ -31,7 +31,7 @@
 }
 
 .teacher-phone-input-bordered .react-international-phone-input-container {
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid #dbe0e5;
   border-radius: 8px;
   background: #fbfcfd;

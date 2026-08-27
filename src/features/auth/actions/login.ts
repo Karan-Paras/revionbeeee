@@ -26,9 +26,10 @@ export const login = async (
   }
 
   let json;
+  const deviceToken = String(formData.get("deviceToken") ?? "").trim();
 
   try {
-    json = await loginApi(validatedFields.data);
+    json = await loginApi(validatedFields.data, deviceToken);
   } catch (error: unknown) {
     const message =
       error instanceof Error

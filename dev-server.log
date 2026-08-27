@@ -1,0 +1,265 @@
+
+> revision-bee@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.3.8
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.67.154:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 6.7s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 3.6s (231 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 7.4s (494 modules)
+ GET /api/auth/session 200 in 3939ms
+ GET /api/auth/session 200 in 10362ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 154ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 47ms
+ ○ Compiling /Tpersonal-info ...
+ ✓ Compiled /Tpersonal-info in 45.7s (2263 modules)
+ GET /api/auth/session 200 in 17789ms
+ GET /api/auth/session 200 in 44955ms
+ POST /Tpersonal-info 200 in 54488ms
+ GET /Tpersonal-info 200 in 35962ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1368ms (1371 modules)
+ GET /favicon.ico 200 in 2436ms
+ GET /api/auth/session 200 in 1747ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/auth/session 200 in 394ms
+ GET /api/auth/session 200 in 365ms
+ GET /Tpersonal-info 200 in 2209ms
+ GET /api/auth/session 200 in 157ms
+ GET /favicon.ico 200 in 202ms
+ GET /api/auth/session 200 in 157ms
+ POST /Tpersonal-info 200 in 3117ms
+ ○ Compiling /Teducation ...
+ ✓ Compiled /Teducation in 3.9s (2281 modules)
+ GET /Teducation 200 in 4283ms
+ ○ Compiling /Tcertifications ...
+ ✓ Compiled /Tcertifications in 2.2s (2294 modules)
+ GET /Tcertifications 200 in 2689ms
+ ○ Compiling /Tavailability ...
+ ✓ Compiled /Tavailability in 5.5s (2334 modules)
+ GET /Tavailability 200 in 5887ms
+ GET /api/auth/session 200 in 332ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 46ms
+ GET /api/auth/session 200 in 48ms
+ GET /api/auth/session 200 in 142ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 99ms
+ ✓ Compiled in 10.5s (2348 modules)
+ GET /Tavailability 200 in 417ms
+ ✓ Compiled in 2.9s (2210 modules)
+ ✓ Compiled in 865ms (885 modules)
+ GET /Tavailability 200 in 815ms
+ GET /Tavailability 200 in 129ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 4.4s (1463 modules)
+ GET /api/auth/session 200 in 5298ms
+ GET /api/auth/session 200 in 103ms
+ POST /Tavailability 200 in 1546ms
+ ○ Compiling /Tbank-details ...
+ ✓ Compiled /Tbank-details in 5.6s (2344 modules)
+ GET /Tbank-details 200 in 5799ms
+ GET /Tbank-details 200 in 86ms
+ POST /Tbank-details 200 in 3592ms
+ GET /Tavailability 200 in 1094ms
+ ○ Compiling /Tcertifications ...
+ ✓ Compiled /Tcertifications in 4.1s (1346 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 19.6s (3763 modules)
+ GET / 200 in 22588ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1278ms (2184 modules)
+ GET /api/auth/session 200 in 1635ms
+ GET /api/auth/session 200 in 51ms
+ ○ Compiling /api/[[...route]] ...
+ ✓ Compiled /api/[[...route]] in 4.9s (3960 modules)
+ GET /api 200 in 6044ms
+ GET /api/auth/session 200 in 520ms
+ GET /api/auth/session 200 in 150ms
+ POST / 200 in 2902ms
+ GET / 200 in 1131ms
+ GET / 200 in 1134ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 681ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 7.9s (3976 modules)
+ GET /api/auth/session 200 in 7724ms
+ GET /login 200 in 8528ms
+ GET /api/auth/session 200 in 77ms
+ GET /login 200 in 334ms
+ GET /api/auth/session 200 in 90ms
+ GET /login 200 in 358ms
+ POST /login 200 in 1433ms
+ POST /login 200 in 1992ms
+ GET /api/auth/session 200 in 113ms
+ ○ Compiling /teacher/dashboard ...
+ ✓ Compiled /teacher/dashboard in 5.6s (3753 modules)
+ GET /api/auth/session 200 in 6101ms
+ GET /teacher/dashboard 200 in 6294ms
+ POST /teacher/dashboard 200 in 2238ms
+ POST /teacher/dashboard 200 in 1118ms
+ ○ Compiling /teacher/profile ...
+ ✓ Compiled /teacher/profile in 4.5s (3781 modules)
+ GET /teacher/profile 200 in 4745ms
+ POST /teacher/profile 200 in 1358ms
+ POST /teacher/profile 200 in 498ms
+ POST /teacher/profile 200 in 485ms
+ POST /teacher/profile 200 in 555ms
+ POST /teacher/profile 200 in 1101ms
+ POST /teacher/profile 200 in 996ms
+ POST /teacher/profile 200 in 1053ms
+ POST /teacher/profile 200 in 1212ms
+ POST /teacher/profile 200 in 1041ms
+ POST /teacher/profile 200 in 624ms
+ GET /teacher/profile 200 in 58ms
+ ○ Compiling /teacher/profile/qualification ...
+ POST /teacher/profile 200 in 6668ms
+ ✓ Compiled /teacher/profile/qualification in 9.7s (3745 modules)
+ GET /teacher/profile/qualification 200 in 10505ms
+ GET /teacher/profile/qualification 200 in 153ms
+ POST /teacher/profile/qualification 200 in 1311ms
+ POST /teacher/profile/qualification 200 in 508ms
+ GET /teacher/profile 200 in 74ms
+ POST /teacher/profile/qualification 200 in 482ms
+ POST /teacher/profile/qualification 200 in 1015ms
+ POST /teacher/profile 200 in 448ms
+ POST /teacher/profile 200 in 475ms
+ POST /teacher/profile 200 in 467ms
+ POST /teacher/profile 200 in 465ms
+ GET /teacher/profile 200 in 76ms
+ POST /teacher/profile 200 in 543ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.6s (2182 modules)
+ GET /api/auth/session 200 in 5895ms
+ GET /api/auth/session 200 in 171ms
+ POST /teacher/profile 200 in 6784ms
+ POST /teacher/profile 200 in 609ms
+ POST /teacher/profile 200 in 557ms
+ ○ Compiling /teacher/profile/availability ...
+ ✓ Compiled /teacher/profile/availability in 4.8s (3740 modules)
+ GET /teacher/profile/availability 200 in 6498ms
+ GET /api/auth/session 200 in 462ms
+ GET /api/auth/session 200 in 385ms
+ POST /teacher/profile 200 in 1447ms
+ POST /teacher/profile 200 in 483ms
+ POST /teacher/profile/availability 200 in 497ms
+ POST /teacher/profile/availability 200 in 468ms
+ POST /teacher/profile/availability 200 in 472ms
+ POST /teacher/profile/availability 200 in 465ms
+ GET /api/auth/session 200 in 152ms
+ GET /api/auth/session 200 in 67ms
+ POST /teacher/profile/availability 200 in 1198ms
+ POST /teacher/profile/availability 200 in 489ms
+ POST /teacher/profile/availability 200 in 626ms
+ ○ Compiling /teacher/profile/availability/update ...
+ ✓ Compiled /teacher/profile/availability/update in 78.2s (3144 modules)
+ GET /api/auth/session 200 in 57934ms
+ GET /teacher/profile/availability/update 200 in 79388ms
+ GET /teacher/profile/availability/update 200 in 37304ms
+ GET /teacher/profile/availability/update 200 in 37299ms
+ GET /teacher/profile/availability/update 200 in 37311ms
+ GET /teacher/profile/availability/update 200 in 14748ms
+ GET /api/auth/session 200 in 366ms
+ GET /api/auth/session 200 in 375ms
+ GET /teacher/profile/availability/update 200 in 451ms
+ GET /teacher/profile/availability/update 200 in 455ms
+ GET /teacher/profile/availability/update 200 in 444ms
+ GET /teacher/profile/availability/update 200 in 599ms
+ GET /api/auth/session 200 in 924ms
+ GET /api/auth/session 200 in 945ms
+ GET /api/auth/session 200 in 957ms
+ GET /api/auth/session 200 in 159ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 42ms
+ GET /api/auth/session 200 in 38ms
+ GET /api/auth/session 200 in 29ms
+ POST /teacher/profile/availability 200 in 2194ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 28ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/auth/session 200 in 38ms
+ GET /api/auth/session 200 in 25ms
+ GET /api/auth/session 200 in 29ms
+ GET /api/auth/session 200 in 33ms
+ POST /teacher/profile/availability 200 in 569ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 35ms
+ POST /teacher/profile/availability 200 in 583ms
+ POST /teacher/profile/availability 200 in 578ms
+ POST /teacher/profile/availability 200 in 470ms
+ POST /teacher/profile/availability 200 in 689ms
+ POST /teacher/profile/availability 200 in 3029ms
+ POST /teacher/profile/availability 200 in 621ms
+ POST /teacher/profile/availability 200 in 563ms
+ GET /api/auth/session 200 in 132ms
+ GET /api/auth/session 200 in 68ms
+ POST /teacher/profile/availability 200 in 678ms
+ POST /teacher/profile/availability 200 in 573ms
+ POST /teacher/profile/availability 200 in 482ms
+ POST /teacher/profile/availability 200 in 462ms
+ POST /teacher/profile/availability 200 in 473ms
+ POST /teacher/profile/availability 200 in 494ms
+ POST /teacher/profile/availability 200 in 548ms
+ POST /teacher/profile/availability 200 in 478ms
+ POST /teacher/profile/availability 200 in 462ms
+ GET /api/auth/session 200 in 109ms
+ POST /teacher/profile/availability 200 in 459ms
+ GET /api/auth/session 200 in 94ms
+ POST /teacher/profile/availability 200 in 523ms
+ POST /teacher/profile/availability 200 in 549ms
+ POST /teacher/profile/availability 200 in 499ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 8.9s (3454 modules)
+ POST /teacher/profile/availability 500 in 12109ms
+ GET /api/auth/session 500 in 3009ms
+ GET /api/auth/session 500 in 424ms
+ POST /teacher/profile/availability 200 in 1691ms
+ POST /teacher/profile/availability 200 in 495ms
+ POST /teacher/profile/availability 200 in 458ms
+ POST /teacher/profile/availability 200 in 457ms
+ POST /teacher/profile/availability 200 in 444ms
+ POST /teacher/profile/availability 200 in 425ms
+ POST /teacher/profile/availability 200 in 459ms
+ GET /teacher/profile/availability/update 200 in 142ms
+ POST /teacher/profile/availability 200 in 466ms
+ POST /teacher/profile/availability 200 in 443ms
+ POST /teacher/profile/availability 200 in 490ms
+ POST /teacher/profile/availability 200 in 443ms
+ POST /teacher/profile/availability 200 in 496ms
+ POST /teacher/profile/availability 200 in 485ms
+ POST /teacher/profile/availability 200 in 430ms
+ POST /teacher/profile/availability 200 in 472ms
+ POST /teacher/profile/availability 200 in 455ms
+ POST /teacher/profile/availability 200 in 477ms
+ POST /teacher/profile/availability 200 in 447ms
+ GET /teacher/profile/availability/update 200 in 67ms
+ GET /teacher/profile/availability/update 200 in 77ms
+ POST /teacher/profile/availability 200 in 462ms
+ POST /teacher/profile/availability 200 in 439ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 6.5s (3459 modules)
+ GET /_next/static/css/app/layout.css?v=1787122478647 404 in 7584ms
+ POST /teacher/profile/availability/update 200 in 1412ms
+ POST /teacher/profile/availability/update 200 in 709ms
+[?25h

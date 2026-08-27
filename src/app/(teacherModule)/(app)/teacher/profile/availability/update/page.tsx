@@ -130,11 +130,19 @@ export default function UpdateTeacherAvailabilityPage() {
                 isAvailable: 1 as const,
               };
             })
-        : []
+        : [{ dayOfWeek, isAvailable: 0 as const }]
     );
 
-    if (!items.length)
-      return toast.error("Select at least one day and time slot.");
+    const hasIncompleteEnabledDay = days.some(
+      (day) =>
+        availability[day].enabled &&
+        (availability[day].slots.length === 0 ||
+          availability[day].slots.some(
+            (slot) => !slot.startTime || !slot.endTime
+          ))
+    );
+    if (hasIncompleteEnabledDay)
+      return toast.error("Enter a start and end time for every checked day.");
     startTransition(async () => {
       const result = await addTeacherAvailability({ availabilities: items });
       if (!result.success) {

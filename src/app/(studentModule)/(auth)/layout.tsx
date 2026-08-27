@@ -10,10 +10,13 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   const pathname = usePathname();
+  if (pathname === paths.login() || pathname === paths.studentLogin()) {
+    return children;
+  }
 
   return (
     <section className="bg-[#F3F3F3] p-5">
-      <div className="grid grid-cols-2 ">
+      <div className="grid grid-cols-2">
         <div className="col-span-2 md:col-span-1">{children}</div>
         <div className="col-span-2 hidden md:col-span-1 md:block">
           <div

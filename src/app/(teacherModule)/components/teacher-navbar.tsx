@@ -59,6 +59,21 @@ export function TeacherNavbar() {
     });
   }, []);
 
+  useEffect(() => {
+    const handleProfileUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<{ name?: string }>).detail;
+      const updatedName = detail?.name?.trim();
+      if (updatedName) setTeacherName(updatedName);
+    };
+
+    window.addEventListener("teacher-profile-updated", handleProfileUpdate);
+    return () =>
+      window.removeEventListener(
+        "teacher-profile-updated",
+        handleProfileUpdate
+      );
+  }, []);
+
   async function handleOnlineStatusChange() {
     if (isUpdatingStatus) return;
 

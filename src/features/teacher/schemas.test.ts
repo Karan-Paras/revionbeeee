@@ -10,6 +10,7 @@ const validProfile = {
   professionalTitle: "Mathematics Teacher",
   bio: "Experienced mathematics teacher for IB students.",
   mobileNumber: "+91 98765 43210",
+  countryCode: "+91",
   country: "India",
   city: "Delhi",
   hourlyRate: 25,

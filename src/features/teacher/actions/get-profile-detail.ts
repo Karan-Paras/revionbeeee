@@ -165,6 +165,7 @@ export async function getTeacherProfileDetail(): Promise<GetTeacherProfileDetail
       mobileNumber: String(
         raw.mobileNumber ?? raw.mobile_number ?? raw.phone ?? ""
       ),
+      countryCode: String(raw.countryCode ?? raw.country_code ?? ""),
       country: String(raw.country ?? ""),
       city: String(raw.city ?? ""),
       hourlyRate: String(raw.hourlyRate ?? raw.hourly_rate ?? ""),

@@ -33,6 +33,10 @@ export const CreateTeacherProfileSchema = z.object({
       (value) => value.startsWith("+") && isValidPhoneNumber(value),
       "Enter a valid mobile number for the selected country"
     ),
+  countryCode: z
+    .string()
+    .trim()
+    .regex(/^\+\d{1,4}$/, "Enter a valid country calling code"),
   country: z
     .string({
       required_error: "Please select a country",
@@ -180,14 +184,20 @@ const availabilityTime = z
 export const AddTeacherAvailabilitySchema = z.object({
   availabilities: z
     .array(
-      z.object({
-        dayOfWeek: z.number().int().min(0).max(6),
-        startTime: availabilityTime,
-        startMeridiem: z.enum(["AM", "PM"]),
-        endTime: availabilityTime,
-        endMeridiem: z.enum(["AM", "PM"]),
-        isAvailable: z.literal(1),
-      })
+      z.discriminatedUnion("isAvailable", [
+        z.object({
+          dayOfWeek: z.number().int().min(0).max(6),
+          startTime: availabilityTime,
+          startMeridiem: z.enum(["AM", "PM"]),
+          endTime: availabilityTime,
+          endMeridiem: z.enum(["AM", "PM"]),
+          isAvailable: z.literal(1),
+        }),
+        z.object({
+          dayOfWeek: z.number().int().min(0).max(6),
+          isAvailable: z.literal(0),
+        }),
+      ])
     )
-    .min(1, "Select at least one availability time"),
+    .min(1, "Availability is required"),
 });

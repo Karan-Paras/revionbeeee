@@ -1,18 +1,53 @@
 import { email } from "@/lib/schemas";
 import { z } from "zod";
 
-const password = z.string().trim().min(1, { message: "Password is required" });
+const requiredPassword = z.string().min(1, { message: "Password is required" });
 
-// new password validation
-export const newPassword = z
-  .string()
-  .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/,
-    {
-      message:
-        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character",
-    }
-  );
+export const newPassword = requiredPassword.superRefine((value, ctx) => {
+  if (value.length === 0) return;
+  if (value.length < 8) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must be at least 8 characters",
+    });
+  }
+  if (value.length > 64) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must be no more than 64 characters",
+    });
+  }
+  if (!/^[A-Z]/.test(value)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must start with an uppercase letter",
+    });
+  }
+  if (!/[a-z]/.test(value)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must include a lowercase letter",
+    });
+  }
+  if (!/\d/.test(value)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must include a number",
+    });
+  }
+  if (!/[^A-Za-z0-9\s]/.test(value)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must include a special character",
+    });
+  }
+  if (/\s/.test(value)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Password must not contain spaces",
+    });
+  }
+});
 
 const confirmPassword = z.string().trim();
 
@@ -30,7 +65,7 @@ export const RegisterSchema = z
 
 export const LoginSchema = z.object({
   email,
-  password,
+  password: newPassword,
 });
 
 export const ForgotPasswordSchema = z.object({
@@ -49,7 +84,7 @@ export const ResetPasswordSchema = z
 
 export const ChangePasswordSchema = z
   .object({
-    currentPassword: password,
+    currentPassword: requiredPassword,
     newPassword,
     confirmPassword,
   })

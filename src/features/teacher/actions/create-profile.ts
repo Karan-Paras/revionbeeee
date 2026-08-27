@@ -2,6 +2,7 @@
 
 import { unstable_update } from "@/auth";
 import { createTeacherProfile as createTeacherProfileApi } from "@/features/teacher/api/create-profile";
+import { getInternationalPhoneNumber } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 
 export type CreateTeacherProfileFormState = {
@@ -10,6 +11,7 @@ export type CreateTeacherProfileFormState = {
     professionalTitle?: string[];
     bio?: string[];
     mobileNumber?: string[];
+    countryCode?: string[];
     country?: string[];
     city?: string[];
     hourlyRate?: string[];
@@ -27,7 +29,11 @@ export async function createTeacherProfile(
     fullName: formData.get("fullName"),
     professionalTitle: formData.get("professionalTitle"),
     bio: formData.get("bio"),
-    mobileNumber: formData.get("mobileNumber"),
+    mobileNumber: getInternationalPhoneNumber(
+      formData.get("mobileNumber"),
+      formData.get("countryCode")
+    ),
+    countryCode: formData.get("countryCode"),
     country: formData.get("country"),
     city: formData.get("city"),
     hourlyRate: formData.get("hourlyRate"),

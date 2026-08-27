@@ -1,5 +1,6 @@
 import { RevisionBee } from "@/assets/icons";
 import { RegisterForm } from "@/features/auth/components/register-form";
+import { SocialRegisterButtons } from "@/features/auth/components/social-register-buttons";
 import { paths } from "@/routes";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -9,11 +10,18 @@ export const metadata: Metadata = {
   description: "Create your Revision Bee teacher account.",
 };
 
-export default function TeacherSignup() {
+type TeacherSignupProps = {
+  searchParams: Promise<{ socialError?: string }>;
+};
+
+export default async function TeacherSignup({
+  searchParams,
+}: TeacherSignupProps) {
+  const { socialError } = await searchParams;
   return (
-    <main className="h-dvh w-full overflow-hidden bg-[#f3f3f3]">
-      <div className="grid h-full w-full md:grid-cols-2">
-        <section className="flex h-full items-center justify-center overflow-hidden px-4 py-2 sm:px-10">
+    <main className="min-h-dvh w-full bg-[#f3f3f3] md:h-dvh md:overflow-hidden">
+      <div className="grid min-h-dvh w-full md:h-full md:grid-cols-2">
+        <section className="flex min-h-dvh items-start justify-center px-4 py-6 sm:px-10 md:h-dvh md:min-h-0 md:overflow-y-auto">
           <div className="w-full max-w-md [&_.spc_frm]:mt-4 [&_.spc_frm_.itm]:mb-2.5 [&_.spc_frm_.mb-8]:mb-4 [&_.spc_frm_.my-10]:my-4 [&_.spc_frm_button]:p-3 [&_.spc_frm_input]:py-3">
             <div className="flex justify-center">
               <RevisionBee width={46} height={56} />
@@ -27,14 +35,22 @@ export default function TeacherSignup() {
               </p>
             </div>
             <RegisterForm
+              compact
               signInHref={paths.teacherLogin()}
               userType="teacher"
               successRedirect={paths.teacherPersonalInfo()}
+              socialOptions={
+                <SocialRegisterButtons
+                  compact
+                  userType="teacher"
+                  error={socialError}
+                />
+              }
             />
           </div>
         </section>
 
-        <section className="relative hidden h-full overflow-hidden bg-white md:block">
+        <section className="sticky top-0 hidden h-dvh overflow-hidden bg-white md:block">
           <Image
             src="/images/teacher-signup.png"
             alt="Teacher presenting a lesson in a classroom"
@@ -42,7 +58,7 @@ export default function TeacherSignup() {
             height={908}
             priority
             sizes="50vw"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain object-center"
           />
         </section>
       </div>

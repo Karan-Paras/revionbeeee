@@ -5,8 +5,12 @@ import { deleteTeacherProfileItem } from "@/features/teacher/actions/delete-prof
 import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availabilities";
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherProfile } from "@/features/teacher/actions/update-profile";
+import { getNationalPhoneNumber } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
-import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
+import {
+  closePhoneCountryDropdown,
+  useDismissPhoneCountryDropdown,
+} from "@/hooks/use-dismiss-phone-country-dropdown";
 import {
   getTeacherCertificationUrl,
   getTeacherImageUrl,
@@ -22,6 +26,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -104,6 +109,7 @@ const countries = Country.getAllCountries();
 
 export default function TeacherProfilePage() {
   useDismissPhoneCountryDropdown();
+  const { update: updateSession } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const phoneInputRef = useRef<PhoneInputRefType>(null);
@@ -128,6 +134,7 @@ export default function TeacherProfilePage() {
   });
   const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+91");
   const [mobileNumberError, setMobileNumberError] = useState<string>();
   const [profileErrors, setProfileErrors] = useState<
     Partial<Record<EditableProfileField, string>>
@@ -156,7 +163,17 @@ export default function TeacherProfilePage() {
         countries.find((country) => country.name === detail.country)?.isoCode ??
         "IN";
       setSelectedCountryCode(countryCode);
-      setMobileNumber(detail.mobileNumber ?? "");
+      const dialCode = detail.countryCode?.startsWith("+")
+        ? detail.countryCode
+        : detail.countryCode
+          ? `+${detail.countryCode}`
+          : "";
+      const profileMobileNumber = detail.mobileNumber ?? "";
+      const internationalMobileNumber = profileMobileNumber.startsWith("+")
+        ? profileMobileNumber
+        : `${dialCode}${profileMobileNumber.replace(/\D/g, "")}`;
+      setPhoneCountryCode(dialCode || "+91");
+      setMobileNumber(internationalMobileNumber);
       setProfileDetails({
         fullName: detail.fullName ?? "",
         professionalTitle: detail.professionalTitle ?? "",
@@ -327,6 +344,12 @@ export default function TeacherProfilePage() {
         return;
       }
 
+      await updateSession();
+      window.dispatchEvent(
+        new CustomEvent("teacher-profile-updated", {
+          detail: { name: String(values.fullName).trim() },
+        })
+      );
       toast.success("Profile updated successfully");
       router.refresh();
     });
@@ -562,9 +585,23 @@ export default function TeacherProfilePage() {
                             ...current,
                             city: undefined,
                           }));
-                          phoneInputRef.current?.setCountry(
-                            countryCode.toLowerCase()
+                          const selectedCountry = countries.find(
+                            (country) => country.isoCode === countryCode
                           );
+                          if (selectedCountry?.phonecode) {
+                            const nextPhoneCountryCode = `+${selectedCountry.phonecode.replace(
+                              /\D/g,
+                              ""
+                            )}`;
+                            const nationalNumber = getNationalPhoneNumber(
+                              mobileNumber,
+                              phoneCountryCode
+                            );
+                            setPhoneCountryCode(nextPhoneCountryCode);
+                            setMobileNumber(
+                              `${nextPhoneCountryCode}${nationalNumber}`
+                            );
+                          }
                         }}
                         className={`${inputClassName} appearance-none pr-10`}
                       >
@@ -635,7 +672,15 @@ export default function TeacherProfilePage() {
                   <input
                     type="hidden"
                     name="mobileNumber"
-                    value={mobileNumber}
+                    value={getNationalPhoneNumber(
+                      mobileNumber,
+                      phoneCountryCode
+                    )}
+                  />
+                  <input
+                    type="hidden"
+                    name="countryCode"
+                    value={phoneCountryCode}
                   />
                   <span className="teacher-phone-input teacher-phone-input-bordered mt-2 block">
                     <PhoneInput
@@ -650,6 +695,10 @@ export default function TeacherProfilePage() {
                       }}
                       onChange={(phone, { country }) => {
                         setMobileNumber(phone);
+                        setPhoneCountryCode(
+                          `+${country.dialCode.replace(/\D/g, "")}`
+                        );
+                        closePhoneCountryDropdown(phoneInputRef.current);
                         const countryCode = country.iso2.toUpperCase();
                         setSelectedCountryCode(countryCode);
 

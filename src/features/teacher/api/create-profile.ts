@@ -1,3 +1,4 @@
+import { getNationalPhoneNumber } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 import type { User } from "@/features/user/types";
 import { fetchServer } from "@/lib/fetch-server";
@@ -28,7 +29,11 @@ async function saveTeacherProfile(data: UpdateTeacherProfileInput) {
   formData.append("fullName", data.fullName);
   formData.append("professionalTitle", data.professionalTitle);
   formData.append("bio", data.bio);
-  formData.append("mobileNumber", data.mobileNumber);
+  formData.append(
+    "mobileNumber",
+    getNationalPhoneNumber(data.mobileNumber, data.countryCode)
+  );
+  formData.append("countryCode", data.countryCode);
   formData.append("country", data.country);
   formData.append("city", data.city);
   formData.append("hourlyRate", data.hourlyRate.toString());
