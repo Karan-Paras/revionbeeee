@@ -18,17 +18,7 @@ export function SocialRegisterButtons({
     (process.env.GOOGLE_CLIENT_ID ?? process.env.AUTH_GOOGLE_ID) &&
       (process.env.GOOGLE_CLIENT_SECRET ?? process.env.AUTH_GOOGLE_SECRET)
   );
-  const outlookConfigured = Boolean(
-    process.env.AUTH_MICROSOFT_ENTRA_ID_ID &&
-      process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET
-  );
   const googleAction = socialLogin.bind(null, "google", userType, mode);
-  const outlookAction = socialLogin.bind(
-    null,
-    "microsoft-entra-id",
-    userType,
-    mode
-  );
   const actionLabel = mode === "login" ? "Continue" : "Register";
 
   return (
@@ -42,7 +32,7 @@ export function SocialRegisterButtons({
         <span>Or {mode === "login" ? "continue" : "register"} with</span>
         <span className="h-px flex-1 bg-[#d7d7d7]" />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div>
         <form action={googleAction}>
           <DeviceTokenField />
           <button
@@ -74,27 +64,6 @@ export function SocialRegisterButtons({
               />
             </svg>
             Google
-          </button>
-        </form>
-        <form action={outlookAction}>
-          <DeviceTokenField />
-          <button
-            type="submit"
-            disabled={!outlookConfigured}
-            title={
-              outlookConfigured
-                ? `${actionLabel} with Outlook`
-                : "Outlook authentication is not configured"
-            }
-            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white text-sm font-medium transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 ${compact ? "h-10" : "h-11"}`}
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
-              <path fill="#F35325" d="M2 2h9v9H2z" />
-              <path fill="#81BC06" d="M13 2h9v9h-9z" />
-              <path fill="#05A6F0" d="M2 13h9v9H2z" />
-              <path fill="#FFBA08" d="M13 13h9v9h-9z" />
-            </svg>
-            Outlook
           </button>
         </form>
       </div>

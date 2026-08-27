@@ -77,6 +77,7 @@ export const paths = {
   passwordChanged: () => "/password-changed",
   dashboard: () => "/dashboard",
   lessons: () => "/lessons",
+  lessonSuccess: () => "/lessons/success",
   myLessons: () => "/my-lessons",
   progress: () => "/progress",
   quiz: () => "/quiz",

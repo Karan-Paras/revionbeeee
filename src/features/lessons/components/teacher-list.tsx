@@ -7,10 +7,10 @@ import {
   getVerifiedTeachers,
   type VerifiedTeacher,
 } from "@/features/lessons/api/get-verified-teachers";
+import { paths } from "@/routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CalendarDays,
-  Check,
   ChevronDown,
   CircleDollarSign,
   Clock3,
@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 function detailText(record: Record<string, unknown>, ...keys: string[]) {
@@ -52,12 +53,12 @@ function formatSelectedDate(date: string) {
 }
 
 export function TeacherList() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [selectedTeacher, setSelectedTeacher] =
     useState<VerifiedTeacher | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
   const [isInstantBooking, setIsInstantBooking] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     data: teachers = [],
     isPending,
@@ -209,37 +210,7 @@ export function TeacherList() {
         )}
       </div>
 
-      {isSubmitted && (
-        <div
-          className="fixed inset-0 z-[100001] grid place-items-center bg-[#f8faf9] bg-cover bg-center p-5"
-          style={{ backgroundImage: "url('/images/math_units.png')" }}
-        >
-          <section className="w-full max-w-[600px] rounded-2xl bg-white px-6 py-8 text-center shadow-[0_15px_45px_rgba(68,86,94,0.12)] sm:px-12">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#83d4bd] text-white">
-              <Check size={34} strokeWidth={2.5} />
-            </div>
-            <h2 className="mt-6 text-2xl font-bold text-[#101010]">
-              Request Submitted
-            </h2>
-            <p className="mt-3 text-sm text-[#727272]">
-              Your lesson request has been submitted successfully.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setIsSubmitted(false);
-                setIsScheduling(false);
-                setSelectedTeacher(null);
-              }}
-              className="mt-6 h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white shadow-md hover:bg-[#398fdc]"
-            >
-              Continue
-            </button>
-          </section>
-        </div>
-      )}
-
-      {selectedTeacher && !isSubmitted && (
+      {selectedTeacher && (
         <div
           onMouseDown={(event) =>
             event.target === event.currentTarget && setSelectedTeacher(null)
@@ -264,12 +235,12 @@ export function TeacherList() {
             {isInstantBooking ? (
               <InstantLesson
                 teacher={selectedTeacher}
-                onSubmit={() => setIsSubmitted(true)}
+                onSubmit={() => router.push(paths.lessonSuccess())}
               />
             ) : isScheduling ? (
               <ScheduleLesson
                 teacher={selectedTeacher}
-                onSubmit={() => setIsSubmitted(true)}
+                onSubmit={() => router.push(paths.lessonSuccess())}
               />
             ) : (
               <>
