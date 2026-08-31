@@ -1,7 +1,6 @@
-import { paths } from "@/routes";
 import { Check } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ContinueButton } from "./continue-button";
 
 export const metadata: Metadata = {
   title: "Request Submitted - Revision Bee",
@@ -25,12 +24,7 @@ export default function LessonSuccessPage() {
         <p className="mt-3 text-sm text-[#727272]">
           Your lesson request has been submitted successfully.
         </p>
-        <Link
-          href={paths.lessons()}
-          className="mt-6 grid h-12 w-full place-items-center rounded-lg bg-[#53a2eb] text-sm font-semibold text-white shadow-md hover:bg-[#398fdc]"
-        >
-          Continue
-        </Link>
+        <ContinueButton />
       </section>
     </main>
   );

@@ -3,9 +3,11 @@
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
 import { getTeacherImageUrl } from "@/lib/media-urls";
+import { paths } from "@/routes";
 import { Bell, Menu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -167,14 +169,14 @@ export function TeacherNavbar() {
             {isUpdatingStatus ? "Updating..." : isOnline ? "Online" : "Offline"}
           </span>
         </button>
-        <button
-          type="button"
+        <Link
+          href={paths.teacherNotifications()}
           aria-label="Notifications"
-          className="relative text-[#3899ec]"
+          className="relative rounded-full p-1 text-[#3899ec] transition hover:bg-[#edf6ff]"
         >
           <Bell size={22} strokeWidth={1.7} />
           <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full border border-white bg-[#ff3d4d]" />
-        </button>
+        </Link>
       </div>
     </header>
   );
