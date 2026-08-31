@@ -64,6 +64,7 @@ export const paths = {
   teacherBankDetails: () => "/Tbank-details",
   teacherProfileCreated: () => "/Tprofile-created",
   teacherDashboard: () => "/teacher/dashboard",
+  teacherNotifications: () => "/teacher/notifications",
   signup: () => "/signup",
   studentSignup: () => "/student-signup",
   socialLoginComplete: () => "/social-login-complete",

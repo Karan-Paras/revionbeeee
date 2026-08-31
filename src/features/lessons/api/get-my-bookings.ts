@@ -6,15 +6,19 @@ const myBookingsUrl =
 
 type ApiRecord = Record<string, unknown>;
 
-export type MyBookingFilter = "upcoming" | "pending" | "cancelled";
+export type MyBookingFilter = "upcoming" | "pending" | "accepted" | "cancelled";
 
 export type MyBooking = {
   id: string | number;
   teacherName: string;
   teacherImage: string;
   teacherBio: string;
+  professionalTitle: string;
   isOnline: boolean;
   subject: string;
+  sessionDate: string;
+  sessionTime: string;
+  bookingType: string;
   durationMinutes: number;
   amount: string;
   status: string;
@@ -122,6 +126,13 @@ function capitalizeName(name: string) {
   return name.replace(/(^|[\s'-])\p{L}/gu, (letter) => letter.toUpperCase());
 }
 
+function formatTime(value: string) {
+  const match = value.match(/^(\d{1,2}):(\d{2})/);
+  if (!match) return value || "—";
+  const hour = Number(match[1]);
+  return `${hour % 12 || 12}:${match[2]} ${hour >= 12 ? "PM" : "AM"}`;
+}
+
 export async function getMyBookings(
   params: GetMyBookingsParams
 ): Promise<MyBooking[]> {
@@ -187,6 +198,14 @@ export async function getMyBookings(
       "amount"
     );
     const numericAmount = Number(rawAmount.replace(/[^\d.-]/g, ""));
+    const session = isRecord(booking.session) ? booking.session : {};
+    const startTime = text(session, "startTime", "start_time");
+    const endTime = text(session, "endTime", "end_time");
+    const professionalTitle = text(
+      person,
+      "professionalTitle",
+      "professional_title"
+    );
 
     return {
       id: text(booking, "id", "lessonID", "lessonId", "lesson_id") || index,
@@ -208,6 +227,7 @@ export async function getMyBookings(
       teacherBio:
         text(person, "bio", "biography", "about", "description") ||
         "No teacher description available.",
+      professionalTitle: professionalTitle || "Teacher",
       isOnline:
         onlineValue === true ||
         onlineValue === 1 ||
@@ -222,7 +242,17 @@ export async function getMyBookings(
           "topic",
           "professionalTitle",
           "professional_title"
-        ) || "—",
+        ) ||
+        professionalTitle ||
+        "General lesson",
+      sessionDate:
+        text(session, "date", "scheduledDate", "scheduled_date") || "—",
+      sessionTime: startTime
+        ? `${formatTime(startTime)}${endTime ? ` – ${formatTime(endTime)}` : ""}`
+        : "—",
+      bookingType: capitalizeName(
+        text(session, "bookingType", "booking_type") || "Lesson"
+      ),
       durationMinutes: Number(
         text(booking, "durationMinutes", "duration_minutes", "duration")
       ),

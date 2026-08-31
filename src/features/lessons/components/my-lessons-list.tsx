@@ -4,26 +4,44 @@ import {
   getMyBookings,
   type MyBookingFilter,
 } from "@/features/lessons/api/get-my-bookings";
-import { useQuery } from "@tanstack/react-query";
+import { payForLesson } from "@/features/lessons/api/pay-for-lesson";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle2,
   Clock3,
+  CreditCard,
   Search,
   SlidersHorizontal,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const tabs: Array<{ label: string; value: MyBookingFilter }> = [
   { label: "Upcoming", value: "upcoming" },
   { label: "Pending Approval", value: "pending" },
+  { label: "Approved", value: "accepted" },
   { label: "Cancelled", value: "cancelled" },
 ];
 
 export function MyLessonsList() {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
+  const payment = useMutation({
+    mutationFn: payForLesson,
+    onSuccess: async ({ checkoutUrl, message }) => {
+      if (checkoutUrl) {
+        window.location.assign(checkoutUrl);
+        return;
+      }
+
+      toast.success(message || "Payment completed successfully.");
+      await queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
+    },
+    onError: (error) => toast.error(error.message),
+  });
   const {
     data: lessons = [],
     isPending,
@@ -109,6 +127,9 @@ export function MyLessonsList() {
                     <h3 className="truncate text-sm font-bold text-[#111]">
                       {lesson.teacherName}
                     </h3>
+                    <p className="truncate text-[10px] text-[#6f7b87]">
+                      {lesson.professionalTitle}
+                    </p>
                     <p
                       className={`mt-0.5 flex items-center gap-1 text-[10px] ${lesson.isOnline ? "text-[#19bd57]" : "text-[#90979e]"}`}
                     >
@@ -119,11 +140,15 @@ export function MyLessonsList() {
                     </p>
                   </div>
                   <span
-                    className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
+                    className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : activeTab === "accepted" || activeTab === "upcoming" ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
                   >
                     {activeTab === "cancelled" ? (
                       <>
                         <X size={11} /> Rejected
+                      </>
+                    ) : activeTab === "accepted" ? (
+                      <>
+                        <CheckCircle2 size={11} /> Approved
                       </>
                     ) : activeTab === "upcoming" ? (
                       <>
@@ -150,22 +175,34 @@ export function MyLessonsList() {
                     </p>
                   </div>
                 )}
-                <div className="mt-4 grid grid-cols-2 rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
-                  <div className="border-r border-[#d7e0e8] px-3 py-2">
-                    Subject:{" "}
-                    <strong className="ml-2 text-[#202734]">
-                      {lesson.subject}
-                    </strong>
-                  </div>
-                  <div className="flex justify-between px-3 py-2">
-                    <span>Session Time:</span>
-                    <strong className="text-[#202734]">
-                      {lesson.durationMinutes
+                <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
+                  <Detail label="Topic" value={lesson.subject} />
+                  <Detail label="Type" value={lesson.bookingType} />
+                  <Detail label="Date" value={lesson.sessionDate} />
+                  <Detail label="Time" value={lesson.sessionTime} />
+                  <Detail
+                    label="Duration"
+                    value={
+                      lesson.durationMinutes
                         ? `${lesson.durationMinutes} minutes`
-                        : "—"}
-                    </strong>
-                  </div>
+                        : "—"
+                    }
+                  />
+                  <Detail label="Amount" value={lesson.amount} />
                 </div>
+                {activeTab === "accepted" && (
+                  <button
+                    type="button"
+                    disabled={payment.isPending}
+                    onClick={() => payment.mutate(lesson.id)}
+                    className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#53a2eb] text-xs font-semibold text-white transition hover:bg-[#398fdc] disabled:cursor-wait disabled:opacity-60"
+                  >
+                    <CreditCard size={16} />
+                    {payment.isPending && payment.variables === lesson.id
+                      ? "Processing Payment..."
+                      : `Make Payment · ${lesson.amount}`}
+                  </button>
+                )}
               </article>
             ))}
           </div>
@@ -180,6 +217,15 @@ export function MyLessonsList() {
         )}
       </div>
     </section>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="border-r border-b border-[#d7e0e8] px-3 py-2">
+      <span className="block text-[#748096]">{label}</span>
+      <strong className="mt-0.5 block truncate text-[#202734]">{value}</strong>
+    </div>
   );
 }
 
