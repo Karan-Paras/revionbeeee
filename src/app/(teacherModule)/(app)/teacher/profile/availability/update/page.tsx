@@ -114,24 +114,26 @@ export default function UpdateTeacherAvailabilityPage() {
         meridiem: (hour >= 12 ? "PM" : "AM") as "AM" | "PM",
       };
     };
-    const items = days.flatMap((day, dayOfWeek) =>
-      availability[day].enabled
-        ? availability[day].slots
-            .filter((slot) => slot.startTime && slot.endTime)
-            .map((slot) => {
-              const start = toApiTime(slot.startTime);
-              const end = toApiTime(slot.endTime);
-              return {
-                dayOfWeek,
-                startTime: start.time,
-                startMeridiem: start.meridiem,
-                endTime: end.time,
-                endMeridiem: end.meridiem,
-                isAvailable: 1 as const,
-              };
-            })
-        : [{ dayOfWeek, isAvailable: 0 as const }]
-    );
+    const items = days
+      .map((day, dayOfWeek) =>
+        availability[day].enabled
+          ? availability[day].slots
+              .filter((slot) => slot.startTime && slot.endTime)
+              .map((slot) => {
+                const start = toApiTime(slot.startTime);
+                const end = toApiTime(slot.endTime);
+                return {
+                  dayOfWeek,
+                  startTime: start.time,
+                  startMeridiem: start.meridiem,
+                  endTime: end.time,
+                  endMeridiem: end.meridiem,
+                  isAvailable: 1 as const,
+                };
+              })
+          : [{ dayOfWeek, isAvailable: 0 as const }]
+      )
+      .flat();
 
     const hasIncompleteEnabledDay = days.some(
       (day) =>
