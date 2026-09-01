@@ -60,31 +60,33 @@ export default function TeacherAvailabilityPage() {
   function handleSave() {
     setSubmitError("");
 
-    const availabilities = days.flatMap((day, dayIndex) => {
-      const dayAvailability = availability[day];
-      if (!dayAvailability.enabled) {
-        return [{ dayOfWeek: dayIndex, isAvailable: 0 as const }];
-      }
+    const availabilities = days
+      .map((day, dayIndex) => {
+        const dayAvailability = availability[day];
+        if (!dayAvailability.enabled) {
+          return [{ dayOfWeek: dayIndex, isAvailable: 0 as const }];
+        }
 
-      const completeSlots = dayAvailability.slots.filter(
-        (slot) => slot.startTime && slot.endTime
-      );
-      if (completeSlots.length !== dayAvailability.slots.length) return [];
+        const completeSlots = dayAvailability.slots.filter(
+          (slot) => slot.startTime && slot.endTime
+        );
+        if (completeSlots.length !== dayAvailability.slots.length) return [];
 
-      return completeSlots.map((slot) => {
-        const start = toTwelveHourTime(slot.startTime);
-        const end = toTwelveHourTime(slot.endTime);
+        return completeSlots.map((slot) => {
+          const start = toTwelveHourTime(slot.startTime);
+          const end = toTwelveHourTime(slot.endTime);
 
-        return {
-          dayOfWeek: dayIndex,
-          startTime: start.time,
-          startMeridiem: start.meridiem,
-          endTime: end.time,
-          endMeridiem: end.meridiem,
-          isAvailable: 1 as const,
-        };
-      });
-    });
+          return {
+            dayOfWeek: dayIndex,
+            startTime: start.time,
+            startMeridiem: start.meridiem,
+            endTime: end.time,
+            endMeridiem: end.meridiem,
+            isAvailable: 1 as const,
+          };
+        });
+      })
+      .flat();
 
     const hasIncompleteEnabledDay = days.some(
       (day) =>
