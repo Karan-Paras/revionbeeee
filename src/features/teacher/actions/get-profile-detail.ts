@@ -77,13 +77,48 @@ function findNestedArray(
   return emptyMatch;
 }
 
+function findNestedRecord(
+  value: unknown,
+  keys: readonly string[]
+): Record<string, unknown> | undefined {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const match = findNestedRecord(item, keys);
+      if (match) return match;
+    }
+    return undefined;
+  }
+
+  if (!value || typeof value !== "object") return undefined;
+
+  const record = value as Record<string, unknown>;
+  for (const key of keys) {
+    const candidate = record[key];
+    if (
+      candidate &&
+      typeof candidate === "object" &&
+      !Array.isArray(candidate)
+    ) {
+      return candidate as Record<string, unknown>;
+    }
+  }
+
+  for (const nestedValue of Object.values(record)) {
+    const match = findNestedRecord(nestedValue, keys);
+    if (match) return match;
+  }
+  return undefined;
+}
+
 export type GetTeacherProfileDetailResult =
   | { success: true; data: TeacherProfileDetail }
   | { success: false; error: string };
 
-export async function getTeacherProfileDetail(): Promise<GetTeacherProfileDetailResult> {
+export async function getTeacherProfileDetail(
+  token?: string
+): Promise<GetTeacherProfileDetailResult> {
   try {
-    const response = await getTeacherProfileDetailApi();
+    const response = await getTeacherProfileDetailApi(token);
     const result = response.data;
     const resultRecord = Array.isArray(result)
       ? result.find(
@@ -101,6 +136,19 @@ export async function getTeacherProfileDetail(): Promise<GetTeacherProfileDetail
           )
         : resultRecord;
     const nestedProfile = findTeacherProfile(result);
+    const nestedUser = findNestedRecord(result, [
+      "user",
+      "user_details",
+      "userDetails",
+    ]);
+    const nestedTeacherProfile = findNestedRecord(result, [
+      "teacherProfile",
+      "teacher_profile",
+      "teacherDetails",
+      "teacher_details",
+      "profile",
+      "teacher",
+    ]);
     const qualifications = findNestedArray(result, [
       "qualifications",
       "qualification",
@@ -128,15 +176,17 @@ export async function getTeacherProfileDetail(): Promise<GetTeacherProfileDetail
           "availabilities",
           "availability",
         ]);
-    const data: TeacherProfileDetail = {
-      ...result,
-      ...result.user,
-      ...result.teacher,
-      ...result.profile,
-      ...result.teacherProfile,
-      ...result.data,
+    const resultObject =
+      result && typeof result === "object" && !Array.isArray(result)
+        ? (result as Record<string, unknown>)
+        : {};
+    const data = {
+      ...resultObject,
+      ...directTeacherRecord,
       ...nestedProfile,
-    };
+      ...nestedUser,
+      ...nestedTeacherProfile,
+    } as TeacherProfileDetail;
 
     const raw = data as Record<string, unknown>;
     const firstName = String(raw.firstName ?? raw.first_name ?? "");

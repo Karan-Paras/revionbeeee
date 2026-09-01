@@ -29,24 +29,33 @@ export default function UpdateTeacherAvailabilityPage() {
   const [isSaving, startTransition] = useTransition();
 
   useEffect(() => {
-    getTeacherAvailabilities().then((result) => {
-      if (!result.success) toast.error(result.error);
-      else {
-        const next = createEmptyState();
-        result.data.forEach((item, index) => {
-          const day = days[item.dayOfWeek];
-          if (!day || !item.isAvailable) return;
-          next[day].enabled = true;
-          next[day].slots.push({
-            id: String(item.id ?? `slot-${index}`),
-            startTime: item.startTime.slice(0, 5),
-            endTime: item.endTime.slice(0, 5),
+    getTeacherAvailabilities()
+      .then((result) => {
+        if (!result) toast.error("Availability returned an empty response.");
+        else if (!result.success) toast.error(result.error);
+        else {
+          const next = createEmptyState();
+          result.data.forEach((item, index) => {
+            const day = days[item.dayOfWeek];
+            if (!day || !item.isAvailable) return;
+            next[day].enabled = true;
+            next[day].slots.push({
+              id: String(item.id ?? `slot-${index}`),
+              startTime: item.startTime.slice(0, 5),
+              endTime: item.endTime.slice(0, 5),
+            });
           });
-        });
-        setAvailability(next);
-      }
-      setIsLoading(false);
-    });
+          setAvailability(next);
+        }
+      })
+      .catch((error: unknown) => {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Unable to load availability."
+        );
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   function toggleDay(day: string) {
@@ -147,8 +156,10 @@ export default function UpdateTeacherAvailabilityPage() {
       return toast.error("Enter a start and end time for every checked day.");
     startTransition(async () => {
       const result = await addTeacherAvailability({ availabilities: items });
-      if (!result.success) {
-        toast.error(result.error);
+      if (!result || !result.success) {
+        toast.error(
+          result?.error ?? "Availability update returned an empty response."
+        );
         return;
       }
       toast.success("Availability updated successfully");

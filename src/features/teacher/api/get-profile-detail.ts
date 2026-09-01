@@ -64,7 +64,7 @@ export type TeacherProfileDetailResponse = TeacherProfileDetail & {
   data?: TeacherProfileDetail;
 };
 
-export async function getTeacherProfileDetail() {
+export async function getTeacherProfileDetail(token?: string) {
   const apiBaseUrl = process.env.NEXT_TEACHER_API_URL;
 
   if (!apiBaseUrl) {
@@ -72,7 +72,11 @@ export async function getTeacherProfileDetail() {
   }
 
   const apiUrl = `${apiBaseUrl.replace(/\/+$/, "")}/teacher/profile/detail`;
-  return fetchServer<TeacherProfileDetailResponse>(apiUrl, "GET", undefined, {
-    revalidate: 0,
-  });
+  return fetchServer<TeacherProfileDetailResponse>(
+    apiUrl,
+    "GET",
+    undefined,
+    { revalidate: 0 },
+    token ? { Authorization: `Bearer ${token}` } : undefined
+  );
 }

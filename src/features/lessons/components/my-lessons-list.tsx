@@ -139,27 +139,25 @@ export function MyLessonsList() {
                       {lesson.isOnline ? "Online" : "Offline"}
                     </p>
                   </div>
-                  <span
-                    className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : activeTab === "accepted" || activeTab === "upcoming" ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
-                  >
-                    {activeTab === "cancelled" ? (
-                      <>
-                        <X size={11} /> Rejected
-                      </>
-                    ) : activeTab === "accepted" ? (
-                      <>
-                        <CheckCircle2 size={11} /> Approved
-                      </>
-                    ) : activeTab === "upcoming" ? (
-                      <>
-                        <CheckCircle2 size={11} /> Upcoming
-                      </>
-                    ) : (
-                      <>
-                        <Clock3 size={11} /> Pending Approval
-                      </>
-                    )}
-                  </span>
+                  {activeTab !== "upcoming" && (
+                    <span
+                      className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : activeTab === "accepted" ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
+                    >
+                      {activeTab === "cancelled" ? (
+                        <>
+                          <X size={11} /> Rejected
+                        </>
+                      ) : activeTab === "accepted" ? (
+                        <>
+                          <CheckCircle2 size={11} /> Approved
+                        </>
+                      ) : (
+                        <>
+                          <Clock3 size={11} /> Pending Approval
+                        </>
+                      )}
+                    </span>
+                  )}
                 </div>
                 <p className="mt-4 line-clamp-2 text-[10px] leading-4 text-[#77808f]">
                   {lesson.teacherBio}
@@ -190,6 +188,19 @@ export function MyLessonsList() {
                   />
                   <Detail label="Amount" value={lesson.amount} />
                 </div>
+                {activeTab === "upcoming" && (
+                  <button
+                    type="button"
+                    disabled={!lesson.joinNow}
+                    className={`mt-4 flex h-10 w-full items-center justify-center rounded-lg text-xs font-semibold transition ${
+                      lesson.joinNow
+                        ? "bg-[#53a2eb] text-white hover:bg-[#398fdc]"
+                        : "cursor-not-allowed bg-[#53a2eb]/35 text-white/80"
+                    }`}
+                  >
+                    Join
+                  </button>
+                )}
                 {activeTab === "accepted" && (
                   <button
                     type="button"

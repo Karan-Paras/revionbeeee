@@ -15,6 +15,37 @@ function resolveProfileImage(image: string) {
   return getTeacherImageUrl(image);
 }
 
+type CachedTeacherProfile = {
+  name?: string;
+  image?: string;
+  isOnline?: boolean;
+};
+
+function profileCacheKey(email: string) {
+  return `revision-bee:teacher-profile:${email.toLowerCase()}`;
+}
+
+function readCachedProfile(email: string): CachedTeacherProfile | undefined {
+  try {
+    const value = window.sessionStorage.getItem(profileCacheKey(email));
+    return value ? (JSON.parse(value) as CachedTeacherProfile) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function cacheProfile(email: string, profile: CachedTeacherProfile) {
+  if (!email) return;
+  const current = readCachedProfile(email) ?? {};
+  const definedProfile = Object.fromEntries(
+    Object.entries(profile).filter(([, value]) => value !== undefined)
+  ) as CachedTeacherProfile;
+  window.sessionStorage.setItem(
+    profileCacheKey(email),
+    JSON.stringify({ ...current, ...definedProfile })
+  );
+}
+
 export function TeacherNavbar() {
   const { data: session } = useSession();
   const [teacherName, setTeacherName] = useState("Teacher");
@@ -29,43 +60,93 @@ export function TeacherNavbar() {
     const sessionImage = session?.user?.image;
 
     if (sessionName) setTeacherName(sessionName);
-    if (sessionEmail) setTeacherEmail(sessionEmail);
     if (sessionImage) setTeacherImage(resolveProfileImage(sessionImage));
+    if (sessionEmail) {
+      setTeacherEmail(sessionEmail);
+      const cachedProfile = readCachedProfile(sessionEmail);
+      if (cachedProfile?.name) setTeacherName(cachedProfile.name);
+      if (cachedProfile?.image) setTeacherImage(cachedProfile.image);
+      if (typeof cachedProfile?.isOnline === "boolean") {
+        setIsOnline(cachedProfile.isOnline);
+      }
+    }
   }, [session]);
 
   useEffect(() => {
-    getTeacherProfileDetail().then((result) => {
-      if (!result.success) return;
+    const token = session?.user?.token;
+    if (!token) return;
 
-      const fullName =
-        result.data.fullName?.trim() ||
-        [result.data.firstName, result.data.lastName]
-          .filter(Boolean)
-          .join(" ")
-          .trim() ||
-        result.data.name?.trim();
+    getTeacherProfileDetail(token)
+      .then((result) => {
+        if (!result) return;
+        if (!result.success) {
+          toast.error(result.error);
+          return;
+        }
 
-      if (fullName) setTeacherName(fullName);
+        const fullName =
+          result.data.fullName?.trim() ||
+          [result.data.firstName, result.data.lastName]
+            .filter(Boolean)
+            .join(" ")
+            .trim() ||
+          result.data.name?.trim();
 
-      const image = result.data.profileImage ?? result.data.profilePicture;
-      if (image) setTeacherImage(resolveProfileImage(image));
+        if (fullName) setTeacherName(fullName);
 
-      const onlineStatus =
-        result.data.isOnline ??
-        result.data.is_online ??
-        result.data.onlineStatus ??
-        result.data.online_status;
-      if (typeof onlineStatus === "boolean") setIsOnline(onlineStatus);
-      else if (typeof onlineStatus === "number")
-        setIsOnline(onlineStatus === 1);
-    });
-  }, []);
+        const image = result.data.profileImage ?? result.data.profilePicture;
+        const resolvedImage = image ? resolveProfileImage(image) : undefined;
+        if (resolvedImage) setTeacherImage(resolvedImage);
+
+        const onlineStatus =
+          result.data.isOnline ??
+          result.data.is_online ??
+          result.data.onlineStatus ??
+          result.data.online_status;
+        const normalizedOnlineStatus =
+          typeof onlineStatus === "boolean"
+            ? onlineStatus
+            : typeof onlineStatus === "number"
+              ? onlineStatus === 1
+              : undefined;
+        if (typeof normalizedOnlineStatus === "boolean") {
+          setIsOnline(normalizedOnlineStatus);
+        }
+        cacheProfile(session?.user?.email?.trim() ?? "", {
+          name: fullName,
+          image: resolvedImage,
+          isOnline: normalizedOnlineStatus,
+        });
+      })
+      .catch((error: unknown) => {
+        toast.error(
+          error instanceof Error ? error.message : "Unable to load profile."
+        );
+      });
+  }, [session?.user?.token]);
 
   useEffect(() => {
     const handleProfileUpdate = (event: Event) => {
-      const detail = (event as CustomEvent<{ name?: string }>).detail;
+      const detail = (
+        event as CustomEvent<{
+          name?: string;
+          image?: string;
+          isOnline?: boolean;
+        }>
+      ).detail;
       const updatedName = detail?.name?.trim();
       if (updatedName) setTeacherName(updatedName);
+      if (detail?.image) {
+        setTeacherImage(resolveProfileImage(detail.image));
+      }
+      if (typeof detail?.isOnline === "boolean") {
+        setIsOnline(detail.isOnline);
+      }
+      cacheProfile(session?.user?.email?.trim() ?? "", {
+        name: updatedName,
+        image: detail?.image ? resolveProfileImage(detail.image) : undefined,
+        isOnline: detail?.isOnline,
+      });
     };
 
     window.addEventListener("teacher-profile-updated", handleProfileUpdate);
@@ -74,7 +155,7 @@ export function TeacherNavbar() {
         "teacher-profile-updated",
         handleProfileUpdate
       );
-  }, []);
+  }, [session?.user?.email]);
 
   async function handleOnlineStatusChange() {
     if (isUpdatingStatus) return;
@@ -83,13 +164,14 @@ export function TeacherNavbar() {
     setIsUpdatingStatus(true);
     const result = await updateTeacherOnlineStatus(nextStatus);
 
-    if (!result.success) {
-      toast.error(result.error);
+    if (!result || !result.success) {
+      toast.error(result?.error ?? "Status update returned an empty response.");
       setIsUpdatingStatus(false);
       return;
     }
 
     setIsOnline(result.isOnline);
+    cacheProfile(teacherEmail, { isOnline: result.isOnline });
     setIsUpdatingStatus(false);
     toast.success(result.isOnline ? "You are online" : "You are offline");
   }
@@ -124,6 +206,7 @@ export function TeacherNavbar() {
             alt={teacherName}
             width={42}
             height={42}
+            unoptimized
             onError={() => setTeacherImage(null)}
             className="h-10 w-10 rounded-full border border-[#dce7ef] object-cover"
           />

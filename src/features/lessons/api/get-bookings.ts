@@ -10,6 +10,7 @@ export type BookingStatus = "Pending" | "Accepted" | "Rejected" | "Completed";
 
 export type TeacherBooking = {
   id: string | number;
+  lessonID: string | number;
   name: string;
   email: string;
   image: string;
@@ -18,6 +19,7 @@ export type TeacherBooking = {
   topic: string;
   status: BookingStatus;
   amount: string;
+  paidAt?: string;
 };
 
 function isRecord(value: unknown): value is ApiRecord {
@@ -119,6 +121,21 @@ function normalizeStatus(value: string): BookingStatus {
 
 function capitalizeName(name: string) {
   return name.replace(/(^|[\s'-])\p{L}/gu, (letter) => letter.toUpperCase());
+}
+
+function formatDateTime(value: string) {
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})/);
+  if (!match) return value;
+  const [, year, month, day, hour, minute] = match.map(Number);
+  if (!year || !month || !day) return value;
+  const date = new Date(year, month - 1, day, hour, minute);
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
 }
 
 type GetBookingsParams = {
@@ -230,9 +247,24 @@ export async function getBookings(
       "amount"
     );
     const numericAmount = Number(rawAmount.replace(/[^\d.-]/g, ""));
+    const rawPaidAt = text(
+      booking,
+      "paidAt",
+      "paid_at",
+      "paymentDate",
+      "payment_date",
+      "paymentTime",
+      "payment_time"
+    );
+
+    const bookingID =
+      text(booking, "id", "bookingID", "bookingId", "booking_id") || index;
+    const lessonID =
+      text(booking, "lessonID", "lessonId", "lesson_id") || bookingID;
 
     return {
-      id: text(booking, "id", "bookingID", "bookingId", "booking_id") || index,
+      id: bookingID,
+      lessonID,
       name: capitalizeName(
         text(
           person,
@@ -281,6 +313,7 @@ export async function getBookings(
         rawAmount && Number.isFinite(numericAmount)
           ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
           : rawAmount || "—",
+      paidAt: rawPaidAt ? formatDateTime(rawPaidAt) : undefined,
     };
   });
 }

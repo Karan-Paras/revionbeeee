@@ -109,7 +109,7 @@ const countries = Country.getAllCountries();
 
 export default function TeacherProfilePage() {
   useDismissPhoneCountryDropdown();
-  const { update: updateSession } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const phoneInputRef = useRef<PhoneInputRefType>(null);
@@ -152,115 +152,177 @@ export default function TeacherProfilePage() {
     useState<Record<string, DayAvailability>>(emptyAvailability);
 
   useEffect(() => {
-    getTeacherProfileDetail().then((result) => {
-      if (!result.success) {
-        toast.error(result.error);
-        return;
-      }
+    const token = session?.user?.token;
+    if (!token) return;
 
-      const detail = result.data;
-      const countryCode =
-        countries.find((country) => country.name === detail.country)?.isoCode ??
-        "IN";
-      setSelectedCountryCode(countryCode);
-      const dialCode = detail.countryCode?.startsWith("+")
-        ? detail.countryCode
-        : detail.countryCode
-          ? `+${detail.countryCode}`
-          : "";
-      const profileMobileNumber = detail.mobileNumber ?? "";
-      const internationalMobileNumber = profileMobileNumber.startsWith("+")
-        ? profileMobileNumber
-        : `${dialCode}${profileMobileNumber.replace(/\D/g, "")}`;
-      setPhoneCountryCode(dialCode || "+91");
-      setMobileNumber(internationalMobileNumber);
-      setProfileDetails({
-        fullName: detail.fullName ?? "",
-        professionalTitle: detail.professionalTitle ?? "",
-        bio: detail.bio ?? "",
-        mobileNumber: detail.mobileNumber ?? "",
-        country: detail.country ?? "",
-        city: detail.city ?? "",
-        hourlyRate: String(detail.hourlyRate ?? ""),
+    getTeacherProfileDetail(token)
+      .then((result) => {
+        if (!result) {
+          toast.error("Teacher profile returned an empty response.");
+          return;
+        }
+        if (!result.success) {
+          toast.error(result.error);
+          return;
+        }
+
+        const detail = result.data;
+        const countryCode =
+          countries.find((country) => country.name === detail.country)
+            ?.isoCode ?? "IN";
+        setSelectedCountryCode(countryCode);
+        const dialCode = detail.countryCode?.startsWith("+")
+          ? detail.countryCode
+          : detail.countryCode
+            ? `+${detail.countryCode}`
+            : "";
+        const profileMobileNumber = detail.mobileNumber ?? "";
+        const internationalMobileNumber = profileMobileNumber.startsWith("+")
+          ? profileMobileNumber
+          : `${dialCode}${profileMobileNumber.replace(/\D/g, "")}`;
+        setPhoneCountryCode(dialCode || "+91");
+        setMobileNumber(internationalMobileNumber);
+        setProfileDetails({
+          fullName: detail.fullName ?? "",
+          professionalTitle: detail.professionalTitle ?? "",
+          bio: detail.bio ?? "",
+          mobileNumber: detail.mobileNumber ?? "",
+          country: detail.country ?? "",
+          city: detail.city ?? "",
+          hourlyRate: String(detail.hourlyRate ?? ""),
+        });
+
+        const image = detail.profileImage ?? detail.profilePicture;
+        if (image) {
+          const imageUrl = getTeacherImageUrl(image);
+          setProfileImage(imageUrl);
+          const email = session?.user?.email?.trim();
+          if (email) {
+            try {
+              const cacheKey = `revision-bee:teacher-profile:${email.toLowerCase()}`;
+              const cachedProfile = window.sessionStorage.getItem(cacheKey);
+              const cachedData = cachedProfile
+                ? (JSON.parse(cachedProfile) as Record<string, unknown>)
+                : {};
+              window.sessionStorage.setItem(
+                cacheKey,
+                JSON.stringify({
+                  ...cachedData,
+                  name: detail.fullName?.trim(),
+                  image: imageUrl,
+                })
+              );
+            } catch {
+              // Profile data still renders if browser storage is unavailable.
+            }
+          }
+        }
+        const fullName = detail.fullName?.trim();
+
+        window.dispatchEvent(
+          new CustomEvent("teacher-profile-updated", {
+            detail: {
+              name: fullName,
+              image,
+              isOnline: detail.isOnline === true || detail.isOnline === 1,
+            },
+          })
+        );
+
+        if (detail.qualifications) {
+          setQualifications(
+            detail.qualifications.map((qualification, index) => ({
+              id: qualification.id ?? `qualification-${index}`,
+              institution:
+                qualification.institutionName ??
+                qualification.institution_name ??
+                qualification.institution ??
+                "",
+              degree: qualification.degree ?? "",
+              field:
+                qualification.fieldOfStudy ??
+                qualification.field_of_study ??
+                "",
+              year: String(
+                qualification.graduationYear ??
+                  qualification.graduation_year ??
+                  ""
+              ),
+            }))
+          );
+        }
+
+        if (detail.certifications) {
+          setCertifications(
+            detail.certifications.map((certification, index) => ({
+              id: certification.id ?? `certification-${index}`,
+              name:
+                certification.certificationName ??
+                certification.certification_name ??
+                certification.name ??
+                "",
+              authority:
+                certification.issuingAuthority ??
+                certification.issuing_authority ??
+                certification.authority ??
+                "",
+              issueDate:
+                certification.issueDate ?? certification.issue_date ?? "",
+              image: getTeacherCertificationUrl(
+                certification.certificationFile ??
+                  certification.certification_file ??
+                  certification.image ??
+                  ""
+              ),
+            }))
+          );
+        }
+      })
+      .catch((error: unknown) => {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Unable to load teacher profile."
+        );
       });
-
-      const image = detail.profileImage ?? detail.profilePicture;
-      if (image) {
-        setProfileImage(getTeacherImageUrl(image));
-      }
-
-      if (detail.qualifications) {
-        setQualifications(
-          detail.qualifications.map((qualification, index) => ({
-            id: qualification.id ?? `qualification-${index}`,
-            institution:
-              qualification.institutionName ??
-              qualification.institution_name ??
-              qualification.institution ??
-              "",
-            degree: qualification.degree ?? "",
-            field:
-              qualification.fieldOfStudy ?? qualification.field_of_study ?? "",
-            year: String(
-              qualification.graduationYear ??
-                qualification.graduation_year ??
-                ""
-            ),
-          }))
-        );
-      }
-
-      if (detail.certifications) {
-        setCertifications(
-          detail.certifications.map((certification, index) => ({
-            id: certification.id ?? `certification-${index}`,
-            name:
-              certification.certificationName ??
-              certification.certification_name ??
-              certification.name ??
-              "",
-            authority:
-              certification.issuingAuthority ??
-              certification.issuing_authority ??
-              certification.authority ??
-              "",
-            issueDate:
-              certification.issueDate ?? certification.issue_date ?? "",
-            image: getTeacherCertificationUrl(
-              certification.certificationFile ??
-                certification.certification_file ??
-                certification.image ??
-                ""
-            ),
-          }))
-        );
-      }
-    });
-  }, []);
+  }, [session?.user?.token]);
 
   useEffect(() => {
     let isActive = true;
 
     const loadAvailability = () =>
-      getTeacherAvailabilities().then((result) => {
-        if (!isActive) return;
-        if (!result.success) {
-          toast.error(result.error);
-          return;
-        }
-        const nextAvailability = emptyAvailability();
-        result.data.forEach((item, index) => {
-          const day = availabilityDays[item.dayOfWeek];
-          if (!day || !item.isAvailable) return;
-          nextAvailability[day].enabled = true;
-          nextAvailability[day].slots.push({
-            id: String(item.id ?? `availability-${index}`),
-            startTime: item.startTime.slice(0, 5),
-            endTime: item.endTime.slice(0, 5),
+      getTeacherAvailabilities()
+        .then((result) => {
+          if (!isActive) return;
+          if (!result) {
+            toast.error("Availability returned an empty response.");
+            return;
+          }
+          if (!result.success) {
+            toast.error(result.error);
+            return;
+          }
+          const nextAvailability = emptyAvailability();
+          result.data.forEach((item, index) => {
+            const day = availabilityDays[item.dayOfWeek];
+            if (!day || !item.isAvailable) return;
+            nextAvailability[day].enabled = true;
+            nextAvailability[day].slots.push({
+              id: String(item.id ?? `availability-${index}`),
+              startTime: item.startTime.slice(0, 5),
+              endTime: item.endTime.slice(0, 5),
+            });
           });
+          setAvailability(nextAvailability);
+        })
+        .catch((error: unknown) => {
+          if (!isActive) return;
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : "Unable to load availability."
+          );
         });
-        setAvailability(nextAvailability);
-      });
 
     void loadAvailability();
     const interval = window.setInterval(() => {
@@ -339,8 +401,10 @@ export default function TeacherProfilePage() {
     startUpdateTransition(async () => {
       const result = await updateTeacherProfile(formData);
 
-      if (!result.success) {
-        toast.error(result.error);
+      if (!result || !result.success) {
+        toast.error(
+          result?.error ?? "Profile update returned an empty response."
+        );
         return;
       }
 
@@ -390,8 +454,10 @@ export default function TeacherProfilePage() {
         deleteTarget.id
       );
 
-      if (!result.success) {
-        toast.error(result.error);
+      if (!result || !result.success) {
+        toast.error(
+          result?.error ?? "Delete request returned an empty response."
+        );
         return;
       }
 
@@ -464,6 +530,8 @@ export default function TeacherProfilePage() {
                       alt="Teacher profile"
                       fill
                       sizes="116px"
+                      unoptimized
+                      onError={() => setProfileImage(undefined)}
                       className="rounded-full object-cover"
                     />
                   ) : (

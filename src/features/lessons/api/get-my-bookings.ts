@@ -22,6 +22,7 @@ export type MyBooking = {
   durationMinutes: number;
   amount: string;
   status: string;
+  joinNow: boolean;
   rejectionReason: string;
 };
 
@@ -206,6 +207,11 @@ export async function getMyBookings(
       "professionalTitle",
       "professional_title"
     );
+    const joinNowValue =
+      booking.joinNow ??
+      booking.join_now ??
+      session.joinNow ??
+      session.join_now;
 
     return {
       id: text(booking, "id", "lessonID", "lessonId", "lesson_id") || index,
@@ -261,6 +267,11 @@ export async function getMyBookings(
           ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
           : rawAmount || "—",
       status: text(booking, "status", "bookingStatus", "booking_status"),
+      joinNow:
+        joinNowValue === true ||
+        joinNowValue === 1 ||
+        String(joinNowValue).toLowerCase() === "true" ||
+        String(joinNowValue).toLowerCase() === "1",
       rejectionReason:
         text(
           booking,

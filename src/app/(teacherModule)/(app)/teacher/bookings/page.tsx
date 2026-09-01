@@ -165,12 +165,13 @@ export default function TeacherBookingsPage() {
         </div>
 
         <section className="mt-8 overflow-hidden rounded-[22px] bg-white px-4 py-2 shadow-[0_1px_2px_rgba(20,30,40,0.02)] sm:px-6">
-          <div className="hidden grid-cols-[1.35fr_1.05fr_2.65fr_.85fr_.7fr_1.15fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
+          <div className="hidden grid-cols-[1.25fr_1fr_1.2fr_1fr_.65fr_.75fr_1.15fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
             <span>Client Details</span>
             <span>Session</span>
             <span>Topic</span>
             <span>Status</span>
             <span>Amount</span>
+            <span className="text-center">Payment</span>
             <span className="text-right">Action</span>
           </div>
 
@@ -197,7 +198,7 @@ export default function TeacherBookingsPage() {
             {visibleBookings.map((booking) => (
               <article
                 key={booking.id}
-                className="grid gap-4 py-4 lg:grid-cols-[1.35fr_1.05fr_2.65fr_.85fr_.7fr_1.15fr] lg:items-center lg:gap-4"
+                className="grid gap-4 py-4 lg:grid-cols-[1.25fr_1fr_1.2fr_1fr_.65fr_.75fr_1.15fr] lg:items-center lg:gap-4"
               >
                 <div className="flex min-w-0 items-center gap-3">
                   <Image
@@ -253,12 +254,33 @@ export default function TeacherBookingsPage() {
                     {booking.amount}
                   </span>
                 </div>
+                <div>
+                  <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                    Payment
+                  </span>
+                  {booking.paidAt ? (
+                    <span className="block lg:text-center">
+                      <span className="block text-xs font-medium text-[#23b865]">
+                        Paid
+                      </span>
+                      <span className="block text-[10px] text-[#999]">
+                        {booking.paidAt}
+                      </span>
+                    </span>
+                  ) : (
+                    <span className="block text-xs font-medium text-[#ff3d4d] lg:text-center">
+                      Not Paid
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-2 lg:justify-end">
                   {booking.status === "Pending" && (
                     <>
                       <button
                         disabled={respondMutation.isPending}
-                        onClick={() => respondToBooking(booking.id, "accept")}
+                        onClick={() =>
+                          respondToBooking(booking.lessonID, "accept")
+                        }
                         className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-wait disabled:opacity-50"
                       >
                         Accept
@@ -266,7 +288,7 @@ export default function TeacherBookingsPage() {
                       <button
                         disabled={respondMutation.isPending}
                         onClick={() => {
-                          setRejectingLessonID(booking.id);
+                          setRejectingLessonID(booking.lessonID);
                           setRejectionReason("");
                         }}
                         className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-wait disabled:opacity-50"
