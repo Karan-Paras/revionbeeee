@@ -26,6 +26,40 @@ const statusColor: Record<BookingStatus, string> = {
   Completed: "text-[#777]",
 };
 
+function isSessionActiveNow(booking: TeacherBooking) {
+  const today = new Date();
+  const isoMatch = booking.sessionDate.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  let isToday = false;
+
+  if (isoMatch) {
+    isToday =
+      Number(isoMatch[1]) === today.getFullYear() &&
+      Number(isoMatch[2]) === today.getMonth() + 1 &&
+      Number(isoMatch[3]) === today.getDate();
+  } else {
+    const parsedDate = new Date(booking.sessionDate);
+    isToday =
+      !Number.isNaN(parsedDate.getTime()) &&
+      parsedDate.getFullYear() === today.getFullYear() &&
+      parsedDate.getMonth() === today.getMonth() &&
+      parsedDate.getDate() === today.getDate();
+  }
+
+  if (!isToday) return false;
+  if (booking.sessionStartTime.toLowerCase() === "instant") return true;
+
+  const toMinutes = (value: string) => {
+    const match = value.match(/^(\d{1,2}):(\d{2})/);
+    return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+  };
+  const startMinutes = toMinutes(booking.sessionStartTime);
+  const endMinutes = toMinutes(booking.sessionEndTime);
+  if (startMinutes === null || endMinutes === null) return false;
+
+  const currentMinutes = today.getHours() * 60 + today.getMinutes();
+  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+}
+
 export default function TeacherBookingsPage() {
   const pathname = usePathname();
   const router = useRouter();
@@ -165,12 +199,14 @@ export default function TeacherBookingsPage() {
         </div>
 
         <section className="mt-8 overflow-hidden rounded-[22px] bg-white px-4 py-2 shadow-[0_1px_2px_rgba(20,30,40,0.02)] sm:px-6">
-          <div className="hidden grid-cols-[1.35fr_1.05fr_2.65fr_.85fr_.7fr_1.15fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
+          <div className="hidden grid-cols-[1.2fr_.9fr_.8fr_1fr_.85fr_.6fr_.7fr_1fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
             <span>Client Details</span>
             <span>Session</span>
+            <span>Session Type</span>
             <span>Topic</span>
             <span>Status</span>
             <span>Amount</span>
+            <span className="text-center">Payment</span>
             <span className="text-right">Action</span>
           </div>
 
@@ -194,127 +230,176 @@ export default function TeacherBookingsPage() {
           )}
 
           <div className="divide-y divide-[#e9ecef]">
-            {visibleBookings.map((booking) => (
-              <article
-                key={booking.id}
-                className="grid gap-4 py-4 lg:grid-cols-[1.35fr_1.05fr_2.65fr_.85fr_.7fr_1.15fr] lg:items-center lg:gap-4"
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <Image
-                    src={booking.image}
-                    alt=""
-                    width={36}
-                    height={36}
-                    className="h-9 w-9 shrink-0 rounded-full object-cover"
-                  />
-                  <div className="min-w-0">
-                    <h2 className="truncate text-xs font-semibold text-[#252525]">
-                      {booking.name}
-                    </h2>
-                    <p className="truncate text-[10px] text-[#a0a0a0]">
-                      {booking.email}
+            {visibleBookings.map((booking) => {
+              const isPaid = Boolean(booking.paidAt);
+              const canManageSession = isPaid && isSessionActiveNow(booking);
+              const unavailableActionTitle = isPaid
+                ? "Available during the session time"
+                : "Payment is required before starting the session";
+
+              return (
+                <article
+                  key={booking.id}
+                  className="grid gap-4 py-4 lg:grid-cols-[1.2fr_.9fr_.8fr_1fr_.85fr_.6fr_.7fr_1fr] lg:items-center lg:gap-4"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Image
+                      src={booking.image}
+                      alt=""
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 shrink-0 rounded-full object-cover"
+                    />
+                    <div className="min-w-0">
+                      <h2 className="truncate text-xs font-semibold text-[#252525]">
+                        {booking.name}
+                      </h2>
+                      <p className="truncate text-[10px] text-[#a0a0a0]">
+                        {booking.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Session
+                    </span>
+                    <p className="text-xs text-[#333]">{booking.date}</p>
+                    <p className="mt-0.5 text-[10px] text-[#999]">
+                      {booking.time}
                     </p>
                   </div>
-                </div>
-                <div>
-                  <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
-                    Session
-                  </span>
-                  <p className="text-xs text-[#333]">{booking.date}</p>
-                  <p className="mt-0.5 text-[10px] text-[#999]">
-                    {booking.time}
-                  </p>
-                </div>
-                <div>
-                  <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
-                    Topic
-                  </span>
-                  <p className="text-xs leading-5 text-[#303338]">
-                    {booking.topic}
-                  </p>
-                </div>
-                <div>
-                  <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
-                    Status
-                  </span>
-                  <span
-                    className={`text-xs font-medium ${statusColor[booking.status]}`}
-                  >
-                    {booking.status === "Accepted"
-                      ? "Approved"
-                      : booking.status}
-                  </span>
-                </div>
-                <div>
-                  <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
-                    Amount
-                  </span>
-                  <span className="text-xs text-[#252525]">
-                    {booking.amount}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 lg:justify-end">
-                  {booking.status === "Pending" && (
-                    <>
-                      <button
-                        disabled={respondMutation.isPending}
-                        onClick={() => respondToBooking(booking.id, "accept")}
-                        className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-wait disabled:opacity-50"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        disabled={respondMutation.isPending}
-                        onClick={() => {
-                          setRejectingLessonID(booking.id);
-                          setRejectionReason("");
-                        }}
-                        className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-wait disabled:opacity-50"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                  {booking.status === "Accepted" && (
-                    <>
-                      <button
-                        onClick={() => updateStatus(booking.id, "Completed")}
-                        className="rounded-full bg-[#53a2eb] px-4 py-1.5 text-[11px] font-medium text-white hover:bg-[#4295df]"
-                      >
-                        Start
-                      </button>
-                      <button
-                        onClick={() => updateStatus(booking.id, "Rejected")}
-                        className="rounded-full bg-[#ff3543] px-3 py-1.5 text-[11px] font-medium text-white hover:bg-[#ed2937]"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
-                  {booking.status === "Rejected" && (
-                    <>
-                      <button
-                        disabled
-                        className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        disabled
-                        className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                  {booking.status === "Completed" && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#23b865]">
-                      <Check size={14} /> Completed
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Session Type
                     </span>
-                  )}
-                </div>
-              </article>
-            ))}
+                    <p className="text-xs text-[#303338]">
+                      {booking.bookingType}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Topic
+                    </span>
+                    <p className="text-xs leading-5 text-[#303338]">
+                      {booking.topic}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Status
+                    </span>
+                    <span
+                      className={`text-xs font-medium ${statusColor[booking.status]}`}
+                    >
+                      {booking.status === "Accepted"
+                        ? "Approved"
+                        : booking.status}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Amount
+                    </span>
+                    <span className="text-xs text-[#252525]">
+                      {booking.amount}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
+                      Payment
+                    </span>
+                    {booking.paidAt ? (
+                      <span className="block lg:text-center">
+                        <span className="block text-xs font-medium text-[#23b865]">
+                          Paid
+                        </span>
+                        <span className="block text-[10px] text-[#999]">
+                          {booking.paidAt}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="block text-xs font-medium text-[#ff3d4d] lg:text-center">
+                        Not Paid
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 lg:justify-end">
+                    {booking.status === "Pending" && (
+                      <>
+                        <button
+                          disabled={respondMutation.isPending}
+                          onClick={() =>
+                            respondToBooking(booking.lessonID, "accept")
+                          }
+                          className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-wait disabled:opacity-50"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          disabled={respondMutation.isPending}
+                          onClick={() => {
+                            setRejectingLessonID(booking.lessonID);
+                            setRejectionReason("");
+                          }}
+                          className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-wait disabled:opacity-50"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+                    {booking.status === "Accepted" && (
+                      <>
+                        <button
+                          disabled={!canManageSession}
+                          title={
+                            canManageSession
+                              ? "Start session"
+                              : unavailableActionTitle
+                          }
+                          onClick={() => updateStatus(booking.id, "Completed")}
+                          className="rounded-full bg-[#53a2eb] px-4 py-1.5 text-[11px] font-medium text-white hover:bg-[#4295df] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-[#53a2eb]"
+                        >
+                          Start
+                        </button>
+                        <button
+                          disabled={!canManageSession}
+                          title={
+                            canManageSession
+                              ? "Cancel session"
+                              : unavailableActionTitle
+                          }
+                          onClick={() => updateStatus(booking.id, "Rejected")}
+                          className="rounded-full bg-[#ff3543] px-3 py-1.5 text-[11px] font-medium text-white hover:bg-[#ed2937] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-[#ff3543]"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                    {booking.status === "Rejected" && (
+                      <>
+                        <button
+                          disabled
+                          className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          disabled
+                          className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+                    {booking.status === "Completed" && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#23b865]">
+                        <Check size={14} /> Completed
+                      </span>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {!isPending && !error && visibleBookings.length === 0 && (

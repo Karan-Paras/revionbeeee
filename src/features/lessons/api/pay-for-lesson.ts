@@ -46,9 +46,15 @@ export async function payForLesson(lessonID: string | number) {
   const response = await fetchClient<unknown>(payForLessonUrl, "POST", {
     lessonID,
   });
+  const checkoutUrl = findCheckoutUrl(response);
+
+  if (!checkoutUrl) {
+    throw new Error(
+      response.message || "Payment page URL was not returned. Please try again."
+    );
+  }
 
   return {
-    message: response.message,
-    checkoutUrl: findCheckoutUrl(response.data),
+    checkoutUrl,
   };
 }

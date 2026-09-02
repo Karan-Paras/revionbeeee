@@ -747,7 +747,7 @@ function ScheduleLesson({
         onClick={() => bookLesson.mutate()}
         className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {bookLesson.isPending ? "Booking..." : "Confirm & Pay"}
+        {bookLesson.isPending ? "Booking..." : "Confirm"}
       </button>
       {bookLesson.error && (
         <p className="text-center text-xs text-red-500">

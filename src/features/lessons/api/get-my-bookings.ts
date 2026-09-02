@@ -10,6 +10,7 @@ export type MyBookingFilter = "upcoming" | "pending" | "accepted" | "cancelled";
 
 export type MyBooking = {
   id: string | number;
+  paymentLessonID: string | number;
   teacherName: string;
   teacherImage: string;
   teacherBio: string;
@@ -22,6 +23,7 @@ export type MyBooking = {
   durationMinutes: number;
   amount: string;
   status: string;
+  joinNow: boolean;
   rejectionReason: string;
 };
 
@@ -206,9 +208,24 @@ export async function getMyBookings(
       "professionalTitle",
       "professional_title"
     );
+    const joinNowValue =
+      booking.joinNow ??
+      booking.join_now ??
+      session.joinNow ??
+      session.join_now;
+
+    const bookingID = text(
+      booking,
+      "id",
+      "bookingID",
+      "bookingId",
+      "booking_id"
+    );
+    const lessonID = text(booking, "lessonID", "lessonId", "lesson_id");
 
     return {
-      id: text(booking, "id", "lessonID", "lessonId", "lesson_id") || index,
+      id: bookingID || lessonID || index,
+      paymentLessonID: lessonID || bookingID || index,
       teacherName: capitalizeName(
         text(
           person,
@@ -261,6 +278,11 @@ export async function getMyBookings(
           ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
           : rawAmount || "—",
       status: text(booking, "status", "bookingStatus", "booking_status"),
+      joinNow:
+        joinNowValue === true ||
+        joinNowValue === 1 ||
+        String(joinNowValue).toLowerCase() === "true" ||
+        String(joinNowValue).toLowerCase() === "1",
       rejectionReason:
         text(
           booking,
