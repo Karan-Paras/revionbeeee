@@ -10,6 +10,7 @@ export type MyBookingFilter = "upcoming" | "pending" | "accepted" | "cancelled";
 
 export type MyBooking = {
   id: string | number;
+  paymentLessonID: string | number;
   teacherName: string;
   teacherImage: string;
   teacherBio: string;
@@ -213,8 +214,18 @@ export async function getMyBookings(
       session.joinNow ??
       session.join_now;
 
+    const bookingID = text(
+      booking,
+      "id",
+      "bookingID",
+      "bookingId",
+      "booking_id"
+    );
+    const lessonID = text(booking, "lessonID", "lessonId", "lesson_id");
+
     return {
-      id: text(booking, "id", "lessonID", "lessonId", "lesson_id") || index,
+      id: bookingID || lessonID || index,
+      paymentLessonID: lessonID || bookingID || index,
       teacherName: capitalizeName(
         text(
           person,

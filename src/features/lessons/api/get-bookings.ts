@@ -15,7 +15,11 @@ export type TeacherBooking = {
   email: string;
   image: string;
   date: string;
+  sessionDate: string;
+  sessionStartTime: string;
+  sessionEndTime: string;
   time: string;
+  bookingType: "Scheduled" | "Instant";
   topic: string;
   status: BookingStatus;
   amount: string;
@@ -262,6 +266,18 @@ export async function getBookings(
     const lessonID =
       text(booking, "lessonID", "lessonId", "lesson_id") || bookingID;
 
+    const sessionDate = text(
+      sessionData,
+      "scheduledDate",
+      "scheduled_date",
+      "sessionDate",
+      "session_date",
+      "lessonDate",
+      "lesson_date",
+      "bookingDate",
+      "date"
+    );
+
     return {
       id: bookingID,
       lessonID,
@@ -281,22 +297,15 @@ export async function getBookings(
       image: image
         ? getUserImageUrl(image)
         : "/images/teacher-personal-info.svg",
-      date: formatDate(
-        text(
-          sessionData,
-          "scheduledDate",
-          "scheduled_date",
-          "sessionDate",
-          "session_date",
-          "lessonDate",
-          "lesson_date",
-          "bookingDate",
-          "date"
-        )
-      ),
+      date: formatDate(sessionDate),
+      sessionDate,
+      sessionStartTime: startTime,
+      sessionEndTime: endTime,
       time: startTime
         ? `${formatTime(startTime)}${endTime ? ` - ${formatTime(endTime)}` : ""}`
         : "—",
+      bookingType:
+        startTime.toLowerCase() === "instant" ? "Instant" : "Scheduled",
       topic:
         text(
           booking,

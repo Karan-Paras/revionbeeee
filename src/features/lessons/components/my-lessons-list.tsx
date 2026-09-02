@@ -2,10 +2,11 @@
 
 import {
   getMyBookings,
+  type MyBooking,
   type MyBookingFilter,
 } from "@/features/lessons/api/get-my-bookings";
 import { payForLesson } from "@/features/lessons/api/pay-for-lesson";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CheckCircle2,
   Clock3,
@@ -15,7 +16,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const tabs: Array<{ label: string; value: MyBookingFilter }> = [
@@ -25,20 +26,95 @@ const tabs: Array<{ label: string; value: MyBookingFilter }> = [
   { label: "Cancelled", value: "cancelled" },
 ];
 
+const notificationTabs = ["accepted", "cancelled"] as const;
+type NotificationTab = (typeof notificationTabs)[number];
+
+function seenBookingsKey(tab: NotificationTab) {
+  return `revision-bee:seen-my-bookings:${tab}`;
+}
+
+function bookingIds(bookings: { id: string | number }[]) {
+  return bookings.map((booking) => String(booking.id));
+}
+
+function readSeenBookings(tab: NotificationTab) {
+  try {
+    const value: unknown = JSON.parse(
+      localStorage.getItem(seenBookingsKey(tab)) ?? "[]"
+    );
+    return new Set(Array.isArray(value) ? value.map(String) : []);
+  } catch {
+    return new Set<string>();
+  }
+}
+
 export function MyLessonsList() {
-  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
+  const [hasNewBookings, setHasNewBookings] = useState<
+    Record<NotificationTab, boolean>
+  >({ accepted: false, cancelled: false });
+  const approvedNotifications = useQuery({
+    queryKey: ["my-booking-notifications", "accepted"],
+    queryFn: () =>
+      getMyBookings({ filter: "accepted", search: "", perPage: 100 }),
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: "always",
+  });
+  const cancelledNotifications = useQuery({
+    queryKey: ["my-booking-notifications", "cancelled"],
+    queryFn: () =>
+      getMyBookings({ filter: "cancelled", search: "", perPage: 100 }),
+    refetchInterval: 10_000,
+    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: "always",
+  });
+  const notificationBookings: Record<NotificationTab, MyBooking[]> = {
+    accepted: approvedNotifications.data ?? [],
+    cancelled: cancelledNotifications.data ?? [],
+  };
+
+  useEffect(() => {
+    setHasNewBookings((current) => {
+      const next = { ...current };
+      const latestBookings: Record<NotificationTab, MyBooking[]> = {
+        accepted: approvedNotifications.data ?? [],
+        cancelled: cancelledNotifications.data ?? [],
+      };
+
+      notificationTabs.forEach((tab) => {
+        const bookings = latestBookings[tab];
+        if (!bookings.length) {
+          next[tab] = false;
+          return;
+        }
+
+        const seenIds = readSeenBookings(tab);
+        next[tab] = bookings.some(
+          (booking) => !seenIds.has(String(booking.id))
+        );
+      });
+
+      return next;
+    });
+  }, [approvedNotifications.data, cancelledNotifications.data]);
+
+  function changeTab(tab: MyBookingFilter) {
+    setActiveTab(tab);
+
+    if (tab !== "accepted" && tab !== "cancelled") return;
+
+    localStorage.setItem(
+      seenBookingsKey(tab),
+      JSON.stringify(bookingIds(notificationBookings[tab]))
+    );
+    setHasNewBookings((current) => ({ ...current, [tab]: false }));
+  }
   const payment = useMutation({
     mutationFn: payForLesson,
-    onSuccess: async ({ checkoutUrl, message }) => {
-      if (checkoutUrl) {
-        window.location.assign(checkoutUrl);
-        return;
-      }
-
-      toast.success(message || "Payment completed successfully.");
-      await queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
+    onSuccess: ({ checkoutUrl }) => {
+      window.location.assign(checkoutUrl);
     },
     onError: (error) => toast.error(error.message),
   });
@@ -70,10 +146,17 @@ export function MyLessonsList() {
               <button
                 key={tab.value}
                 type="button"
-                onClick={() => setActiveTab(tab.value)}
-                className={`flex-1 rounded-md px-5 py-2 text-[11px] transition sm:flex-none ${activeTab === tab.value ? "bg-white font-semibold text-[#111] shadow-sm" : "text-[#929292]"}`}
+                onClick={() => changeTab(tab.value)}
+                className={`relative flex-1 rounded-md px-5 py-2 text-[11px] transition sm:flex-none ${activeTab === tab.value ? "bg-white font-semibold text-[#111] shadow-sm" : "text-[#929292]"}`}
               >
                 {tab.label}
+                {(tab.value === "accepted" || tab.value === "cancelled") &&
+                  hasNewBookings[tab.value] && (
+                    <span
+                      aria-label={`New ${tab.label.toLowerCase()} request`}
+                      className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-[#ff3547] ring-2 ring-white"
+                    />
+                  )}
               </button>
             ))}
           </div>
@@ -205,11 +288,12 @@ export function MyLessonsList() {
                   <button
                     type="button"
                     disabled={payment.isPending}
-                    onClick={() => payment.mutate(lesson.id)}
+                    onClick={() => payment.mutate(lesson.paymentLessonID)}
                     className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#53a2eb] text-xs font-semibold text-white transition hover:bg-[#398fdc] disabled:cursor-wait disabled:opacity-60"
                   >
                     <CreditCard size={16} />
-                    {payment.isPending && payment.variables === lesson.id
+                    {payment.isPending &&
+                    payment.variables === lesson.paymentLessonID
                       ? "Processing Payment..."
                       : `Make Payment · ${lesson.amount}`}
                   </button>
