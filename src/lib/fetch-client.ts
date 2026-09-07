@@ -6,7 +6,8 @@ export async function fetchClient<T>(
   method: Method,
   body?: object | FormData,
   next?: RequestInit["next"],
-  headers?: RequestInit["headers"]
+  headers?: RequestInit["headers"],
+  signal?: AbortSignal
 ): Promise<ApiSuccessResponse<T>> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
   const isAbsoluteUrl = /^https?:\/\//i.test(url);
@@ -44,6 +45,7 @@ export async function fetchClient<T>(
             : JSON.stringify(body)
           : undefined,
       headers: requestHeaders,
+      signal,
       ...(next ? { next } : {}),
     });
 

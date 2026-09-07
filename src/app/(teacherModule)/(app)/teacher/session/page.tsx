@@ -29,7 +29,19 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-type StoredSession = LessonSessionCredentials & { expiresAt: number };
+type CallActivity = {
+  type: "joined" | "left" | "disconnected";
+  message: string;
+  at: number;
+};
+
+type StoredSession = LessonSessionCredentials & {
+  expiresAt: number;
+  assignedUid?: UID;
+  connectedAt?: number;
+  endedAt?: number | null;
+  lastActivity?: CallActivity;
+};
 
 const sessionStorageKey = "revision-bee:active-lesson-session";
 
@@ -64,12 +76,43 @@ function isUidConflict(error: unknown) {
   );
 }
 
+function updateStoredSession(patch: Partial<StoredSession>) {
+  try {
+    const current = sessionStorage.getItem(sessionStorageKey);
+    if (!current) return;
+    sessionStorage.setItem(
+      sessionStorageKey,
+      JSON.stringify({ ...(JSON.parse(current) as StoredSession), ...patch })
+    );
+  } catch {
+    // The live call should continue even if browser storage is unavailable.
+  }
+}
+
+function persistCallActivity(
+  lessonID: string | number,
+  activity: CallActivity
+) {
+  try {
+    const key = `revision-bee:call-activity:${lessonID}`;
+    const current: unknown = JSON.parse(localStorage.getItem(key) ?? "[]");
+    const history = Array.isArray(current) ? current : [];
+    localStorage.setItem(
+      key,
+      JSON.stringify([...history.slice(-49), activity])
+    );
+  } catch {
+    // Persistence is optional and must never interrupt a live call.
+  }
+}
+
 export default function TeacherSessionPage() {
   const pathname = usePathname();
   const router = useRouter();
   const isStudentSession = pathname === "/session";
   const returnPath = isStudentSession ? "/my-lessons" : "/teacher/bookings";
   const remoteParticipant = isStudentSession ? "teacher" : "student";
+  const localParticipant = isStudentSession ? "Student" : "Teacher";
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const audioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const videoTrackRef = useRef<ICameraVideoTrack | null>(null);
@@ -95,6 +138,9 @@ export default function TeacherSessionPage() {
   const [remoteUsers, setRemoteUsers] = useState<UID[]>([]);
   const [remoteParticipants, setRemoteParticipants] = useState<UID[]>([]);
   const [callStartedAt, setCallStartedAt] = useState<number | null>(null);
+  const [callEndedAt, setCallEndedAt] = useState<number | null>(null);
+  const [participantNotice, setParticipantNotice] =
+    useState<CallActivity | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -108,6 +154,7 @@ export default function TeacherSessionPage() {
     let disposed = false;
     let isRenewingToken = false;
     let joinTimer: number | null = null;
+    const presentRemoteUsers = new Set<UID>();
 
     async function joinSession() {
       const session = readSession();
@@ -116,6 +163,10 @@ export default function TeacherSessionPage() {
         router.replace(returnPath);
         return;
       }
+
+      setCallStartedAt(session.connectedAt ?? null);
+      setCallEndedAt(session.endedAt ?? null);
+      setParticipantNotice(session.lastActivity ?? null);
 
       try {
         const AgoraRTC = (await import("agora-rtc-sdk-ng")).default;
@@ -142,13 +193,10 @@ export default function TeacherSessionPage() {
             }
 
             await client.renewToken(credentials.token);
-            sessionStorage.setItem(
-              sessionStorageKey,
-              JSON.stringify({
-                ...credentials,
-                expiresAt: Date.now() + credentials.expiresIn * 1000,
-              })
-            );
+            updateStoredSession({
+              ...credentials,
+              expiresAt: Date.now() + credentials.expiresIn * 1000,
+            });
           } catch (error) {
             if (!disposed && !isEndingRef.current) {
               toast.error(
@@ -179,14 +227,40 @@ export default function TeacherSessionPage() {
             setConnectionStatus("disconnected");
         });
 
+        const recordActivity = (activity: CallActivity) => {
+          setParticipantNotice(activity);
+          updateStoredSession({ lastActivity: activity });
+          persistCallActivity(session.lessonID, activity);
+        };
+
+        const markRemoteParticipantJoined = (uid: UID) => {
+          const isNewParticipant = !presentRemoteUsers.has(uid);
+          presentRemoteUsers.add(uid);
+          setRemoteParticipants((current) =>
+            current.includes(uid) ? current : [...current, uid]
+          );
+          if (!isNewParticipant) return;
+
+          const connectedAt = session.connectedAt ?? Date.now();
+          session.connectedAt = connectedAt;
+          session.endedAt = null;
+          setCallStartedAt(connectedAt);
+          setCallEndedAt(null);
+          const activity: CallActivity = {
+            type: "joined",
+            message: `${remoteParticipant === "student" ? "Student" : "Teacher"} joined the call`,
+            at: Date.now(),
+          };
+          updateStoredSession({ connectedAt, endedAt: null });
+          recordActivity(activity);
+        };
+
         client.on("user-published", async (user, mediaType) => {
           try {
             await client.subscribe(user, mediaType);
             if (disposed) return;
 
-            setRemoteParticipants((current) =>
-              current.includes(user.uid) ? current : [...current, user.uid]
-            );
+            markRemoteParticipantJoined(user.uid);
 
             if (mediaType === "audio") user.audioTrack?.play();
             if (mediaType === "video" && user.videoTrack) {
@@ -205,11 +279,10 @@ export default function TeacherSessionPage() {
             );
           }
         });
+
         client.on("user-joined", (user) => {
           if (disposed) return;
-          setRemoteParticipants((current) =>
-            current.includes(user.uid) ? current : [...current, user.uid]
-          );
+          markRemoteParticipantJoined(user.uid);
         });
         client.on("user-unpublished", (user, mediaType) => {
           if (disposed) return;
@@ -221,8 +294,9 @@ export default function TeacherSessionPage() {
             );
           }
         });
-        client.on("user-left", (user) => {
+        client.on("user-left", (user, reason) => {
           if (disposed) return;
+          presentRemoteUsers.delete(user.uid);
           remoteVideoTracksRef.current.get(user.uid)?.stop();
           remoteVideoTracksRef.current.delete(user.uid);
           setRemoteUsers((current) =>
@@ -231,6 +305,22 @@ export default function TeacherSessionPage() {
           setRemoteParticipants((current) =>
             current.filter((uid) => uid !== user.uid)
           );
+          const endedAt = Date.now();
+          const wasDisconnected = reason.toLowerCase().includes("server");
+          const participantName =
+            remoteParticipant === "student" ? "Student" : "Teacher";
+          const activity: CallActivity = {
+            type: wasDisconnected ? "disconnected" : "left",
+            message: wasDisconnected
+              ? `${participantName} was disconnected from the call`
+              : `${participantName} left the call`,
+            at: endedAt,
+          };
+          session.endedAt = endedAt;
+          setCallEndedAt(endedAt);
+          updateStoredSession({ endedAt });
+          recordActivity(activity);
+          toast.info(activity.message, { duration: 8_000 });
         });
 
         const requestedUid =
@@ -338,7 +428,6 @@ export default function TeacherSessionPage() {
           );
         }
 
-        setCallStartedAt(Date.now());
         setIsJoining(false);
       } catch (error) {
         audioTrackRef.current?.stop();
@@ -395,12 +484,18 @@ export default function TeacherSessionPage() {
     if (!callStartedAt) return;
 
     const updateElapsedTime = () => {
-      setElapsedSeconds(Math.floor((Date.now() - callStartedAt) / 1000));
+      setElapsedSeconds(
+        Math.max(
+          0,
+          Math.floor(((callEndedAt ?? Date.now()) - callStartedAt) / 1000)
+        )
+      );
     };
     updateElapsedTime();
+    if (callEndedAt) return;
     const timer = window.setInterval(updateElapsedTime, 1000);
     return () => window.clearInterval(timer);
-  }, [callStartedAt]);
+  }, [callEndedAt, callStartedAt]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -455,6 +550,15 @@ export default function TeacherSessionPage() {
     if (isEndingRef.current) return;
     isEndingRef.current = true;
     setIsLeaving(true);
+    const storedSession = readSession();
+    const endedActivity: CallActivity = {
+      type: "left",
+      message: `${localParticipant} ended the call`,
+      at: Date.now(),
+    };
+    if (storedSession) {
+      persistCallActivity(storedSession.lessonID, endedActivity);
+    }
     sessionStorage.removeItem(sessionStorageKey);
 
     try {
@@ -472,6 +576,7 @@ export default function TeacherSessionPage() {
       client?.removeAllListeners();
       await client?.leave().catch(() => undefined);
     } finally {
+      toast.info("Call ended successfully.", { duration: 5_000 });
       router.replace(returnPath);
     }
   }
@@ -660,7 +765,7 @@ export default function TeacherSessionPage() {
             Secure call
           </div>
           <span className="rounded-lg bg-white/[0.06] px-2.5 py-1.5 font-mono text-xs text-white/70">
-            {formattedDuration}
+            {callStartedAt ? formattedDuration : "--:--"}
           </span>
           {!isMinimized && (
             <div className="hidden items-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.06] sm:flex">
@@ -805,6 +910,18 @@ export default function TeacherSessionPage() {
                 : !hasMicrophone
                   ? "Microphone unavailable"
                   : "Camera unavailable"}
+            </div>
+          )}
+
+          {!isMinimized && participantNotice && (
+            <div
+              className={`absolute top-3 left-1/2 z-20 -translate-x-1/2 rounded-full border px-3 py-2 text-[10px] font-medium shadow-xl backdrop-blur sm:top-5 sm:text-xs ${
+                participantNotice.type === "joined"
+                  ? "border-emerald-300/15 bg-emerald-500/15 text-emerald-100"
+                  : "border-amber-300/15 bg-amber-500/15 text-amber-100"
+              }`}
+            >
+              {participantNotice.message}
             </div>
           )}
 

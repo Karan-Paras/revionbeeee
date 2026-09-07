@@ -17,7 +17,6 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -30,6 +29,44 @@ const tabs: Array<{ label: string; value: MyBookingFilter }> = [
 
 const notificationTabs = ["accepted", "cancelled"] as const;
 type NotificationTab = (typeof notificationTabs)[number];
+
+const upcomingLessonsCacheKey = "revision-bee:student-upcoming-lessons";
+const upcomingLessonCacheLifetime = 6 * 60 * 60 * 1000;
+
+type CachedUpcomingLessons = {
+  savedAt: number;
+  lessons: MyBooking[];
+};
+
+function readCachedUpcomingLessons() {
+  try {
+    const value = JSON.parse(
+      localStorage.getItem(upcomingLessonsCacheKey) ?? "null"
+    ) as CachedUpcomingLessons | null;
+    if (
+      !value ||
+      !Array.isArray(value.lessons) ||
+      Date.now() - value.savedAt > upcomingLessonCacheLifetime
+    ) {
+      localStorage.removeItem(upcomingLessonsCacheKey);
+      return [];
+    }
+    return value.lessons;
+  } catch {
+    return [];
+  }
+}
+
+function saveCachedUpcomingLessons(lessons: MyBooking[]) {
+  try {
+    localStorage.setItem(
+      upcomingLessonsCacheKey,
+      JSON.stringify({ savedAt: Date.now(), lessons })
+    );
+  } catch {
+    // A storage failure must not prevent the student from using the list.
+  }
+}
 
 function seenBookingsKey(tab: NotificationTab) {
   return `revision-bee:seen-my-bookings:${tab}`;
@@ -51,9 +88,11 @@ function readSeenBookings(tab: NotificationTab) {
 }
 
 export function MyLessonsList() {
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
+  const [cachedUpcomingLessons, setCachedUpcomingLessons] = useState<
+    MyBooking[]
+  >([]);
   const [hasNewBookings, setHasNewBookings] = useState<
     Record<NotificationTab, boolean>
   >({ accepted: false, cancelled: false });
@@ -77,6 +116,10 @@ export function MyLessonsList() {
     accepted: approvedNotifications.data ?? [],
     cancelled: cancelledNotifications.data ?? [],
   };
+
+  useEffect(() => {
+    setCachedUpcomingLessons(readCachedUpcomingLessons());
+  }, []);
 
   useEffect(() => {
     setHasNewBookings((current) => {
@@ -124,19 +167,43 @@ export function MyLessonsList() {
   const joinSession = useMutation({
     mutationFn: joinLessonSession,
     onSuccess: (credentials) => {
-      sessionStorage.setItem(
-        "revision-bee:active-lesson-session",
-        JSON.stringify({
-          ...credentials,
-          expiresAt: Date.now() + credentials.expiresIn * 1000,
-        })
-      );
-      router.push("/session");
+      const storedSession = JSON.stringify({
+        ...credentials,
+        expiresAt: Date.now() + credentials.expiresIn * 1000,
+      });
+
+      try {
+        sessionStorage.setItem(
+          "revision-bee:active-lesson-session",
+          storedSession
+        );
+        if (
+          sessionStorage.getItem("revision-bee:active-lesson-session") !==
+          storedSession
+        ) {
+          throw new Error("Session storage verification failed.");
+        }
+      } catch {
+        toast.error(
+          "The call details could not be saved. Enable browser storage and try again."
+        );
+        return;
+      }
+
+      setCachedUpcomingLessons((current) => {
+        const next = current.filter(
+          (lesson) =>
+            String(lesson.paymentLessonID) !== String(credentials.lessonID)
+        );
+        saveCachedUpcomingLessons(next);
+        return next;
+      });
+      window.location.assign("/session");
     },
     onError: (error) => toast.error(error.message),
   });
   const {
-    data: lessons = [],
+    data: fetchedLessons = [],
     isPending,
     error,
   } = useQuery({
@@ -153,6 +220,44 @@ export function MyLessonsList() {
     refetchOnWindowFocus: "always",
     refetchOnReconnect: "always",
   });
+
+  useEffect(() => {
+    if (activeTab !== "upcoming" || query.trim() || !fetchedLessons.length) {
+      return;
+    }
+
+    setCachedUpcomingLessons((current) => {
+      const merged = new Map(
+        current.map((lesson) => [String(lesson.paymentLessonID), lesson])
+      );
+      fetchedLessons.forEach((lesson) => {
+        merged.set(String(lesson.paymentLessonID), lesson);
+      });
+      const next = Array.from(merged.values());
+      saveCachedUpcomingLessons(next);
+      return next;
+    });
+  }, [activeTab, fetchedLessons, query]);
+
+  const cancelledLessonIds = new Set(
+    (cancelledNotifications.data ?? []).map((lesson) =>
+      String(lesson.paymentLessonID)
+    )
+  );
+  const fetchedLessonIds = new Set(
+    fetchedLessons.map((lesson) => String(lesson.paymentLessonID))
+  );
+  const retainedUpcomingLessons = cachedUpcomingLessons
+    .filter(
+      (lesson) =>
+        !fetchedLessonIds.has(String(lesson.paymentLessonID)) &&
+        !cancelledLessonIds.has(String(lesson.paymentLessonID))
+    )
+    .map((lesson) => ({ ...lesson, joinNow: true }));
+  const lessons =
+    activeTab === "upcoming" && !query.trim()
+      ? [...fetchedLessons, ...retainedUpcomingLessons]
+      : fetchedLessons;
 
   return (
     <section className="min-h-[500px] bg-white px-5 py-10 sm:px-8 lg:px-12">
@@ -200,7 +305,7 @@ export function MyLessonsList() {
               />
             ))}
           </div>
-        ) : error ? (
+        ) : error && !lessons.length ? (
           <EmptyState
             message={
               error instanceof Error
