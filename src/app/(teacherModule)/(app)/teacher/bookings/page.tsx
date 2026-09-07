@@ -9,6 +9,7 @@ import {
   respondToLesson,
   type RespondToLessonParams,
 } from "@/features/lessons/api/respond-to-lesson";
+import { startLessonSession } from "@/features/lessons/api/start-session";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
@@ -27,6 +28,13 @@ const statusColor: Record<BookingStatus, string> = {
 };
 
 function isSessionActiveNow(booking: TeacherBooking) {
+  const isInstant =
+    booking.bookingType.trim().toLowerCase() === "instant" ||
+    booking.sessionStartTime.trim().toLowerCase() === "instant";
+
+  // Instant lessons can be managed immediately, regardless of their date.
+  if (isInstant) return true;
+
   const today = new Date();
   const isoMatch = booking.sessionDate.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
   let isToday = false;
@@ -46,8 +54,6 @@ function isSessionActiveNow(booking: TeacherBooking) {
   }
 
   if (!isToday) return false;
-  if (booking.sessionStartTime.toLowerCase() === "instant") return true;
-
   const toMinutes = (value: string) => {
     const match = value.match(/^(\d{1,2}):(\d{2})/);
     return match ? Number(match[1]) * 60 + Number(match[2]) : null;
@@ -134,6 +140,21 @@ export default function TeacherBookingsPage() {
         setRejectingLessonID(null);
         setRejectionReason("");
       }
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  const startSessionMutation = useMutation({
+    mutationFn: startLessonSession,
+    onSuccess: (credentials) => {
+      sessionStorage.setItem(
+        "revision-bee:active-lesson-session",
+        JSON.stringify({
+          ...credentials,
+          expiresAt: Date.now() + credentials.expiresIn * 1000,
+        })
+      );
+      router.push("/teacher/session");
     },
     onError: (error) => toast.error(error.message),
   });
@@ -350,16 +371,23 @@ export default function TeacherBookingsPage() {
                     {booking.status === "Accepted" && (
                       <>
                         <button
-                          disabled={!canManageSession}
+                          disabled={
+                            !canManageSession || startSessionMutation.isPending
+                          }
                           title={
                             canManageSession
                               ? "Start session"
                               : unavailableActionTitle
                           }
-                          onClick={() => updateStatus(booking.id, "Completed")}
+                          onClick={() =>
+                            startSessionMutation.mutate(booking.lessonID)
+                          }
                           className="rounded-full bg-[#53a2eb] px-4 py-1.5 text-[11px] font-medium text-white hover:bg-[#4295df] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-[#53a2eb]"
                         >
-                          Start
+                          {startSessionMutation.isPending &&
+                          startSessionMutation.variables === booking.lessonID
+                            ? "Starting..."
+                            : "Start"}
                         </button>
                         <button
                           disabled={!canManageSession}

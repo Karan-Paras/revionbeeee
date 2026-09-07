@@ -102,10 +102,11 @@ export async function getVerifiedTeachers(): Promise<VerifiedTeacher[]> {
       "image"
     );
     const onlineValue =
-      teacher.isOnline ??
-      teacher.is_online ??
-      teacher.onlineStatus ??
-      teacher.online_status;
+      profile.isOnline ??
+      profile.is_online ??
+      profile.onlineStatus ??
+      profile.online_status;
+    const normalizedOnlineValue = String(onlineValue).trim().toLowerCase();
 
     return {
       id:
@@ -137,8 +138,9 @@ export async function getVerifiedTeachers(): Promise<VerifiedTeacher[]> {
       isOnline:
         onlineValue === true ||
         onlineValue === 1 ||
-        onlineValue === "1" ||
-        onlineValue === "online",
+        normalizedOnlineValue === "1" ||
+        normalizedOnlineValue === "true" ||
+        normalizedOnlineValue === "online",
       subjects: subjectNames(profile),
       qualifications: list(
         teacher,
