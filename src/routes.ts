@@ -80,6 +80,7 @@ export const paths = {
   lessons: () => "/lessons",
   lessonSuccess: () => "/lessons/success",
   myLessons: () => "/my-lessons",
+  session: () => "/session",
   progress: () => "/progress",
   quiz: () => "/quiz",
   accounts: withPrefix("/accounts", {

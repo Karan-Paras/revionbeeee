@@ -5,6 +5,7 @@ import {
   type MyBooking,
   type MyBookingFilter,
 } from "@/features/lessons/api/get-my-bookings";
+import { joinLessonSession } from "@/features/lessons/api/join-session";
 import { payForLesson } from "@/features/lessons/api/pay-for-lesson";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -16,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -49,6 +51,7 @@ function readSeenBookings(tab: NotificationTab) {
 }
 
 export function MyLessonsList() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
   const [hasNewBookings, setHasNewBookings] = useState<
@@ -115,6 +118,20 @@ export function MyLessonsList() {
     mutationFn: payForLesson,
     onSuccess: ({ checkoutUrl }) => {
       window.location.assign(checkoutUrl);
+    },
+    onError: (error) => toast.error(error.message),
+  });
+  const joinSession = useMutation({
+    mutationFn: joinLessonSession,
+    onSuccess: (credentials) => {
+      sessionStorage.setItem(
+        "revision-bee:active-lesson-session",
+        JSON.stringify({
+          ...credentials,
+          expiresAt: Date.now() + credentials.expiresIn * 1000,
+        })
+      );
+      router.push("/session");
     },
     onError: (error) => toast.error(error.message),
   });
@@ -274,14 +291,18 @@ export function MyLessonsList() {
                 {activeTab === "upcoming" && (
                   <button
                     type="button"
-                    disabled={!lesson.joinNow}
+                    disabled={!lesson.joinNow || joinSession.isPending}
+                    onClick={() => joinSession.mutate(lesson.paymentLessonID)}
                     className={`mt-4 flex h-10 w-full items-center justify-center rounded-lg text-xs font-semibold transition ${
-                      lesson.joinNow
+                      lesson.joinNow && !joinSession.isPending
                         ? "bg-[#53a2eb] text-white hover:bg-[#398fdc]"
                         : "cursor-not-allowed bg-[#53a2eb]/35 text-white/80"
                     }`}
                   >
-                    Join
+                    {joinSession.isPending &&
+                    joinSession.variables === lesson.paymentLessonID
+                      ? "Joining..."
+                      : "Join"}
                   </button>
                 )}
                 {activeTab === "accepted" && (

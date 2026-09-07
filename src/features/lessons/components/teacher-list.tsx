@@ -67,10 +67,11 @@ export function TeacherList() {
     queryKey: ["verified-teachers"],
     queryFn: getVerifiedTeachers,
     refetchInterval: 10_000,
-    refetchIntervalInBackground: false,
+    refetchIntervalInBackground: true,
     refetchOnMount: "always",
     refetchOnWindowFocus: "always",
     refetchOnReconnect: "always",
+    retry: 3,
   });
   const visibleTeachers = useMemo(
     () =>
