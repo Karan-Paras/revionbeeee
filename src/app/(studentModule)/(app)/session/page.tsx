@@ -1,7 +1,5 @@
-"use client";
-
-import TeacherSessionPage from "@/app/(teacherModule)/(app)/teacher/session/page";
+import { LessonSessionPage } from "@/features/lessons/components/lesson-session-page";
 
 export default function StudentSessionPage() {
-  return <TeacherSessionPage />;
+  return <LessonSessionPage />;
 }
