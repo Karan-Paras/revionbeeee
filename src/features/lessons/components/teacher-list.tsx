@@ -59,6 +59,7 @@ export function TeacherList() {
     useState<VerifiedTeacher | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
   const [isInstantBooking, setIsInstantBooking] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const {
     data: teachers = [],
     isPending,
@@ -213,12 +214,10 @@ export function TeacherList() {
 
       {selectedTeacher && (
         <div
-          onMouseDown={(event) =>
-            event.target === event.currentTarget && setSelectedTeacher(null)
-          }
           className={`fixed inset-0 z-[100000] flex bg-black/55 ${isInstantBooking ? "justify-end" : "items-center justify-center p-3 sm:p-6"}`}
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={`${selectedTeacher.name} profile details`}

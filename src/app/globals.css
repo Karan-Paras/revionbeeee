@@ -287,3 +287,22 @@ body {
 .usr_grd {
   background-image: linear-gradient(#53a2eb, #fbbe1b);
 }
+
+.fastboard-react-div {
+  position: absolute;
+  inset: 0;
+}
+
+/* Keep the Netless drawing surface interactive inside the draggable call UI. */
+.fastboard-react-div,
+.fastboard-root,
+.fastboard-view,
+.netless-window-manager-wrapper,
+.netless-window-manager-main-view {
+  pointer-events: auto;
+}
+
+.fastboard-view,
+.netless-window-manager-main-view {
+  touch-action: none;
+}

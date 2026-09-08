@@ -1,265 +1,2435 @@
 
 > revision-bee@0.1.0 dev
-> next dev -p 3000
+> next dev --port 3000
 
-   ▲ Next.js 15.3.8
+   ▲ Next.js 15.5.25
    - Local:        http://localhost:3000
    - Network:      http://192.168.67.154:3000
    - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
 
  ✓ Starting...
- ✓ Ready in 6.7s
+ ✓ Ready in 10.3s
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 3.6s (231 modules)
+ ✓ Compiled /middleware in 1784ms (239 modules)
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 7.4s (494 modules)
- GET /api/auth/session 200 in 3939ms
- GET /api/auth/session 200 in 10362ms
- GET /api/auth/session 200 in 103ms
+ ✓ Compiled /api/auth/[...nextauth] in 13s (427 modules)
+ GET /api/auth/session 200 in 16597ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 130ms
+ GET /api/auth/session 200 in 116ms
+ GET /api/auth/session 200 in 155ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 266ms
+ GET /api/auth/session 200 in 323ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 65ms
+ GET /api/auth/session 200 in 300ms
+ GET /api/auth/session 200 in 175ms
+ GET /api/auth/session 200 in 360ms
+ GET /api/auth/session 200 in 248ms
+ GET /api/auth/session 200 in 237ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 679ms
+ GET /api/auth/session 200 in 556ms
+ GET /api/auth/session 200 in 381ms
+ GET /api/auth/session 200 in 389ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 600ms
+ GET /api/auth/session 200 in 677ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 32.7s (1916 modules)
+ GET /api/auth/session 200 in 35405ms
+ GET /login 200 in 36691ms
+ GET /api/auth/session 200 in 190ms
+ GET /api/auth/session 200 in 285ms
+ GET /api/auth/session 200 in 130ms
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 293ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 292ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 116ms
+ GET /api/auth/session 200 in 356ms
+ GET /api/auth/session 200 in 350ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 136ms
+ GET /api/auth/session 200 in 523ms
+ GET /api/auth/session 200 in 510ms
+ GET /api/auth/session 200 in 227ms
+ GET /api/auth/session 200 in 352ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 52ms
+ GET /api/auth/session 200 in 181ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 186ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 263ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 180ms
+ GET /api/auth/session 200 in 154ms
+ GET /api/auth/session 200 in 516ms
+ GET /api/auth/session 200 in 394ms
+ GET /api/auth/session 200 in 259ms
+ GET /api/auth/session 200 in 160ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 241ms
+ GET /api/auth/session 200 in 124ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 249ms
+ GET /api/auth/session 200 in 225ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 215ms
+ GET /api/auth/session 200 in 713ms
+ GET /api/auth/session 200 in 122ms
+ ○ Compiling /lessons ...
+ ✓ Compiled /lessons in 18.7s (3028 modules)
+ GET /api/auth/session 200 in 4520ms
+ GET /lessons 200 in 20816ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1903ms (1765 modules)
+ GET /favicon.ico 200 in 2904ms
+ GET /api/auth/session 200 in 1510ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 157ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 157ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 136ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 263ms
+ GET /api/auth/session 200 in 434ms
+ GET /api/auth/session 200 in 684ms
+ GET /api/auth/session 200 in 219ms
+ GET /api/auth/session 200 in 223ms
+ GET /api/auth/session 200 in 212ms
+ GET /api/auth/session 200 in 316ms
+ GET /api/auth/session 200 in 1106ms
+ GET /api/auth/session 200 in 388ms
+ GET /api/auth/session 200 in 267ms
+ GET /api/auth/session 200 in 346ms
+ GET /api/auth/session 200 in 139ms
+ GET /api/auth/session 200 in 161ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/auth/session 200 in 198ms
+ GET /api/auth/session 200 in 147ms
+ GET /api/auth/session 200 in 196ms
+ ○ Compiling /lessons/success ...
+ ✓ Compiled /lessons/success in 24.1s (3066 modules)
+ GET /api/auth/session 200 in 24894ms
+ GET /api/auth/session 200 in 3008ms
+ GET /api/auth/session 200 in 2854ms
+ GET /lessons/success 200 in 26304ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 6.6s (1841 modules)
+ GET /api/auth/session 200 in 14214ms
+ GET /login 200 in 14629ms
+ GET /lessons/success 200 in 14612ms
+ GET /api/auth/session 200 in 1007ms
+ GET /api/auth/session 200 in 418ms
+ ○ Compiling /my-lessons ...
+ ✓ Compiled /my-lessons in 14.2s (3154 modules)
+ GET /api/auth/session 200 in 18447ms
+ GET /my-lessons 200 in 18906ms
+ GET /api/auth/session 200 in 279ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 294ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 153ms
+ GET /api/auth/session 200 in 146ms
+ GET /api/auth/session 200 in 155ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 523ms
+ GET /api/auth/session 200 in 78ms
+ ○ Compiling /teacher/bookings ...
+ ✓ Compiled /teacher/bookings in 6.7s (3184 modules)
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 79ms
+ POST /teacher/bookings 200 in 10103ms
+ GET /api/auth/session 200 in 116ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 47ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 275ms
+ GET /api/auth/session 200 in 294ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 556ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 66ms
+ GET /my-lessons 200 in 745ms
+ GET /lessons/success 200 in 663ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 298ms
+ GET /api/auth/session 200 in 338ms
+ GET /api/auth/session 200 in 142ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 490ms
+ ○ Compiling /dashboard ...
+ GET /lessons 200 in 845ms
+ ✓ Compiled /dashboard in 12.3s (3097 modules)
+ GET /api/auth/session 200 in 13912ms
+ GET /dashboard 200 in 14970ms
+ GET /api/auth/session 200 in 14394ms
+ GET /dashboard 200 in 15043ms
+ GET /api/auth/session 200 in 207ms
+ GET /api/auth/session 200 in 149ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 142ms
+ GET /api/auth/session 200 in 326ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 170ms
+ GET /api/auth/session 200 in 153ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 141ms
+ GET /api/auth/session 200 in 165ms
  GET /api/auth/session 200 in 94ms
  GET /api/auth/session 200 in 79ms
- GET /api/auth/session 200 in 154ms
- GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 62ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 85ms
  GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 136ms
+ GET /api/auth/session 200 in 143ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 370ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 341ms
+ GET /api/auth/session 200 in 625ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/auth/session 200 in 127ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 115ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 750ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 801ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 151ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 526ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 255ms
+ GET /api/auth/session 200 in 230ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 233ms
+ GET /api/auth/session 200 in 275ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 234ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 580ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 438ms
+ GET /api/auth/session 200 in 234ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/auth/session 200 in 147ms
+ GET /api/auth/session 200 in 152ms
+ GET /api/auth/session 200 in 152ms
+ GET /api/auth/session 200 in 176ms
+ GET /api/auth/session 200 in 327ms
+ GET /api/auth/session 200 in 417ms
+ GET /api/auth/session 200 in 248ms
+ GET /api/auth/session 200 in 169ms
+ GET /api/auth/session 200 in 161ms
+ GET /api/auth/session 200 in 180ms
+ GET /api/auth/session 200 in 303ms
+ GET /api/auth/session 200 in 174ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 165ms
+ GET /api/auth/session 200 in 146ms
+ GET /api/auth/session 200 in 406ms
+ GET /api/auth/session 200 in 370ms
+ GET /api/auth/session 200 in 430ms
+ GET /api/auth/session 200 in 561ms
+ GET /api/auth/session 200 in 247ms
+ GET /api/auth/session 200 in 355ms
+ GET /api/auth/session 200 in 347ms
+ GET /api/auth/session 200 in 350ms
+ GET /api/auth/session 200 in 170ms
+ GET /api/auth/session 200 in 227ms
+ GET /api/auth/session 200 in 186ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 230ms
+ GET /api/auth/session 200 in 189ms
+ GET /api/auth/session 200 in 244ms
+ GET /api/auth/session 200 in 215ms
+ GET /api/auth/session 200 in 440ms
+ GET /api/auth/session 200 in 141ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 389ms
+ GET /api/auth/session 200 in 302ms
+ GET /api/auth/session 200 in 296ms
+ GET /api/auth/session 200 in 455ms
+ GET /api/auth/session 200 in 236ms
+ GET /api/auth/session 200 in 479ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 318ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/auth/session 200 in 159ms
+ GET /api/auth/session 200 in 176ms
+ GET /api/auth/session 200 in 166ms
+ GET /api/auth/session 200 in 189ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 324ms
+ GET /api/auth/session 200 in 162ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 174ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 139ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 337ms
+ GET /api/auth/session 200 in 492ms
+ GET /api/auth/session 200 in 604ms
+ GET /api/auth/session 200 in 704ms
+ GET /api/auth/session 200 in 717ms
+ GET /api/auth/session 200 in 335ms
+ GET /api/auth/session 200 in 455ms
+ GET /api/auth/session 200 in 485ms
+ GET /api/auth/session 200 in 262ms
+ GET /api/auth/session 200 in 280ms
+ GET /lessons 200 in 661ms
+ GET /api/auth/session 200 in 359ms
+ GET /api/auth/session 200 in 733ms
+ GET /my-lessons 200 in 1135ms
+ GET /api/auth/session 200 in 309ms
+ GET /api/auth/session 200 in 626ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 252ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 259ms
+ GET /api/auth/session 200 in 129ms
+ GET /api/auth/session 200 in 185ms
+ GET /lessons 200 in 348ms
+ GET /api/auth/session 200 in 334ms
+ GET /api/auth/session 200 in 366ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 177ms
+ GET /api/auth/session 200 in 141ms
+ GET /api/auth/session 200 in 124ms
+ GET /api/auth/session 200 in 139ms
+ GET /api/auth/session 200 in 615ms
+ GET /api/auth/session 200 in 515ms
+ GET /api/auth/session 200 in 254ms
+ GET /api/auth/session 200 in 169ms
+ GET /api/auth/session 200 in 303ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 115ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 116ms
+ GET /api/auth/session 200 in 243ms
+ GET /api/auth/session 200 in 171ms
+ GET /api/auth/session 200 in 234ms
+ GET /api/auth/session 200 in 162ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 244ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 484ms
+ GET /api/auth/session 200 in 272ms
+ GET /api/auth/session 200 in 213ms
+ GET /api/auth/session 200 in 292ms
+ GET /api/auth/session 200 in 293ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 198ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 191ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 115ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 129ms
+ GET /api/auth/session 200 in 243ms
+ GET /api/auth/session 200 in 154ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 631ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 132ms
+ GET /api/auth/session 200 in 151ms
+ GET /api/auth/session 200 in 234ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 214ms
+ GET /api/auth/session 200 in 165ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 146ms
+ GET /api/auth/session 200 in 184ms
+ GET /api/auth/session 200 in 283ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 141ms
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 159ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 238ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 176ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 169ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 245ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 161ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 115ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 175ms
+ GET /api/auth/session 200 in 285ms
+ GET /api/auth/session 200 in 205ms
+ GET /api/auth/session 200 in 130ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 226ms
+ GET /api/auth/session 200 in 213ms
+ GET /api/auth/session 200 in 164ms
+ GET /api/auth/session 200 in 209ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 134ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 131ms
+ GET /api/auth/session 200 in 130ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 106ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 269ms
+ GET /api/auth/session 200 in 193ms
+ GET /api/auth/session 200 in 243ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 143ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 115ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 601ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 80ms
+ ✓ Compiled in 10.8s (3121 modules)
+ GET /api/auth/session 200 in 1397ms
+ GET /api/auth/session 200 in 8922ms
+ GET /api/auth/session 200 in 740ms
+ GET /lessons 200 in 934ms
+ GET /api/auth/session 200 in 800ms
+ ✓ Compiled in 2.2s (1325 modules)
+ GET /lessons 200 in 340ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 78ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 7.7s (1862 modules)
+ ✓ Compiled in 0ms (1862 modules)
+ ✓ Compiled in 2ms (1862 modules)
+ ✓ Compiled in 2ms (1862 modules)
+ GET /login 200 in 14696ms
+ GET /api/auth/session 200 in 8785ms
+ GET /api/auth/session 200 in 6849ms
+ ✓ Compiled in 4ms (1862 modules)
+ GET /lessons 200 in 10497ms
+ GET /api/auth/session 200 in 6487ms
+ GET /api/auth/session 200 in 6506ms
+ GET /api/auth/session 200 in 146ms
+ GET /api/auth/session 200 in 173ms
+ GET /api/auth/session 200 in 171ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 258ms
+ GET /api/auth/session 200 in 316ms
+ GET /api/auth/session 200 in 484ms
+ GET /api/auth/session 200 in 582ms
+ GET /api/auth/session 200 in 266ms
+ GET /api/auth/session 200 in 293ms
+ GET /api/auth/session 200 in 253ms
+ GET /api/auth/session 200 in 215ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 124ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 153ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 59ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 56ms
+ GET /api/auth/session 200 in 193ms
+ GET /api/auth/session 200 in 185ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 154ms
+ GET /api/auth/session 200 in 131ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 74ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 65ms
+ GET /api/auth/session 200 in 65ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 65ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 142ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 127ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 50ms
+ GET /api/auth/session 200 in 131ms
+ GET /api/auth/session 200 in 1521ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 184ms
+ GET /api/auth/session 200 in 56ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 59ms
+ GET /api/auth/session 200 in 51ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 62ms
+ GET /api/auth/session 200 in 90ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 89ms
  GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 62ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 50ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 65ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/auth/session 200 in 59ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 80ms
  GET /api/auth/session 200 in 103ms
  GET /api/auth/session 200 in 69ms
- GET /api/auth/session 200 in 86ms
- GET /api/auth/session 200 in 47ms
- ○ Compiling /Tpersonal-info ...
- ✓ Compiled /Tpersonal-info in 45.7s (2263 modules)
- GET /api/auth/session 200 in 17789ms
- GET /api/auth/session 200 in 44955ms
- POST /Tpersonal-info 200 in 54488ms
- GET /Tpersonal-info 200 in 35962ms
- ○ Compiling /favicon.ico ...
- ✓ Compiled /favicon.ico in 1368ms (1371 modules)
- GET /favicon.ico 200 in 2436ms
- GET /api/auth/session 200 in 1747ms
- GET /api/auth/session 200 in 120ms
- GET /api/auth/session 200 in 394ms
- GET /api/auth/session 200 in 365ms
- GET /Tpersonal-info 200 in 2209ms
- GET /api/auth/session 200 in 157ms
- GET /favicon.ico 200 in 202ms
- GET /api/auth/session 200 in 157ms
- POST /Tpersonal-info 200 in 3117ms
- ○ Compiling /Teducation ...
- ✓ Compiled /Teducation in 3.9s (2281 modules)
- GET /Teducation 200 in 4283ms
- ○ Compiling /Tcertifications ...
- ✓ Compiled /Tcertifications in 2.2s (2294 modules)
- GET /Tcertifications 200 in 2689ms
- ○ Compiling /Tavailability ...
- ✓ Compiled /Tavailability in 5.5s (2334 modules)
- GET /Tavailability 200 in 5887ms
- GET /api/auth/session 200 in 332ms
- GET /api/auth/session 200 in 53ms
- GET /api/auth/session 200 in 46ms
- GET /api/auth/session 200 in 48ms
- GET /api/auth/session 200 in 142ms
- GET /api/auth/session 200 in 119ms
- GET /api/auth/session 200 in 79ms
- GET /api/auth/session 200 in 60ms
- GET /api/auth/session 200 in 122ms
- GET /api/auth/session 200 in 99ms
- ✓ Compiled in 10.5s (2348 modules)
- GET /Tavailability 200 in 417ms
- ✓ Compiled in 2.9s (2210 modules)
- ✓ Compiled in 865ms (885 modules)
- GET /Tavailability 200 in 815ms
- GET /Tavailability 200 in 129ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 4.4s (1463 modules)
- GET /api/auth/session 200 in 5298ms
- GET /api/auth/session 200 in 103ms
- POST /Tavailability 200 in 1546ms
- ○ Compiling /Tbank-details ...
- ✓ Compiled /Tbank-details in 5.6s (2344 modules)
- GET /Tbank-details 200 in 5799ms
- GET /Tbank-details 200 in 86ms
- POST /Tbank-details 200 in 3592ms
- GET /Tavailability 200 in 1094ms
- ○ Compiling /Tcertifications ...
- ✓ Compiled /Tcertifications in 4.1s (1346 modules)
- ○ Compiling / ...
- ✓ Compiled / in 19.6s (3763 modules)
- GET / 200 in 22588ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1278ms (2184 modules)
- GET /api/auth/session 200 in 1635ms
+ GET /api/auth/session 200 in 81ms
  GET /api/auth/session 200 in 51ms
- ○ Compiling /api/[[...route]] ...
- ✓ Compiled /api/[[...route]] in 4.9s (3960 modules)
- GET /api 200 in 6044ms
- GET /api/auth/session 200 in 520ms
- GET /api/auth/session 200 in 150ms
- POST / 200 in 2902ms
- GET / 200 in 1131ms
- GET / 200 in 1134ms
- GET /api/auth/session 200 in 70ms
- GET /api/auth/session 200 in 118ms
- GET /api/auth/session 200 in 681ms
- ○ Compiling /login ...
- ✓ Compiled /login in 7.9s (3976 modules)
- GET /api/auth/session 200 in 7724ms
- GET /login 200 in 8528ms
- GET /api/auth/session 200 in 77ms
- GET /login 200 in 334ms
- GET /api/auth/session 200 in 90ms
- GET /login 200 in 358ms
- POST /login 200 in 1433ms
- POST /login 200 in 1992ms
- GET /api/auth/session 200 in 113ms
- ○ Compiling /teacher/dashboard ...
- ✓ Compiled /teacher/dashboard in 5.6s (3753 modules)
- GET /api/auth/session 200 in 6101ms
- GET /teacher/dashboard 200 in 6294ms
- POST /teacher/dashboard 200 in 2238ms
- POST /teacher/dashboard 200 in 1118ms
- ○ Compiling /teacher/profile ...
- ✓ Compiled /teacher/profile in 4.5s (3781 modules)
- GET /teacher/profile 200 in 4745ms
- POST /teacher/profile 200 in 1358ms
- POST /teacher/profile 200 in 498ms
- POST /teacher/profile 200 in 485ms
- POST /teacher/profile 200 in 555ms
- POST /teacher/profile 200 in 1101ms
- POST /teacher/profile 200 in 996ms
- POST /teacher/profile 200 in 1053ms
- POST /teacher/profile 200 in 1212ms
- POST /teacher/profile 200 in 1041ms
- POST /teacher/profile 200 in 624ms
- GET /teacher/profile 200 in 58ms
- ○ Compiling /teacher/profile/qualification ...
- POST /teacher/profile 200 in 6668ms
- ✓ Compiled /teacher/profile/qualification in 9.7s (3745 modules)
- GET /teacher/profile/qualification 200 in 10505ms
- GET /teacher/profile/qualification 200 in 153ms
- POST /teacher/profile/qualification 200 in 1311ms
- POST /teacher/profile/qualification 200 in 508ms
- GET /teacher/profile 200 in 74ms
- POST /teacher/profile/qualification 200 in 482ms
- POST /teacher/profile/qualification 200 in 1015ms
- POST /teacher/profile 200 in 448ms
- POST /teacher/profile 200 in 475ms
- POST /teacher/profile 200 in 467ms
- POST /teacher/profile 200 in 465ms
- GET /teacher/profile 200 in 76ms
- POST /teacher/profile 200 in 543ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 2.6s (2182 modules)
- GET /api/auth/session 200 in 5895ms
- GET /api/auth/session 200 in 171ms
- POST /teacher/profile 200 in 6784ms
- POST /teacher/profile 200 in 609ms
- POST /teacher/profile 200 in 557ms
- ○ Compiling /teacher/profile/availability ...
- ✓ Compiled /teacher/profile/availability in 4.8s (3740 modules)
- GET /teacher/profile/availability 200 in 6498ms
- GET /api/auth/session 200 in 462ms
- GET /api/auth/session 200 in 385ms
- POST /teacher/profile 200 in 1447ms
- POST /teacher/profile 200 in 483ms
- POST /teacher/profile/availability 200 in 497ms
- POST /teacher/profile/availability 200 in 468ms
- POST /teacher/profile/availability 200 in 472ms
- POST /teacher/profile/availability 200 in 465ms
- GET /api/auth/session 200 in 152ms
- GET /api/auth/session 200 in 67ms
- POST /teacher/profile/availability 200 in 1198ms
- POST /teacher/profile/availability 200 in 489ms
- POST /teacher/profile/availability 200 in 626ms
- ○ Compiling /teacher/profile/availability/update ...
- ✓ Compiled /teacher/profile/availability/update in 78.2s (3144 modules)
- GET /api/auth/session 200 in 57934ms
- GET /teacher/profile/availability/update 200 in 79388ms
- GET /teacher/profile/availability/update 200 in 37304ms
- GET /teacher/profile/availability/update 200 in 37299ms
- GET /teacher/profile/availability/update 200 in 37311ms
- GET /teacher/profile/availability/update 200 in 14748ms
- GET /api/auth/session 200 in 366ms
- GET /api/auth/session 200 in 375ms
- GET /teacher/profile/availability/update 200 in 451ms
- GET /teacher/profile/availability/update 200 in 455ms
- GET /teacher/profile/availability/update 200 in 444ms
- GET /teacher/profile/availability/update 200 in 599ms
- GET /api/auth/session 200 in 924ms
- GET /api/auth/session 200 in 945ms
- GET /api/auth/session 200 in 957ms
- GET /api/auth/session 200 in 159ms
- GET /api/auth/session 200 in 105ms
- GET /api/auth/session 200 in 42ms
- GET /api/auth/session 200 in 38ms
- GET /api/auth/session 200 in 29ms
- POST /teacher/profile/availability 200 in 2194ms
- GET /api/auth/session 200 in 140ms
- GET /api/auth/session 200 in 28ms
- GET /api/auth/session 200 in 21ms
- GET /api/auth/session 200 in 38ms
- GET /api/auth/session 200 in 25ms
- GET /api/auth/session 200 in 29ms
- GET /api/auth/session 200 in 33ms
- POST /teacher/profile/availability 200 in 569ms
- GET /api/auth/session 200 in 60ms
- GET /api/auth/session 200 in 55ms
- GET /api/auth/session 200 in 22ms
- GET /api/auth/session 200 in 35ms
- POST /teacher/profile/availability 200 in 583ms
- POST /teacher/profile/availability 200 in 578ms
- POST /teacher/profile/availability 200 in 470ms
- POST /teacher/profile/availability 200 in 689ms
- POST /teacher/profile/availability 200 in 3029ms
- POST /teacher/profile/availability 200 in 621ms
- POST /teacher/profile/availability 200 in 563ms
- GET /api/auth/session 200 in 132ms
+ GET /api/auth/session 200 in 164ms
+ GET /api/auth/session 200 in 281ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 65ms
  GET /api/auth/session 200 in 68ms
- POST /teacher/profile/availability 200 in 678ms
- POST /teacher/profile/availability 200 in 573ms
- POST /teacher/profile/availability 200 in 482ms
- POST /teacher/profile/availability 200 in 462ms
- POST /teacher/profile/availability 200 in 473ms
- POST /teacher/profile/availability 200 in 494ms
- POST /teacher/profile/availability 200 in 548ms
- POST /teacher/profile/availability 200 in 478ms
- POST /teacher/profile/availability 200 in 462ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 56ms
+ GET /lessons/success 200 in 323ms
+ GET /my-lessons 200 in 922ms
+ GET /api/auth/session 200 in 386ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 124ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 202ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 190ms
+ GET /api/auth/session 200 in 273ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 57ms
+ GET /api/auth/session 200 in 178ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 56ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 73ms
+ GET /api/auth/session 200 in 53ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 92ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 363ms
+ GET /api/auth/session 200 in 89ms
+ GET /api/auth/session 200 in 50ms
+ GET /api/auth/session 200 in 194ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 655ms
+ GET /api/auth/session 200 in 501ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 277ms
+ GET /my-lessons 200 in 582ms
+ GET /lessons/success 200 in 751ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 445ms
+ GET /my-lessons 200 in 638ms
+ GET /api/auth/session 200 in 486ms
+ GET /api/auth/session 200 in 190ms
+ GET /api/auth/session 200 in 241ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 105ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 55ms
+ GET /api/auth/session 200 in 70ms
+ GET /api/auth/session 200 in 50ms
+ GET /api/auth/session 200 in 52ms
  GET /api/auth/session 200 in 109ms
- POST /teacher/profile/availability 200 in 459ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 142ms
+ GET /api/auth/session 200 in 135ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 522ms
+ GET /my-lessons 200 in 611ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 8.5s (1798 modules)
+ GET /favicon.ico 200 in 10553ms
+ GET /api/auth/session 200 in 1671ms
+ GET /api/auth/session 200 in 6266ms
+ GET /api/auth/session 200 in 266ms
+ GET /api/auth/session 200 in 311ms
+ GET /api/auth/session 200 in 107ms
+ GET /api/auth/session 200 in 79ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 77ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 207ms
+ GET /api/auth/session 200 in 150ms
+ GET /api/auth/session 200 in 81ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 60ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 54ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 51ms
+ GET /api/auth/session 200 in 48ms
+ GET /api/auth/session 200 in 68ms
+ GET /api/auth/session 200 in 45ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 46ms
+ GET /api/auth/session 200 in 78ms
+ GET /api/auth/session 200 in 66ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 67ms
+ GET /api/auth/session 200 in 314ms
+ GET /api/auth/session 200 in 143ms
+ GET /api/auth/session 200 in 108ms
+ GET /api/auth/session 200 in 176ms
+ GET /api/auth/session 200 in 166ms
+ ○ Compiling /session ...
+ ✓ Compiled /session in 159.3s (6427 modules)
+ GET /api/auth/session 200 in 151781ms
+ GET /api/auth/session 200 in 37358ms
+ GET /api/auth/session 200 in 27793ms
+ GET /api/auth/session 200 in 27857ms
+ GET /api/auth/session 200 in 27918ms
+ GET /api/auth/session 200 in 27978ms
+ GET /my-lessons 200 in 38868ms
+ GET /api/auth/session 200 in 212ms
+ GET /favicon.ico 200 in 345ms
+ GET /api/auth/session 200 in 618ms
+ GET /api/auth/session 200 in 587ms
+ GET /api/auth/session 200 in 600ms
+ GET /api/auth/session 200 in 735ms
+ GET /api/auth/session 200 in 880ms
+ GET /api/auth/session 200 in 448ms
+ GET /api/auth/session 200 in 841ms
+ GET /session 200 in 1488ms
+ GET /api/auth/session 200 in 289ms
+ GET /api/auth/session 200 in 749ms
+ GET /api/auth/session 200 in 467ms
+ GET /api/auth/session 200 in 338ms
+ GET /api/auth/session 200 in 263ms
+ GET /api/auth/session 200 in 132ms
+ GET /api/auth/session 200 in 212ms
+ GET /api/auth/session 200 in 463ms
+ GET /api/auth/session 200 in 338ms
+ GET /api/auth/session 200 in 314ms
+ GET /api/auth/session 200 in 166ms
+ GET /api/auth/session 200 in 207ms
+ GET /api/auth/session 200 in 336ms
+ GET /api/auth/session 200 in 1295ms
+ GET /api/auth/session 200 in 453ms
+ GET /api/auth/session 200 in 270ms
+ GET /api/auth/session 200 in 1929ms
+ GET /api/auth/session 200 in 332ms
+ GET /api/auth/session 200 in 331ms
+ GET /api/auth/session 200 in 332ms
+ GET /api/auth/session 200 in 248ms
+ GET /api/auth/session 200 in 367ms
+ GET /api/auth/session 200 in 561ms
+ GET /api/auth/session 200 in 689ms
+ GET /api/auth/session 200 in 302ms
+ GET /api/auth/session 200 in 303ms
+ GET /api/auth/session 200 in 205ms
+ GET /api/auth/session 200 in 320ms
+ GET /api/auth/session 200 in 492ms
+ GET /api/auth/session 200 in 342ms
+ GET /api/auth/session 200 in 492ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 257ms
+ GET /api/auth/session 200 in 262ms
+ GET /api/auth/session 200 in 256ms
+ ✓ Compiled in 22.3s (6425 modules)
+ GET /api/auth/session 200 in 7888ms
+ GET /api/auth/session 200 in 20737ms
+ GET /api/auth/session 200 in 2097ms
+ GET /session 200 in 2814ms
+ GET /api/auth/session 200 in 2142ms
+ GET /api/auth/session 200 in 846ms
+ GET /api/auth/session 200 in 360ms
+ GET /api/auth/session 200 in 309ms
+ GET /api/auth/session 200 in 273ms
+ GET /api/auth/session 200 in 266ms
+ GET /api/auth/session 200 in 232ms
+ GET /api/auth/session 200 in 239ms
+ GET /api/auth/session 200 in 156ms
+ GET /api/auth/session 200 in 180ms
+ GET /api/auth/session 200 in 209ms
+ GET /api/auth/session 200 in 321ms
+ GET /api/auth/session 200 in 200ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 332ms
  GET /api/auth/session 200 in 94ms
- POST /teacher/profile/availability 200 in 523ms
- POST /teacher/profile/availability 200 in 549ms
- POST /teacher/profile/availability 200 in 499ms
+ GET /api/auth/session 200 in 118ms
+ ✓ Compiled in 56s (6425 modules)
+ GET /api/auth/session 200 in 40698ms
+ GET /api/auth/session 200 in 3344ms
+ GET /api/auth/session 200 in 3354ms
+ GET /api/auth/session 200 in 3230ms
+ GET /api/auth/session 200 in 40839ms
+ GET /api/auth/session 200 in 672ms
+ GET /api/auth/session 200 in 690ms
+ GET /session 200 in 875ms
+ GET /api/auth/session 200 in 741ms
+ GET /api/auth/session 200 in 292ms
+ GET /api/auth/session 200 in 191ms
+ GET /api/auth/session 200 in 71ms
+ GET /api/auth/session 200 in 76ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 102ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 5.5s (3520 modules)
+ GET /login 200 in 7213ms
+ GET /api/auth/session 200 in 240ms
+ GET /session 200 in 529ms
+ GET /api/auth/session 200 in 366ms
+ GET /api/auth/session 200 in 217ms
+ GET /api/auth/session 200 in 186ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 134ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 147ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 304ms
+ GET /api/auth/session 200 in 365ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 452ms
+ GET /api/auth/session 200 in 488ms
+ GET /api/auth/session 200 in 929ms
+ GET /api/auth/session 200 in 935ms
+ GET /api/auth/session 200 in 532ms
+ GET /api/auth/session 200 in 536ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 110ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 99ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 376ms
+ GET /api/auth/session 200 in 183ms
+ GET /api/auth/session 200 in 321ms
+ GET /api/auth/session 200 in 238ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/auth/session 200 in 218ms
+ GET /api/auth/session 200 in 445ms
+ GET /api/auth/session 200 in 328ms
+ GET /api/auth/session 200 in 205ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 165ms
+ GET /api/auth/session 200 in 331ms
+ GET /api/auth/session 200 in 1403ms
+ ⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/api/auth/session'
+}
  ○ Compiling /_error ...
- ✓ Compiled /_error in 8.9s (3454 modules)
- POST /teacher/profile/availability 500 in 12109ms
- GET /api/auth/session 500 in 3009ms
- GET /api/auth/session 500 in 424ms
- POST /teacher/profile/availability 200 in 1691ms
- POST /teacher/profile/availability 200 in 495ms
- POST /teacher/profile/availability 200 in 458ms
- POST /teacher/profile/availability 200 in 457ms
- POST /teacher/profile/availability 200 in 444ms
- POST /teacher/profile/availability 200 in 425ms
- POST /teacher/profile/availability 200 in 459ms
- GET /teacher/profile/availability/update 200 in 142ms
- POST /teacher/profile/availability 200 in 466ms
- POST /teacher/profile/availability 200 in 443ms
- POST /teacher/profile/availability 200 in 490ms
- POST /teacher/profile/availability 200 in 443ms
- POST /teacher/profile/availability 200 in 496ms
- POST /teacher/profile/availability 200 in 485ms
- POST /teacher/profile/availability 200 in 430ms
- POST /teacher/profile/availability 200 in 472ms
- POST /teacher/profile/availability 200 in 455ms
- POST /teacher/profile/availability 200 in 477ms
- POST /teacher/profile/availability 200 in 447ms
- GET /teacher/profile/availability/update 200 in 67ms
- GET /teacher/profile/availability/update 200 in 77ms
- POST /teacher/profile/availability 200 in 462ms
- POST /teacher/profile/availability 200 in 439ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 6.5s (3459 modules)
- GET /_next/static/css/app/layout.css?v=1787122478647 404 in 7584ms
- POST /teacher/profile/availability/update 200 in 1412ms
- POST /teacher/profile/availability/update 200 in 709ms
+ ✓ Compiled /login in 53.7s (6771 modules)
+ GET /api/auth/session 500 in 51553ms
+ ✓ Compiled in 4ms (3714 modules)
+ GET /api/auth/session 200 in 13659ms
+ GET /api/auth/session 200 in 42038ms
+ GET /api/auth/session 200 in 22664ms
+ GET /api/auth/session 200 in 9667ms
+ GET /api/auth/session 200 in 9688ms
+ GET /login 200 in 16914ms
+ GET /session 200 in 10127ms
+ GET /api/auth/session 200 in 477ms
+ GET /api/auth/session 200 in 504ms
+ GET /session 200 in 902ms
+ GET /api/auth/session 200 in 339ms
+ GET /api/auth/session 200 in 263ms
+ GET /session 200 in 385ms
+ GET /api/auth/session 200 in 415ms
+ GET /api/auth/session 200 in 333ms
+ GET /api/auth/session 200 in 348ms
+ GET /api/auth/session 200 in 298ms
+ GET /api/auth/session 200 in 503ms
+ GET /api/auth/session 200 in 423ms
+ GET /api/auth/session 200 in 799ms
+ GET /api/auth/session 200 in 370ms
+ GET /api/auth/session 200 in 486ms
+ GET /api/auth/session 200 in 895ms
+ GET /api/auth/session 200 in 751ms
+ GET /api/auth/session 200 in 798ms
+ GET /api/auth/session 200 in 927ms
+ GET /api/auth/session 200 in 228ms
+ GET /api/auth/session 200 in 299ms
+ GET /api/auth/session 200 in 224ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 325ms
+ GET /api/auth/session 200 in 460ms
+ GET /api/auth/session 200 in 280ms
+ GET /api/auth/session 200 in 1319ms
+ GET /api/auth/session 200 in 186ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 193ms
+ GET /api/auth/session 200 in 346ms
+ GET /api/auth/session 200 in 308ms
+ GET /api/auth/session 200 in 441ms
+ GET /api/auth/session 200 in 485ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 490ms
+ GET /api/auth/session 200 in 150ms
+ GET /api/auth/session 200 in 160ms
+ GET /api/auth/session 200 in 216ms
+ GET /api/auth/session 200 in 335ms
+ GET /api/auth/session 200 in 2193ms
+ GET /api/auth/session 200 in 2240ms
+ GET /api/auth/session 200 in 874ms
+ GET /api/auth/session 200 in 434ms
+ GET /api/auth/session 200 in 359ms
+ GET /api/auth/session 200 in 436ms
+ GET /api/auth/session 200 in 419ms
+ GET /api/auth/session 200 in 518ms
+ GET /api/auth/session 200 in 505ms
+ GET /api/auth/session 200 in 424ms
+ GET /api/auth/session 200 in 580ms
+ GET /api/auth/session 200 in 340ms
+ GET /api/auth/session 200 in 652ms
+ GET /api/auth/session 200 in 189ms
+ GET /api/auth/session 200 in 171ms
+ GET /api/auth/session 200 in 150ms
+ GET /api/auth/session 200 in 257ms
+ GET /api/auth/session 200 in 341ms
+ GET /api/auth/session 200 in 531ms
+ GET /api/auth/session 200 in 430ms
+ GET /api/auth/session 200 in 563ms
+ GET /api/auth/session 200 in 258ms
+ GET /api/auth/session 200 in 317ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 758ms
+ GET /api/auth/session 200 in 199ms
+ GET /api/auth/session 200 in 270ms
+ GET /api/auth/session 200 in 232ms
+ GET /api/auth/session 200 in 169ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 359ms
+ GET /api/auth/session 200 in 254ms
+ GET /api/auth/session 200 in 164ms
+ GET /api/auth/session 200 in 127ms
+ GET /api/auth/session 200 in 298ms
+ GET /api/auth/session 200 in 272ms
+ GET /api/auth/session 200 in 605ms
+ GET /api/auth/session 200 in 196ms
+ GET /api/auth/session 200 in 329ms
+ GET /api/auth/session 200 in 407ms
+ GET /api/auth/session 200 in 319ms
+ GET /api/auth/session 200 in 544ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 241ms
+ GET /api/auth/session 200 in 366ms
+ GET /api/auth/session 200 in 386ms
+ GET /api/auth/session 200 in 293ms
+ GET /api/auth/session 200 in 285ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 161ms
+ GET /api/auth/session 200 in 359ms
+ GET /api/auth/session 200 in 425ms
+ GET /api/auth/session 200 in 342ms
+ GET /api/auth/session 200 in 336ms
+ GET /api/auth/session 200 in 642ms
+ GET /api/auth/session 200 in 1028ms
+ GET /session 200 in 3681ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 21.4s (3555 modules)
+ GET /favicon.ico 200 in 27717ms
+ GET /api/auth/session 200 in 8740ms
+ GET /api/auth/session 200 in 9016ms
+ GET /api/auth/session 200 in 565ms
+ GET /api/auth/session 200 in 719ms
+ GET /api/auth/session 200 in 194ms
+ GET /api/auth/session 200 in 213ms
+ GET /api/auth/session 200 in 254ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 358ms
+ GET /api/auth/session 200 in 305ms
+ GET /api/auth/session 200 in 333ms
+ GET /api/auth/session 200 in 291ms
+ GET /api/auth/session 200 in 374ms
+ GET /api/auth/session 200 in 373ms
+ GET /api/auth/session 200 in 509ms
+ GET /api/auth/session 200 in 314ms
+ GET /api/auth/session 200 in 184ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 258ms
+ GET /api/auth/session 200 in 196ms
+ GET /api/auth/session 200 in 237ms
+ GET /api/auth/session 200 in 270ms
+ GET /api/auth/session 200 in 321ms
+ GET /api/auth/session 200 in 220ms
+ GET /api/auth/session 200 in 306ms
+ GET /api/auth/session 200 in 563ms
+ GET /api/auth/session 200 in 273ms
+ GET /api/auth/session 200 in 390ms
+ GET /api/auth/session 200 in 481ms
+ GET /api/auth/session 200 in 342ms
+ GET /api/auth/session 200 in 447ms
+ GET /api/auth/session 200 in 299ms
+ GET /api/auth/session 200 in 200ms
+ GET /api/auth/session 200 in 342ms
+ GET /api/auth/session 200 in 413ms
+ GET /api/auth/session 200 in 464ms
+ GET /api/auth/session 200 in 422ms
+ GET /api/auth/session 200 in 365ms
+ GET /api/auth/session 200 in 234ms
+ GET /api/auth/session 200 in 284ms
+ GET /api/auth/session 200 in 256ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 202ms
+ GET /api/auth/session 200 in 182ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 200ms
+ GET /api/auth/session 200 in 300ms
+ GET /api/auth/session 200 in 182ms
+ GET /api/auth/session 200 in 302ms
+ GET /api/auth/session 200 in 262ms
+ GET /api/auth/session 200 in 537ms
+ GET /api/auth/session 200 in 187ms
+ GET /api/auth/session 200 in 318ms
+ GET /api/auth/session 200 in 308ms
+ GET /api/auth/session 200 in 433ms
+ GET /api/auth/session 200 in 290ms
+ GET /api/auth/session 200 in 759ms
+ GET /api/auth/session 200 in 354ms
+ GET /api/auth/session 200 in 600ms
+ GET /api/auth/session 200 in 488ms
+ GET /api/auth/session 200 in 566ms
+ GET /api/auth/session 200 in 1226ms
+ GET /api/auth/session 200 in 299ms
+ GET /api/auth/session 200 in 463ms
+ GET /api/auth/session 200 in 185ms
+ GET /api/auth/session 200 in 685ms
+ GET /api/auth/session 200 in 440ms
+ GET /api/auth/session 200 in 354ms
+ GET /api/auth/session 200 in 236ms
+ GET /api/auth/session 200 in 180ms
+ GET /api/auth/session 200 in 233ms
+ GET /api/auth/session 200 in 239ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 290ms
+ GET /api/auth/session 200 in 195ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 104ms
+ GET /api/auth/session 200 in 85ms
+ GET /api/auth/session 200 in 206ms
+ GET /api/auth/session 200 in 177ms
+ GET /api/auth/session 200 in 222ms
+ GET /api/auth/session 200 in 518ms
+ GET /api/auth/session 200 in 575ms
+ GET /api/auth/session 200 in 535ms
+ GET /api/auth/session 200 in 1113ms
+ GET /api/auth/session 200 in 1418ms
+ GET /api/auth/session 200 in 242ms
+ GET /api/auth/session 200 in 137ms
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 246ms
+ GET /api/auth/session 200 in 147ms
+ GET /api/auth/session 200 in 265ms
+ GET /api/auth/session 200 in 213ms
+ GET /api/auth/session 200 in 155ms
+ GET /api/auth/session 200 in 176ms
+ GET /api/auth/session 200 in 157ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 101ms
+ GET /api/auth/session 200 in 182ms
+ GET /api/auth/session 200 in 281ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 82ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 132ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 112ms
+ GET /api/auth/session 200 in 64ms
+ GET /api/auth/session 200 in 58ms
+ GET /api/auth/session 200 in 268ms
+ GET /api/auth/session 200 in 184ms
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 75ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 165ms
+ GET /api/auth/session 200 in 348ms
+ GET /api/auth/session 200 in 278ms
+ GET /api/auth/session 200 in 327ms
+ GET /api/auth/session 200 in 577ms
+ GET /api/auth/session 200 in 388ms
+ GET /api/auth/session 200 in 344ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 98ms
+ GET /api/auth/session 200 in 617ms
+ GET /api/auth/session 200 in 80ms
+ GET /api/auth/session 200 in 116ms
+ GET /api/auth/session 200 in 404ms
+ GET /api/auth/session 200 in 491ms
+ GET /api/auth/session 200 in 69ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/auth/session 200 in 358ms
+ GET /api/auth/session 200 in 294ms
+ GET /api/auth/session 200 in 465ms
+ GET /api/auth/session 200 in 410ms
+ GET /api/auth/session 200 in 173ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 515ms
+ GET /api/auth/session 200 in 482ms
+ GET /api/auth/session 200 in 109ms
+ GET /api/auth/session 200 in 237ms
+ GET /api/auth/session 200 in 471ms
+ GET /api/auth/session 200 in 461ms
+ GET /api/auth/session 200 in 458ms
+ GET /api/auth/session 200 in 407ms
+ GET /api/auth/session 200 in 590ms
+ GET /api/auth/session 200 in 516ms
+ GET /api/auth/session 200 in 507ms
+ GET /api/auth/session 200 in 336ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 189ms
+ GET /api/auth/session 200 in 126ms
+ GET /api/auth/session 200 in 404ms
+ GET /api/auth/session 200 in 297ms
+ GET /api/auth/session 200 in 455ms
+ GET /api/auth/session 200 in 319ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 122ms
+ GET /api/auth/session 200 in 437ms
+ GET /api/auth/session 200 in 250ms
+ GET /api/auth/session 200 in 214ms
+ GET /api/auth/session 200 in 123ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 111ms
+ GET /api/auth/session 200 in 196ms
+ GET /api/auth/session 200 in 138ms
+ GET /api/auth/session 200 in 197ms
+ GET /api/auth/session 200 in 240ms
+ GET /api/auth/session 200 in 469ms
+ GET /api/auth/session 200 in 276ms
+ GET /api/auth/session 200 in 423ms
+ GET /api/auth/session 200 in 231ms
+ GET /api/auth/session 200 in 187ms
+ GET /api/auth/session 200 in 169ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 158ms
+ GET /api/auth/session 200 in 928ms
+ GET /api/auth/session 200 in 849ms
+ GET /api/auth/session 200 in 580ms
+ GET /api/auth/session 200 in 377ms
+ GET /api/auth/session 200 in 172ms
+ GET /api/auth/session 200 in 546ms
+ GET /api/auth/session 200 in 562ms
+ GET /api/auth/session 200 in 205ms
+ GET /api/auth/session 200 in 381ms
+ GET /api/auth/session 200 in 269ms
+ GET /api/auth/session 200 in 261ms
+ GET /api/auth/session 200 in 261ms
+ GET /api/auth/session 200 in 362ms
+ GET /api/auth/session 200 in 364ms
+ GET /api/auth/session 200 in 885ms
+ GET /api/auth/session 200 in 900ms
+ GET /api/auth/session 200 in 910ms
+ GET /api/auth/session 200 in 280ms
+ GET /api/auth/session 200 in 1078ms
+ GET /api/auth/session 200 in 156ms
+ GET /api/auth/session 200 in 1093ms
+ GET /api/auth/session 200 in 817ms
+ GET /api/auth/session 200 in 210ms
+ GET /api/auth/session 200 in 145ms
+ GET /api/auth/session 200 in 420ms
+ GET /api/auth/session 200 in 212ms
+ GET /api/auth/session 200 in 360ms
+ GET /api/auth/session 200 in 723ms
+ GET /api/auth/session 200 in 821ms
+ GET /api/auth/session 200 in 233ms
+ GET /api/auth/session 200 in 358ms
+ GET /api/auth/session 200 in 553ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 192ms
+ GET /api/auth/session 200 in 301ms
+ GET /api/auth/session 200 in 227ms
+ GET /api/auth/session 200 in 134ms
+ GET /api/auth/session 200 in 878ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 113ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 286ms
+ GET /api/auth/session 200 in 596ms
+ GET /api/auth/session 200 in 583ms
+ GET /api/auth/session 200 in 1682ms
+ GET /api/auth/session 200 in 532ms
+ GET /api/auth/session 200 in 593ms
+ GET /api/auth/session 200 in 540ms
+ GET /api/auth/session 200 in 444ms
+ GET /api/auth/session 200 in 782ms
+ GET /api/auth/session 200 in 392ms
+ GET /api/auth/session 200 in 1262ms
+ GET /api/auth/session 200 in 650ms
+ GET /api/auth/session 200 in 1867ms
+ ✓ Compiled in 103s (6675 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 11.3s (6747 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ GET /api/auth/session 500 in 286158ms
+ ○ Compiling /_error ...
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\1.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\1.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\3.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\4.pack.gz_' -> 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\cache\webpack\client-development-fallback\4.pack.gz'
+ ✓ Compiled /_error in 201.5s (6626 modules)
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\api\auth\[...nextauth]\route.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\app\\api\\auth\\[...nextauth]\\route.js',
+  page: '/api/auth/session'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 14.9s (6603 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /api/auth/session 500 in 648986ms
+ GET /api/auth/session 500 in 18342ms
+ GET /api/auth/session 500 in 676846ms
+ GET /api/auth/session 500 in 18342ms
+ GET /api/auth/session 500 in 676856ms
+ GET /api/auth/session 500 in 18340ms
+ GET /api/auth/session 500 in 714640ms
+ GET /api/auth/session 500 in 18340ms
+ GET /api/auth/session 500 in 645407ms
+ GET /api/auth/session 500 in 18340ms
+ GET /api/auth/session 500 in 648993ms
+ GET /api/auth/session 500 in 18340ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 17.2s (3648 modules)
+ ⨯ Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\vendor-chunks\lucide-react@0.511.0_react@19.2.8.js'
+    at <unknown> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1266:47)
+    at Object.<anonymous> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1269:3) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\vendor-chunks\\lucide-react@0.511.0_react@19.2.8.js',
+  page: '/session'
+}
+ ⨯ Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\vendor-chunks\lucide-react@0.511.0_react@19.2.8.js'
+    at <unknown> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1266:47)
+    at Object.<anonymous> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1269:3) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\vendor-chunks\\lucide-react@0.511.0_react@19.2.8.js',
+  page: '/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\vendor-chunks\lucide-react@0.511.0_react@19.2.8.js'
+    at <unknown> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1266:47)
+    at Object.<anonymous> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1269:3) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\vendor-chunks\\lucide-react@0.511.0_react@19.2.8.js',
+  page: '/session'
+}
+Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\vendor-chunks\lucide-react@0.511.0_react@19.2.8.js'
+    at <unknown> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1266:47)
+    at Object.<anonymous> (C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\app\(studentModule)\(app)\session\page.js:1269:3) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\vendor-chunks\\lucide-react@0.511.0_react@19.2.8.js',
+  page: '/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/auth/session'
+}
+ GET /session 500 in 86051ms
+ GET /session 500 in 39366ms
+ GET /session 500 in 86150ms
+ GET /session 500 in 39365ms
+ GET /api/auth/session 500 in 88121ms
+ GET /api/auth/session 500 in 2367ms
+ GET /api/auth/session 500 in 88121ms
+ GET /api/auth/session 500 in 2370ms
+ GET /api/auth/session 500 in 87908ms
+ GET /api/auth/session 500 in 2370ms
+ GET /api/auth/session 500 in 88110ms
+ GET /api/auth/session 500 in 2371ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 21.4s (3650 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 22274ms
+ ○ Compiling /teacher/bookings ...
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /teacher/bookings 500 in 103063ms
+ GET /teacher/bookings 500 in 553ms
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 4933ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /teacher/bookings 500 in 1945ms
+ GET /teacher/bookings 500 in 103ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 227ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /teacher/bookings 500 in 5171ms
+ GET /teacher/bookings 500 in 237ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 1066ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/teacher/bookings'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /teacher/bookings 500 in 4225ms
+ GET /teacher/bookings 500 in 330ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 1020ms
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/doc'
+}
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/doc'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /api/doc 500 in 69169ms
+ GET /api/doc 500 in 460ms
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 4848ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/doc'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/api/doc'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\server\\pages\\_document.js'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json'
+}
+ GET /api/doc 500 in 1444ms
+ GET /api/doc 500 in 242ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\routes-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\Admin\\Desktop\\revisonBe Safty\\Revision-Bee-HTML\\.next\\routes-manifest.json',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 985ms
+ ⚠ ./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
+
+./src/features/lessons/components/collaborative-whiteboard.tsx
+Attempted import error: 'RenderEngine' is not exported from '@netless/fastboard-react' (imported as 'RenderEngine').
+
+Import trace for requested module:
+./src/features/lessons/components/collaborative-whiteboard.tsx
+./src/features/lessons/components/lesson-session-page.tsx
 [?25h
+npm notice
+npm notice New major version of npm available! 10.9.2 -> 12.0.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.2
+npm notice To update run: npm install -g npm@12.0.2
+npm notice

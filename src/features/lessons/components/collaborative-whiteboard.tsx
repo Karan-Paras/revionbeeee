@@ -9,7 +9,7 @@ import { Fastboard, useFastboard } from "@netless/fastboard-react";
 
 import { AlertCircle, LoaderCircle, PenTool, RefreshCw, X } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CollaborativeWhiteboardProps = {
   lessonID: string | number;
@@ -48,13 +48,18 @@ function WhiteboardRoom({
       userPayload: {
         nickName: participantName,
       },
+      // Both lesson participants collaborate; an accidentally restrictive API
+      // flag must not disable the pencil and other editing tools.
       isWritable: true,
+      disableDeviceInputs: false,
     },
 
     managerConfig: {
       cursor: true,
     },
   }));
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [isContainerReady, setIsContainerReady] = useState(false);
   useEffect(() => {
     console.log("WHITEBOARD COMPONENT MOUNT", {
       roomUUID: credentials.roomUUID,
@@ -68,6 +73,66 @@ function WhiteboardRoom({
       });
     };
   }, [credentials.roomUUID, credentials.uid]);
+
+  useEffect(() => {
+    if (!app || !wrapRef.current) return;
+
+    const rect = wrapRef.current.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      setIsContainerReady(true);
+      return;
+    }
+
+    const checkTimer = window.setInterval(() => {
+      const currentRect = wrapRef.current?.getBoundingClientRect();
+      if (!wrapRef.current || !currentRect) return;
+      if (currentRect.width > 0 && currentRect.height > 0) {
+        window.clearInterval(checkTimer);
+        setIsContainerReady(true);
+      }
+    }, 50);
+
+    return () => window.clearInterval(checkTimer);
+  }, [app]);
+
+  useEffect(() => {
+    if (!app || !isContainerReady || !wrapRef.current) return;
+
+    let disposed = false;
+    let frame = 0;
+
+    const refreshBoardSize = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => app.room.refreshViewSize());
+    };
+
+    // The room can still become read-only if the server overrides the join
+    // preference. Ask the SDK for write access again and surface a real error
+    // instead of leaving apparently clickable but ineffective tools onscreen.
+    void (async () => {
+      try {
+        if (!app.room.isWritable) await app.room.setWritable(true);
+        if (!disposed) refreshBoardSize();
+      } catch {
+        if (!disposed) {
+          onError(
+            "This whiteboard session is read-only. Please refresh the lesson or ask the server administrator to issue a writable room token."
+          );
+        }
+      }
+    })();
+
+    const resizeObserver = new ResizeObserver(refreshBoardSize);
+    resizeObserver.observe(wrapRef.current);
+    const refreshTimer = window.setTimeout(refreshBoardSize, 250);
+
+    return () => {
+      disposed = true;
+      resizeObserver.disconnect();
+      window.clearTimeout(refreshTimer);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [app, isContainerReady, onError]);
 
   console.log("WHITEBOARD RENDER", {
     hasApp: !!app,
@@ -83,8 +148,8 @@ function WhiteboardRoom({
   }
 
   return (
-    <div className="relative h-full w-full min-h-[500px]">
-      <Fastboard app={app} />
+    <div ref={wrapRef} className="relative h-full w-full min-h-[500px]">
+      {isContainerReady && <Fastboard app={app} />}
     </div>
   );
 }
@@ -240,10 +305,6 @@ export function CollaborativeWhiteboard({
           flex-1
           overflow-hidden
         "
-        style={{
-          height: "calc(100vh - 56px)",
-          pointerEvents: "auto",
-        }}
       >
         {error ? (
           /* =================================================

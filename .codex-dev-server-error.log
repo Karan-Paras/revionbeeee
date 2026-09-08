@@ -1,0 +1,78 @@
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+connect EACCES 142.250.118.95:443
+
+Retrying 1/3...
+connect EACCES 142.250.118.95:443
+
+Retrying 1/3...
+connect EACCES 142.250.118.95:443
+
+Retrying 2/3...
+connect EACCES 142.250.118.95:443
+
+Retrying 2/3...
+connect EACCES 142.250.118.95:443
+
+Retrying 3/3...
+connect EACCES 142.250.118.95:443
+
+Retrying 3/3...
+Error: connect EACCES 142.250.118.95:443
+    at <unknown> (Error: connect EACCES 142.250.118.95:443) {
+  errno: -4092,
+  code: 'EACCES',
+  syscall: 'connect',
+  address: '142.250.118.95',
+  port: 443
+}
+ ⨯ Failed to download `Sora` from Google Fonts. Using fallback font instead.
+
+Failed to fetch `Sora` from Google Fonts.}
+Error: connect EACCES 142.250.118.95:443
+    at <unknown> (Error: connect EACCES 142.250.118.95:443) {
+  errno: -4092,
+  code: 'EACCES',
+  syscall: 'connect',
+  address: '142.250.118.95',
+  port: 443
+}
+ ⨯ Failed to download `Noto Color Emoji` from Google Fonts. Using fallback font instead.
+
+Failed to fetch `Noto Color Emoji` from Google Fonts.}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+Unable to preload subjects on the server: Error: Unable to connect to the API endpoint /topic/list. Check the backend server and API URL configuration.
+    at fetchServer (src\lib\fetch-server.ts:99:13)
+    at async getSubjectsOnServer (src\features\subjects\api\get-subjects-on-server.ts:7:10)
+    at async SubjectsList (src\app\(studentModule)\(home)\select-subjects.tsx:11:22)
+   97 |
+   98 |     if (isNetworkError) {
+>  99 |       throw new Error(
+      |             ^
+  100 |         `Unable to connect to the API endpoint ${apiPath}. Check the backend server and API URL configuration.`
+  101 |       );
+  102 |     }
+Unable to preload subjects on the server: Error: Unable to connect to the API endpoint /topic/list. Check the backend server and API URL configuration.
+    at fetchServer (src\lib\fetch-server.ts:99:13)
+    at async getSubjectsOnServer (src\features\subjects\api\get-subjects-on-server.ts:7:10)
+    at async SubjectsList (src\app\(studentModule)\(home)\select-subjects.tsx:11:22)
+   97 |
+   98 |     if (isNetworkError) {
+>  99 |       throw new Error(
+      |             ^
+  100 |         `Unable to connect to the API endpoint ${apiPath}. Check the backend server and API URL configuration.`
+  101 |       );
+  102 |     }
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: Unable to snapshot resolve dependencies
+Unable to preload subjects on the server: Error: Unable to connect to the API endpoint /topic/list. Check the backend server and API URL configuration.
+    at fetchServer (src\lib\fetch-server.ts:99:13)
+    at async getSubjectsOnServer (src\features\subjects\api\get-subjects-on-server.ts:7:10)
+    at async SubjectsList (src\app\(studentModule)\(home)\select-subjects.tsx:11:22)
+   97 |
+   98 |     if (isNetworkError) {
+>  99 |       throw new Error(
+      |             ^
+  100 |         `Unable to connect to the API endpoint ${apiPath}. Check the backend server and API URL configuration.`
+  101 |       );
+  102 |     }
