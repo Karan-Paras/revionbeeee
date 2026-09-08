@@ -152,6 +152,7 @@ export default function TeacherBookingsPage() {
         JSON.stringify({
           ...credentials,
           expiresAt: Date.now() + credentials.expiresIn * 1000,
+          sessionRole: "teacher",
         })
       );
       router.push("/teacher/session");

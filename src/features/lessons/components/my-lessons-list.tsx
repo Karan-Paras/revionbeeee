@@ -7,6 +7,10 @@ import {
 } from "@/features/lessons/api/get-my-bookings";
 import { joinLessonSession } from "@/features/lessons/api/join-session";
 import { payForLesson } from "@/features/lessons/api/pay-for-lesson";
+import {
+  activeLessonSessionReadyEvent,
+  activeLessonSessionStorageKey,
+} from "@/features/lessons/components/active-lesson-session-guard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CheckCircle2,
@@ -170,15 +174,13 @@ export function MyLessonsList() {
       const storedSession = JSON.stringify({
         ...credentials,
         expiresAt: Date.now() + credentials.expiresIn * 1000,
+        sessionRole: "student",
       });
 
       try {
-        sessionStorage.setItem(
-          "revision-bee:active-lesson-session",
-          storedSession
-        );
+        sessionStorage.setItem(activeLessonSessionStorageKey, storedSession);
         if (
-          sessionStorage.getItem("revision-bee:active-lesson-session") !==
+          sessionStorage.getItem(activeLessonSessionStorageKey) !==
           storedSession
         ) {
           throw new Error("Session storage verification failed.");
@@ -198,7 +200,20 @@ export function MyLessonsList() {
         saveCachedUpcomingLessons(next);
         return next;
       });
-      window.location.assign("/session");
+
+      window.dispatchEvent(new Event(activeLessonSessionReadyEvent));
+      const navigationFallback = window.setTimeout(() => {
+        if (window.location.pathname !== "/session") {
+          window.location.replace("/session");
+        }
+      }, 1_200);
+
+      try {
+        window.location.assign("/session");
+      } catch {
+        window.clearTimeout(navigationFallback);
+        window.location.replace("/session");
+      }
     },
     onError: (error) => toast.error(error.message),
   });
@@ -247,13 +262,11 @@ export function MyLessonsList() {
   const fetchedLessonIds = new Set(
     fetchedLessons.map((lesson) => String(lesson.paymentLessonID))
   );
-  const retainedUpcomingLessons = cachedUpcomingLessons
-    .filter(
-      (lesson) =>
-        !fetchedLessonIds.has(String(lesson.paymentLessonID)) &&
-        !cancelledLessonIds.has(String(lesson.paymentLessonID))
-    )
-    .map((lesson) => ({ ...lesson, joinNow: true }));
+  const retainedUpcomingLessons = cachedUpcomingLessons.filter(
+    (lesson) =>
+      !fetchedLessonIds.has(String(lesson.paymentLessonID)) &&
+      !cancelledLessonIds.has(String(lesson.paymentLessonID))
+  );
   const lessons =
     activeTab === "upcoming" && !query.trim()
       ? [...fetchedLessons, ...retainedUpcomingLessons]
@@ -396,10 +409,15 @@ export function MyLessonsList() {
                 {activeTab === "upcoming" && (
                   <button
                     type="button"
-                    disabled={!lesson.joinNow || joinSession.isPending}
+                    disabled={lesson.joinNow !== true || joinSession.isPending}
+                    title={
+                      lesson.joinNow
+                        ? "Join lesson"
+                        : "The lesson is not open for joining yet"
+                    }
                     onClick={() => joinSession.mutate(lesson.paymentLessonID)}
                     className={`mt-4 flex h-10 w-full items-center justify-center rounded-lg text-xs font-semibold transition ${
-                      lesson.joinNow && !joinSession.isPending
+                      lesson.joinNow === true && !joinSession.isPending
                         ? "bg-[#53a2eb] text-white hover:bg-[#398fdc]"
                         : "cursor-not-allowed bg-[#53a2eb]/35 text-white/80"
                     }`}
