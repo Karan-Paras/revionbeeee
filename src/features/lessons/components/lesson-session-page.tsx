@@ -57,6 +57,16 @@ type StoredSession = LessonSessionCredentials & {
 const sessionStorageKey = "revision-bee:active-lesson-session";
 const whiteboardMessageType = "revision-bee:whiteboard-state";
 
+// sendStreamMessage is a real (undocumented) Agora Web SDK method but is not
+// exposed in the public type definitions. Extend the client type so builds
+// succeed while keeping the runtime API intact.
+type AgoraRTCClientWithDataStream = IAgoraRTCClient & {
+  sendStreamMessage(
+    data: string | Uint8Array,
+    reliable?: boolean
+  ): Promise<void>;
+};
+
 function readSession(): StoredSession | null {
   try {
     const value = sessionStorage.getItem(sessionStorageKey);
@@ -125,7 +135,7 @@ export function LessonSessionPage() {
   const returnPath = isStudentSession ? "/my-lessons" : "/teacher/bookings";
   const remoteParticipant = isStudentSession ? "teacher" : "student";
   const localParticipant = isStudentSession ? "Student" : "Teacher";
-  const clientRef = useRef<IAgoraRTCClient | null>(null);
+  const clientRef = useRef<AgoraRTCClientWithDataStream | null>(null);
   const audioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const videoTrackRef = useRef<ICameraVideoTrack | null>(null);
   const remoteVideoTracksRef = useRef(new Map<UID, IRemoteVideoTrack>());
@@ -204,7 +214,10 @@ export function LessonSessionPage() {
         // Connection/device failures are surfaced through the call UI. Keep
         // Agora's handled internal retries from appearing as console errors.
         AgoraRTC.setLogLevel(4);
-        const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+        const client = AgoraRTC.createClient({
+          mode: "rtc",
+          codec: "vp8",
+        }) as AgoraRTCClientWithDataStream;
         clientRef.current = client;
 
         const renewSessionToken = async () => {

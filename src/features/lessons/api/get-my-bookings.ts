@@ -18,6 +18,8 @@ export type MyBooking = {
   isOnline: boolean;
   subject: string;
   sessionDate: string;
+  sessionStartTime: string;
+  sessionEndTime: string;
   sessionTime: string;
   bookingType: string;
   durationMinutes: number;
@@ -264,6 +266,8 @@ export async function getMyBookings(
         "General lesson",
       sessionDate:
         text(session, "date", "scheduledDate", "scheduled_date") || "—",
+      sessionStartTime: startTime,
+      sessionEndTime: endTime,
       sessionTime: startTime
         ? `${formatTime(startTime)}${endTime ? ` – ${formatTime(endTime)}` : ""}`
         : "—",

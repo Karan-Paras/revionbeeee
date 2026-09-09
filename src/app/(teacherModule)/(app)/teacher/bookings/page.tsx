@@ -96,7 +96,7 @@ function getSessionUtcTimeRange(booking: TeacherBooking): {
 
   const startHour = Math.floor(startMinutes / 60);
   const startMin = startMinutes % 60;
-  const startMs = new Date(
+  const startMs = Date.UTC(
     dateParts.year,
     dateParts.month - 1,
     dateParts.day,
@@ -104,38 +104,29 @@ function getSessionUtcTimeRange(booking: TeacherBooking): {
     startMin,
     0,
     0
-  ).getTime();
+  );
 
   let endMs: number;
   if (endMinutes < startMinutes) {
-    const nextDay = new Date(
+    endMs = Date.UTC(
       dateParts.year,
       dateParts.month - 1,
-      dateParts.day + 1
-    );
-    const endHour = Math.floor(endMinutes / 60);
-    const endMin = endMinutes % 60;
-    endMs = new Date(
-      nextDay.getFullYear(),
-      nextDay.getMonth(),
-      nextDay.getDate(),
-      endHour,
-      endMin,
+      dateParts.day + 1,
+      Math.floor(endMinutes / 60),
+      endMinutes % 60,
       59,
       999
-    ).getTime();
+    );
   } else {
-    const endHour = Math.floor(endMinutes / 60);
-    const endMin = endMinutes % 60;
-    endMs = new Date(
+    endMs = Date.UTC(
       dateParts.year,
       dateParts.month - 1,
       dateParts.day,
-      endHour,
-      endMin,
+      Math.floor(endMinutes / 60),
+      endMinutes % 60,
       59,
       999
-    ).getTime();
+    );
   }
 
   return { startMs, endMs };

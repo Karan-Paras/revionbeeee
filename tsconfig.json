@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "emoji-scanner.js"
+    "emoji-scanner.js",
+    ".next-dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

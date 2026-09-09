@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
-const nextConfig: NextConfig = {
+const createNextConfig = (phase: string): NextConfig => ({
   /* config options here */
+  distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
   webpack(config, { webpack }) {
     // white-web-sdk probes this optional local-log package at runtime and
     // safely falls back when it is unavailable. Ignoring it here prevents
@@ -29,6 +31,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10gb",
     },
   },
-};
+});
 
-export default nextConfig;
+export default createNextConfig;

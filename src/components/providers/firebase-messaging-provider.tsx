@@ -1,39 +1,68 @@
 "use client";
 
-import { listenForForegroundMessages } from "@/lib/firebase";
-import { useEffect } from "react";
+import { FIREBASE_MESSAGING_READY_EVENT } from "@/lib/firebase-messaging-events";
+import type { MessagePayload, Unsubscribe } from "firebase/messaging";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
+function canListenForMessages() {
+  return "Notification" in window && Notification.permission === "granted";
+}
+
+function showForegroundMessage(payload: MessagePayload) {
+  const title = payload.notification?.title ?? "Revision Bee";
+  const description =
+    payload.notification?.body ?? payload.data?.body ?? "New notification";
+  const link = payload.fcmOptions?.link ?? payload.data?.link;
+
+  toast(title, {
+    description,
+    ...(link
+      ? {
+          action: {
+            label: "Open",
+            onClick: () => window.location.assign(link),
+          },
+        }
+      : {}),
+  });
+}
+
 export function FirebaseMessagingProvider() {
+  const unsubscribeRef = useRef<Unsubscribe | undefined>(undefined);
+
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
+    let isMounted = true;
 
-    listenForForegroundMessages((payload) => {
-      const title = payload.notification?.title ?? "Revision Bee";
-      const description =
-        payload.notification?.body ?? payload.data?.body ?? "New notification";
-      const link = payload.fcmOptions?.link ?? payload.data?.link;
+    async function startListening() {
+      if (!canListenForMessages() || unsubscribeRef.current) return;
 
-      toast(title, {
-        description,
-        ...(link
-          ? {
-              action: {
-                label: "Open",
-                onClick: () => window.location.assign(link),
-              },
-            }
-          : {}),
-      });
-    })
-      .then((cleanup) => {
-        unsubscribe = cleanup;
-      })
-      .catch((error) => {
+      try {
+        const { listenForForegroundMessages } = await import("@/lib/firebase");
+        if (!isMounted || !canListenForMessages() || unsubscribeRef.current) {
+          return;
+        }
+
+        unsubscribeRef.current = await listenForForegroundMessages(
+          showForegroundMessage
+        );
+      } catch (error) {
         console.error("Unable to initialize Firebase messaging", error);
-      });
+      }
+    }
 
-    return () => unsubscribe?.();
+    void startListening();
+    window.addEventListener(FIREBASE_MESSAGING_READY_EVENT, startListening);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(
+        FIREBASE_MESSAGING_READY_EVENT,
+        startListening
+      );
+      unsubscribeRef.current?.();
+      unsubscribeRef.current = undefined;
+    };
   }, []);
 
   return null;

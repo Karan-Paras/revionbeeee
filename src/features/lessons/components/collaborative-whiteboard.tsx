@@ -60,39 +60,56 @@ function WhiteboardRoom({
   }));
   const wrapRef = useRef<HTMLDivElement>(null);
   const [isContainerReady, setIsContainerReady] = useState(false);
-  useEffect(() => {
-    console.log("WHITEBOARD COMPONENT MOUNT", {
-      roomUUID: credentials.roomUUID,
-      uid: credentials.uid,
-    });
-
-    return () => {
-      console.log("WHITEBOARD COMPONENT UNMOUNT", {
-        roomUUID: credentials.roomUUID,
-        uid: credentials.uid,
-      });
-    };
-  }, [credentials.roomUUID, credentials.uid]);
+  const [isRoomConnected, setIsRoomConnected] = useState(false);
 
   useEffect(() => {
     if (!app || !wrapRef.current) return;
 
-    const rect = wrapRef.current.getBoundingClientRect();
-    if (rect.width > 0 && rect.height > 0) {
-      setIsContainerReady(true);
-      return;
-    }
+    const el = wrapRef.current;
+    let rafId = 0;
 
-    const checkTimer = window.setInterval(() => {
-      const currentRect = wrapRef.current?.getBoundingClientRect();
-      if (!wrapRef.current || !currentRect) return;
-      if (currentRect.width > 0 && currentRect.height > 0) {
-        window.clearInterval(checkTimer);
-        setIsContainerReady(true);
+    const checkDimensions = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        // rAF ensures the browser has computed layout before the
+        // <Fastboard> component's own useIsomorphicLayoutEffect fires.
+        rafId = requestAnimationFrame(() => {
+          setIsContainerReady(true);
+          observer.disconnect();
+        });
       }
-    }, 50);
+    };
 
-    return () => window.clearInterval(checkTimer);
+    const observer = new ResizeObserver(checkDimensions);
+    observer.observe(el);
+
+    // Kick off an immediate check in case the element already has dimensions.
+    checkDimensions();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
+  }, [app]);
+
+  useEffect(() => {
+    if (!app) return;
+
+    // WindowManager.bindContainer throws "room phase only Connected can be
+    // bindContainer" until the whiteboard room reaches the "connected" phase.
+    // Only mount <Fastboard> once the room is actually connected, otherwise
+    // it binds too early and errors out.
+    let active = true;
+    setIsRoomConnected(app.phase.value === "connected");
+
+    const unsubscribe = app.phase.subscribe((phase) => {
+      if (active) setIsRoomConnected(phase === "connected");
+    });
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, [app]);
 
   useEffect(() => {
@@ -134,11 +151,6 @@ function WhiteboardRoom({
     };
   }, [app, isContainerReady, onError]);
 
-  console.log("WHITEBOARD RENDER", {
-    hasApp: !!app,
-    roomUUID: credentials.roomUUID,
-  });
-
   if (!app) {
     return (
       <div className="grid h-full place-items-center">
@@ -148,8 +160,26 @@ function WhiteboardRoom({
   }
 
   return (
-    <div ref={wrapRef} className="relative h-full w-full min-h-[500px]">
-      {isContainerReady && <Fastboard app={app} />}
+    <div
+      ref={wrapRef}
+      className="relative h-full w-full min-h-[500px]"
+      style={{ height: "100%", width: "100%" }}
+    >
+      {isContainerReady && isRoomConnected ? (
+        <Fastboard app={app} />
+      ) : (
+        <div className="grid h-full w-full place-items-center text-slate-500">
+          <div className="text-center">
+            <LoaderCircle
+              className="mx-auto animate-spin text-[#348edc]"
+              size={24}
+            />
+            <p className="mt-2 text-sm font-medium">
+              Connecting to whiteboard...
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
