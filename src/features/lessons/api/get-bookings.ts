@@ -236,6 +236,7 @@ export async function getBookings(
       ) || addMinutes(startTime, duration);
     const image = text(
       person,
+      "profilePhoto",
       "profileImage",
       "profile_image",
       "profilePicture",

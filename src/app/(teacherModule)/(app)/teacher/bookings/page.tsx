@@ -146,8 +146,15 @@ function isSessionActiveNow(
   const range = getSessionUtcTimeRange(booking);
   if (!range) return false;
 
+  // Allow joining 15 minutes before scheduled start time.
+  const EARLY_JOIN_MS = 15 * 60 * 1000;
+  // Keep the button active for 2 hours after the scheduled end time
+  // (covers overruns and cases where the teacher is slightly late).
+  const LATE_JOIN_MS = 2 * 60 * 60 * 1000;
+
   return (
-    currentTimestampMs >= range.startMs && currentTimestampMs <= range.endMs
+    currentTimestampMs >= range.startMs - EARLY_JOIN_MS &&
+    currentTimestampMs <= range.endMs + LATE_JOIN_MS
   );
 }
 
