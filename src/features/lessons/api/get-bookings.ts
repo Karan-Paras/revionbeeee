@@ -260,6 +260,19 @@ export async function getBookings(
       "paymentTime",
       "payment_time"
     );
+    const hasPaidStatus =
+      booking.isPaid === true ||
+      booking.is_paid === true ||
+      booking.isPaid === 1 ||
+      booking.is_paid === 1 ||
+      ["paid", "completed", "success"].includes(
+        text(
+          booking,
+          "paymentStatus",
+          "payment_status",
+          "payment_state"
+        ).toLowerCase()
+      );
 
     const bookingID =
       text(booking, "id", "bookingID", "bookingId", "booking_id") || index;
@@ -322,7 +335,11 @@ export async function getBookings(
         rawAmount && Number.isFinite(numericAmount)
           ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
           : rawAmount || "—",
-      paidAt: rawPaidAt ? formatDateTime(rawPaidAt) : undefined,
+      paidAt: rawPaidAt
+        ? formatDateTime(rawPaidAt)
+        : hasPaidStatus
+          ? "Paid"
+          : undefined,
     };
   });
 }

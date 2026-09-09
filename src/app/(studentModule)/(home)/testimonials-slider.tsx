@@ -2,10 +2,13 @@
 
 import { Camille, Jisso, Yara } from "@/assets/images";
 import Image from "next/image";
-import Slider from "react-slick";
+import type { ComponentType } from "react";
+import Slider, { type Settings } from "react-slick";
 
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+
+const SlickSlider = Slider as unknown as ComponentType<Settings>;
 
 export function TestimonialsSlider() {
   const settings = {
@@ -51,7 +54,7 @@ export function TestimonialsSlider() {
   };
   return (
     <div className="w-full xl:ml-[10%]">
-      <Slider {...settings}>
+      <SlickSlider {...settings}>
         <div className="item p-3">
           <Image src={Yara} alt="" />
         </div>
@@ -62,7 +65,7 @@ export function TestimonialsSlider() {
         <div className="item p-3">
           <Image src={Jisso} alt="" />
         </div>
-      </Slider>
+      </SlickSlider>
     </div>
   );
 }

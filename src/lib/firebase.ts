@@ -7,8 +7,10 @@ import {
   isSupported,
   onMessage,
   type MessagePayload,
+  type Messaging,
   type Unsubscribe,
 } from "firebase/messaging";
+import { FIREBASE_MESSAGING_READY_EVENT } from "./firebase-messaging-events";
 
 export const DEVICE_TOKEN_STORAGE_KEY = "revision-bee-device-token";
 
@@ -24,16 +26,34 @@ const firebaseConfig = {
 
 const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-async function getMessagingRegistration() {
-  if (!(await isSupported()) || !("serviceWorker" in navigator)) return;
+type MessagingRegistration = {
+  messaging: Messaging;
+  serviceWorkerRegistration: ServiceWorkerRegistration;
+};
 
-  const serviceWorkerRegistration = await navigator.serviceWorker.register(
-    "/firebase-messaging-sw.js"
-  );
-  return {
-    messaging: getMessaging(firebaseApp),
-    serviceWorkerRegistration,
-  };
+let messagingRegistrationPromise:
+  | Promise<MessagingRegistration | undefined>
+  | undefined;
+
+async function getMessagingRegistration() {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+
+  messagingRegistrationPromise ??= (async () => {
+    if (!(await isSupported())) return;
+
+    const serviceWorkerRegistration = await navigator.serviceWorker.register(
+      "/firebase-messaging-sw.js"
+    );
+    return {
+      messaging: getMessaging(firebaseApp),
+      serviceWorkerRegistration,
+    };
+  })().catch((error) => {
+    messagingRegistrationPromise = undefined;
+    throw error;
+  });
+
+  return messagingRegistrationPromise;
 }
 
 export async function getFirebaseDeviceToken(requestPermission = false) {
@@ -54,6 +74,7 @@ export async function getFirebaseDeviceToken(requestPermission = false) {
 
   if (token) {
     localStorage.setItem(DEVICE_TOKEN_STORAGE_KEY, token);
+    window.dispatchEvent(new Event(FIREBASE_MESSAGING_READY_EVENT));
     return token;
   }
 }

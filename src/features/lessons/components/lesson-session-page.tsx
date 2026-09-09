@@ -55,6 +55,17 @@ type StoredSession = LessonSessionCredentials & {
 };
 
 const sessionStorageKey = "revision-bee:active-lesson-session";
+const whiteboardMessageType = "revision-bee:whiteboard-state";
+
+// sendStreamMessage is a real (undocumented) Agora Web SDK method but is not
+// exposed in the public type definitions. Extend the client type so builds
+// succeed while keeping the runtime API intact.
+type AgoraRTCClientWithDataStream = IAgoraRTCClient & {
+  sendStreamMessage(
+    data: string | Uint8Array,
+    reliable?: boolean
+  ): Promise<void>;
+};
 
 function readSession(): StoredSession | null {
   try {
@@ -124,7 +135,7 @@ export function LessonSessionPage() {
   const returnPath = isStudentSession ? "/my-lessons" : "/teacher/bookings";
   const remoteParticipant = isStudentSession ? "teacher" : "student";
   const localParticipant = isStudentSession ? "Student" : "Teacher";
-  const clientRef = useRef<IAgoraRTCClient | null>(null);
+  const clientRef = useRef<AgoraRTCClientWithDataStream | null>(null);
   const audioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const videoTrackRef = useRef<ICameraVideoTrack | null>(null);
   const remoteVideoTracksRef = useRef(new Map<UID, IRemoteVideoTrack>());
@@ -137,6 +148,7 @@ export function LessonSessionPage() {
     offsetY: number;
   } | null>(null);
   const isEndingRef = useRef(false);
+  const isWhiteboardOpenRef = useRef(false);
   const [isJoining, setIsJoining] = useState(true);
   const [isLeaving, setIsLeaving] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -164,6 +176,10 @@ export function LessonSessionPage() {
     x: number;
     y: number;
   } | null>(null);
+
+  useEffect(() => {
+    isWhiteboardOpenRef.current = isWhiteboardOpen;
+  }, [isWhiteboardOpen]);
 
   useEffect(() => {
     let disposed = false;
@@ -198,7 +214,10 @@ export function LessonSessionPage() {
         // Connection/device failures are surfaced through the call UI. Keep
         // Agora's handled internal retries from appearing as console errors.
         AgoraRTC.setLogLevel(4);
-        const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+        const client = AgoraRTC.createClient({
+          mode: "rtc",
+          codec: "vp8",
+        }) as AgoraRTCClientWithDataStream;
         clientRef.current = client;
 
         const renewSessionToken = async () => {
@@ -455,6 +474,39 @@ export function LessonSessionPage() {
         client.on("user-joined", (user) => {
           if (disposed) return;
           markRemoteParticipantJoined(user.uid);
+
+          // A participant who joins after the board was opened also needs the
+          // current UI state. Netless handles the actual drawing sync.
+          if (isWhiteboardOpenRef.current) {
+            void client
+              .sendStreamMessage(
+                JSON.stringify({ type: whiteboardMessageType, open: true }),
+                true
+              )
+              .catch(() => undefined);
+          }
+        });
+        client.on("stream-message", (_uid, payload) => {
+          if (disposed) return;
+
+          try {
+            const message = JSON.parse(
+              typeof payload === "string"
+                ? payload
+                : new TextDecoder().decode(payload)
+            ) as { type?: unknown; open?: unknown };
+
+            if (
+              message.type === whiteboardMessageType &&
+              typeof message.open === "boolean"
+            ) {
+              isWhiteboardOpenRef.current = message.open;
+              setIsWhiteboardOpen(message.open);
+              if (message.open) setIsMinimized(false);
+            }
+          } catch {
+            // Ignore unrelated or malformed data-stream messages.
+          }
         });
         client.on("user-unpublished", (user, mediaType) => {
           if (disposed) return;
@@ -822,13 +874,26 @@ export function LessonSessionPage() {
     }
   }
 
-  function toggleWhiteboard() {
+  async function toggleWhiteboard() {
     if (activeLessonID === null) {
       toast.error("Lesson session is still connecting. Please try again.");
       return;
     }
 
-    setIsWhiteboardOpen((current) => !current);
+    const open = !isWhiteboardOpenRef.current;
+    isWhiteboardOpenRef.current = open;
+    setIsWhiteboardOpen(open);
+
+    try {
+      await clientRef.current?.sendStreamMessage(
+        JSON.stringify({ type: whiteboardMessageType, open }),
+        true
+      );
+    } catch {
+      toast.warning(
+        "Whiteboard opened here, but the other participant may need to open it manually."
+      );
+    }
   }
 
   async function dockCall(side: "left" | "right") {
@@ -1071,7 +1136,7 @@ export function LessonSessionPage() {
             <CollaborativeWhiteboard
               lessonID={activeLessonID}
               participantName={localParticipant}
-              onClose={() => setIsWhiteboardOpen(false)}
+              onClose={() => void toggleWhiteboard()}
             />
           )}
 

@@ -1,0 +1,35 @@
+
+> revision-bee@0.1.0 dev
+> next dev --port 3000
+
+   ▲ Next.js 15.5.25
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.67.154:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+ ✓ Ready in 4.5s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 3.4s (239 modules)
+ ✓ Compiled in 158ms (239 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 45.1s (3526 modules)
+ ✓ Compiled in 1245ms (1872 modules)
+ GET / 200 in 50899ms
+ GET / 200 in 11683ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.1s (1877 modules)
+ ✓ Compiled in 2.7s (1328 modules)
+ GET /favicon.ico 200 in 7704ms
+ GET / 200 in 1107ms
+ GET /api/auth/session 200 in 10373ms
+ GET /api/auth/session 200 in 338ms
+ GET /api/auth/session 200 in 289ms
+ GET /api/auth/session 200 in 178ms
+ GET /api/auth/session 200 in 153ms
+ GET /api/auth/session 200 in 147ms
+ GET /api/auth/session 200 in 155ms
+ GET /api/auth/session 200 in 237ms
+[?25h

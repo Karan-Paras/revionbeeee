@@ -1,0 +1,45 @@
+
+> revision-bee@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.25
+   - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2.3min
+   Linting and checking validity of types ...
+
+./src/app/(teacherModule)/(app)/teacher/bookings/page.tsx
+190:10  Warning: 'nowUtc' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/(teacherModule)/(app)/teacher/profile/page.tsx
+288:6  Warning: React Hook useEffect has a missing dependency: 'session?.user?.email'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/(teacherModule)/components/teacher-navbar.tsx
+126:6  Warning: React Hook useEffect has a missing dependency: 'session?.user?.email'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/63) ...
+Error occurred prerendering page "/404". Read more: https://nextjs.org/docs/messages/prerender-error
+[Error: Cannot find module './5611.js'
+Require stack:
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\webpack-runtime.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\.next\server\pages\_document.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\node_modules\next\dist\server\require.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\node_modules\next\dist\server\load-components.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\node_modules\next\dist\build\utils.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\node_modules\next\dist\build\worker.js
+- C:\Users\Admin\Desktop\revisonBe Safty\Revision-Bee-HTML\node_modules\next\dist\compiled\jest-worker\processChild.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+Export encountered an error on /_error: /404, exiting the build.
+Error occurred prerendering page "/subjects". Read more: https://nextjs.org/docs/messages/prerender-error
+[Error [PageNotFoundError]: Cannot find module for page: /(studentModule)/(app)/subjects/page] {
+  code: 'ENOENT'
+}
+Export encountered an error on /(studentModule)/(app)/subjects/page: /subjects, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null

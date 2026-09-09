@@ -9,7 +9,7 @@ import { Fastboard, useFastboard } from "@netless/fastboard-react";
 
 import { AlertCircle, LoaderCircle, PenTool, RefreshCw, X } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CollaborativeWhiteboardProps = {
   lessonID: string | number;
@@ -48,31 +48,108 @@ function WhiteboardRoom({
       userPayload: {
         nickName: participantName,
       },
+      // Both lesson participants collaborate; an accidentally restrictive API
+      // flag must not disable the pencil and other editing tools.
       isWritable: true,
+      disableDeviceInputs: false,
     },
 
     managerConfig: {
       cursor: true,
     },
   }));
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [isContainerReady, setIsContainerReady] = useState(false);
+  const [isRoomConnected, setIsRoomConnected] = useState(false);
+
   useEffect(() => {
-    console.log("WHITEBOARD COMPONENT MOUNT", {
-      roomUUID: credentials.roomUUID,
-      uid: credentials.uid,
+    if (!app || !wrapRef.current) return;
+
+    const el = wrapRef.current;
+    let rafId = 0;
+
+    const checkDimensions = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        // rAF ensures the browser has computed layout before the
+        // <Fastboard> component's own useIsomorphicLayoutEffect fires.
+        rafId = requestAnimationFrame(() => {
+          setIsContainerReady(true);
+          observer.disconnect();
+        });
+      }
+    };
+
+    const observer = new ResizeObserver(checkDimensions);
+    observer.observe(el);
+
+    // Kick off an immediate check in case the element already has dimensions.
+    checkDimensions();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
+  }, [app]);
+
+  useEffect(() => {
+    if (!app) return;
+
+    // WindowManager.bindContainer throws "room phase only Connected can be
+    // bindContainer" until the whiteboard room reaches the "connected" phase.
+    // Only mount <Fastboard> once the room is actually connected, otherwise
+    // it binds too early and errors out.
+    let active = true;
+    setIsRoomConnected(app.phase.value === "connected");
+
+    const unsubscribe = app.phase.subscribe((phase) => {
+      if (active) setIsRoomConnected(phase === "connected");
     });
 
     return () => {
-      console.log("WHITEBOARD COMPONENT UNMOUNT", {
-        roomUUID: credentials.roomUUID,
-        uid: credentials.uid,
-      });
+      active = false;
+      unsubscribe();
     };
-  }, [credentials.roomUUID, credentials.uid]);
+  }, [app]);
 
-  console.log("WHITEBOARD RENDER", {
-    hasApp: !!app,
-    roomUUID: credentials.roomUUID,
-  });
+  useEffect(() => {
+    if (!app || !isContainerReady || !wrapRef.current) return;
+
+    let disposed = false;
+    let frame = 0;
+
+    const refreshBoardSize = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => app.room.refreshViewSize());
+    };
+
+    // The room can still become read-only if the server overrides the join
+    // preference. Ask the SDK for write access again and surface a real error
+    // instead of leaving apparently clickable but ineffective tools onscreen.
+    void (async () => {
+      try {
+        if (!app.room.isWritable) await app.room.setWritable(true);
+        if (!disposed) refreshBoardSize();
+      } catch {
+        if (!disposed) {
+          onError(
+            "This whiteboard session is read-only. Please refresh the lesson or ask the server administrator to issue a writable room token."
+          );
+        }
+      }
+    })();
+
+    const resizeObserver = new ResizeObserver(refreshBoardSize);
+    resizeObserver.observe(wrapRef.current);
+    const refreshTimer = window.setTimeout(refreshBoardSize, 250);
+
+    return () => {
+      disposed = true;
+      resizeObserver.disconnect();
+      window.clearTimeout(refreshTimer);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [app, isContainerReady, onError]);
 
   if (!app) {
     return (
@@ -83,8 +160,26 @@ function WhiteboardRoom({
   }
 
   return (
-    <div className="relative h-full w-full min-h-[500px]">
-      <Fastboard app={app} />
+    <div
+      ref={wrapRef}
+      className="relative h-full w-full min-h-[500px]"
+      style={{ height: "100%", width: "100%" }}
+    >
+      {isContainerReady && isRoomConnected ? (
+        <Fastboard app={app} />
+      ) : (
+        <div className="grid h-full w-full place-items-center text-slate-500">
+          <div className="text-center">
+            <LoaderCircle
+              className="mx-auto animate-spin text-[#348edc]"
+              size={24}
+            />
+            <p className="mt-2 text-sm font-medium">
+              Connecting to whiteboard...
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -240,10 +335,6 @@ export function CollaborativeWhiteboard({
           flex-1
           overflow-hidden
         "
-        style={{
-          height: "calc(100vh - 56px)",
-          pointerEvents: "auto",
-        }}
       >
         {error ? (
           /* =================================================
