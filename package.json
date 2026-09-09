@@ -5,7 +5,7 @@
   "packageManager": "npm@10.9.2",
   "scripts": {
     "preinstall": "node scripts/enforce-npm.mjs",
-    "dev": "node scripts/with-canonical-cwd.mjs next dev --port 3000",
+    "dev": "node scripts/with-canonical-cwd.mjs next dev --turbopack --port 3000",
     "build": "node scripts/with-canonical-cwd.mjs next build",
     "postbuild": "node scripts/with-canonical-cwd.mjs next-sitemap",
     "start": "node scripts/with-canonical-cwd.mjs next start",

@@ -15,6 +15,17 @@ const createNextConfig = (phase: string): NextConfig => ({
     );
     return config;
   },
+  // Turbopack equivalent: resolve agora-foundation to a no-op stub
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        "agora-foundation": "./src/lib/agora-foundation-stub.ts",
+      },
+    },
+    serverActions: {
+      bodySizeLimit: "10gb",
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -25,11 +36,6 @@ const createNextConfig = (phase: string): NextConfig => ({
         pathname: "/admin.revisionbee.com/storage/app/public/**",
       },
     ],
-  },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10gb",
-    },
   },
 });
 
