@@ -5,7 +5,12 @@ import {
   type WhiteboardSessionCredentials,
 } from "@/features/lessons/api/get-whiteboard-session";
 
-import { Fastboard, useFastboard } from "@netless/fastboard-react";
+import {
+  createFastboard,
+  Fastboard,
+  type FastboardApp,
+  type RoomPhase,
+} from "@netless/fastboard-react";
 
 import { AlertCircle, LoaderCircle, PenTool, RefreshCw, X } from "lucide-react";
 
@@ -21,6 +26,18 @@ type CollaborativeWhiteboardProps = {
    WHITEBOARD ROOM
 ========================================================= */
 
+function WhiteboardCanvas({
+  app,
+  onMount,
+}: {
+  app: FastboardApp;
+  onMount: (app: FastboardApp) => void;
+}) {
+  useEffect(() => onMount(app), [app, onMount]);
+
+  return <Fastboard app={app} />;
+}
+
 function WhiteboardRoom({
   credentials,
   participantName,
@@ -30,52 +47,123 @@ function WhiteboardRoom({
   participantName: string;
   onError: (message: string) => void;
 }) {
-  const app = useFastboard(() => ({
-    sdkConfig: {
-      appIdentifier: credentials.appIdentifier,
-      region: credentials.region,
-      loggerOptions: {
-        localLog: {
-          enabled: false,
-        },
-      },
-    },
-
-    joinRoom: {
-      uid: credentials.uid,
-      uuid: credentials.roomUUID,
-      roomToken: credentials.roomToken,
-      userPayload: {
-        nickName: participantName,
-      },
-      // Both lesson participants collaborate; an accidentally restrictive API
-      // flag must not disable the pencil and other editing tools.
-      isWritable: true,
-      disableDeviceInputs: false,
-    },
-
-    managerConfig: {
-      cursor: true,
-    },
-  }));
+  const [app, setApp] = useState<FastboardApp | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [isContainerReady, setIsContainerReady] = useState(false);
-  const [isRoomConnected, setIsRoomConnected] = useState(false);
+  const [phase, setPhase] = useState<RoomPhase>("connecting");
+  const [hasConnected, setHasConnected] = useState(false);
+  const [mountedApp, setMountedApp] = useState<FastboardApp | null>(null);
+  const shutdownRef = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
-    if (!app || !wrapRef.current) return;
+    let disposed = false;
+    let joinedApp: FastboardApp | null = null;
+    let unsubscribe: (() => void) | undefined;
+
+    const reportError = (message: string) => {
+      if (!disposed) onError(message);
+    };
+
+    const destroyApp = async (board: FastboardApp) => {
+      try {
+        await board.destroy();
+      } catch {
+        // Closing a disconnected room must not create an unhandled rejection.
+        console.warn("Whiteboard connection could not be cleanly closed.");
+      }
+    };
+
+    setApp(null);
+    setPhase("connecting");
+    setHasConnected(false);
+    setMountedApp(null);
+
+    const joinTimeout = window.setTimeout(() => {
+      reportError("Whiteboard connection timed out. Please try again.");
+    }, 30_000);
+
+    // Defer the join until after React's StrictMode effect cleanup. The SDK's
+    // useFastboard hook neither catches join failures nor reliably cleans up
+    // rooms when a whiteboard is closed before joining finishes.
+    const previousShutdown = shutdownRef.current;
+    const joinTask = Promise.resolve().then(async () => {
+      await previousShutdown;
+      if (disposed) return;
+
+      try {
+        const board = await createFastboard({
+          sdkConfig: {
+            appIdentifier: credentials.appIdentifier,
+            region: credentials.region,
+            loggerOptions: { localLog: { enabled: false } },
+          },
+          joinRoom: {
+            uid: credentials.uid,
+            uuid: credentials.roomUUID,
+            roomToken: credentials.roomToken,
+            userPayload: { nickName: participantName },
+            isWritable: credentials.writable,
+            disableDeviceInputs: false,
+            callbacks: {
+              onDisconnectWithError: () => {
+                reportError(
+                  "The whiteboard connection was lost. Please retry."
+                );
+              },
+              onKickedWithReason: () => {
+                reportError(
+                  "This whiteboard connection was closed. Please retry."
+                );
+              },
+            },
+          },
+          managerConfig: { cursor: true },
+        });
+
+        window.clearTimeout(joinTimeout);
+
+        if (disposed) {
+          await destroyApp(board);
+          return;
+        }
+
+        joinedApp = board;
+        unsubscribe = board.phase.subscribe((nextPhase) => {
+          if (disposed) return;
+          setPhase(nextPhase);
+          if (nextPhase === "connected") setHasConnected(true);
+          if (nextPhase === "disconnected") {
+            reportError("The whiteboard connection was closed. Please retry.");
+          }
+        });
+        setApp(board);
+      } catch {
+        window.clearTimeout(joinTimeout);
+        reportError("Unable to join the whiteboard. Please retry.");
+      }
+    });
+
+    return () => {
+      disposed = true;
+      window.clearTimeout(joinTimeout);
+      unsubscribe?.();
+      shutdownRef.current = joinedApp ? destroyApp(joinedApp) : joinTask;
+    };
+  }, [credentials, participantName, onError]);
+
+  useEffect(() => {
+    if (!wrapRef.current) return;
 
     const el = wrapRef.current;
     let rafId = 0;
+    let disposed = false;
 
     const checkDimensions = () => {
+      window.cancelAnimationFrame(rafId);
       const rect = el.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
-        // rAF ensures the browser has computed layout before the
-        // <Fastboard> component's own useIsomorphicLayoutEffect fires.
-        rafId = requestAnimationFrame(() => {
-          setIsContainerReady(true);
-          observer.disconnect();
+        rafId = window.requestAnimationFrame(() => {
+          if (!disposed) setIsContainerReady(true);
         });
       }
     };
@@ -87,40 +175,32 @@ function WhiteboardRoom({
     checkDimensions();
 
     return () => {
-      cancelAnimationFrame(rafId);
+      disposed = true;
+      window.cancelAnimationFrame(rafId);
       observer.disconnect();
     };
-  }, [app]);
+  }, []);
 
   useEffect(() => {
-    if (!app) return;
-
-    // WindowManager.bindContainer throws "room phase only Connected can be
-    // bindContainer" until the whiteboard room reaches the "connected" phase.
-    // Only mount <Fastboard> once the room is actually connected, otherwise
-    // it binds too early and errors out.
-    let active = true;
-    setIsRoomConnected(app.phase.value === "connected");
-
-    const unsubscribe = app.phase.subscribe((phase) => {
-      if (active) setIsRoomConnected(phase === "connected");
-    });
-
-    return () => {
-      active = false;
-      unsubscribe();
-    };
-  }, [app]);
-
-  useEffect(() => {
-    if (!app || !isContainerReady || !wrapRef.current) return;
+    if (
+      !app ||
+      !isContainerReady ||
+      phase !== "connected" ||
+      !wrapRef.current
+    ) {
+      return;
+    }
 
     let disposed = false;
     let frame = 0;
 
     const refreshBoardSize = () => {
       window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => app.room.refreshViewSize());
+      frame = window.requestAnimationFrame(() => {
+        if (!disposed && app.phase.value === "connected") {
+          app.room.refreshViewSize();
+        }
+      });
     };
 
     // The room can still become read-only if the server overrides the join
@@ -128,7 +208,9 @@ function WhiteboardRoom({
     // instead of leaving apparently clickable but ineffective tools onscreen.
     void (async () => {
       try {
-        if (!app.room.isWritable) await app.room.setWritable(true);
+        if (credentials.writable && !app.room.isWritable) {
+          await app.room.setWritable(true);
+        }
         if (!disposed) refreshBoardSize();
       } catch {
         if (!disposed) {
@@ -149,37 +231,48 @@ function WhiteboardRoom({
       window.clearTimeout(refreshTimer);
       window.cancelAnimationFrame(frame);
     };
-  }, [app, isContainerReady, onError]);
+  }, [app, credentials.writable, isContainerReady, phase, onError]);
 
-  if (!app) {
-    return (
-      <div className="grid h-full place-items-center">
-        Joining whiteboard...
-      </div>
-    );
-  }
+  // Bind only while connected, then preserve the canvas during reconnection.
+  // Recreating Fastboard at every phase change loses its mounted container.
+  const showBoard = Boolean(
+    app && isContainerReady && (phase === "connected" || mountedApp === app)
+  );
 
   return (
-    <div
-      ref={wrapRef}
-      className="relative h-full w-full min-h-[500px]"
-      style={{ height: "100%", width: "100%" }}
-    >
-      {isContainerReady && isRoomConnected ? (
-        <Fastboard app={app} />
-      ) : (
-        <div className="grid h-full w-full place-items-center text-slate-500">
-          <div className="text-center">
-            <LoaderCircle
-              className="mx-auto animate-spin text-[#348edc]"
-              size={24}
-            />
-            <p className="mt-2 text-sm font-medium">
-              Connecting to whiteboard...
-            </p>
-          </div>
-        </div>
+    <div ref={wrapRef} className="relative flex h-full min-h-0 w-full flex-col">
+      {!credentials.writable && (
+        <p
+          role="status"
+          className="shrink-0 bg-amber-50 px-3 py-2 text-xs text-amber-800"
+        >
+          This whiteboard is view-only. Editing access is required to use the
+          tools.
+        </p>
       )}
+      <div className="relative min-h-0 flex-1">
+        {showBoard && app && (
+          <WhiteboardCanvas app={app} onMount={setMountedApp} />
+        )}
+        {(!showBoard || phase !== "connected") && (
+          <div
+            role="status"
+            className="absolute inset-0 grid h-full w-full place-items-center bg-white/90 text-slate-500"
+          >
+            <div className="text-center">
+              <LoaderCircle
+                className="mx-auto animate-spin text-[#348edc]"
+                size={24}
+              />
+              <p className="mt-2 text-sm font-medium">
+                {hasConnected
+                  ? "Reconnecting to whiteboard..."
+                  : "Connecting to whiteboard..."}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -206,19 +299,9 @@ export function CollaborativeWhiteboard({
     setCredentials(null);
     setError(null);
 
-    console.log("Getting whiteboard session for lesson:", lessonID);
-
     void getWhiteboardSession(lessonID)
       .then((session) => {
         if (disposed) return;
-
-        console.log("Whiteboard session received:", {
-          appIdentifier: session.appIdentifier,
-          region: session.region,
-          roomUUID: session.roomUUID,
-          uid: session.uid,
-          writable: session.writable,
-        });
 
         setCredentials(session);
       })
@@ -348,7 +431,7 @@ export function CollaborativeWhiteboard({
               </span>
 
               <h2 className="mt-4 text-base font-semibold">
-                Whiteboard backend is not ready
+                Whiteboard is unavailable
               </h2>
 
               <p className="mt-2 text-xs leading-5 text-slate-500 sm:text-sm">
@@ -405,6 +488,7 @@ export function CollaborativeWhiteboard({
           ================================================= */
 
           <WhiteboardRoom
+            key={`${lessonID}:${attempt}`}
             credentials={credentials}
             participantName={participantName}
             onError={setError}
