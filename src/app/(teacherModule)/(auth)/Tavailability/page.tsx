@@ -1,9 +1,10 @@
 "use client";
 
+import { TimeSelect } from "@/components/ui/time-select";
 import { addTeacherAvailability } from "@/features/teacher/actions/add-availability";
 import { AddTeacherAvailabilitySchema } from "@/features/teacher/schemas";
 import { paths } from "@/routes";
-import { Clock3, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,8 @@ type TimeSlot = {
   id: string;
   startTime: string;
   endTime: string;
+  /** Per-slot validation error (end ≤ start) */
+  error?: string;
 };
 
 type DayAvailability = {
@@ -31,13 +34,7 @@ const days = [
 ];
 
 const initialAvailability: Record<string, DayAvailability> = Object.fromEntries(
-  days.map((day) => [
-    day,
-    {
-      enabled: false,
-      slots: [],
-    },
-  ])
+  days.map((day) => [day, { enabled: false, slots: [] }])
 );
 
 export default function TeacherAvailabilityPage() {
@@ -47,82 +44,24 @@ export default function TeacherAvailabilityPage() {
   const [availability, setAvailability] =
     useState<Record<string, DayAvailability>>(initialAvailability);
 
+  /** Convert 24-hour "HH:MM" to 12-hour time + meridiem for the API. */
   function toTwelveHourTime(time: string) {
     const [hourText, minute] = time.split(":");
     const hour = Number(hourText);
-
     return {
       time: `${String(hour % 12 || 12).padStart(2, "0")}:${minute}`,
       meridiem: (hour >= 12 ? "PM" : "AM") as "AM" | "PM",
     };
   }
 
-  function handleSave() {
-    setSubmitError("");
-
-    const availabilities = days
-      .map((day, dayIndex) => {
-        const dayAvailability = availability[day];
-        if (!dayAvailability.enabled) {
-          return [{ dayOfWeek: dayIndex, isAvailable: 0 as const }];
-        }
-
-        const completeSlots = dayAvailability.slots.filter(
-          (slot) => slot.startTime && slot.endTime
-        );
-        if (completeSlots.length !== dayAvailability.slots.length) return [];
-
-        return completeSlots.map((slot) => {
-          const start = toTwelveHourTime(slot.startTime);
-          const end = toTwelveHourTime(slot.endTime);
-
-          return {
-            dayOfWeek: dayIndex,
-            startTime: start.time,
-            startMeridiem: start.meridiem,
-            endTime: end.time,
-            endMeridiem: end.meridiem,
-            isAvailable: 1 as const,
-          };
-        });
-      })
-      .flat();
-
-    const hasIncompleteEnabledDay = days.some(
-      (day) =>
-        availability[day].enabled &&
-        (availability[day].slots.length === 0 ||
-          availability[day].slots.some(
-            (slot) => !slot.startTime || !slot.endTime
-          ))
-    );
-    if (hasIncompleteEnabledDay) {
-      setSubmitError("Enter a start and end time for every checked day.");
-      return;
-    }
-
-    const validation = AddTeacherAvailabilitySchema.safeParse({
-      availabilities,
-    });
-
-    if (!validation.success) {
-      setSubmitError(
-        validation.error.issues[0]?.message ??
-          "Please check your availability details."
-      );
-      return;
-    }
-
-    startTransition(async () => {
-      const result = await addTeacherAvailability(validation.data);
-
-      if (!result.success) {
-        setSubmitError(result.error);
-        return;
-      }
-
-      router.push(paths.teacherBankDetails());
-    });
+  /** Return an error string when end ≤ start, otherwise undefined. */
+  function slotError(startTime: string, endTime: string): string | undefined {
+    if (!startTime || !endTime) return undefined;
+    const [sh, sm] = startTime.split(":").map(Number);
+    const [eh, em] = endTime.split(":").map(Number);
+    if (eh * 60 + em <= sh * 60 + sm)
+      return "End time must be after start time";
+    return undefined;
   }
 
   function toggleDay(day: string) {
@@ -172,15 +111,87 @@ export default function TeacherAvailabilityPage() {
     value: string
   ) {
     setSubmitError("");
-    setAvailability((current) => ({
-      ...current,
-      [day]: {
-        ...current[day],
-        slots: current[day].slots.map((slot) =>
-          slot.id === slotId ? { ...slot, [field]: value } : slot
-        ),
-      },
-    }));
+    setAvailability((current) => {
+      const updatedSlots = current[day].slots.map((slot) => {
+        if (slot.id !== slotId) return slot;
+        const next = { ...slot, [field]: value };
+        return { ...next, error: slotError(next.startTime, next.endTime) };
+      });
+      return { ...current, [day]: { ...current[day], slots: updatedSlots } };
+    });
+  }
+
+  function handleSave() {
+    setSubmitError("");
+
+    // First check: every enabled day has complete, valid slots
+    const hasIncomplete = days.some(
+      (day) =>
+        availability[day].enabled &&
+        (availability[day].slots.length === 0 ||
+          availability[day].slots.some(
+            (slot) => !slot.startTime || !slot.endTime
+          ))
+    );
+    if (hasIncomplete) {
+      setSubmitError("Enter a start and end time for every checked day.");
+      return;
+    }
+
+    // Second check: no per-slot time-order errors
+    const hasSlotErrors = days.some(
+      (day) =>
+        availability[day].enabled &&
+        availability[day].slots.some((slot) => !!slot.error)
+    );
+    if (hasSlotErrors) {
+      setSubmitError("Please fix the time errors before saving.");
+      return;
+    }
+
+    const availabilities = days
+      .map((day, dayIndex) => {
+        const dayAvailability = availability[day];
+        if (!dayAvailability.enabled)
+          return [{ dayOfWeek: dayIndex, isAvailable: 0 as const }];
+
+        return dayAvailability.slots
+          .filter((slot) => slot.startTime && slot.endTime)
+          .map((slot) => {
+            const start = toTwelveHourTime(slot.startTime);
+            const end = toTwelveHourTime(slot.endTime);
+            return {
+              dayOfWeek: dayIndex,
+              startTime: start.time,
+              startMeridiem: start.meridiem,
+              endTime: end.time,
+              endMeridiem: end.meridiem,
+              isAvailable: 1 as const,
+            };
+          });
+      })
+      .flat();
+
+    const validation = AddTeacherAvailabilitySchema.safeParse({
+      availabilities,
+    });
+
+    if (!validation.success) {
+      setSubmitError(
+        validation.error.issues[0]?.message ??
+          "Please check your availability details."
+      );
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await addTeacherAvailability(validation.data);
+      if (!result.success) {
+        setSubmitError(result.error);
+        return;
+      }
+      router.push(paths.teacherBankDetails());
+    });
   }
 
   return (
@@ -218,7 +229,6 @@ export default function TeacherAvailabilityPage() {
             <div className="mt-6 min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
               {days.map((day) => {
                 const dayAvailability = availability[day];
-
                 return (
                   <div key={day}>
                     <div className="flex h-6 items-center justify-between text-xs">
@@ -247,60 +257,42 @@ export default function TeacherAvailabilityPage() {
                     </div>
 
                     {dayAvailability.enabled && (
-                      <div className="mt-2 space-y-2">
+                      <div className="mt-2 space-y-1">
                         {dayAvailability.slots.map((slot) => (
-                          <div
-                            key={slot.id}
-                            className="grid grid-cols-[1fr_1fr_28px] gap-3"
-                          >
-                            <label className="relative block">
-                              <Clock3
-                                size={16}
-                                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#9aa7be]"
-                              />
-                              <input
-                                type="time"
-                                aria-label={`${day} start time`}
+                          <div key={slot.id}>
+                            <div className="grid grid-cols-[1fr_1fr_28px] gap-3">
+                              <TimeSelect
                                 value={slot.startTime}
-                                onChange={(event) =>
-                                  updateSlot(
-                                    day,
-                                    slot.id,
-                                    "startTime",
-                                    event.target.value
-                                  )
+                                ariaLabel={`${day} start time`}
+                                onChange={(v) =>
+                                  updateSlot(day, slot.id, "startTime", v)
                                 }
-                                className="h-11 w-full rounded-lg border border-transparent bg-white pr-2 pl-9 text-xs text-[#777] outline-none focus:border-[#53a2eb]"
                               />
-                            </label>
-                            <label className="relative block">
-                              <Clock3
-                                size={16}
-                                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#9aa7be]"
-                              />
-                              <input
-                                type="time"
-                                aria-label={`${day} end time`}
+                              <TimeSelect
                                 value={slot.endTime}
-                                onChange={(event) =>
-                                  updateSlot(
-                                    day,
-                                    slot.id,
-                                    "endTime",
-                                    event.target.value
-                                  )
+                                ariaLabel={`${day} end time`}
+                                error={!!slot.error}
+                                onChange={(v) =>
+                                  updateSlot(day, slot.id, "endTime", v)
                                 }
-                                className="h-11 w-full rounded-lg border border-transparent bg-white pr-2 pl-9 text-xs text-[#777] outline-none focus:border-[#53a2eb]"
                               />
-                            </label>
-                            <button
-                              type="button"
-                              aria-label={`Remove ${day} time slot`}
-                              onClick={() => removeSlot(day, slot.id)}
-                              className="grid h-11 place-items-center text-[#555] hover:text-[#ff3547]"
-                            >
-                              <X size={17} />
-                            </button>
+                              <button
+                                type="button"
+                                aria-label={`Remove ${day} time slot`}
+                                onClick={() => removeSlot(day, slot.id)}
+                                className="grid h-11 place-items-center text-[#555] hover:text-[#ff3547]"
+                              >
+                                <X size={17} />
+                              </button>
+                            </div>
+                            {slot.error && (
+                              <p
+                                role="alert"
+                                className="mt-0.5 pl-1 text-xs text-red-500"
+                              >
+                                {slot.error}
+                              </p>
+                            )}
                           </div>
                         ))}
                       </div>

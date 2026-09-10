@@ -490,11 +490,6 @@ export default function TeacherProfilePage() {
         <h1 className="text-[22px] font-bold leading-tight text-[#111]">
           My Profile
         </h1>
-        <p className="mt-2 text-xs text-[#6f7378] sm:text-sm">
-          Lorem ipsum dolor sit amet consectetur. Varius eu fermentum arcu lacus
-          lacus. Adipiscing egestas pretium rhoncus.
-        </p>
-
         <section className="mt-8 min-h-[560px] overflow-hidden rounded-[22px] bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,40,0.03)] sm:px-7">
           <nav
             className="flex overflow-x-auto border-b border-[#edf0f2]"

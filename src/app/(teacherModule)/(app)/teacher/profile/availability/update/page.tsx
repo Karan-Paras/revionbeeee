@@ -1,14 +1,22 @@
 "use client";
 
+import { TimeSelect } from "@/components/ui/time-select";
 import { addTeacherAvailability } from "@/features/teacher/actions/add-availability";
 import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availabilities";
-import { ArrowLeft, Clock3, Plus, X } from "lucide-react";
+import { ArrowLeft, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-type Slot = { id: string; startTime: string; endTime: string };
+type Slot = {
+  id: string;
+  startTime: string;
+  endTime: string;
+  /** Per-slot validation error (end ≤ start) */
+  error?: string;
+};
 type DayState = { enabled: boolean; slots: Slot[] };
+
 const days = [
   "Sunday",
   "Monday",
@@ -18,6 +26,7 @@ const days = [
   "Friday",
   "Saturday",
 ] as const;
+
 const createEmptyState = (): Record<string, DayState> =>
   Object.fromEntries(days.map((day) => [day, { enabled: false, slots: [] }]));
 
@@ -41,6 +50,7 @@ export default function UpdateTeacherAvailabilityPage() {
             next[day].enabled = true;
             next[day].slots.push({
               id: String(item.id ?? `slot-${index}`),
+              // API returns "HH:MM:SS" in 24-hour format; take first 5 chars
               startTime: item.startTime.slice(0, 5),
               endTime: item.endTime.slice(0, 5),
             });
@@ -57,6 +67,26 @@ export default function UpdateTeacherAvailabilityPage() {
       })
       .finally(() => setIsLoading(false));
   }, []);
+
+  /** Convert 24-hr "HH:MM" to 12-hr + meridiem for the API. */
+  function toApiTime(value: string) {
+    const [hourText, minute] = value.split(":");
+    const hour = Number(hourText);
+    return {
+      time: `${String(hour % 12 || 12).padStart(2, "0")}:${minute}`,
+      meridiem: (hour >= 12 ? "PM" : "AM") as "AM" | "PM",
+    };
+  }
+
+  /** Return an error string when end ≤ start, otherwise undefined. */
+  function slotError(startTime: string, endTime: string): string | undefined {
+    if (!startTime || !endTime) return undefined;
+    const [sh, sm] = startTime.split(":").map(Number);
+    const [eh, em] = endTime.split(":").map(Number);
+    if (eh * 60 + em <= sh * 60 + sm)
+      return "End time must be after start time";
+    return undefined;
+  }
 
   function toggleDay(day: string) {
     setAvailability((current) => {
@@ -93,15 +123,14 @@ export default function UpdateTeacherAvailabilityPage() {
     field: "startTime" | "endTime",
     value: string
   ) {
-    setAvailability((current) => ({
-      ...current,
-      [day]: {
-        ...current[day],
-        slots: current[day].slots.map((slot) =>
-          slot.id === id ? { ...slot, [field]: value } : slot
-        ),
-      },
-    }));
+    setAvailability((current) => {
+      const updatedSlots = current[day].slots.map((slot) => {
+        if (slot.id !== id) return slot;
+        const next = { ...slot, [field]: value };
+        return { ...next, error: slotError(next.startTime, next.endTime) };
+      });
+      return { ...current, [day]: { ...current[day], slots: updatedSlots } };
+    });
   }
 
   function removeSlot(day: string, id: string) {
@@ -115,14 +144,25 @@ export default function UpdateTeacherAvailabilityPage() {
   }
 
   function save() {
-    const toApiTime = (value: string) => {
-      const [hourText, minute] = value.split(":");
-      const hour = Number(hourText);
-      return {
-        time: `${String(hour % 12 || 12).padStart(2, "0")}:${minute}`,
-        meridiem: (hour >= 12 ? "PM" : "AM") as "AM" | "PM",
-      };
-    };
+    const hasIncompleteEnabledDay = days.some(
+      (day) =>
+        availability[day].enabled &&
+        (availability[day].slots.length === 0 ||
+          availability[day].slots.some(
+            (slot) => !slot.startTime || !slot.endTime
+          ))
+    );
+    if (hasIncompleteEnabledDay)
+      return toast.error("Enter a start and end time for every checked day.");
+
+    const hasSlotErrors = days.some(
+      (day) =>
+        availability[day].enabled &&
+        availability[day].slots.some((slot) => !!slot.error)
+    );
+    if (hasSlotErrors)
+      return toast.error("Please fix the time errors before saving.");
+
     const items = days
       .map((day, dayOfWeek) =>
         availability[day].enabled
@@ -144,16 +184,6 @@ export default function UpdateTeacherAvailabilityPage() {
       )
       .flat();
 
-    const hasIncompleteEnabledDay = days.some(
-      (day) =>
-        availability[day].enabled &&
-        (availability[day].slots.length === 0 ||
-          availability[day].slots.some(
-            (slot) => !slot.startTime || !slot.endTime
-          ))
-    );
-    if (hasIncompleteEnabledDay)
-      return toast.error("Enter a start and end time for every checked day.");
     startTransition(async () => {
       const result = await addTeacherAvailability({ availabilities: items });
       if (!result || !result.success) {
@@ -230,45 +260,44 @@ export default function UpdateTeacherAvailabilityPage() {
                         </span>
                       )}
                     </div>
+
                     {state.enabled && (
-                      <div className="mt-3 space-y-2">
+                      <div className="mt-3 space-y-1">
                         {state.slots.map((slot) => (
-                          <div
-                            key={slot.id}
-                            className="grid grid-cols-[1fr_1fr_28px] gap-2"
-                          >
-                            {(["startTime", "endTime"] as const).map(
-                              (field) => (
-                                <label key={field} className="relative">
-                                  <Clock3
-                                    size={14}
-                                    className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#9aa7be]"
-                                  />
-                                  <input
-                                    type="time"
-                                    aria-label={`${day} ${field}`}
-                                    value={slot[field]}
-                                    onChange={(event) =>
-                                      changeSlot(
-                                        day,
-                                        slot.id,
-                                        field,
-                                        event.target.value
-                                      )
-                                    }
-                                    className="h-11 w-full rounded-lg border border-[#e1e5e9] bg-white pr-2 pl-9 text-xs outline-none focus:border-[#53a2eb]"
-                                  />
-                                </label>
-                              )
+                          <div key={slot.id}>
+                            <div className="grid grid-cols-[1fr_1fr_28px] gap-2">
+                              <TimeSelect
+                                value={slot.startTime}
+                                ariaLabel={`${day} start time`}
+                                onChange={(v) =>
+                                  changeSlot(day, slot.id, "startTime", v)
+                                }
+                              />
+                              <TimeSelect
+                                value={slot.endTime}
+                                ariaLabel={`${day} end time`}
+                                error={!!slot.error}
+                                onChange={(v) =>
+                                  changeSlot(day, slot.id, "endTime", v)
+                                }
+                              />
+                              <button
+                                type="button"
+                                aria-label={`Remove ${day} slot`}
+                                onClick={() => removeSlot(day, slot.id)}
+                                className="grid place-items-center text-[#777] hover:text-[#ff3547]"
+                              >
+                                <X size={16} />
+                              </button>
+                            </div>
+                            {slot.error && (
+                              <p
+                                role="alert"
+                                className="mt-0.5 pl-1 text-xs text-red-500"
+                              >
+                                {slot.error}
+                              </p>
                             )}
-                            <button
-                              type="button"
-                              aria-label={`Remove ${day} slot`}
-                              onClick={() => removeSlot(day, slot.id)}
-                              className="grid place-items-center text-[#777] hover:text-[#ff3547]"
-                            >
-                              <X size={16} />
-                            </button>
                           </div>
                         ))}
                       </div>

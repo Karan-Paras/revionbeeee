@@ -1,9 +1,13 @@
 "use client";
 
-import type { TeacherNotification } from "@/features/teacher/api/get-notifications";
-import { getTeacherNotifications } from "@/features/teacher/api/get-notifications";
+import type { StudentNotification } from "@/features/user/api/get-notifications";
+import {
+  getStudentNotifications,
+  getStudentUnreadCount,
+  markStudentNotificationsRead,
+} from "@/features/user/api/get-notifications";
 import { paths } from "@/routes";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bell,
@@ -19,7 +23,7 @@ import { useState } from "react";
 
 const PAGE_SIZE = 8;
 
-function notificationIcon(type: TeacherNotification["type"]) {
+function notificationIcon(type: StudentNotification["type"]) {
   switch (type) {
     case "payment":
       return { Icon: CircleDollarSign, cls: "bg-[#fff2e5] text-[#ff9b32]" };
@@ -32,14 +36,23 @@ function notificationIcon(type: TeacherNotification["type"]) {
   }
 }
 
-export default function TeacherNotificationsPage() {
+export default function StudentNotificationsPage() {
+  const queryClient = useQueryClient();
+
   const {
     data: notifications = [],
     isPending,
     error,
   } = useQuery({
-    queryKey: ["teacher-notifications"],
-    queryFn: getTeacherNotifications,
+    queryKey: ["student-notifications"],
+    queryFn: getStudentNotifications,
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
+  });
+
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ["student-notifications-unread-count"],
+    queryFn: getStudentUnreadCount,
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
   });
@@ -49,7 +62,29 @@ export default function TeacherNotificationsPage() {
   const safePage = Math.min(currentPage, totalPages);
   const pageStart = (safePage - 1) * PAGE_SIZE;
   const pageItems = notifications.slice(pageStart, pageStart + PAGE_SIZE);
-  const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const [readIds, setReadIds] = useState<Set<string | number>>(new Set());
+
+  async function markRead(id: string | number) {
+    if (readIds.has(id)) return;
+    setReadIds((prev) => new Set(prev).add(id));
+    try {
+      await markStudentNotificationsRead([id]);
+      queryClient.setQueriesData<number>(
+        { queryKey: ["student-notifications-unread-count"] },
+        (prev = 0) => Math.max(0, prev - 1)
+      );
+      queryClient.refetchQueries({
+        queryKey: ["student-notifications-unread-count"],
+      });
+    } catch {
+      setReadIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  }
 
   function goToPage(page: number) {
     setCurrentPage(Math.min(Math.max(1, page), totalPages));
@@ -63,13 +98,13 @@ export default function TeacherNotificationsPage() {
   }
 
   return (
-    <main className="min-h-full bg-[#f5f6f8] p-5 sm:p-8">
+    <main className="min-h-screen bg-[#f5f6f8] p-5 sm:p-8">
       <div className="mx-auto max-w-[950px]">
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
-              href={paths.teacherDashboard()}
+              href={paths.dashboard()}
               aria-label="Back to dashboard"
               className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#dce5ec] bg-white text-[#429bea] shadow-sm transition hover:border-[#429bea] hover:bg-[#edf6ff]"
             >
@@ -78,7 +113,7 @@ export default function TeacherNotificationsPage() {
             <div>
               <h1 className="text-2xl font-bold text-[#111]">Notifications</h1>
               <p className="mt-1 text-xs text-[#777] sm:text-sm">
-                Stay updated with your lessons, requests, and payments.
+                Stay updated with your lessons, requests, and more.
               </p>
             </div>
           </div>
@@ -126,7 +161,8 @@ export default function TeacherNotificationsPage() {
             <div className="divide-y divide-[#edf0f2]">
               {pageItems.map((notification) => {
                 const { Icon, cls } = notificationIcon(notification.type);
-                const isUnread = notification.unread;
+                const isUnread =
+                  notification.unread && !readIds.has(notification.id);
                 return (
                   <article
                     key={notification.id}
@@ -165,6 +201,7 @@ export default function TeacherNotificationsPage() {
           )}
         </section>
 
+        {/* Pagination */}
         {!isPending && notifications.length > 0 && totalPages > 1 && (
           <div className="sticky bottom-0 z-10 mt-10 flex items-center justify-center gap-1.5 border-t border-[#edf0f2] bg-[#f5f6f8] py-5 shadow-[0_-4px_12px_-6px_rgba(0,0,0,0.08)]">
             <button

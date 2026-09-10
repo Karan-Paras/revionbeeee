@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { NotificationBell } from "@/components/common/notification-bell";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
@@ -140,7 +141,13 @@ export function MobileSidebar({
                   )
                 ) : (
                   data && (
-                    <ProfileDropdown user={data.data} onClick={closeSidebar} />
+                    <div className="flex items-center gap-3">
+                      <NotificationBell />
+                      <ProfileDropdown
+                        user={data.data}
+                        onClick={closeSidebar}
+                      />
+                    </div>
                   )
                 )}
               </div>

@@ -10,6 +10,7 @@ import {
   type RespondToLessonParams,
 } from "@/features/lessons/api/respond-to-lesson";
 import { startLessonSession } from "@/features/lessons/api/start-session";
+import { isSessionWindowOpen } from "@/lib/session-time";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
@@ -27,135 +28,18 @@ const statusColor: Record<BookingStatus, string> = {
   Completed: "text-[#777]",
 };
 
-function parseSessionDateUtc(dateStr: string): {
-  year: number;
-  month: number;
-  day: number;
-} | null {
-  if (!dateStr) return null;
-  const trimmed = dateStr.trim();
-  const isoMatch = trimmed.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (isoMatch) {
-    return {
-      year: Number(isoMatch[1]),
-      month: Number(isoMatch[2]),
-      day: Number(isoMatch[3]),
-    };
-  }
-  const parsed = new Date(trimmed);
-  if (!Number.isNaN(parsed.getTime())) {
-    return {
-      year: parsed.getUTCFullYear(),
-      month: parsed.getUTCMonth() + 1,
-      day: parsed.getUTCDate(),
-    };
-  }
-  return null;
-}
-
-function parseTimeToMinutes(timeStr: string): number | null {
-  if (!timeStr) return null;
-  const trimmed = timeStr.trim().toLowerCase();
-  if (trimmed === "instant") return 0;
-
-  const isoTimeMatch = trimmed.match(/t(\d{1,2}):(\d{2})/);
-  if (isoTimeMatch) {
-    return Number(isoTimeMatch[1]) * 60 + Number(isoTimeMatch[2]);
-  }
-
-  const match = trimmed.match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)?/i);
-  if (!match) return null;
-
-  let hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  const meridiem = match[3]?.toLowerCase();
-
-  if (meridiem === "pm" && hours < 12) {
-    hours += 12;
-  } else if (meridiem === "am" && hours === 12) {
-    hours = 0;
-  }
-
-  return hours * 60 + minutes;
-}
-
-function getSessionUtcTimeRange(booking: TeacherBooking): {
-  startMs: number;
-  endMs: number;
-} | null {
-  const dateParts = parseSessionDateUtc(booking.sessionDate);
-  if (!dateParts) return null;
-
-  const startMinutes = parseTimeToMinutes(booking.sessionStartTime);
-  if (startMinutes === null) return null;
-
-  let endMinutes = parseTimeToMinutes(booking.sessionEndTime);
-  if (endMinutes === null) {
-    endMinutes = startMinutes + 60;
-  }
-
-  const startHour = Math.floor(startMinutes / 60);
-  const startMin = startMinutes % 60;
-  const startMs = Date.UTC(
-    dateParts.year,
-    dateParts.month - 1,
-    dateParts.day,
-    startHour,
-    startMin,
-    0,
-    0
-  );
-
-  let endMs: number;
-  if (endMinutes < startMinutes) {
-    endMs = Date.UTC(
-      dateParts.year,
-      dateParts.month - 1,
-      dateParts.day + 1,
-      Math.floor(endMinutes / 60),
-      endMinutes % 60,
-      59,
-      999
-    );
-  } else {
-    endMs = Date.UTC(
-      dateParts.year,
-      dateParts.month - 1,
-      dateParts.day,
-      Math.floor(endMinutes / 60),
-      endMinutes % 60,
-      59,
-      999
-    );
-  }
-
-  return { startMs, endMs };
-}
-
-function isSessionActiveNow(
-  booking: TeacherBooking,
-  currentTimestampMs = Date.now()
-) {
+function isSessionActiveNow(booking: TeacherBooking, nowMs = Date.now()) {
   const isInstant =
     booking.bookingType.trim().toLowerCase() === "instant" ||
     booking.sessionStartTime.trim().toLowerCase() === "instant";
-
-  // Instant lessons can be managed immediately, regardless of their date.
-  if (isInstant) return true;
-
-  const range = getSessionUtcTimeRange(booking);
-  if (!range) return false;
-
-  // Allow joining 15 minutes before scheduled start time.
-  const EARLY_JOIN_MS = 15 * 60 * 1000;
-  // Keep the button active for 2 hours after the scheduled end time
-  // (covers overruns and cases where the teacher is slightly late).
-  const LATE_JOIN_MS = 2 * 60 * 60 * 1000;
-
-  return (
-    currentTimestampMs >= range.startMs - EARLY_JOIN_MS &&
-    currentTimestampMs <= range.endMs + LATE_JOIN_MS
-  );
+  return isSessionWindowOpen({
+    sessionDate: booking.sessionDate,
+    sessionStartTime: booking.sessionStartTime,
+    sessionEndTime: booking.sessionEndTime,
+    isInstant,
+    nowMs,
+    lateMs: 3 * 60 * 60 * 1000,
+  });
 }
 
 export default function TeacherBookingsPage() {
@@ -199,7 +83,7 @@ export default function TeacherBookingsPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setNowUtc(Date.now());
-    }, 5000);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
   const bookings = useMemo(

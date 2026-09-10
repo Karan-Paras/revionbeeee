@@ -14,6 +14,14 @@ export type DashboardLesson = {
   dateTime: string;
   duration: string;
   canLaunch: boolean;
+  /** Raw date string from API for client-side UTC time check */
+  rawDate: string;
+  /** Raw start time string from API for client-side UTC time check */
+  rawStartTime: string;
+  /** Raw end time / duration minutes for client-side UTC time check */
+  durationMinutes: number;
+  /** Whether this is an instant lesson (no time validation) */
+  isInstant: boolean;
 };
 
 export type DashboardRequest = DashboardLesson & { amount: string };
@@ -69,7 +77,7 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
   const lastName = text(person, "lastName", "last_name");
   const image = text(
     person,
-    "profilePhoto", // actual API key
+    "profilePhoto",
     "profileImage",
     "profile_image",
     "profilePicture",
@@ -85,8 +93,17 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
     "start_time",
     "time"
   );
+  const durationMinutes = numeric(
+    item,
+    "durationMinutes",
+    "duration_minutes",
+    "duration"
+  );
+  const isInstant =
+    text(item, "bookingType", "booking_type", "lessonType").toLowerCase() ===
+      "instant" || time.toLowerCase() === "instant";
 
-  // canLaunch comes directly as a boolean from the API
+  // canLaunch from API (used as fallback; dashboard component overrides with UTC check)
   const canLaunch =
     typeof item.canLaunch === "boolean"
       ? item.canLaunch
@@ -118,8 +135,12 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
         "lessonType"
       ) || "Lesson",
     dateTime: [date, time && `at ${time}`].filter(Boolean).join(" ") || "—",
-    duration: `${numeric(item, "durationMinutes", "duration_minutes", "duration")} Minutes`,
+    duration: `${durationMinutes} Minutes`,
     canLaunch,
+    rawDate: date,
+    rawStartTime: time,
+    durationMinutes,
+    isInstant,
   };
 }
 
