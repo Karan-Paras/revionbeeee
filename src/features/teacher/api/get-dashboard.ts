@@ -69,6 +69,7 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
   const lastName = text(person, "lastName", "last_name");
   const image = text(
     person,
+    "profilePhoto", // actual API key
     "profileImage",
     "profile_image",
     "profilePicture",
@@ -84,23 +85,41 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
     "start_time",
     "time"
   );
-  const status = text(item, "status", "bookingStatus", "booking_status");
+
+  // canLaunch comes directly as a boolean from the API
+  const canLaunch =
+    typeof item.canLaunch === "boolean"
+      ? item.canLaunch
+      : typeof item.can_launch === "boolean"
+        ? item.can_launch
+        : ["accepted", "approved", "confirmed"].includes(
+            text(
+              item,
+              "status",
+              "bookingStatus",
+              "booking_status"
+            ).toLowerCase()
+          );
 
   return {
     id: text(item, "id", "lessonID", "lessonId", "bookingID") || String(index),
     studentName:
-      text(person, "fullName", "full_name", "studentName", "name") ||
+      text(person, "name", "fullName", "full_name", "studentName") ||
       [firstName, lastName].filter(Boolean).join(" ") ||
       "Student",
     image: image ? getUserImageUrl(image) : "/images/teacher-personal-info.svg",
     topic:
-      text(item, "topic", "subjectName", "subject_name", "lessonType") ||
-      "Lesson",
+      text(
+        item,
+        "topic",
+        "bookingType",
+        "subjectName",
+        "subject_name",
+        "lessonType"
+      ) || "Lesson",
     dateTime: [date, time && `at ${time}`].filter(Boolean).join(" ") || "—",
     duration: `${numeric(item, "durationMinutes", "duration_minutes", "duration")} Minutes`,
-    canLaunch: ["accepted", "approved", "confirmed"].includes(
-      status.toLowerCase()
-    ),
+    canLaunch,
   };
 }
 
@@ -111,6 +130,7 @@ export async function getTeacherDashboard(): Promise<TeacherDashboardData> {
   const source = { ...data, ...stats };
   const scheduledLessons = array(
     data,
+    "todaysLessons", // actual API key
     "scheduledLessons",
     "scheduled_lessons",
     "todayLessons",
@@ -129,6 +149,7 @@ export async function getTeacherDashboard(): Promise<TeacherDashboardData> {
   return {
     todayLessons: numeric(
       source,
+      "todaysSessions", // actual API key
       "todayLessonsCount",
       "today_lessons_count",
       "todayLessons"
@@ -141,12 +162,14 @@ export async function getTeacherDashboard(): Promise<TeacherDashboardData> {
     ),
     totalTaughtHours: numeric(
       source,
+      "totalHoursTaught", // actual API key
       "totalTaughtHours",
       "total_taught_hours",
       "totalHours"
     ),
     totalEarnings: numeric(
       source,
+      "totalEarning", // actual API key (singular)
       "totalEarnings",
       "total_earnings",
       "earnings"

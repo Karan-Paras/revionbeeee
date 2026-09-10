@@ -18,6 +18,16 @@ export type TeacherStudent = {
   status: StudentStatus;
   sessions: number;
   spend: string;
+  lastSessionAt?: string;
+};
+
+export type StudentsResponse = {
+  students: TeacherStudent[];
+  summary: {
+    totalStudents: number;
+    activeStudents: number;
+    totalRevenue: number;
+  };
 };
 
 function isRecord(value: unknown): value is ApiRecord {
@@ -70,18 +80,53 @@ function normalizeStatus(record: ApiRecord): StudentStatus {
   return "Active";
 }
 
+function formatLastSession(value: string) {
+  if (!value) return undefined;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})/);
+  if (!match) return value;
+  const [, year, month, day, hour, minute] = match.map(Number);
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(year, month - 1, day, hour, minute));
+}
+
 export async function getTeacherStudents(params: {
   filter: StudentFilter;
   search: string;
   perPage: number;
-}): Promise<TeacherStudent[]> {
+}): Promise<StudentsResponse> {
   const response = await fetchClient<unknown>(
     teacherStudentsUrl,
     "POST",
     params
   );
 
-  return findStudents(response.data).map((student, index) => {
+  // Summary is at the top level of the API response (not inside data)
+  const raw = response as Record<string, unknown>;
+  const summaryRaw = isRecord(raw.summary)
+    ? (raw.summary as ApiRecord)
+    : isRecord((response.data as ApiRecord)?.summary)
+      ? ((response.data as ApiRecord).summary as ApiRecord)
+      : ({} as ApiRecord);
+
+  const summary = {
+    totalStudents:
+      Number(text(summaryRaw, "totalStudents", "total_students")) || 0,
+    activeStudents:
+      Number(text(summaryRaw, "activeStudents", "active_students")) || 0,
+    totalRevenue:
+      Number(text(summaryRaw, "totalRevenue", "total_revenue")) || 0,
+  };
+
+  const students = findStudents(response.data).map((student, index) => {
+    // API shape: { client: { name, email, profilePhoto }, contact: { phone, email }, ... }
+    const client = nestedRecord(student, "client");
+    const contact = nestedRecord(student, "contact");
     const user = nestedRecord(
       student,
       "user",
@@ -90,11 +135,13 @@ export async function getTeacherStudents(params: {
       "student_details",
       "profile"
     );
-    const person = { ...student, ...user };
+    // Merge all sources — client/contact take priority for their respective fields
+    const person = { ...student, ...user, ...client };
     const firstName = text(person, "firstName", "first_name");
     const lastName = text(person, "lastName", "last_name");
     const image = text(
       person,
+      "profilePhoto", // actual API key
       "profilePicture",
       "profile_picture",
       "profileImage",
@@ -112,32 +159,61 @@ export async function getTeacherStudents(params: {
     );
     const numericSpend = Number(rawSpend.replace(/[^\d.-]/g, ""));
 
+    // Phone: look in contact first, then person
+    const phone =
+      text(
+        contact,
+        "phone",
+        "phoneNumber",
+        "phone_number",
+        "mobile",
+        "mobileNumber"
+      ) ||
+      text(
+        person,
+        "mobileNumber",
+        "mobile_number",
+        "phoneNumber",
+        "phone_number",
+        "phone"
+      ) ||
+      "—";
+
+    // Email: look in client/contact first, then person
+    const email =
+      text(client, "email", "emailAddress") ||
+      text(contact, "email", "emailAddress") ||
+      text(person, "email", "emailAddress", "email_address") ||
+      "—";
+
+    const rawLastSession = text(
+      student,
+      "lastSessionAt",
+      "last_session_at",
+      "lastLesson",
+      "last_lesson",
+      "lastActivity",
+      "last_activity"
+    );
+
     return {
       id: text(student, "id", "studentID", "studentId", "student_id") || index,
       name:
         text(
           person,
+          "name",
           "fullName",
           "full_name",
           "studentName",
-          "student_name",
-          "name"
+          "student_name"
         ) ||
         [firstName, lastName].filter(Boolean).join(" ") ||
         "Student",
-      email: text(person, "email", "emailAddress", "email_address") || "—",
+      email,
       image: image
         ? getUserImageUrl(image)
         : "/images/teacher-personal-info.svg",
-      phone:
-        text(
-          person,
-          "mobileNumber",
-          "mobile_number",
-          "phoneNumber",
-          "phone_number",
-          "phone"
-        ) || "—",
+      phone,
       status: normalizeStatus({ ...student, ...user }),
       sessions:
         Number(
@@ -154,6 +230,9 @@ export async function getTeacherStudents(params: {
         rawSpend && Number.isFinite(numericSpend)
           ? `$${numericSpend.toLocaleString("en-US", { maximumFractionDigits: 2 })}`
           : rawSpend || "$0",
+      lastSessionAt: formatLastSession(rawLastSession),
     };
   });
+
+  return { students, summary };
 }

@@ -8,7 +8,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Search, UserRoundCheck, UsersRound } from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 const filters: Array<{ label: string; value: StudentFilter }> = [
   { label: "All", value: "all" },
@@ -24,11 +24,7 @@ const statusColors: Record<StudentStatus, string> = {
 export default function TeacherStudentsPage() {
   const [activeFilter, setActiveFilter] = useState<StudentFilter>("all");
   const [search, setSearch] = useState("");
-  const {
-    data: students = [],
-    isPending,
-    error,
-  } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["teacher-students", activeFilter, search.trim()],
     queryFn: () =>
       getTeacherStudents({
@@ -39,33 +35,35 @@ export default function TeacherStudentsPage() {
     refetchOnMount: "always",
     refetchOnWindowFocus: "always",
   });
-  const stats = useMemo(
-    () => [
-      {
-        value: students.length.toLocaleString(),
-        label: "Total Students",
-        icon: UsersRound,
-        iconStyle: "bg-[#edf7ff] text-[#53a2eb]",
-      },
-      {
-        value: students
-          .filter((student) => student.status === "Active")
-          .length.toLocaleString(),
-        label: "Active Students",
-        icon: UserRoundCheck,
-        iconStyle: "bg-[#eaf9ee] text-[#27c65e]",
-      },
-      {
-        value: students
-          .reduce((total, student) => total + student.sessions, 0)
-          .toLocaleString(),
-        label: "Total Sessions",
-        icon: CalendarDays,
-        iconStyle: "bg-[#fff2e7] text-[#ff8e2b]",
-      },
-    ],
-    [students]
-  );
+
+  const students = data?.students ?? [];
+  const summary = data?.summary;
+
+  const stats = [
+    {
+      value: (summary?.totalStudents ?? students.length).toLocaleString(),
+      label: "Total Students",
+      icon: UsersRound,
+      iconStyle: "bg-[#edf7ff] text-[#53a2eb]",
+    },
+    {
+      value: (
+        summary?.activeStudents ??
+        students.filter((s) => s.status === "Active").length
+      ).toLocaleString(),
+      label: "Active Students",
+      icon: UserRoundCheck,
+      iconStyle: "bg-[#eaf9ee] text-[#27c65e]",
+    },
+    {
+      value: students
+        .reduce((total, student) => total + student.sessions, 0)
+        .toLocaleString(),
+      label: "Total Sessions",
+      icon: CalendarDays,
+      iconStyle: "bg-[#fff2e7] text-[#ff8e2b]",
+    },
+  ];
 
   return (
     <main className="min-h-full bg-[#f5f6f8] p-4 sm:p-8 lg:px-9 lg:py-9">
@@ -157,6 +155,7 @@ export default function TeacherStudentsPage() {
                   key={student.id}
                   className="grid gap-4 py-4 lg:grid-cols-[1.5fr_1.45fr_1fr_1.25fr_.8fr] lg:items-center lg:gap-5"
                 >
+                  {/* Client Details */}
                   <div className="flex min-w-0 items-center gap-3">
                     <Image
                       src={student.image}
@@ -174,12 +173,26 @@ export default function TeacherStudentsPage() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Contact — phone + email + last session */}
                   <div>
                     <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
                       Contact
                     </span>
                     <p className="text-xs text-[#303338]">{student.phone}</p>
+                    {student.email !== "—" && (
+                      <p className="mt-0.5 truncate text-[10px] text-[#a0a0a0]">
+                        {student.email}
+                      </p>
+                    )}
+                    {student.lastSessionAt && (
+                      <p className="mt-0.5 text-[10px] text-[#b0b3b8]">
+                        Last: {student.lastSessionAt}
+                      </p>
+                    )}
                   </div>
+
+                  {/* Status */}
                   <div>
                     <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
                       Status
@@ -190,6 +203,8 @@ export default function TeacherStudentsPage() {
                       {student.status}
                     </span>
                   </div>
+
+                  {/* Total Sessions */}
                   <div>
                     <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
                       Total Sessions
@@ -198,6 +213,8 @@ export default function TeacherStudentsPage() {
                       {student.sessions}
                     </span>
                   </div>
+
+                  {/* Total Spend */}
                   <div className="lg:text-right">
                     <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
                       Total Spend
