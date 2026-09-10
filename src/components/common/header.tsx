@@ -34,7 +34,6 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
       ? [
           { name: "Dashboard", path: paths.dashboard() },
           { name: "Lessons", path: paths.lessons() },
-          { name: "My Lessons", path: paths.myLessons() },
           { name: "Progress", path: paths.progress() },
           { name: "Subjects", path: paths.subjects() },
           { name: "Quiz", path: paths.quiz() },

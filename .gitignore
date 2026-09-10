@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/.tmp-whiteboard/
 
 # next.js
 /.next/

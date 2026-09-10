@@ -10,6 +10,7 @@ import {
 import { paths } from "@/routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  ArrowLeft,
   CalendarDays,
   ChevronDown,
   CircleDollarSign,
@@ -19,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -113,17 +115,26 @@ export function TeacherList() {
           <h2 className="text-2xl font-bold text-[#121212] lg:text-[28px]">
             List of all Teachers
           </h2>
-          <label className="flex h-11 w-full items-center rounded-lg border border-[#7e7e7e] bg-white px-4 sm:w-[320px]">
-            <Search size={18} className="shrink-0 text-[#6f6f6f]" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search..."
-              className="min-w-0 flex-1 bg-transparent px-2.5 text-sm outline-none"
-            />
-            <SlidersHorizontal size={19} className="text-[#555]" />
-          </label>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <Link
+              href={paths.myLessons()}
+              className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#53a2eb] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#398fdc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#348edc]"
+            >
+              <CalendarDays size={18} aria-hidden="true" />
+              My Lessons
+            </Link>
+            <label className="flex h-11 w-full items-center rounded-lg border border-[#7e7e7e] bg-white px-4 sm:w-[320px]">
+              <Search size={18} className="shrink-0 text-[#6f6f6f]" />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search..."
+                className="min-w-0 flex-1 bg-transparent px-2.5 text-sm outline-none"
+              />
+              <SlidersHorizontal size={19} className="text-[#555]" />
+            </label>
+          </div>
         </div>
 
         {isPending ? (
@@ -213,225 +224,245 @@ export function TeacherList() {
       </div>
 
       {selectedTeacher && (
-        <div
-          className={`fixed inset-0 z-[100000] flex bg-black/55 ${isInstantBooking ? "justify-end" : "items-center justify-center p-3 sm:p-6"}`}
-        >
+        <div className="fixed inset-0 z-[100000] flex justify-end bg-black/55">
           <div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={`${selectedTeacher.name} profile details`}
-            className={`relative w-full overflow-y-auto bg-[#f3f4f6] p-4 shadow-2xl sm:p-5 ${isInstantBooking ? "h-dvh max-w-[440px]" : "max-h-[94dvh] max-w-[540px] rounded-xl"}`}
+            className={`relative flex h-dvh w-full flex-col overflow-hidden bg-[#f3f4f6] shadow-2xl ${isInstantBooking ? "max-w-[440px]" : "max-w-[540px]"}`}
           >
-            <button
-              type="button"
-              onClick={() => setSelectedTeacher(null)}
-              aria-label="Close teacher details"
-              className="absolute top-3 right-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white shadow hover:bg-[#e9eef3]"
-            >
-              <X size={17} />
-            </button>
+            <div className="flex shrink-0 items-center justify-between border-b border-[#d9dce0] bg-white px-4 py-3 sm:px-5">
+              <button
+                type="button"
+                onClick={() => {
+                  if (isScheduling || isInstantBooking) {
+                    setIsScheduling(false);
+                    setIsInstantBooking(false);
+                  } else {
+                    setSelectedTeacher(null);
+                  }
+                }}
+                className="inline-flex h-9 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[#343b44] hover:bg-[#e9eef3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#53a2eb]"
+              >
+                <ArrowLeft size={18} aria-hidden="true" />
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedTeacher(null)}
+                aria-label="Close teacher details"
+                className="grid h-8 w-8 place-items-center rounded-full bg-white shadow hover:bg-[#e9eef3]"
+              >
+                <X size={17} />
+              </button>
+            </div>
 
-            {isInstantBooking ? (
-              <InstantLesson
-                teacher={selectedTeacher}
-                onSubmit={() => router.push(paths.lessonSuccess())}
-              />
-            ) : isScheduling ? (
-              <ScheduleLesson
-                teacher={selectedTeacher}
-                onSubmit={() => router.push(paths.lessonSuccess())}
-              />
-            ) : (
-              <>
-                <section className="rounded-xl border border-[#d9dce0] bg-white p-4">
-                  <div className="flex items-center gap-3 pr-8">
-                    <Image
-                      src={selectedTeacher.image}
-                      alt={selectedTeacher.name}
-                      width={54}
-                      height={54}
-                      className="h-14 w-14 rounded-full object-cover"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <h2 className="truncate text-sm font-bold">
-                        {selectedTeacher.name}
-                      </h2>
-                      <p
-                        className={`mt-0.5 flex items-center gap-1 text-[11px] ${selectedTeacher.isOnline ? "text-[#19bd57]" : "text-[#8a929a]"}`}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${selectedTeacher.isOnline ? "bg-[#19bd57]" : "bg-[#aeb4ba]"}`}
-                        />
-                        {selectedTeacher.isOnline ? "Online" : "Offline"}
-                      </p>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5">
+              {isInstantBooking ? (
+                <InstantLesson
+                  teacher={selectedTeacher}
+                  onSubmit={() => router.push(paths.lessonSuccess())}
+                />
+              ) : isScheduling ? (
+                <ScheduleLesson
+                  teacher={selectedTeacher}
+                  onSubmit={() => router.push(paths.lessonSuccess())}
+                />
+              ) : (
+                <>
+                  <section className="rounded-xl border border-[#d9dce0] bg-white p-4">
+                    <div className="flex items-center gap-3 pr-8">
+                      <Image
+                        src={selectedTeacher.image}
+                        alt={selectedTeacher.name}
+                        width={54}
+                        height={54}
+                        className="h-14 w-14 rounded-full object-cover"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h2 className="truncate text-sm font-bold">
+                          {selectedTeacher.name}
+                        </h2>
+                        <p
+                          className={`mt-0.5 flex items-center gap-1 text-[11px] ${selectedTeacher.isOnline ? "text-[#19bd57]" : "text-[#8a929a]"}`}
+                        >
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full ${selectedTeacher.isOnline ? "bg-[#19bd57]" : "bg-[#aeb4ba]"}`}
+                          />
+                          {selectedTeacher.isOnline ? "Online" : "Offline"}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-base font-bold">
+                          {selectedTeacher.hourlyRate
+                            ? `$${selectedTeacher.hourlyRate}`
+                            : "—"}
+                          <span className="text-[10px] font-normal">/min</span>
+                        </p>
+                        <p className="text-[9px] text-[#929292]">
+                          Lesson Price
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-base font-bold">
-                        {selectedTeacher.hourlyRate
-                          ? `$${selectedTeacher.hourlyRate}`
-                          : "—"}
-                        <span className="text-[10px] font-normal">/min</span>
-                      </p>
-                      <p className="text-[9px] text-[#929292]">Lesson Price</p>
-                    </div>
-                  </div>
-                  <div
-                    className={`mt-4 grid gap-3 border-t border-[#ececec] pt-4 ${selectedTeacher.isOnline ? "grid-cols-2" : "grid-cols-1"}`}
-                  >
-                    {selectedTeacher.isOnline && (
+                    <div
+                      className={`mt-4 grid gap-3 border-t border-[#ececec] pt-4 ${selectedTeacher.isOnline ? "grid-cols-2" : "grid-cols-1"}`}
+                    >
+                      {selectedTeacher.isOnline && (
+                        <button
+                          type="button"
+                          onClick={() => setIsInstantBooking(true)}
+                          className="h-11 rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc]"
+                        >
+                          Instant Lesson
+                        </button>
+                      )}
                       <button
                         type="button"
-                        onClick={() => setIsInstantBooking(true)}
-                        className="h-11 rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc]"
+                        onClick={() => setIsScheduling(true)}
+                        className="h-11 rounded-lg border-2 border-[#53a2eb] text-sm font-semibold text-[#53a2eb] hover:bg-[#f3f9ff]"
                       >
-                        Instant Lesson
+                        Schedule Lesson
                       </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setIsScheduling(true)}
-                      className="h-11 rounded-lg border-2 border-[#53a2eb] text-sm font-semibold text-[#53a2eb] hover:bg-[#f3f9ff]"
-                    >
-                      Schedule Lesson
-                    </button>
-                  </div>
-                </section>
+                    </div>
+                  </section>
 
-                <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
-                  <h3 className="text-sm font-bold">About me</h3>
-                  <p className="mt-3 text-[10px] leading-[1.55] text-[#898989]">
-                    {selectedTeacher.bio || "No profile description available."}
-                  </p>
-                  <div className="mt-4 flex gap-2">
-                    {selectedTeacher.subjects.map((subject) => (
-                      <span
-                        key={subject}
-                        className="rounded bg-[#e8f4ff] px-2 py-1 text-[10px] font-medium text-[#278bdc]"
-                      >
-                        {subject}
-                      </span>
-                    ))}
-                  </div>
-                </section>
-
-                {selectedTeacher.qualifications.length > 0 && (
                   <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
-                    <h3 className="text-sm font-bold">
-                      Education &amp; Qualification
-                    </h3>
-                    <div className="mt-3 space-y-3">
-                      {selectedTeacher.qualifications.map((item, index) => (
+                    <h3 className="text-sm font-bold">About me</h3>
+                    <p className="mt-3 text-[10px] leading-[1.55] text-[#898989]">
+                      {selectedTeacher.bio ||
+                        "No profile description available."}
+                    </p>
+                    <div className="mt-4 flex gap-2">
+                      {selectedTeacher.subjects.map((subject) => (
+                        <span
+                          key={subject}
+                          className="rounded bg-[#e8f4ff] px-2 py-1 text-[10px] font-medium text-[#278bdc]"
+                        >
+                          {subject}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+
+                  {selectedTeacher.qualifications.length > 0 && (
+                    <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
+                      <h3 className="text-sm font-bold">
+                        Education &amp; Qualification
+                      </h3>
+                      <div className="mt-3 space-y-3">
+                        {selectedTeacher.qualifications.map((item, index) => (
+                          <div
+                            key={detailText(item, "id") || index}
+                            className="grid grid-cols-[84px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
+                          >
+                            <Image
+                              src="/images/teacher-certifications.png"
+                              alt="Qualification certificate"
+                              width={84}
+                              height={72}
+                              className="h-[72px] w-[84px] rounded-md bg-white object-cover"
+                            />
+                            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
+                              <div>
+                                <dt>Institution Name</dt>
+                                <dd className="font-bold text-[#111]">
+                                  {detailText(
+                                    item,
+                                    "institutionName",
+                                    "institution_name",
+                                    "institution"
+                                  ) || "—"}
+                                </dd>
+                              </div>
+                              <div>
+                                <dt>Graduation Year</dt>
+                                <dd className="font-bold text-[#111]">
+                                  {detailText(
+                                    item,
+                                    "graduationYear",
+                                    "graduation_year",
+                                    "year"
+                                  ) || "—"}
+                                </dd>
+                              </div>
+                              <div>
+                                <dt>Field of Study</dt>
+                                <dd className="font-bold text-[#111]">
+                                  {detailText(
+                                    item,
+                                    "fieldOfStudy",
+                                    "field_of_study",
+                                    "field"
+                                  ) || "—"}
+                                </dd>
+                              </div>
+                              <div>
+                                <dt>Degree</dt>
+                                <dd className="font-bold text-[#111]">
+                                  {detailText(item, "degree") || "—"}
+                                </dd>
+                              </div>
+                            </dl>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {selectedTeacher.certifications.length > 0 && (
+                    <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
+                      <h3 className="text-sm font-bold">Certifications</h3>
+                      {selectedTeacher.certifications.map((item, index) => (
                         <div
                           key={detailText(item, "id") || index}
-                          className="grid grid-cols-[84px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
+                          className="mt-3 grid grid-cols-[100px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
                         >
                           <Image
-                            src="/images/teacher-certifications.png"
-                            alt="Qualification certificate"
-                            width={84}
-                            height={72}
-                            className="h-[72px] w-[84px] rounded-md bg-white object-cover"
+                            src="/images/teacher-education.png"
+                            alt="Professional certification"
+                            width={100}
+                            height={78}
+                            className="h-[78px] w-[100px] rounded-md object-cover"
                           />
                           <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
                             <div>
-                              <dt>Institution Name</dt>
+                              <dt>Certification Name</dt>
                               <dd className="font-bold text-[#111]">
                                 {detailText(
                                   item,
-                                  "institutionName",
-                                  "institution_name",
-                                  "institution"
+                                  "certificationName",
+                                  "certification_name",
+                                  "name"
                                 ) || "—"}
                               </dd>
                             </div>
                             <div>
-                              <dt>Graduation Year</dt>
+                              <dt>Issuing Authority</dt>
                               <dd className="font-bold text-[#111]">
                                 {detailText(
                                   item,
-                                  "graduationYear",
-                                  "graduation_year",
-                                  "year"
+                                  "issuingAuthority",
+                                  "issuing_authority",
+                                  "authority"
                                 ) || "—"}
                               </dd>
                             </div>
                             <div>
-                              <dt>Field of Study</dt>
+                              <dt>Issue Date</dt>
                               <dd className="font-bold text-[#111]">
-                                {detailText(
-                                  item,
-                                  "fieldOfStudy",
-                                  "field_of_study",
-                                  "field"
-                                ) || "—"}
-                              </dd>
-                            </div>
-                            <div>
-                              <dt>Degree</dt>
-                              <dd className="font-bold text-[#111]">
-                                {detailText(item, "degree") || "—"}
+                                {detailText(item, "issueDate", "issue_date") ||
+                                  "—"}
                               </dd>
                             </div>
                           </dl>
                         </div>
                       ))}
-                    </div>
-                  </section>
-                )}
-
-                {selectedTeacher.certifications.length > 0 && (
-                  <section className="mt-5 rounded-xl border border-[#d9dce0] bg-white p-4">
-                    <h3 className="text-sm font-bold">Certifications</h3>
-                    {selectedTeacher.certifications.map((item, index) => (
-                      <div
-                        key={detailText(item, "id") || index}
-                        className="mt-3 grid grid-cols-[100px_1fr] gap-4 rounded-xl bg-[#f0f4f8] p-3"
-                      >
-                        <Image
-                          src="/images/teacher-education.png"
-                          alt="Professional certification"
-                          width={100}
-                          height={78}
-                          className="h-[78px] w-[100px] rounded-md object-cover"
-                        />
-                        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-[9px] text-[#5f6670]">
-                          <div>
-                            <dt>Certification Name</dt>
-                            <dd className="font-bold text-[#111]">
-                              {detailText(
-                                item,
-                                "certificationName",
-                                "certification_name",
-                                "name"
-                              ) || "—"}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>Issuing Authority</dt>
-                            <dd className="font-bold text-[#111]">
-                              {detailText(
-                                item,
-                                "issuingAuthority",
-                                "issuing_authority",
-                                "authority"
-                              ) || "—"}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>Issue Date</dt>
-                            <dd className="font-bold text-[#111]">
-                              {detailText(item, "issueDate", "issue_date") ||
-                                "—"}
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
-                    ))}
-                  </section>
-                )}
-              </>
-            )}
+                    </section>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
