@@ -104,9 +104,6 @@ function TeacherAddQualification() {
           <h1 className="text-2xl font-bold text-[#111] sm:text-[28px]">
             Add Qualification
           </h1>
-          <p className="mx-auto mt-2 max-w-[270px] text-xs leading-5 text-[#666]">
-            Lorem ipsum dolor sit amet consectetur. In ornare lorem at sociis.
-          </p>
         </div>
 
         <form className="mt-5 space-y-4" onSubmit={handleSubmit} noValidate>

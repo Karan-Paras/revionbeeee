@@ -11,6 +11,7 @@ import {
   activeLessonSessionReadyEvent,
   activeLessonSessionStorageKey,
 } from "@/features/lessons/components/active-lesson-session-guard";
+import { isSessionWindowOpen } from "@/lib/session-time";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CheckCircle2,
@@ -37,10 +38,7 @@ type NotificationTab = (typeof notificationTabs)[number];
 const upcomingLessonsCacheKey = "revision-bee:student-upcoming-lessons";
 const upcomingLessonCacheLifetime = 6 * 60 * 60 * 1000;
 
-type CachedUpcomingLessons = {
-  savedAt: number;
-  lessons: MyBooking[];
-};
+type CachedUpcomingLessons = { savedAt: number; lessons: MyBooking[] };
 
 function readCachedUpcomingLessons() {
   try {
@@ -67,9 +65,7 @@ function saveCachedUpcomingLessons(lessons: MyBooking[]) {
       upcomingLessonsCacheKey,
       JSON.stringify({ savedAt: Date.now(), lessons })
     );
-  } catch {
-    // A storage failure must not prevent the student from using the list.
-  }
+  } catch {}
 }
 
 function seenBookingsKey(tab: NotificationTab) {
@@ -77,67 +73,7 @@ function seenBookingsKey(tab: NotificationTab) {
 }
 
 function bookingIds(bookings: { id: string | number }[]) {
-  return bookings.map((booking) => String(booking.id));
-}
-
-function parseUtcSessionDate(value: string) {
-  const isoMatch = value.trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (isoMatch) {
-    return {
-      year: Number(isoMatch[1]),
-      month: Number(isoMatch[2]),
-      day: Number(isoMatch[3]),
-    };
-  }
-
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return {
-    year: parsed.getUTCFullYear(),
-    month: parsed.getUTCMonth() + 1,
-    day: parsed.getUTCDate(),
-  };
-}
-
-function parseTimeToMinutes(value: string) {
-  const match = value.trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)?/i);
-  if (!match) return null;
-
-  let hours = Number(match[1]);
-  const meridiem = match[3]?.toLowerCase();
-  if (meridiem === "pm" && hours < 12) hours += 12;
-  if (meridiem === "am" && hours === 12) hours = 0;
-  return hours * 60 + Number(match[2]);
-}
-
-function canJoinLessonAtUtc(lesson: MyBooking, nowMs: number) {
-  if (lesson.bookingType.trim().toLowerCase() === "instant") return true;
-
-  const date = parseUtcSessionDate(lesson.sessionDate);
-  const startMinutes = parseTimeToMinutes(lesson.sessionStartTime);
-  if (!date || startMinutes === null) return false;
-
-  const endMinutes =
-    parseTimeToMinutes(lesson.sessionEndTime) ??
-    startMinutes + (lesson.durationMinutes || 60);
-  const startMs = Date.UTC(
-    date.year,
-    date.month - 1,
-    date.day,
-    Math.floor(startMinutes / 60),
-    startMinutes % 60
-  );
-  const endMs = Date.UTC(
-    date.year,
-    date.month - 1,
-    date.day + (endMinutes < startMinutes ? 1 : 0),
-    Math.floor(endMinutes / 60),
-    endMinutes % 60,
-    59,
-    999
-  );
-
-  return nowMs >= startMs && nowMs <= endMs;
+  return bookings.map((b) => String(b.id));
 }
 
 function readSeenBookings(tab: NotificationTab) {
@@ -154,13 +90,17 @@ function readSeenBookings(tab: NotificationTab) {
 export function MyLessonsList() {
   const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
   const [query, setQuery] = useState("");
-  const [nowUtc, setNowUtc] = useState(() => Date.now());
+  const [nowMs, setNowMs] = useState(() => Date.now());
   const [cachedUpcomingLessons, setCachedUpcomingLessons] = useState<
     MyBooking[]
   >([]);
   const [hasNewBookings, setHasNewBookings] = useState<
     Record<NotificationTab, boolean>
-  >({ accepted: false, cancelled: false });
+  >({
+    accepted: false,
+    cancelled: false,
+  });
+
   const approvedNotifications = useQuery({
     queryKey: ["my-booking-notifications", "accepted"],
     queryFn: () =>
@@ -186,47 +126,39 @@ export function MyLessonsList() {
     setCachedUpcomingLessons(readCachedUpcomingLessons());
   }, []);
 
+  // Tick every second so Join button activates exactly on time
   useEffect(() => {
-    const timer = window.setInterval(() => setNowUtc(Date.now()), 5000);
+    const timer = window.setInterval(() => setNowMs(Date.now()), 1000);
     return () => window.clearInterval(timer);
   }, []);
 
   useEffect(() => {
     setHasNewBookings((current) => {
       const next = { ...current };
-      const latestBookings: Record<NotificationTab, MyBooking[]> = {
-        accepted: approvedNotifications.data ?? [],
-        cancelled: cancelledNotifications.data ?? [],
-      };
-
       notificationTabs.forEach((tab) => {
-        const bookings = latestBookings[tab];
+        const bookings = notificationBookings[tab];
         if (!bookings.length) {
           next[tab] = false;
           return;
         }
-
         const seenIds = readSeenBookings(tab);
-        next[tab] = bookings.some(
-          (booking) => !seenIds.has(String(booking.id))
-        );
+        next[tab] = bookings.some((b) => !seenIds.has(String(b.id)));
       });
-
       return next;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [approvedNotifications.data, cancelledNotifications.data]);
 
   function changeTab(tab: MyBookingFilter) {
     setActiveTab(tab);
-
     if (tab !== "accepted" && tab !== "cancelled") return;
-
     localStorage.setItem(
       seenBookingsKey(tab),
       JSON.stringify(bookingIds(notificationBookings[tab]))
     );
     setHasNewBookings((current) => ({ ...current, [tab]: false }));
   }
+
   const payment = useMutation({
     mutationFn: payForLesson,
     onSuccess: ({ checkoutUrl }) => {
@@ -234,6 +166,7 @@ export function MyLessonsList() {
     },
     onError: (error) => toast.error(error.message),
   });
+
   const joinSession = useMutation({
     mutationFn: joinLessonSession,
     onSuccess: (credentials) => {
@@ -242,47 +175,41 @@ export function MyLessonsList() {
         expiresAt: Date.now() + credentials.expiresIn * 1000,
         sessionRole: "student",
       });
-
       try {
         sessionStorage.setItem(activeLessonSessionStorageKey, storedSession);
         if (
           sessionStorage.getItem(activeLessonSessionStorageKey) !==
           storedSession
-        ) {
+        )
           throw new Error("Session storage verification failed.");
-        }
       } catch {
         toast.error(
           "The call details could not be saved. Enable browser storage and try again."
         );
         return;
       }
-
       setCachedUpcomingLessons((current) => {
         const next = current.filter(
-          (lesson) =>
-            String(lesson.paymentLessonID) !== String(credentials.lessonID)
+          (l) => String(l.paymentLessonID) !== String(credentials.lessonID)
         );
         saveCachedUpcomingLessons(next);
         return next;
       });
-
       window.dispatchEvent(new Event(activeLessonSessionReadyEvent));
-      const navigationFallback = window.setTimeout(() => {
-        if (window.location.pathname !== "/session") {
+      const fallback = window.setTimeout(() => {
+        if (window.location.pathname !== "/session")
           window.location.replace("/session");
-        }
       }, 1_200);
-
       try {
         window.location.assign("/session");
       } catch {
-        window.clearTimeout(navigationFallback);
+        window.clearTimeout(fallback);
         window.location.replace("/session");
       }
     },
     onError: (error) => toast.error(error.message),
   });
+
   const {
     data: fetchedLessons = [],
     isPending,
@@ -290,11 +217,7 @@ export function MyLessonsList() {
   } = useQuery({
     queryKey: ["my-bookings", activeTab, query.trim()],
     queryFn: () =>
-      getMyBookings({
-        filter: activeTab,
-        search: query.trim(),
-        perPage: 8,
-      }),
+      getMyBookings({ filter: activeTab, search: query.trim(), perPage: 8 }),
     refetchInterval: 10_000,
     refetchIntervalInBackground: true,
     refetchOnMount: "always",
@@ -303,44 +226,49 @@ export function MyLessonsList() {
   });
 
   useEffect(() => {
-    if (activeTab !== "upcoming" || query.trim() || !fetchedLessons.length) {
+    if (activeTab !== "upcoming" || query.trim() || !fetchedLessons.length)
       return;
-    }
-
     setCachedUpcomingLessons((current) => {
       const merged = new Map(
-        current.map((lesson) => [String(lesson.paymentLessonID), lesson])
+        current.map((l) => [String(l.paymentLessonID), l])
       );
-      fetchedLessons.forEach((lesson) => {
-        merged.set(String(lesson.paymentLessonID), lesson);
-      });
+      fetchedLessons.forEach((l) => merged.set(String(l.paymentLessonID), l));
       const next = Array.from(merged.values());
       saveCachedUpcomingLessons(next);
       return next;
     });
   }, [activeTab, fetchedLessons, query]);
 
-  const cancelledLessonIds = new Set(
-    (cancelledNotifications.data ?? []).map((lesson) =>
-      String(lesson.paymentLessonID)
-    )
+  const cancelledIds = new Set(
+    (cancelledNotifications.data ?? []).map((l) => String(l.paymentLessonID))
   );
-  const fetchedLessonIds = new Set(
-    fetchedLessons.map((lesson) => String(lesson.paymentLessonID))
+  const fetchedIds = new Set(
+    fetchedLessons.map((l) => String(l.paymentLessonID))
   );
-  const retainedUpcomingLessons = cachedUpcomingLessons.filter(
-    (lesson) =>
-      !fetchedLessonIds.has(String(lesson.paymentLessonID)) &&
-      !cancelledLessonIds.has(String(lesson.paymentLessonID))
+  const retainedUpcoming = cachedUpcomingLessons.filter(
+    (l) =>
+      !fetchedIds.has(String(l.paymentLessonID)) &&
+      !cancelledIds.has(String(l.paymentLessonID))
   );
-  const lessons =
+
+  const isRejected = (status: string) =>
+    ["rejected", "cancelled", "canceled"].includes(status.trim().toLowerCase());
+
+  const allLessons =
     activeTab === "upcoming" && !query.trim()
-      ? [...fetchedLessons, ...retainedUpcomingLessons]
+      ? [...fetchedLessons, ...retainedUpcoming]
       : fetchedLessons;
+
+  // On the upcoming tab, hide any lesson the teacher has rejected
+  const lessons =
+    activeTab === "upcoming"
+      ? allLessons.filter((l) => !isRejected(l.status))
+      : allLessons;
 
   return (
     <section className="min-h-[500px] bg-white px-5 py-10 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-[1240px]">
+        {/* Tab bar + search */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex w-full rounded-lg bg-[#f0f0f0] p-1 sm:w-auto">
             {tabs.map((tab) => (
@@ -348,7 +276,11 @@ export function MyLessonsList() {
                 key={tab.value}
                 type="button"
                 onClick={() => changeTab(tab.value)}
-                className={`relative flex-1 rounded-md px-5 py-2 text-[11px] transition sm:flex-none ${activeTab === tab.value ? "bg-white font-semibold text-[#111] shadow-sm" : "text-[#929292]"}`}
+                className={`relative flex-1 rounded-md px-5 py-2 text-[11px] transition sm:flex-none ${
+                  activeTab === tab.value
+                    ? "bg-white font-semibold text-[#111] shadow-sm"
+                    : "text-[#929292]"
+                }`}
               >
                 {tab.label}
                 {(tab.value === "accepted" || tab.value === "cancelled") &&
@@ -361,13 +293,12 @@ export function MyLessonsList() {
               </button>
             ))}
           </div>
-
           <label className="flex h-10 w-full items-center rounded-lg border border-[#777] px-3 sm:w-[285px]">
             <Search size={16} className="text-[#777]" />
             <input
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search..."
               className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
             />
@@ -375,11 +306,12 @@ export function MyLessonsList() {
           </label>
         </div>
 
+        {/* Lesson cards */}
         {isPending ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, i) => (
               <div
-                key={index}
+                key={i}
                 className="h-[174px] animate-pulse rounded-xl bg-[#eef2f5]"
               />
             ))}
@@ -395,7 +327,18 @@ export function MyLessonsList() {
         ) : lessons.length ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {lessons.map((lesson) => {
-              const canJoinSession = canJoinLessonAtUtc(lesson, nowUtc);
+              const isInstant =
+                lesson.bookingType.trim().toLowerCase() === "instant";
+              const canJoin =
+                !isRejected(lesson.status) &&
+                isSessionWindowOpen({
+                  sessionDate: lesson.sessionDate,
+                  sessionStartTime: lesson.sessionStartTime,
+                  sessionEndTime: lesson.sessionEndTime,
+                  durationMinutes: lesson.durationMinutes,
+                  isInstant,
+                  nowMs,
+                });
 
               return (
                 <article
@@ -428,7 +371,13 @@ export function MyLessonsList() {
                     </div>
                     {activeTab !== "upcoming" && (
                       <span
-                        className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${activeTab === "cancelled" ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]" : activeTab === "accepted" ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]" : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"}`}
+                        className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${
+                          activeTab === "cancelled"
+                            ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]"
+                            : activeTab === "accepted"
+                              ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]"
+                              : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"
+                        }`}
                       >
                         {activeTab === "cancelled" ? (
                           <>
@@ -446,9 +395,11 @@ export function MyLessonsList() {
                       </span>
                     )}
                   </div>
+
                   <p className="mt-4 line-clamp-2 text-[10px] leading-4 text-[#77808f]">
                     {lesson.teacherBio}
                   </p>
+
                   {activeTab === "cancelled" && (
                     <div className="mt-3 rounded-md border border-[#ffd1d5] bg-[#fff5f6] px-3 py-2">
                       <p className="text-[10px] font-semibold text-[#d93645]">
@@ -460,6 +411,7 @@ export function MyLessonsList() {
                       </p>
                     </div>
                   )}
+
                   <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
                     <Detail label="Topic" value={lesson.subject} />
                     <Detail label="Type" value={lesson.bookingType} />
@@ -475,18 +427,19 @@ export function MyLessonsList() {
                     />
                     <Detail label="Amount" value={lesson.amount} />
                   </div>
+
                   {activeTab === "upcoming" && (
                     <button
                       type="button"
-                      disabled={!canJoinSession || joinSession.isPending}
+                      disabled={!canJoin || joinSession.isPending}
                       title={
-                        canJoinSession
+                        canJoin
                           ? "Join lesson"
-                          : "The lesson is not open for joining yet"
+                          : "Available 30 min before the session starts"
                       }
                       onClick={() => joinSession.mutate(lesson.paymentLessonID)}
                       className={`mt-4 flex h-10 w-full items-center justify-center rounded-lg text-xs font-semibold transition ${
-                        canJoinSession && !joinSession.isPending
+                        canJoin && !joinSession.isPending
                           ? "bg-[#53a2eb] text-white hover:bg-[#398fdc]"
                           : "cursor-not-allowed bg-[#53a2eb]/35 text-white/80"
                       }`}
@@ -497,6 +450,7 @@ export function MyLessonsList() {
                         : "Join"}
                     </button>
                   )}
+
                   {activeTab === "accepted" && (
                     <button
                       type="button"
@@ -519,7 +473,7 @@ export function MyLessonsList() {
           <EmptyState
             message={
               query
-                ? `No lessons found for “${query}”.`
+                ? `No lessons found for "${query}".`
                 : `You don't have any ${activeTab} lessons yet.`
             }
           />

@@ -167,10 +167,6 @@ export default function TeacherSettingsPage() {
         <h1 className="text-[22px] font-bold leading-tight text-[#111]">
           Settings
         </h1>
-        <p className="mt-2 text-xs text-[#6f7378] sm:text-sm">
-          Lorem ipsum dolor sit amet consectetur. Varius eu fermentum arcu lacus
-          lacus. Adipiscing egestas pretium rhoncus.
-        </p>
 
         <div className="mt-8 grid items-start gap-7 lg:grid-cols-[320px_1fr]">
           <nav className="space-y-4" aria-label="Settings sections">

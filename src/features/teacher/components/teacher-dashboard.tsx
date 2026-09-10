@@ -1,7 +1,10 @@
 "use client";
 
+import { startLessonSession } from "@/features/lessons/api/start-session";
+import type { DashboardLesson } from "@/features/teacher/api/get-dashboard";
 import { getTeacherDashboard } from "@/features/teacher/api/get-dashboard";
-import { useQuery } from "@tanstack/react-query";
+import { isSessionWindowOpen } from "@/lib/session-time";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   AlertTriangle,
   CalendarDays,
@@ -11,6 +14,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const statColors = [
   "bg-[#eaf5ff] text-[#429bea]",
@@ -19,13 +25,52 @@ const statColors = [
   "bg-[#e8faee] text-[#31c86b]",
 ];
 
+function canLaunchNow(lesson: DashboardLesson, nowMs: number): boolean {
+  return isSessionWindowOpen({
+    sessionDate: lesson.rawDate,
+    sessionStartTime: lesson.rawStartTime,
+    durationMinutes: lesson.durationMinutes,
+    isInstant: lesson.isInstant,
+    nowMs,
+  });
+}
+
 export function TeacherDashboardContent() {
+  const router = useRouter();
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
+  // Update every second so the button activates exactly on time
+  useEffect(() => {
+    const t = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
   const { data, isPending, error } = useQuery({
     queryKey: ["teacher-dashboard"],
     queryFn: getTeacherDashboard,
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
   });
+
+  const startSession = useMutation({
+    mutationFn: startLessonSession,
+    onSuccess: (credentials) => {
+      sessionStorage.setItem(
+        "revision-bee:active-lesson-session",
+        JSON.stringify({
+          ...credentials,
+          expiresAt: Date.now() + credentials.expiresIn * 1000,
+          sessionRole: "teacher",
+        })
+      );
+      router.push("/teacher/session");
+    },
+    onError: (err) =>
+      toast.error(
+        err instanceof Error ? err.message : "Failed to start session"
+      ),
+  });
+
   const stats = data
     ? [
         {
@@ -69,13 +114,13 @@ export function TeacherDashboardContent() {
 
         <section className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {isPending
-            ? Array.from({ length: 4 }).map((_, index) => (
+            ? Array.from({ length: 4 }).map((_, i) => (
                 <div
-                  key={index}
+                  key={i}
                   className="h-[92px] animate-pulse rounded-xl bg-white"
                 />
               ))
-            : stats.map(({ value, label, icon: Icon }, index) => (
+            : stats.map(({ value, label, icon: Icon }, i) => (
                 <article
                   key={label}
                   className="flex items-center justify-between rounded-xl bg-white p-4 shadow-sm"
@@ -85,7 +130,7 @@ export function TeacherDashboardContent() {
                     <p className="mt-1 text-sm text-[#999]">{label}</p>
                   </div>
                   <span
-                    className={`grid h-11 w-11 place-items-center rounded-lg ${statColors[index]}`}
+                    className={`grid h-11 w-11 place-items-center rounded-lg ${statColors[i]}`}
                   >
                     <Icon size={22} />
                   </span>
@@ -94,6 +139,7 @@ export function TeacherDashboardContent() {
         </section>
 
         <div className="mt-7 grid gap-6 xl:grid-cols-[1.65fr_1fr]">
+          {/* Today's Scheduled Lessons */}
           <section className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-[#edf0f2] pb-4">
               <h2 className="font-bold">Today&apos;s Scheduled Lessons</h2>
@@ -105,38 +151,51 @@ export function TeacherDashboardContent() {
               </Link>
             </div>
             <div className="divide-y divide-[#edf0f2]">
-              {data?.scheduledLessons.map((lesson) => (
-                <article
-                  key={lesson.id}
-                  className="flex items-center gap-3 py-4"
-                >
-                  <Image
-                    src={lesson.image}
-                    alt={lesson.studentName}
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full object-cover"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-sm font-semibold">
-                      {lesson.studentName}
-                    </h3>
-                    <p className="truncate text-xs text-[#999]">
-                      {lesson.topic}
-                    </p>
-                    <p className="mt-1 flex gap-4 text-[11px] text-[#999]">
-                      <span>{lesson.dateTime}</span>
-                      <span>{lesson.duration}</span>
-                    </p>
-                  </div>
-                  <button
-                    disabled={!lesson.canLaunch}
-                    className="hidden items-center gap-2 rounded-lg bg-[#53a2eb] px-4 py-2 text-xs font-semibold text-white disabled:bg-[#c9c9c9] sm:flex"
+              {data?.scheduledLessons.map((lesson) => {
+                const active = canLaunchNow(lesson, nowMs);
+                return (
+                  <article
+                    key={lesson.id}
+                    className="flex items-center gap-3 py-4"
                   >
-                    <Video size={17} /> Launch Session
-                  </button>
-                </article>
-              ))}
+                    <Image
+                      src={lesson.image}
+                      alt={lesson.studentName}
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-semibold">
+                        {lesson.studentName}
+                      </h3>
+                      <p className="truncate text-xs text-[#999]">
+                        {lesson.topic}
+                      </p>
+                      <p className="mt-1 flex gap-4 text-[11px] text-[#999]">
+                        <span>{lesson.dateTime}</span>
+                        <span>{lesson.duration}</span>
+                      </p>
+                    </div>
+                    <button
+                      disabled={!active || startSession.isPending}
+                      title={
+                        active
+                          ? "Launch session"
+                          : "Available 30 min before the scheduled start time"
+                      }
+                      onClick={() => startSession.mutate(lesson.id)}
+                      className="hidden items-center gap-2 rounded-lg bg-[#53a2eb] px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-[#c9c9c9] sm:flex"
+                    >
+                      <Video size={17} />
+                      {startSession.isPending &&
+                      startSession.variables === lesson.id
+                        ? "Launching..."
+                        : "Launch Session"}
+                    </button>
+                  </article>
+                );
+              })}
               {!isPending && !error && !data?.scheduledLessons.length && (
                 <p className="py-10 text-center text-sm text-[#999]">
                   No lessons scheduled for today.
@@ -145,6 +204,7 @@ export function TeacherDashboardContent() {
             </div>
           </section>
 
+          {/* Recent Requests */}
           <section className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-[#edf0f2] pb-4">
               <h2 className="font-bold">

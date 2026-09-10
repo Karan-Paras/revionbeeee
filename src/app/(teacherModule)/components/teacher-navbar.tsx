@@ -2,8 +2,10 @@
 
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
+import { getTeacherNotifications } from "@/features/teacher/api/get-notifications";
 import { getTeacherImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
+import { useQuery } from "@tanstack/react-query";
 import { Bell, Menu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -53,6 +55,15 @@ export function TeacherNavbar() {
   const [teacherImage, setTeacherImage] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  // Poll notifications every 30s for live unread badge
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["teacher-notifications"],
+    queryFn: getTeacherNotifications,
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
+  });
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   useEffect(() => {
     const sessionName = session?.user?.name?.trim();
@@ -254,11 +265,15 @@ export function TeacherNavbar() {
         </button>
         <Link
           href={paths.teacherNotifications()}
-          aria-label="Notifications"
+          aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
           className="relative rounded-full p-1 text-[#3899ec] transition hover:bg-[#edf6ff]"
         >
           <Bell size={22} strokeWidth={1.7} />
-          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full border border-white bg-[#ff3d4d]" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-[#ff3d4d] text-[9px] font-bold text-white">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </Link>
       </div>
     </header>

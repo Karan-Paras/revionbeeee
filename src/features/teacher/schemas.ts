@@ -181,23 +181,56 @@ const availabilityTime = z
   .string()
   .regex(/^(0?[1-9]|1[0-2]):[0-5]\d$/, "Enter a valid time");
 
+/** Convert a 12-hour HH:MM + meridiem to total minutes since midnight. */
+function toMinutes(time: string, meridiem: "AM" | "PM"): number {
+  const [hourText, minuteText] = time.split(":");
+  let hour = Number(hourText);
+  const minute = Number(minuteText);
+  if (meridiem === "AM") {
+    // 12:xx AM → 0:xx
+    if (hour === 12) hour = 0;
+  } else {
+    // 12:xx PM → 12:xx, others add 12
+    if (hour !== 12) hour += 12;
+  }
+  return hour * 60 + minute;
+}
+
+const availableSlotSchema = z.object({
+  dayOfWeek: z.number().int().min(0).max(6),
+  startTime: availabilityTime,
+  startMeridiem: z.enum(["AM", "PM"]),
+  endTime: availabilityTime,
+  endMeridiem: z.enum(["AM", "PM"]),
+  isAvailable: z.literal(1),
+});
+
+const unavailableSlotSchema = z.object({
+  dayOfWeek: z.number().int().min(0).max(6),
+  isAvailable: z.literal(0),
+});
+
 export const AddTeacherAvailabilitySchema = z.object({
   availabilities: z
     .array(
       z.discriminatedUnion("isAvailable", [
-        z.object({
-          dayOfWeek: z.number().int().min(0).max(6),
-          startTime: availabilityTime,
-          startMeridiem: z.enum(["AM", "PM"]),
-          endTime: availabilityTime,
-          endMeridiem: z.enum(["AM", "PM"]),
-          isAvailable: z.literal(1),
-        }),
-        z.object({
-          dayOfWeek: z.number().int().min(0).max(6),
-          isAvailable: z.literal(0),
-        }),
+        availableSlotSchema,
+        unavailableSlotSchema,
       ])
     )
-    .min(1, "Availability is required"),
+    .min(1, "Availability is required")
+    .superRefine((slots, ctx) => {
+      slots.forEach((slot, index) => {
+        if (slot.isAvailable !== 1) return;
+        const startMinutes = toMinutes(slot.startTime, slot.startMeridiem);
+        const endMinutes = toMinutes(slot.endTime, slot.endMeridiem);
+        if (endMinutes <= startMinutes) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "End time must be after start time",
+            path: [index, "endTime"],
+          });
+        }
+      });
+    }),
 });

@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { NotificationBell } from "@/components/common/notification-bell";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
@@ -108,7 +109,12 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     }
 
     if (data) {
-      return <ProfileDropdown user={data.data} />;
+      return (
+        <div className="flex items-center gap-2">
+          <NotificationBell />
+          <ProfileDropdown user={data.data} />
+        </div>
+      );
     }
   };
 
@@ -145,6 +151,10 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
               <div className="btn">{renderAuthButtons()}</div>
             </div>
           </div>
+        </div>
+
+        <div className="absolute top-5 right-20 z-[1000] lg:hidden">
+          {data && <NotificationBell />}
         </div>
 
         <MobileSidebar
