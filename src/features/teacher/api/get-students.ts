@@ -107,12 +107,13 @@ export async function getTeacherStudents(params: {
   );
 
   // Summary is at the top level of the API response (not inside data)
-  const raw = response as Record<string, unknown>;
+  const raw: ApiRecord = isRecord(response) ? response : {};
+  const responseData = isRecord(response.data) ? response.data : {};
   const summaryRaw = isRecord(raw.summary)
-    ? (raw.summary as ApiRecord)
-    : isRecord((response.data as ApiRecord)?.summary)
-      ? ((response.data as ApiRecord).summary as ApiRecord)
-      : ({} as ApiRecord);
+    ? raw.summary
+    : isRecord(responseData.summary)
+      ? responseData.summary
+      : {};
 
   const summary = {
     totalStudents:
