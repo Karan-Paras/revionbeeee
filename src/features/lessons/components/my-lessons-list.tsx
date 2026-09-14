@@ -12,8 +12,10 @@ import {
   activeLessonSessionStorageKey,
 } from "@/features/lessons/components/active-lesson-session-guard";
 import { isSessionWindowOpen } from "@/lib/session-time";
+import { paths } from "@/routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  ArrowLeft,
   CheckCircle2,
   Clock3,
   CreditCard,
@@ -22,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -268,6 +271,14 @@ export function MyLessonsList() {
   return (
     <section className="min-h-[500px] bg-white px-5 py-10 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-[1240px]">
+        <Link
+          href={paths.lessons()}
+          className="mb-5 inline-flex h-10 items-center gap-2 rounded-lg border border-[#53a2eb] px-4 text-xs font-semibold text-[#388edc] transition hover:bg-[#eaf4fd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#348edc]"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Back to Lessons
+        </Link>
+
         {/* Tab bar + search */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex w-full rounded-lg bg-[#f0f0f0] p-1 sm:w-auto">

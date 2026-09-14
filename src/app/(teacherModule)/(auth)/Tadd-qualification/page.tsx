@@ -237,13 +237,30 @@ function TeacherAddQualification() {
           </div>
 
           <label className="relative flex h-36 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-[#c9cdd4] bg-white text-center transition hover:border-[#53a2eb]">
-            <Upload size={22} strokeWidth={1.5} className="text-[#888]" />
-            <span className="mt-3 text-sm font-medium text-[#777]">
-              {degreeDocument?.name ?? "Upload Degree Document"}
-            </span>
-            <span className="mt-2 text-[10px] leading-4 text-[#aaa]">
-              Supported Documents: PDF, JPG, PNG
-            </span>
+            {degreeDocument?.type.startsWith("image/") ? (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-2">
+                <div className="relative h-20 w-full overflow-hidden rounded-md bg-[#f8fafc]">
+                  <img
+                    src={degreeDocument.url}
+                    alt="Degree document preview"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <span className="max-w-full truncate text-xs font-medium text-[#666]">
+                  {degreeDocument.name}
+                </span>
+              </div>
+            ) : (
+              <>
+                <Upload size={22} strokeWidth={1.5} className="text-[#888]" />
+                <span className="mt-3 text-sm font-medium text-[#777]">
+                  {degreeDocument?.name ?? "Upload Degree Document"}
+                </span>
+                <span className="mt-2 text-[10px] leading-4 text-[#aaa]">
+                  Supported Documents: PDF, JPG, PNG
+                </span>
+              </>
+            )}
             <input
               type="file"
               name="degreeDocument"
@@ -277,14 +294,20 @@ function TeacherAddQualification() {
                 }));
 
                 if (degreeDocument?.url) {
-                  URL.revokeObjectURL(degreeDocument.url);
+                  // data URLs don't need to be revoked, but we clear for consistency
                 }
 
-                setDegreeDocument({
-                  name: file.name,
-                  type: file.type,
-                  url: URL.createObjectURL(file),
-                });
+                const docReader = new FileReader();
+                docReader.onload = () => {
+                  if (typeof docReader.result === "string") {
+                    setDegreeDocument({
+                      name: file.name,
+                      type: file.type,
+                      url: docReader.result,
+                    });
+                  }
+                };
+                docReader.readAsDataURL(file);
               }}
             />
           </label>

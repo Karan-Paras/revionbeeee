@@ -2,8 +2,10 @@ import { RevisionBee } from "@/assets/icons";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { SocialRegisterButtons } from "@/features/auth/components/social-register-buttons";
 import { paths } from "@/routes";
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Teacher Sign Up - Revision Bee",
@@ -23,6 +25,15 @@ export default async function TeacherSignup({
       <div className="grid min-h-dvh w-full md:h-full md:grid-cols-2">
         <section className="flex min-h-dvh items-start justify-center px-4 py-6 sm:px-10 md:h-dvh md:min-h-0 md:overflow-y-auto">
           <div className="w-full max-w-md [&_.spc_frm]:mt-4 [&_.spc_frm_.itm]:mb-2.5 [&_.spc_frm_.mb-8]:mb-4 [&_.spc_frm_.my-10]:my-4 [&_.spc_frm_button]:p-3 [&_.spc_frm_input]:py-3">
+            <div className="mb-4">
+              <Link
+                href={paths.home()}
+                className="inline-flex items-center gap-1.5 text-sm text-[#555] hover:text-[#499ff0] transition-colors"
+              >
+                <ArrowLeft size={16} />
+                Back
+              </Link>
+            </div>
             <div className="flex justify-center">
               <RevisionBee width={46} height={56} />
             </div>

@@ -610,14 +610,20 @@ function ScheduleLesson({
     isFetching: areSlotsLoading,
     error: slotsError,
   } = useQuery({
-    queryKey: ["available-lesson-slots", teacher.id, selectedDate],
-    queryFn: () => getAvailableSlots(teacher.id, selectedDate),
-    enabled: Boolean(selectedDate),
+    queryKey: [
+      "available-lesson-slots",
+      teacher.id,
+      selectedDate,
+      selectedDuration,
+    ],
+    queryFn: () =>
+      getAvailableSlots(teacher.id, selectedDate, Number(selectedDuration)),
+    enabled: Boolean(selectedDate) && Boolean(selectedDuration),
   });
 
   useEffect(() => {
     setSelectedSlot("");
-  }, [selectedDate]);
+  }, [selectedDate, selectedDuration]);
 
   return (
     <div className="space-y-5">
@@ -696,10 +702,31 @@ function ScheduleLesson({
         </div>
       </FormSection>
 
+      <FormSection title="Set your time limit">
+        <label className="flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
+          <Clock3 size={17} className="mr-3" />
+          <select
+            aria-label="Choose lesson duration"
+            value={selectedDuration}
+            onChange={(event) => setSelectedDuration(event.target.value)}
+            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
+          >
+            <option value="" disabled>
+              Choose your time range
+            </option>
+            <option value="20">20 minutes</option>
+            <option value="40">40 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+          <ChevronDown size={16} />
+        </label>
+      </FormSection>
       <FormSection title="Choose Slot">
-        {!selectedDate ? (
+        {!selectedDate || !selectedDuration ? (
           <p className="py-3 text-center text-xs text-[#9a9a9a]">
-            Please choose a date to view available slots.
+            {!selectedDate
+              ? "Please choose a date first."
+              : "Please choose a duration to view available slots."}
           </p>
         ) : areSlotsLoading ? (
           <p className="py-3 text-center text-xs text-[#9a9a9a]">
@@ -736,26 +763,6 @@ function ScheduleLesson({
             No slots are available for this date.
           </p>
         )}
-      </FormSection>
-
-      <FormSection title="Set your time limit">
-        <label className="flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
-          <Clock3 size={17} className="mr-3" />
-          <select
-            aria-label="Choose lesson duration"
-            value={selectedDuration}
-            onChange={(event) => setSelectedDuration(event.target.value)}
-            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
-          >
-            <option value="" disabled>
-              Choose your time range
-            </option>
-            <option value="20">20 minutes</option>
-            <option value="40">40 minutes</option>
-            <option value="60">60 minutes</option>
-          </select>
-          <ChevronDown size={16} />
-        </label>
       </FormSection>
 
       <FormSection title="Payable Amount">

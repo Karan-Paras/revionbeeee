@@ -1,6 +1,6 @@
 import { RevisionBee } from "@/assets/icons";
 import { paths } from "@/routes";
-import { GraduationCap, School } from "lucide-react";
+import { ArrowLeft, GraduationCap, School } from "lucide-react";
 import Link from "next/link";
 
 type RoleSelectionPageProps = {
@@ -42,6 +42,16 @@ export default function LoginCommonPage({
       />
 
       <section className="relative w-full max-w-2xl rounded-3xl border border-white bg-white/95 px-6 py-10 text-center shadow-[0_24px_70px_rgba(37,65,101,0.12)] sm:px-12 sm:py-12">
+        {isSignup && (
+          <Link
+            href={paths.login()}
+            className="absolute top-5 left-5 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-[#6b7280] transition hover:bg-[#f3f4f6] hover:text-[#1b1613] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#53a2eb]"
+            aria-label="Back to login"
+          >
+            <ArrowLeft size={16} strokeWidth={2} />
+            Back
+          </Link>
+        )}
         <div className="mx-auto mb-5 flex w-fit justify-center">
           <RevisionBee width={66} height={80} />
         </div>

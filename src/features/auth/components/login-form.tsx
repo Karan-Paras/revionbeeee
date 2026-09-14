@@ -69,7 +69,6 @@ export function LoginForm() {
             disabled={isPending}
             errors={emailError ? [emailError] : formErrors.email}
             autoComplete="email"
-            required
             onBlur={(event) => {
               const result = emailSchema.safeParse(event.currentTarget.value);
               setEmailError(

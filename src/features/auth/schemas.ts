@@ -17,10 +17,10 @@ export const newPassword = requiredPassword.superRefine((value, ctx) => {
       message: "Password must be no more than 64 characters",
     });
   }
-  if (!/^[A-Z]/.test(value)) {
+  if (!/[A-Z]/.test(value)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "Password must start with an uppercase letter",
+      message: "Password must include an uppercase letter",
     });
   }
   if (!/[a-z]/.test(value)) {

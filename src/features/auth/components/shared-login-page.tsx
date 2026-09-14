@@ -1,5 +1,6 @@
 import { RevisionBee } from "@/assets/icons";
 import { paths } from "@/routes";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SocialRegisterButtons } from "./social-register-buttons";
@@ -19,6 +20,15 @@ export function SharedLoginPage({
       <div className="grid h-full w-full lg:grid-cols-2">
         <section className="flex h-full items-center justify-center overflow-hidden px-4 py-3 sm:px-10">
           <div className="w-full max-w-[475px]">
+            <div className="mb-4">
+              <Link
+                href={paths.home()}
+                className="inline-flex items-center gap-1.5 text-sm text-[#555] hover:text-[#499ff0] transition-colors"
+              >
+                <ArrowLeft size={16} />
+                Back
+              </Link>
+            </div>
             <div className="mb-3 flex justify-center">
               <RevisionBee width={54} height={65} />
             </div>

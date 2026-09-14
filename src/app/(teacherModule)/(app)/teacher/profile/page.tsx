@@ -7,10 +7,7 @@ import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-
 import { updateTeacherProfile } from "@/features/teacher/actions/update-profile";
 import { getNationalPhoneNumber } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
-import {
-  closePhoneCountryDropdown,
-  useDismissPhoneCountryDropdown,
-} from "@/hooks/use-dismiss-phone-country-dropdown";
+import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
 import {
   getTeacherCertificationUrl,
   getTeacherImageUrl,
@@ -648,23 +645,6 @@ export default function TeacherProfilePage() {
                             ...current,
                             city: undefined,
                           }));
-                          const selectedCountry = countries.find(
-                            (country) => country.isoCode === countryCode
-                          );
-                          if (selectedCountry?.phonecode) {
-                            const nextPhoneCountryCode = `+${selectedCountry.phonecode.replace(
-                              /\D/g,
-                              ""
-                            )}`;
-                            const nationalNumber = getNationalPhoneNumber(
-                              mobileNumber,
-                              phoneCountryCode
-                            );
-                            setPhoneCountryCode(nextPhoneCountryCode);
-                            setMobileNumber(
-                              `${nextPhoneCountryCode}${nationalNumber}`
-                            );
-                          }
                         }}
                         className={`${inputClassName} appearance-none pr-10`}
                       >
@@ -750,6 +730,7 @@ export default function TeacherProfilePage() {
                       ref={phoneInputRef}
                       defaultCountry={selectedCountryCode.toLowerCase()}
                       value={mobileNumber}
+                      forceDialCode
                       disabled={isUpdating}
                       inputProps={{
                         required: true,
@@ -761,9 +742,6 @@ export default function TeacherProfilePage() {
                         setPhoneCountryCode(
                           `+${country.dialCode.replace(/\D/g, "")}`
                         );
-                        closePhoneCountryDropdown(phoneInputRef.current);
-                        const countryCode = country.iso2.toUpperCase();
-                        setSelectedCountryCode(countryCode);
 
                         const phoneDigits = phone.replace(/\D/g, "");
                         const dialCodeDigits = country.dialCode.replace(
@@ -801,10 +779,10 @@ export default function TeacherProfilePage() {
                       size={17}
                       strokeWidth={1.7}
                     />
-                    <ChevronDown
+                    {/* <ChevronDown
                       className="pointer-events-none absolute top-1/2 left-11 -translate-y-1/2 text-[#a0a4a8]"
                       size={14}
-                    />
+                    /> */}
                     <input
                       name="hourlyRate"
                       defaultValue={profileDetails.hourlyRate}
@@ -818,7 +796,7 @@ export default function TeacherProfilePage() {
                       onChange={(event) =>
                         validateProfileField("hourlyRate", event.target.value)
                       }
-                      className={`${inputClassName} pl-[70px]`}
+                      className={`${inputClassName} inp_spc pl-[70px]`}
                     />
                   </span>
                   {profileErrors.hourlyRate && (

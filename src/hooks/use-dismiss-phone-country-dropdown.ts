@@ -33,7 +33,12 @@ export function useDismissPhoneCountryDropdown() {
           if (getComputedStyle(dropdown).display === "none") return;
 
           const selector = dropdown.closest<HTMLElement>(selectorClass);
-          if (!selector || selector.contains(target)) return;
+          if (!selector) return;
+
+          // Guard against both the selector container and the dropdown itself
+          // (the dropdown may have already been detached from the selector after
+          // a controlled re-render, so check both to avoid false-positives).
+          if (selector.contains(target) || dropdown.contains(target)) return;
 
           selector.querySelector<HTMLButtonElement>(buttonClass)?.click();
         });
@@ -54,11 +59,9 @@ export function useDismissPhoneCountryDropdown() {
         }
       };
 
-      // The controlled phone value can cause a second render immediately
-      // after the library closes its menu. Check again after those renders.
-      window.setTimeout(closeIfStillOpen, 0);
-      window.setTimeout(closeIfStillOpen, 75);
-      window.setTimeout(closeIfStillOpen, 200);
+      // Wait for the controlled-value re-render cycle to settle, then close
+      // once if the library left the dropdown open.
+      window.setTimeout(closeIfStillOpen, 150);
     };
 
     document.addEventListener("pointerdown", dismissOpenDropdown);
