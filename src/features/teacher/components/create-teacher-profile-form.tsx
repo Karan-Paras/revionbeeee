@@ -10,18 +10,10 @@ import {
   getNationalPhoneNumber,
 } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
-import {
-  closePhoneCountryDropdown,
-  useDismissPhoneCountryDropdown,
-} from "@/hooks/use-dismiss-phone-country-dropdown";
+import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
 import { paths } from "@/routes";
 import { City, Country } from "country-state-city";
-import {
-  Camera,
-  ChevronDown,
-  CircleDollarSign,
-  CircleUserRound,
-} from "lucide-react";
+import { Camera, ChevronDown, CircleUserRound, DollarSign } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -148,14 +140,14 @@ export function CreateTeacherProfileForm() {
 
   return (
     <>
-      <div className="mb-5 flex gap-1.5" aria-label="Step 2 of 6">
-        {Array.from({ length: 2 }).map((_, index) => (
+      <div className="mb-5 flex gap-1.5" aria-label="Step 1 of 6">
+        {Array.from({ length: 1 }).map((_, index) => (
           <span
             key={`complete-${index}`}
             className="h-1.5 w-12 rounded-full bg-[#fbbe1b]"
           />
         ))}
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: 5 }).map((_, index) => (
           <span
             key={`remaining-${index}`}
             className="h-1.5 w-12 rounded-full bg-[#d1d1d1]"
@@ -267,21 +259,6 @@ export function CreateTeacherProfileForm() {
                     event.currentTarget.selectedOptions[0]?.dataset.isoCode ??
                     "";
                   setSelectedCountryCode(countryCode);
-                  const selectedCountry = countries.find(
-                    (country) => country.isoCode === countryCode
-                  );
-                  if (selectedCountry?.phonecode) {
-                    const nextPhoneCountryCode = `+${selectedCountry.phonecode.replace(
-                      /\D/g,
-                      ""
-                    )}`;
-                    const nationalNumber = getNationalPhoneNumber(
-                      mobileNumber,
-                      phoneCountryCode
-                    );
-                    setPhoneCountryCode(nextPhoneCountryCode);
-                    setMobileNumber(`${nextPhoneCountryCode}${nationalNumber}`);
-                  }
                   validateField("country", event.target.value);
                   setLiveErrors((current) => ({
                     ...current,
@@ -358,6 +335,7 @@ export function CreateTeacherProfileForm() {
               ref={phoneInputRef}
               defaultCountry="in"
               value={mobileNumber}
+              forceDialCode
               disabled={isPending}
               inputProps={{
                 required: true,
@@ -366,19 +344,6 @@ export function CreateTeacherProfileForm() {
               onChange={(phone, { country }) => {
                 setMobileNumber(phone);
                 setPhoneCountryCode(`+${country.dialCode.replace(/\D/g, "")}`);
-                closePhoneCountryDropdown(phoneInputRef.current);
-                const countryCode = country.iso2.toUpperCase();
-
-                setSelectedCountryCode((currentCountryCode) => {
-                  if (currentCountryCode !== countryCode) {
-                    setLiveErrors((current) => ({
-                      ...current,
-                      country: undefined,
-                      city: undefined,
-                    }));
-                  }
-                  return countryCode;
-                });
 
                 const phoneDigits = phone.replace(/\D/g, "");
                 const dialCodeDigits = country.dialCode.replace(/\D/g, "");
@@ -399,15 +364,12 @@ export function CreateTeacherProfileForm() {
         <label className="block text-xs font-medium text-[#222]">
           Rate per minute
           <span className="relative mt-1.5 block">
-            <CircleDollarSign
-              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#999]"
+            <DollarSign
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#9c9898]"
               size={17}
-              strokeWidth={1.6}
+              strokeWidth={1.5}
             />
-            <ChevronDown
-              className="pointer-events-none absolute top-1/2 left-10 -translate-y-1/2 text-[#999]"
-              size={14}
-            />
+
             <input
               name="hourlyRate"
               type="number"
@@ -421,7 +383,7 @@ export function CreateTeacherProfileForm() {
               onChange={(event) =>
                 validateField("hourlyRate", event.target.value)
               }
-              className={`${inputClassName} pl-16`}
+              className={`${inputClassName} inp_spc pl-16`}
             />
           </span>
           <FieldError errors={fieldErrors("hourlyRate")} />

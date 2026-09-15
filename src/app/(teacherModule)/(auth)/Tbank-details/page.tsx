@@ -65,14 +65,14 @@ export default function TeacherBankDetails() {
             >
               Try Again
             </button>
-            <Link
-              href={paths.teacherAvailability()}
-              className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#d9dee3] text-sm font-medium text-[#667085] hover:bg-[#f8fafb]"
-            >
-              <ArrowLeft size={17} /> Back
-            </Link>
           </>
         )}
+        <Link
+          href={paths.teacherAvailability()}
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#d9dee3] text-sm font-medium text-[#667085] hover:bg-[#f8fafb]"
+        >
+          <ArrowLeft size={17} /> Back
+        </Link>
       </section>
     </main>
   );

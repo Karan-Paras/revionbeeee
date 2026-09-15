@@ -213,13 +213,17 @@ function TeacherAddCertification() {
                   certificationFile: undefined,
                 }));
 
-                if (certificate?.url) URL.revokeObjectURL(certificate.url);
-
-                setCertificate({
-                  name: file.name,
-                  type: file.type,
-                  url: URL.createObjectURL(file),
-                });
+                const certReader = new FileReader();
+                certReader.onload = () => {
+                  if (typeof certReader.result === "string") {
+                    setCertificate({
+                      name: file.name,
+                      type: file.type,
+                      url: certReader.result,
+                    });
+                  }
+                };
+                certReader.readAsDataURL(file);
               }}
             />
           </label>

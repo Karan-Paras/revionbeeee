@@ -28,7 +28,7 @@ describe("authentication schemas", () => {
 
   it("reports all missing password requirements", () => {
     const messages = messagesFor("password");
-    expect(messages).toContain("Password must start with an uppercase letter");
+    expect(messages).toContain("Password must include an uppercase letter");
     expect(messages).toContain("Password must include a number");
     expect(messages).toContain("Password must include a special character");
   });

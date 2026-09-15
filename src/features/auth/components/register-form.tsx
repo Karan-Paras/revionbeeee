@@ -1,6 +1,5 @@
 "use client";
 
-import { ErrorBlock } from "@/components/errors/error-block";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormLabel } from "@/components/ui/form-label";
@@ -34,6 +33,8 @@ export function RegisterForm({
   const router = useRouter();
   const [emailError, setEmailError] = useState<string>();
   const [passwordError, setPasswordError] = useState<string>();
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>();
+  const [termsError, setTermsError] = useState<string>();
 
   const [formState, action, isPending] = useActionState(register, {
     errors: {},
@@ -50,16 +51,41 @@ export function RegisterForm({
     const formData = new FormData(e.currentTarget);
     const parsedEmail = emailSchema.safeParse(formData.get("email"));
     const parsedPassword = newPassword.safeParse(formData.get("password"));
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
 
     setEmailError(
-      parsedEmail.success ? undefined : parsedEmail.error.issues[0]?.message
+      parsedEmail.success
+        ? undefined
+        : (parsedEmail.error.issues[0]?.message ?? "Email is required")
     );
     setPasswordError(
       parsedPassword.success
         ? undefined
-        : parsedPassword.error.issues[0]?.message
+        : (parsedPassword.error.issues[0]?.message ?? "Password is required")
     );
-    if (!parsedEmail.success || !parsedPassword.success) {
+
+    const confirmErr =
+      confirmPassword.length === 0
+        ? "Confirm password is required"
+        : password !== confirmPassword
+          ? "Passwords don't match"
+          : undefined;
+    setConfirmPasswordError(confirmErr);
+
+    const termsChecked =
+      (formData.get("terms-and-conditions") as string) === "on";
+    const termsErr = termsChecked
+      ? undefined
+      : "You must agree to the Terms & Conditions and Privacy Policy.";
+    setTermsError(termsErr);
+
+    if (
+      !parsedEmail.success ||
+      !parsedPassword.success ||
+      confirmErr ||
+      termsErr
+    ) {
       return;
     }
 
@@ -84,7 +110,6 @@ export function RegisterForm({
             disabled={isPending}
             errors={emailError ? [emailError] : formState.errors.email}
             autoComplete="email"
-            required
             className={compact ? "py-3.5" : undefined}
             onBlur={(event) => {
               const result = emailSchema.safeParse(event.currentTarget.value);
@@ -115,7 +140,6 @@ export function RegisterForm({
                 : formState.errors.password?.slice(0, 1)
             }
             autoComplete="new-password"
-            required
             className={compact ? "py-3.5" : undefined}
             onChange={(event) => {
               const result = newPassword.safeParse(event.currentTarget.value);
@@ -134,23 +158,40 @@ export function RegisterForm({
             type="password"
             placeholder="Confirm password"
             disabled={isPending}
-            errors={formState.errors.confirmPassword}
+            errors={
+              confirmPasswordError
+                ? [confirmPasswordError]
+                : formState.errors.confirmPassword
+            }
             autoComplete="new-password"
             className={compact ? "py-3.5" : undefined}
+            onChange={(event) => {
+              const passwordInput = (
+                event.currentTarget.form?.elements.namedItem(
+                  "password"
+                ) as HTMLInputElement | null
+              )?.value;
+              const val = event.currentTarget.value;
+              setConfirmPasswordError(
+                val.length === 0
+                  ? undefined
+                  : val !== passwordInput
+                    ? "Passwords don't match"
+                    : undefined
+              );
+            }}
           />
         </div>
-        <div
-          className={cn(
-            "flex items-center justify-between",
-            compact ? "mb-3" : "mb-8"
-          )}
-        >
+        <div className={cn("flex flex-col", compact ? "mb-3" : "mb-8")}>
           <div className="chk flex items-start gap-3">
             <Checkbox
               id="terms-and-conditions"
               disabled={isPending}
               name="terms-and-conditions"
               className="mt-0.5 shrink-0"
+              onChange={(e) => {
+                if (e.currentTarget.checked) setTermsError(undefined);
+              }}
             />
             <label
               htmlFor="terms-and-conditions"
@@ -174,13 +215,17 @@ export function RegisterForm({
               </Link>
             </label>
           </div>
+          {(termsError || formState.errors._form) && (
+            <p className="mt-1 text-sm text-red-600">
+              {termsError ?? formState.errors._form?.[0]}
+            </p>
+          )}
         </div>
         <div className="btn">
           <Button disabled={isPending} className={compact ? "p-3" : undefined}>
             Sign Up
           </Button>
         </div>
-        <ErrorBlock errors={formState.errors._form} />
       </form>
       {socialOptions}
       <div className={cn("lnk", compact ? "my-3" : "my-6")}>

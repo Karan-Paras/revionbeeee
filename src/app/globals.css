@@ -161,6 +161,11 @@ body {
   @apply absolute right-0 bottom-0 left-auto h-full w-6/12 bg-white bg-cover bg-no-repeat;
 }
 
+.inp_spc {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
 .inp_spc::-webkit-outer-spin-button,
 .inp_spc::-webkit-inner-spin-button {
   -webkit-appearance: none;

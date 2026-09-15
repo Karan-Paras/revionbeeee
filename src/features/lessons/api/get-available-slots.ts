@@ -10,11 +10,13 @@ export type AvailableSlot = {
 
 export async function getAvailableSlots(
   teacherID: string | number,
-  date: string
+  date: string,
+  durationMinutes: number
 ): Promise<AvailableSlot[]> {
   const query = new URLSearchParams({
     teacherID: String(teacherID),
     date,
+    durationMinutes: String(durationMinutes),
   });
   const response = await fetchClient<AvailableSlot[]>(
     `${availableSlotsUrl}?${query.toString()}`,

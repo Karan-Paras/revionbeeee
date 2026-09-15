@@ -1,4 +1,6 @@
+import { BackLink } from "@/components/common/back-link";
 import { CreateTeacherProfileForm } from "@/features/teacher/components/create-teacher-profile-form";
+import { paths } from "@/routes";
 import type { Metadata } from "next";
 import Image from "next/image";
 
@@ -14,6 +16,7 @@ export default function TeacherPersonalInformation() {
         <section className="flex h-full items-center justify-center overflow-y-auto px-5 py-4 sm:px-10">
           <div className="w-full max-w-[470px]">
             <div className="mb-4">
+              <BackLink href={paths.teacherSignup()} className="mb-4" />
               <h1 className="text-2xl font-bold tracking-tight text-[#111] sm:text-[28px]">
                 Personal Information
               </h1>
