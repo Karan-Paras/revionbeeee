@@ -4,8 +4,8 @@ const availableSlotsUrl =
   "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/lesson/scheduled/available-slots";
 
 export type AvailableSlot = {
-  startTime: string;
-  endTime: string;
+  time: string;
+  isBooked: boolean;
 };
 
 export async function getAvailableSlots(
