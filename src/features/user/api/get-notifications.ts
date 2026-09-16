@@ -90,25 +90,67 @@ function inferType(record: ApiRecord): StudentNotification["type"] {
 
 export async function getStudentUnreadCount(): Promise<number> {
   const response = await fetchClient<unknown>(unreadCountUrl, "GET");
-  const value = response.data;
-  if (typeof value === "number") return Math.max(0, Math.floor(value));
-  if (isRecord(value)) {
-    for (const key of [
-      "count",
-      "unreadCount",
-      "unread_count",
-      "unread",
-      "totalCount",
-      "total",
-    ]) {
-      const v = value[key];
-      if (typeof v === "number") return Math.max(0, Math.floor(v));
-      if (typeof v === "string" && v.trim()) {
-        const parsed = Number(v.replace(/[^\d.-]/g, ""));
-        if (Number.isFinite(parsed) && parsed > 0) return Math.floor(parsed);
+
+  // DEBUG — remove after confirming the correct key
+  console.log(
+    "[unread-count] raw response:",
+    JSON.stringify(response, null, 2)
+  );
+
+  // Helper: extract a non-negative integer from any value
+  function extractCount(v: unknown): number | null {
+    if (typeof v === "number" && Number.isFinite(v) && v >= 0)
+      return Math.floor(v);
+    if (typeof v === "string" && v.trim()) {
+      const parsed = Number(v.replace(/[^\d.-]/g, ""));
+      if (Number.isFinite(parsed) && parsed >= 0) return Math.floor(parsed);
+    }
+    return null;
+  }
+
+  const countKeys = [
+    "count",
+    "unreadCount",
+    "unread_count",
+    "unread",
+    "totalCount",
+    "total",
+    "total_count",
+    "notificationCount",
+    "notification_count",
+  ];
+
+  // Check top-level response first
+  const topLevel = response as unknown as ApiRecord;
+  for (const key of countKeys) {
+    const v = extractCount(topLevel[key]);
+    if (v !== null) return v;
+  }
+
+  // Check response.data if it's a number
+  const directCount = extractCount(response.data);
+  if (directCount !== null) return directCount;
+
+  // Check response.data if it's an object
+  if (isRecord(response.data)) {
+    for (const key of countKeys) {
+      const v = extractCount((response.data as ApiRecord)[key]);
+      if (v !== null) return v;
+    }
+    // Check one level deeper (e.g. response.data.data)
+    const nested = (response.data as ApiRecord).data;
+    if (isRecord(nested)) {
+      for (const key of countKeys) {
+        const v = extractCount((nested as ApiRecord)[key]);
+        if (v !== null) return v;
       }
     }
+    if (typeof nested === "number") {
+      const v = extractCount(nested);
+      if (v !== null) return v;
+    }
   }
+
   return 0;
 }
 
@@ -120,6 +162,10 @@ export async function markStudentNotificationsRead(
     "POST",
     ids && ids.length ? { notificationIds: ids } : {}
   );
+}
+
+export async function markAllStudentNotificationsRead(): Promise<void> {
+  await markStudentNotificationsRead();
 }
 
 export async function getStudentNotifications(): Promise<

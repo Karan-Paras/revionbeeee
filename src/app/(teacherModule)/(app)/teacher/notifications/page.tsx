@@ -1,9 +1,12 @@
 "use client";
 
 import type { TeacherNotification } from "@/features/teacher/api/get-notifications";
-import { getTeacherNotifications } from "@/features/teacher/api/get-notifications";
+import {
+  getTeacherNotifications,
+  markTeacherNotificationsRead,
+} from "@/features/teacher/api/get-notifications";
 import { paths } from "@/routes";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bell,
@@ -15,7 +18,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 8;
 
@@ -33,6 +36,23 @@ function notificationIcon(type: TeacherNotification["type"]) {
 }
 
 export default function TeacherNotificationsPage() {
+  const queryClient = useQueryClient();
+
+  const { mutate: markAllRead } = useMutation({
+    mutationFn: markTeacherNotificationsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
+    },
+  });
+
+  useEffect(() => {
+    markAllRead(undefined, {
+      onError: () => {
+        /* ignore mark-read API failure */
+      },
+    });
+  }, [markAllRead]);
+
   const {
     data: notifications = [],
     isPending,

@@ -9,7 +9,7 @@ const teacherDashboardUrl =
 export type DashboardLesson = {
   id: string;
   studentName: string;
-  image: string;
+  image?: string;
   topic: string;
   dateTime: string;
   duration: string;
@@ -124,7 +124,7 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
       text(person, "name", "fullName", "full_name", "studentName") ||
       [firstName, lastName].filter(Boolean).join(" ") ||
       "Student",
-    image: image ? getUserImageUrl(image) : "/images/teacher-personal-info.svg",
+    image: image ? getUserImageUrl(image) : undefined,
     topic:
       text(
         item,

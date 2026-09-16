@@ -12,13 +12,25 @@ import {
   type RoomPhase,
 } from "@netless/fastboard-react";
 
-import { AlertCircle, LoaderCircle, PenTool, RefreshCw, X } from "lucide-react";
+import {
+  AlertCircle,
+  LoaderCircle,
+  Lock,
+  LockOpen,
+  PenTool,
+  RefreshCw,
+  X,
+} from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
 
 type CollaborativeWhiteboardProps = {
   lessonID: string | number;
   participantName: string;
+  isLocked: boolean;
+  isTeacher: boolean;
+  isOpener: boolean;
+  onLockChange: (locked: boolean) => void;
   onClose: () => void;
 };
 
@@ -41,10 +53,14 @@ function WhiteboardCanvas({
 function WhiteboardRoom({
   credentials,
   participantName,
+  isLocked,
+  isTeacher,
   onError,
 }: {
   credentials: WhiteboardSessionCredentials;
   participantName: string;
+  isLocked: boolean;
+  isTeacher: boolean;
   onError: (message: string) => void;
 }) {
   const [app, setApp] = useState<FastboardApp | null>(null);
@@ -203,13 +219,16 @@ function WhiteboardRoom({
       });
     };
 
-    // The room can still become read-only if the server overrides the join
-    // preference. Ask the SDK for write access again and surface a real error
-    // instead of leaving apparently clickable but ineffective tools onscreen.
+    // A participant can become view-only because the join preference is not
+    // honored by the server, or because the teacher locked the board so the
+    // student cannot edit. Ask the SDK for the exact access this participant
+    // should have and surface a real error instead of leaving ineffective
+    // tools onscreen.
     void (async () => {
       try {
-        if (credentials.writable && !app.room.isWritable) {
-          await app.room.setWritable(true);
+        const shouldWrite = isLocked ? isTeacher : credentials.writable;
+        if (shouldWrite !== app.room.isWritable) {
+          await app.room.setWritable(shouldWrite);
         }
         if (!disposed) refreshBoardSize();
       } catch {
@@ -231,7 +250,15 @@ function WhiteboardRoom({
       window.clearTimeout(refreshTimer);
       window.cancelAnimationFrame(frame);
     };
-  }, [app, credentials.writable, isContainerReady, phase, onError]);
+  }, [
+    app,
+    credentials.writable,
+    isContainerReady,
+    phase,
+    onError,
+    isLocked,
+    isTeacher,
+  ]);
 
   // Bind only while connected, then preserve the canvas during reconnection.
   // Recreating Fastboard at every phase change loses its mounted container.
@@ -248,6 +275,16 @@ function WhiteboardRoom({
         >
           This whiteboard is view-only. Editing access is required to use the
           tools.
+        </p>
+      )}
+      {isLocked && (
+        <p
+          role="status"
+          className="shrink-0 bg-amber-50 px-3 py-2 text-xs text-amber-800"
+        >
+          {isTeacher
+            ? "Whiteboard locked for the student. You can keep editing, but the student can only view."
+            : "The teacher locked the whiteboard. You can view it, but editing is disabled."}
         </p>
       )}
       <div className="relative min-h-0 flex-1">
@@ -272,6 +309,38 @@ function WhiteboardRoom({
             </div>
           </div>
         )}
+        {isLocked && !isTeacher && (
+          <div
+            role="status"
+            aria-live="polite"
+            onPointerDown={(event) => event.preventDefault()}
+            onKeyDown={(event) =>
+              (["Backspace", "Delete", " "].includes(event.key) ||
+                event.metaKey ||
+                event.ctrlKey) &&
+              event.preventDefault()
+            }
+            className="
+              absolute
+              inset-0
+              z-20
+              grid
+              h-full
+              w-full
+              touch-none
+              place-items-center
+              bg-white/40
+              select-none
+            "
+          >
+            <div className="rounded-xl border border-amber-200 bg-white/90 px-4 py-3 text-center shadow-sm backdrop-blur">
+              <Lock className="mx-auto mb-1.5 text-amber-600" size={20} />
+              <p className="text-xs font-medium text-amber-800">
+                Whiteboard locked — view only
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -284,6 +353,10 @@ function WhiteboardRoom({
 export function CollaborativeWhiteboard({
   lessonID,
   participantName,
+  isLocked,
+  isTeacher,
+  isOpener,
+  onLockChange,
   onClose,
 }: CollaborativeWhiteboardProps) {
   const [attempt, setAttempt] = useState(0);
@@ -380,16 +453,44 @@ export function CollaborativeWhiteboard({
             </p>
 
             <p className="hidden text-[10px] text-slate-400 sm:block">
-              Changes sync live for teacher and student
+              {isLocked
+                ? "Locked — student can view only"
+                : "Changes sync live for teacher and student"}
             </p>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close whiteboard"
-          className="
+        <div className="flex shrink-0 items-center gap-2">
+          {isTeacher && (
+            <button
+              type="button"
+              onClick={() => onLockChange(!isLocked)}
+              aria-label={
+                isLocked
+                  ? "Unlock whiteboard for the student"
+                  : "Lock whiteboard so the student can only view"
+              }
+              title={
+                isLocked
+                  ? "Unlock: the student can edit again"
+                  : "Lock: the student can only view"
+              }
+              className={`grid h-8 w-8 place-items-center rounded-lg border transition ${
+                isLocked
+                  ? "border-amber-300 bg-amber-100 text-amber-700 hover:bg-amber-200"
+                  : "border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              {isLocked ? <Lock size={16} /> : <LockOpen size={16} />}
+            </button>
+          )}
+
+          {isOpener && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close whiteboard"
+              className="
             grid
             h-8
             w-8
@@ -402,9 +503,11 @@ export function CollaborativeWhiteboard({
             hover:bg-slate-100
             hover:text-slate-900
           "
-        >
-          <X size={17} />
-        </button>
+            >
+              <X size={17} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* =====================================================
@@ -491,6 +594,8 @@ export function CollaborativeWhiteboard({
             key={`${lessonID}:${attempt}`}
             credentials={credentials}
             participantName={participantName}
+            isLocked={isLocked}
+            isTeacher={isTeacher}
             onError={setError}
           />
         ) : (

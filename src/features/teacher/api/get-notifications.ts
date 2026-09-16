@@ -2,6 +2,8 @@ import { fetchClient } from "@/lib/fetch-client";
 
 const notificationsUrl =
   "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/notifications/list";
+const markReadUrl =
+  "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/notifications/mark-read";
 
 type ApiRecord = Record<string, unknown>;
 
@@ -120,4 +122,8 @@ export async function getTeacherNotifications(): Promise<
       type: inferType(item),
     };
   });
+}
+
+export async function markTeacherNotificationsRead(): Promise<void> {
+  await fetchClient<unknown>(markReadUrl, "POST", {});
 }
