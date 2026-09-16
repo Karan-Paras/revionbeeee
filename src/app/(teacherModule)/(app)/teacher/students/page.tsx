@@ -21,6 +21,41 @@ const statusColors: Record<StudentStatus, string> = {
   Inactive: "text-[#ff4552]",
 };
 
+/** Returns up to 2 uppercase initials from a name string */
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+/** Avatar: shows photo if available, otherwise clean initials placeholder */
+function StudentAvatar({ image, name }: { image: string; name: string }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (image && !imgError) {
+    return (
+      <Image
+        src={image}
+        alt={name}
+        width={36}
+        height={36}
+        unoptimized
+        onError={() => setImgError(true)}
+        className="h-9 w-9 shrink-0 rounded-full object-cover"
+      />
+    );
+  }
+
+  return (
+    <span
+      aria-label={name}
+      className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#e8f1fb] text-xs font-semibold text-[#3994e7]"
+    >
+      {getInitials(name)}
+    </span>
+  );
+}
+
 export default function TeacherStudentsPage() {
   const [activeFilter, setActiveFilter] = useState<StudentFilter>("all");
   const [search, setSearch] = useState("");
@@ -157,13 +192,7 @@ export default function TeacherStudentsPage() {
                 >
                   {/* Client Details */}
                   <div className="flex min-w-0 items-center gap-3">
-                    <Image
-                      src={student.image}
-                      alt=""
-                      width={36}
-                      height={36}
-                      className="h-9 w-9 shrink-0 rounded-full object-cover"
-                    />
+                    <StudentAvatar image={student.image} name={student.name} />
                     <div className="min-w-0">
                       <h2 className="truncate text-xs font-semibold text-[#252525]">
                         {student.name}
