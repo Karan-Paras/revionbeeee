@@ -33,7 +33,8 @@ function detailText(record: Record<string, unknown>, ...keys: string[]) {
   return "";
 }
 
-function formatSlotTime(time: string) {
+function formatSlotTime(time?: string | null) {
+  if (!time) return "";
   const [hourText, minute = "00"] = time.split(":");
   const hour = Number(hourText);
   if (!Number.isInteger(hour) || hour < 0 || hour > 23) return time;
@@ -565,7 +566,7 @@ function InstantLesson({
         onClick={() => bookLesson.mutate()}
         className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white hover:bg-[#398fdc] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {bookLesson.isPending ? "Booking..." : "Pay Now"}
+        {bookLesson.isPending ? "Booking..." : "Continue"}
       </button>
       {bookLesson.error && (
         <p className="text-center text-xs text-red-500">
@@ -599,7 +600,7 @@ function ScheduleLesson({
       bookScheduledLesson({
         teacherID: teacher.id,
         scheduledDate: selectedDate,
-        scheduledStartTime: selectedSlot.split("-")[0],
+        scheduledStartTime: selectedSlot,
         durationMinutes: Number(selectedDuration),
         paymentMethodId: null,
       }),
@@ -741,19 +742,18 @@ function ScheduleLesson({
         ) : slots.length ? (
           <div className="grid grid-cols-2 gap-2">
             {slots.map((slot) => {
-              const slotValue = `${slot.startTime}-${slot.endTime}`;
+              if (!slot.time) return null;
+              const slotValue = slot.time;
               return (
                 <button
                   key={slotValue}
                   type="button"
+                  disabled={slot.isBooked}
                   onClick={() => setSelectedSlot(slotValue)}
-                  className={`flex h-11 items-center justify-center gap-2 rounded-lg border text-[11px] ${selectedSlot === slotValue ? "border-[#53a2eb] bg-[#eef7ff] font-semibold text-[#3598ed]" : "border-[#d5dce4] text-[#9a9a9a]"}`}
+                  className={`flex h-11 items-center justify-center gap-2 rounded-lg border text-[11px] ${slot.isBooked ? "cursor-not-allowed border-[#e3e6e8] bg-[#f4f5f6] text-[#b5bac0] line-through" : selectedSlot === slotValue ? "border-[#53a2eb] bg-[#eef7ff] font-semibold text-[#3598ed]" : "border-[#d5dce4] text-[#9a9a9a] hover:border-[#53a2eb] hover:text-[#3598ed]"}`}
                 >
                   <Clock3 size={16} />
-                  <span>
-                    {formatSlotTime(slot.startTime)} -{" "}
-                    {formatSlotTime(slot.endTime)}
-                  </span>
+                  <span>{formatSlotTime(slot.time)}</span>
                 </button>
               );
             })}

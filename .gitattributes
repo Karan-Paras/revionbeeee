@@ -1,0 +1,16 @@
+# Normalize line endings to LF for consistency across all platforms.
+# This overrides the global core.autocrlf setting so editors never
+# introduce CRLF-only phantom diffs that get stripped by prettier.
+* text=auto eol=lf
+
+# Binary assets: never convert or diff.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.mp4 binary
+*.mov binary
+*.woff binary
+*.woff2 binary
