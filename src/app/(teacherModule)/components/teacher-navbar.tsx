@@ -48,7 +48,7 @@ function cacheProfile(email: string, profile: CachedTeacherProfile) {
   );
 }
 
-export function TeacherNavbar() {
+export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const { data: session } = useSession();
   const [teacherName, setTeacherName] = useState("Teacher");
   const [teacherEmail, setTeacherEmail] = useState("");
@@ -207,6 +207,7 @@ export function TeacherNavbar() {
         <button
           type="button"
           aria-label="Open navigation"
+          onClick={onMenuClick}
           className="lg:hidden"
         >
           <Menu size={22} />

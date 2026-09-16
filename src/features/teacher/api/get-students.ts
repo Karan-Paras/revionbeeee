@@ -211,9 +211,7 @@ export async function getTeacherStudents(params: {
         [firstName, lastName].filter(Boolean).join(" ") ||
         "Student",
       email,
-      image: image
-        ? getUserImageUrl(image)
-        : "/images/teacher-personal-info.svg",
+      image: image ? getUserImageUrl(image) : "",
       phone,
       status: normalizeStatus({ ...student, ...user }),
       sessions:
