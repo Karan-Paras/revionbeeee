@@ -4,10 +4,11 @@ import type { StudentNotification } from "@/features/user/api/get-notifications"
 import {
   getStudentNotifications,
   getStudentUnreadCount,
+  markAllStudentNotificationsRead,
   markStudentNotificationsRead,
 } from "@/features/user/api/get-notifications";
 import { paths } from "@/routes";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bell,
@@ -19,7 +20,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 8;
 
@@ -38,6 +39,26 @@ function notificationIcon(type: StudentNotification["type"]) {
 
 export default function StudentNotificationsPage() {
   const queryClient = useQueryClient();
+
+  const { mutate: markAllRead } = useMutation({
+    mutationFn: markAllStudentNotificationsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["student-notifications-unread-count"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["student-notifications"],
+      });
+    },
+  });
+
+  useEffect(() => {
+    markAllRead(undefined, {
+      onError: () => {
+        /* ignore mark-read API failure */
+      },
+    });
+  }, [markAllRead]);
 
   const {
     data: notifications = [],

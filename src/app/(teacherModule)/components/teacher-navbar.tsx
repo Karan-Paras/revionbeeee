@@ -2,10 +2,13 @@
 
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
-import { getTeacherNotifications } from "@/features/teacher/api/get-notifications";
+import {
+  getTeacherNotifications,
+  markTeacherNotificationsRead,
+} from "@/features/teacher/api/get-notifications";
 import { getTeacherImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Menu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -49,12 +52,28 @@ function cacheProfile(email: string, profile: CachedTeacherProfile) {
 }
 
 export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [teacherName, setTeacherName] = useState("Teacher");
   const [teacherEmail, setTeacherEmail] = useState("");
   const [teacherImage, setTeacherImage] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  const { mutate: markTeacherRead } = useMutation({
+    mutationFn: markTeacherNotificationsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
+    },
+  });
+
+  function handleMarkAllRead() {
+    markTeacherRead(undefined, {
+      onError: () => {
+        /* ignore mark-read API failure */
+      },
+    });
+  }
 
   // Poll notifications every 30s for live unread badge
   const { data: notifications = [] } = useQuery({
@@ -268,6 +287,7 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
           href={paths.teacherNotifications()}
           aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
           className="relative rounded-full p-1 text-[#3899ec] transition hover:bg-[#edf6ff]"
+          onClick={handleMarkAllRead}
         >
           <Bell size={22} strokeWidth={1.7} />
           {unreadCount > 0 && (

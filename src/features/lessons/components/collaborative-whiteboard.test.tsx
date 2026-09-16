@@ -69,11 +69,22 @@ function makeBoard(initialPhase = "connected", isWritable = true) {
   return board;
 }
 
-function showWhiteboard() {
+function showWhiteboard(
+  overrides: {
+    isLocked?: boolean;
+    isTeacher?: boolean;
+    isOpener?: boolean;
+    onLockChange?: (locked: boolean) => void;
+  } = {}
+) {
   return render(
     <CollaborativeWhiteboard
       lessonID="lesson-1"
-      participantName="Teacher"
+      participantName={overrides.isTeacher ? "Teacher" : "Student"}
+      isLocked={overrides.isLocked ?? false}
+      isTeacher={overrides.isTeacher ?? false}
+      isOpener={overrides.isOpener ?? true}
+      onLockChange={overrides.onLockChange ?? vi.fn()}
       onClose={vi.fn()}
     />
   );
@@ -173,6 +184,10 @@ describe("CollaborativeWhiteboard", () => {
         <CollaborativeWhiteboard
           lessonID="lesson-1"
           participantName="Teacher"
+          isLocked={false}
+          isTeacher={false}
+          isOpener={true}
+          onLockChange={vi.fn()}
           onClose={vi.fn()}
         />
       </StrictMode>
@@ -248,6 +263,62 @@ describe("CollaborativeWhiteboard", () => {
     ).toBeTruthy();
     expect(board.room.setWritable).toHaveBeenCalledWith(true);
     expect(board.destroy).toHaveBeenCalledTimes(1);
+  });
+
+  it("lets the teacher lock the whiteboard so the student can only view", async () => {
+    const board = makeBoard();
+    createBoard.mockResolvedValue(board);
+    const onLockChange = vi.fn();
+    showWhiteboard({ isTeacher: true, onLockChange });
+
+    expect(await screen.findByTestId("whiteboard-canvas")).toBeTruthy();
+    expect(
+      screen.getByRole("button", {
+        name: "Lock whiteboard so the student can only view",
+      })
+    ).toBeTruthy();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Lock whiteboard so the student can only view",
+      })
+    );
+    expect(onLockChange).toHaveBeenCalledWith(true);
+  });
+
+  it("hides the lock control from a student", async () => {
+    createBoard.mockResolvedValue(makeBoard());
+    showWhiteboard({ isTeacher: false });
+
+    expect(await screen.findByTestId("whiteboard-canvas")).toBeTruthy();
+    expect(
+      screen.queryByRole("button", { name: /Lock whiteboard/ })
+    ).toBeNull();
+  });
+
+  it("makes a locked student view-only and shows the lock status", async () => {
+    const board = makeBoard();
+    createBoard.mockResolvedValue(board);
+    showWhiteboard({ isLocked: true, isTeacher: false });
+
+    expect(await screen.findByTestId("whiteboard-canvas")).toBeTruthy();
+    expect(screen.getByText(/The teacher locked the whiteboard/)).toBeTruthy();
+    expect(screen.getByText(/Whiteboard locked — view only/)).toBeTruthy();
+    await waitFor(() =>
+      expect(board.room.setWritable).toHaveBeenCalledWith(false)
+    );
+  });
+
+  it("keeps the teacher writable while the board is locked", async () => {
+    const board = makeBoard();
+    createBoard.mockResolvedValue(board);
+    showWhiteboard({ isLocked: true, isTeacher: true });
+
+    expect(await screen.findByTestId("whiteboard-canvas")).toBeTruthy();
+    expect(screen.getByText(/Whiteboard locked for the student/)).toBeTruthy();
+    expect(screen.queryByText(/Whiteboard locked — view only/)).toBeNull();
+    await waitFor(() => expect(board.room.refreshViewSize).toHaveBeenCalled());
+    expect(board.room.setWritable).not.toHaveBeenCalledWith(false);
   });
 
   it("offers retry and releases the room after a terminal disconnect", async () => {

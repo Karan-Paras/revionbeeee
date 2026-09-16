@@ -1,6 +1,10 @@
 "use client";
 
 import { startLessonSession } from "@/features/lessons/api/start-session";
+import {
+  connectTeacherStripe,
+  getTeacherStripeOnboardingStatus,
+} from "@/features/teacher/actions/connect-stripe";
 import type { DashboardLesson } from "@/features/teacher/api/get-dashboard";
 import { getTeacherDashboard } from "@/features/teacher/api/get-dashboard";
 import { isSessionWindowOpen } from "@/lib/session-time";
@@ -8,8 +12,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   AlertTriangle,
   CalendarDays,
-  Clock3,
   DollarSign,
+  UserRound,
   Video,
 } from "lucide-react";
 import Image from "next/image";
@@ -35,6 +39,33 @@ function canLaunchNow(lesson: DashboardLesson, nowMs: number): boolean {
   });
 }
 
+function StudentAvatar({ image, name }: { image?: string; name: string }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (image && !imageFailed) {
+    return (
+      <Image
+        src={image}
+        alt={name}
+        width={48}
+        height={48}
+        onError={() => setImageFailed(true)}
+        className="h-12 w-12 shrink-0 rounded-full object-cover"
+      />
+    );
+  }
+
+  return (
+    <span
+      role="img"
+      aria-label={`${name} photo not available`}
+      className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#d7e3ec] bg-gradient-to-br from-[#edf6fd] to-[#dcecf8] text-[#7e9bb1]"
+    >
+      <UserRound size={22} strokeWidth={1.7} />
+    </span>
+  );
+}
+
 export function TeacherDashboardContent() {
   const router = useRouter();
   const [nowMs, setNowMs] = useState(() => Date.now());
@@ -51,6 +82,40 @@ export function TeacherDashboardContent() {
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
   });
+
+  const stripeOnboardingStatus = useQuery({
+    queryKey: ["teacher-stripe-onboarding-status"],
+    queryFn: getTeacherStripeOnboardingStatus,
+    refetchInterval: 30_000,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  });
+
+  const stripeConfigurationBroken =
+    stripeOnboardingStatus.data?.success === true &&
+    stripeOnboardingStatus.data.configured === false;
+
+  const stripeStatusMessage =
+    stripeOnboardingStatus.data?.success === true
+      ? stripeOnboardingStatus.data.message
+      : undefined;
+
+  const [isConnectingStripe, setIsConnectingStripe] = useState(false);
+
+  async function handleStartOnboarding() {
+    if (isConnectingStripe) return;
+    setIsConnectingStripe(true);
+    try {
+      const result = await connectTeacherStripe();
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+      window.location.assign(result.url);
+    } finally {
+      setIsConnectingStripe(false);
+    }
+  }
 
   const startSession = useMutation({
     mutationFn: startLessonSession,
@@ -83,11 +148,11 @@ export function TeacherDashboardContent() {
           label: "Booking Requests",
           icon: AlertTriangle,
         },
-        {
-          value: `${data.totalTaughtHours} Hours`,
-          label: "Total Taught",
-          icon: Clock3,
-        },
+        // {
+        //   value: `${data.totalTaughtHours} Hours`,
+        //   label: "Total Taught",
+        //   icon: Clock3,
+        // },
         {
           value: `$${data.totalEarnings.toLocaleString("en-US")}`,
           label: "Total Earning",
@@ -112,7 +177,28 @@ export function TeacherDashboardContent() {
           </div>
         )}
 
-        <section className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stripeConfigurationBroken && (
+          <div
+            role="alert"
+            className="mt-7 rounded-xl border-l-4 border-red-600 bg-red-50 p-4 text-red-700"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="whitespace-pre-line text-sm font-medium leading-5">
+                {stripeStatusMessage}
+              </p>
+              <button
+                type="button"
+                onClick={handleStartOnboarding}
+                disabled={isConnectingStripe}
+                className="shrink-0 rounded-lg bg-red-600 px-4 py-2 text-xs font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-400"
+              >
+                {isConnectingStripe ? "Redirecting..." : "Start onboarding"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <section className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {isPending
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div
@@ -158,12 +244,9 @@ export function TeacherDashboardContent() {
                     key={lesson.id}
                     className="flex items-center gap-3 py-4"
                   >
-                    <Image
-                      src={lesson.image}
-                      alt={lesson.studentName}
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 rounded-full object-cover"
+                    <StudentAvatar
+                      image={lesson.image}
+                      name={lesson.studentName}
                     />
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-semibold">
@@ -223,12 +306,9 @@ export function TeacherDashboardContent() {
             <div className="divide-y divide-[#edf0f2]">
               {data?.recentRequests.map((request) => (
                 <article key={request.id} className="flex gap-3 py-4">
-                  <Image
-                    src={request.image}
-                    alt={request.studentName}
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full object-cover"
+                  <StudentAvatar
+                    image={request.image}
+                    name={request.studentName}
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex justify-between gap-2">

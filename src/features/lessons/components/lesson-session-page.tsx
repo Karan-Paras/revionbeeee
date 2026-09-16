@@ -149,6 +149,8 @@ export function LessonSessionPage() {
   } | null>(null);
   const isEndingRef = useRef(false);
   const isWhiteboardOpenRef = useRef(false);
+  const isWhiteboardLockedRef = useRef(false);
+  const whiteboardOpenerRef = useRef<string | null>(null);
   const [isJoining, setIsJoining] = useState(true);
   const [isLeaving, setIsLeaving] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -168,6 +170,8 @@ export function LessonSessionPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
+  const [isWhiteboardLocked, setIsWhiteboardLocked] = useState(false);
+  const [whiteboardOpener, setWhiteboardOpener] = useState<string | null>(null);
   const [activeLessonID, setActiveLessonID] = useState<string | number | null>(
     null
   );
@@ -179,6 +183,39 @@ export function LessonSessionPage() {
 
   useEffect(() => {
     isWhiteboardOpenRef.current = isWhiteboardOpen;
+  }, [isWhiteboardOpen]);
+
+  useEffect(() => {
+    isWhiteboardLockedRef.current = isWhiteboardLocked;
+  }, [isWhiteboardLocked]);
+
+  useEffect(() => {
+    whiteboardOpenerRef.current = whiteboardOpener;
+  }, [whiteboardOpener]);
+
+  // While the whiteboard is open, keep broadcasting its open/lock state. A
+  // single stream message can be lost while the other participant is still
+  // connecting, so repeating it guarantees the lock settles on both sides.
+  useEffect(() => {
+    if (!isWhiteboardOpen) return;
+
+    const sendWhiteboardState = () => {
+      void clientRef.current
+        ?.sendStreamMessage(
+          JSON.stringify({
+            type: whiteboardMessageType,
+            open: isWhiteboardOpenRef.current,
+            lock: isWhiteboardLockedRef.current,
+            opener: whiteboardOpenerRef.current,
+          }),
+          true
+        )
+        .catch(() => undefined);
+    };
+
+    sendWhiteboardState();
+    const timer = window.setInterval(sendWhiteboardState, 3_000);
+    return () => window.clearInterval(timer);
   }, [isWhiteboardOpen]);
 
   useEffect(() => {
@@ -480,7 +517,12 @@ export function LessonSessionPage() {
           if (isWhiteboardOpenRef.current) {
             void client
               .sendStreamMessage(
-                JSON.stringify({ type: whiteboardMessageType, open: true }),
+                JSON.stringify({
+                  type: whiteboardMessageType,
+                  open: true,
+                  lock: isWhiteboardLockedRef.current,
+                  opener: whiteboardOpenerRef.current,
+                }),
                 true
               )
               .catch(() => undefined);
@@ -494,7 +536,12 @@ export function LessonSessionPage() {
               typeof payload === "string"
                 ? payload
                 : new TextDecoder().decode(payload)
-            ) as { type?: unknown; open?: unknown };
+            ) as {
+              type?: unknown;
+              open?: unknown;
+              lock?: unknown;
+              opener?: unknown;
+            };
 
             if (
               message.type === whiteboardMessageType &&
@@ -503,6 +550,27 @@ export function LessonSessionPage() {
               isWhiteboardOpenRef.current = message.open;
               setIsWhiteboardOpen(message.open);
               if (message.open) setIsMinimized(false);
+              if (!message.open) {
+                whiteboardOpenerRef.current = null;
+                setWhiteboardOpener(null);
+              }
+            }
+
+            if (
+              message.type === whiteboardMessageType &&
+              typeof message.lock === "boolean"
+            ) {
+              isWhiteboardLockedRef.current = message.lock;
+              setIsWhiteboardLocked(message.lock);
+            }
+
+            if (
+              message.type === whiteboardMessageType &&
+              typeof message.opener === "string" &&
+              message.opener
+            ) {
+              whiteboardOpenerRef.current = message.opener;
+              setWhiteboardOpener(message.opener);
             }
           } catch {
             // Ignore unrelated or malformed data-stream messages.
@@ -880,18 +948,77 @@ export function LessonSessionPage() {
       return;
     }
 
-    const open = !isWhiteboardOpenRef.current;
+    if (isWhiteboardOpenRef.current) {
+      if (whiteboardOpenerRef.current !== localParticipant) {
+        toast.warning(
+          "Only the person who opened the whiteboard can close it."
+        );
+        return;
+      }
+      const open = false;
+      isWhiteboardOpenRef.current = open;
+      setIsWhiteboardOpen(open);
+      whiteboardOpenerRef.current = null;
+      setWhiteboardOpener(null);
+
+      try {
+        await clientRef.current?.sendStreamMessage(
+          JSON.stringify({
+            type: whiteboardMessageType,
+            open,
+            lock: isWhiteboardLockedRef.current,
+            opener: null,
+          }),
+          true
+        );
+      } catch {
+        toast.warning(
+          "Whiteboard closed here, but the other participant may need to close it manually."
+        );
+      }
+      return;
+    }
+
+    const open = true;
     isWhiteboardOpenRef.current = open;
     setIsWhiteboardOpen(open);
+    whiteboardOpenerRef.current = localParticipant;
+    setWhiteboardOpener(localParticipant);
 
     try {
       await clientRef.current?.sendStreamMessage(
-        JSON.stringify({ type: whiteboardMessageType, open }),
+        JSON.stringify({
+          type: whiteboardMessageType,
+          open,
+          lock: isWhiteboardLockedRef.current,
+          opener: localParticipant,
+        }),
         true
       );
     } catch {
       toast.warning(
         "Whiteboard opened here, but the other participant may need to open it manually."
+      );
+    }
+  }
+
+  async function setWhiteboardLock(locked: boolean) {
+    if (activeLessonID === null) {
+      toast.error("Lesson session is still connecting. Please try again.");
+      return;
+    }
+
+    isWhiteboardLockedRef.current = locked;
+    setIsWhiteboardLocked(locked);
+
+    try {
+      await clientRef.current?.sendStreamMessage(
+        JSON.stringify({ type: whiteboardMessageType, lock: locked }),
+        true
+      );
+    } catch {
+      toast.warning(
+        "Lock changed here, but the other participant may need to refresh the whiteboard to see it."
       );
     }
   }
@@ -1136,6 +1263,10 @@ export function LessonSessionPage() {
             <CollaborativeWhiteboard
               lessonID={activeLessonID}
               participantName={localParticipant}
+              isLocked={isWhiteboardLocked}
+              isTeacher={!isStudentSession}
+              isOpener={whiteboardOpener === localParticipant}
+              onLockChange={(locked) => void setWhiteboardLock(locked)}
               onClose={() => void toggleWhiteboard()}
             />
           )}
@@ -1233,11 +1364,25 @@ export function LessonSessionPage() {
               <button
                 type="button"
                 aria-label={
-                  isWhiteboardOpen ? "Close whiteboard" : "Open whiteboard"
+                  isWhiteboardOpen
+                    ? whiteboardOpener === localParticipant
+                      ? "Close whiteboard"
+                      : "Whiteboard is open (only the opener can close)"
+                    : "Open whiteboard"
                 }
-                title={isWhiteboardOpen ? "Back to video" : "Open whiteboard"}
+                title={
+                  isWhiteboardOpen
+                    ? whiteboardOpener === localParticipant
+                      ? "Back to video"
+                      : "Only the person who opened the whiteboard can close it"
+                    : "Open whiteboard"
+                }
                 onClick={toggleWhiteboard}
-                disabled={isJoining || isLeaving}
+                disabled={
+                  isJoining ||
+                  isLeaving ||
+                  (isWhiteboardOpen && whiteboardOpener !== localParticipant)
+                }
                 className={`grid h-11 w-11 place-items-center rounded-xl transition sm:h-12 sm:w-12 sm:rounded-2xl ${
                   isWhiteboardOpen
                     ? "bg-[#348edc] text-white"
