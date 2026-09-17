@@ -1,4 +1,4 @@
-import { email } from "@/lib/schemas";
+import { email, phoneNumber } from "@/lib/schemas";
 import { z } from "zod";
 
 export const ContactUsSchema = z.object({
@@ -39,11 +39,7 @@ export const SupportSchema = z.object({
     .min(1, { message: "Last name is required" })
     .max(50, { message: "Last name must be at most 50 characters" }),
   email,
-  phoneNumber: z
-    .string()
-    .trim()
-    .min(1, { message: "Phone number is required" })
-    .max(20, { message: "Phone number must be at most 20 characters" }),
+  phoneNumber,
   message: z
     .string()
     .trim()

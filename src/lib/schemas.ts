@@ -1,4 +1,25 @@
+import { isValidPhoneNumber } from "libphonenumber-js/max";
 import { z } from "zod";
+
+export const phoneNumber = z
+  .string()
+  .trim()
+  .superRefine((val, ctx) => {
+    if (val.length < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Phone number is required",
+      });
+      return;
+    }
+
+    if (!val.startsWith("+") || !isValidPhoneNumber(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Enter a valid mobile number for the selected country",
+      });
+    }
+  });
 
 export const email = z
   .string()
