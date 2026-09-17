@@ -1,4 +1,5 @@
 import { socialLogin } from "../actions/social-login";
+import { googleCredentials } from "../credentials";
 import { DeviceTokenField } from "./device-token-field";
 
 type SocialRegisterButtonsProps = {
@@ -14,10 +15,8 @@ export function SocialRegisterButtons({
   mode = "register",
   userType,
 }: SocialRegisterButtonsProps) {
-  const googleConfigured = Boolean(
-    (process.env.GOOGLE_CLIENT_ID ?? process.env.AUTH_GOOGLE_ID) &&
-      (process.env.GOOGLE_CLIENT_SECRET ?? process.env.AUTH_GOOGLE_SECRET)
-  );
+  const { clientId, clientSecret } = googleCredentials();
+  const googleConfigured = Boolean(clientId && clientSecret);
   const googleAction = socialLogin.bind(null, "google", userType, mode);
   const actionLabel = mode === "login" ? "Continue" : "Register";
 

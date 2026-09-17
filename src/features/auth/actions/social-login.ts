@@ -6,6 +6,7 @@ import {
   SOCIAL_DEVICE_TOKEN_COOKIE,
   SOCIAL_LOGIN_ROLE_COOKIE,
 } from "@/features/auth/constants";
+import { googleCredentials } from "@/features/auth/credentials";
 import { paths } from "@/routes";
 import { cookies } from "next/headers";
 
@@ -18,8 +19,7 @@ export async function socialLogin(
   const isConfigured =
     provider === "google"
       ? Boolean(
-          (process.env.GOOGLE_CLIENT_ID ?? process.env.AUTH_GOOGLE_ID) &&
-            (process.env.GOOGLE_CLIENT_SECRET ?? process.env.AUTH_GOOGLE_SECRET)
+          googleCredentials().clientId && googleCredentials().clientSecret
         )
       : Boolean(
           process.env.AUTH_MICROSOFT_ENTRA_ID_ID &&
