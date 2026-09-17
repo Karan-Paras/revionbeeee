@@ -19,7 +19,7 @@ export function SocialRegisterButtons({
   const googleConfigured = Boolean(clientId && clientSecret);
   const googleAction = socialLogin.bind(null, "google", userType, mode);
   const actionLabel = mode === "login" ? "Continue" : "Register";
-
+  console.log(googleConfigured, "googleConfigured", googleCredentials());
   return (
     <div className={compact ? "mt-2" : "mt-4"}>
       <div
