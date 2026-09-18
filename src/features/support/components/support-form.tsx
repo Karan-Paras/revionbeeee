@@ -124,6 +124,7 @@ export function SupportForm() {
         <form
           className="grid grid-cols-2 gap-6"
           onSubmit={handleFormSubmit}
+          ref={formRef}
           noValidate
         >
           <div className="col-span-2 md:col-span-1">

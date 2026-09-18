@@ -11,24 +11,27 @@ const ALLOWED_PROFILE_IMAGE_TYPES = [
 
 export const CreateTeacherProfileSchema = z.object({
   fullName: z
-    .string()
+    .string({ required_error: "This field is required" })
     .trim()
+    .min(1, "This field is required")
     .min(2, "Full name must be at least 2 characters")
     .max(100, "Full name must be at most 100 characters"),
   professionalTitle: z
-    .string()
+    .string({ required_error: "This field is required" })
     .trim()
+    .min(1, "This field is required")
     .min(2, "Professional title must be at least 2 characters")
     .max(100, "Professional title must be at most 100 characters"),
   bio: z
-    .string()
+    .string({ required_error: "This field is required" })
     .trim()
+    .min(1, "This field is required")
     .min(10, "Bio must be at least 10 characters")
     .max(1000, "Bio must be at most 1000 characters"),
   mobileNumber: z
     .string()
     .trim()
-    .min(1, "Mobile number is required")
+
     .refine(
       (value) => value.startsWith("+") && isValidPhoneNumber(value),
       "Enter a valid mobile number for the selected country"
@@ -38,6 +41,7 @@ export const CreateTeacherProfileSchema = z.object({
     .trim()
     .regex(/^\+\d{1,4}$/, "Enter a valid country calling code"),
   country: z
+
     .string({
       required_error: "Please select a country",
       invalid_type_error: "Please select a country",
@@ -53,11 +57,21 @@ export const CreateTeacherProfileSchema = z.object({
     .trim()
     .min(1, "Please select a city")
     .max(100, "City must be at most 100 characters"),
-  hourlyRate: z.coerce
-    .number({ invalid_type_error: "Enter a valid rate per minute" })
-    .finite("Enter a valid rate per minute")
-    .positive("Rate per minute must be greater than 0")
-    .max(500, "Rate per minute must not exceed 500"),
+  hourlyRate: z.preprocess(
+    (value) => {
+      if (typeof value === "string" && value.trim() === "") return undefined;
+      if (typeof value === "string") return Number(value);
+      return value;
+    },
+    z
+      .number({
+        required_error: "This field is required",
+        invalid_type_error: "Enter a valid rate per minute",
+      })
+      .finite("Enter a valid rate per minute")
+      .positive("Rate per minute must be greater than 0")
+      .max(500, "Rate per minute must not exceed 500")
+  ),
   profileImage: z
     .instanceof(File)
     .refine((file) => file.size > 0, "Profile image is required")
