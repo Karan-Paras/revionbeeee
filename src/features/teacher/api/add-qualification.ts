@@ -22,7 +22,9 @@ export async function addTeacherQualification(
   formData.append("degree", data.degree);
   formData.append("fieldOfStudy", data.fieldOfStudy);
   formData.append("graduationYear", data.graduationYear);
-  formData.append("degreeDocument", data.degreeDocument);
+  if (data.degreeDocument) {
+    formData.append("degreeDocument", data.degreeDocument);
+  }
 
   return fetchServer<unknown>(apiUrl, "POST", formData);
 }

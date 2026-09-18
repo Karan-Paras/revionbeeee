@@ -38,7 +38,11 @@ export const SupportSchema = z.object({
     .trim()
     .min(1, { message: "Last name is required" })
     .max(50, { message: "Last name must be at most 50 characters" }),
-  email,
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "Email is required" })
+    .max(254, { message: "Email must be at most 254 characters" }),
   phoneNumber,
   message: z
     .string()

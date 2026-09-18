@@ -80,6 +80,25 @@ describe("AddTeacherQualificationSchema", () => {
     ).toBe(true);
   });
 
+  it("accepts a qualification without a degree document", () => {
+    const withoutDocument = {
+      institutionName: validQualification.institutionName,
+      degree: validQualification.degree,
+      fieldOfStudy: validQualification.fieldOfStudy,
+      graduationYear: validQualification.graduationYear,
+    };
+
+    expect(
+      AddTeacherQualificationSchema.safeParse(withoutDocument).success
+    ).toBe(true);
+    expect(
+      AddTeacherQualificationSchema.safeParse({
+        ...withoutDocument,
+        degreeDocument: null,
+      }).success
+    ).toBe(true);
+  });
+
   it("rejects blank qualification fields", () => {
     const result = AddTeacherQualificationSchema.safeParse({
       ...validQualification,

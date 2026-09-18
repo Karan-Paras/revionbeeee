@@ -320,9 +320,8 @@ export default function TeacherCertifications() {
             <div className="mt-6 space-y-3">
               <button
                 type="button"
-                disabled={certifications.length === 0}
                 onClick={() => router.push(paths.teacherAvailability())}
-                className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-medium text-white transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:bg-[#d2d2d2] disabled:text-[#777]"
+                className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-medium text-white transition hover:bg-[#4395df]"
               >
                 Save &amp; Next
               </button>
