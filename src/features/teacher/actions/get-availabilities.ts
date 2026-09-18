@@ -1,6 +1,6 @@
 "use server";
 
-import { getTeacherProfileDetail } from "@/features/teacher/api/get-profile-detail";
+import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 
 export type TeacherAvailabilityItem = {
   id?: number | string;
@@ -10,29 +10,36 @@ export type TeacherAvailabilityItem = {
   isAvailable: boolean;
 };
 
-function findTeacherAvailabilities(value: unknown): unknown[] | undefined {
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const found = findTeacherAvailabilities(item);
-      if (found) return found;
+function firstValue(record: Record<string, unknown>, keys: string[]) {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" || typeof value === "number") {
+      const text = String(value).trim();
+      if (text) return text;
     }
-    return undefined;
   }
-  if (!value || typeof value !== "object") return undefined;
+  return "";
+}
 
-  const record = value as Record<string, unknown>;
-  if (Array.isArray(record.teacher_availabilities)) {
-    return record.teacher_availabilities;
+/* Normalize "09:30", "09:30:00", "09:30 AM", "9:30" to 24-hour "HH:MM". */
+function toHourMinute(value: string): string {
+  const match = value.match(/(\d{1,2}):(\d{2})/);
+  if (!match || match.index === undefined) return "";
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (minute > 59 || hour > 23) return "";
+  const suffix = value
+    .slice(match.index + match[0].length)
+    .trim()
+    .toUpperCase();
+  let normalizedHour = hour;
+  if (suffix.startsWith("P")) {
+    if (normalizedHour !== 12) normalizedHour += 12;
+  } else if (suffix.startsWith("A") && normalizedHour === 12) {
+    normalizedHour = 0;
   }
-  if (Array.isArray(record.teacherAvailabilities)) {
-    return record.teacherAvailabilities;
-  }
-
-  for (const nestedValue of Object.values(record)) {
-    const found = findTeacherAvailabilities(nestedValue);
-    if (found) return found;
-  }
-  return undefined;
+  if (normalizedHour > 23) return "";
+  return `${String(normalizedHour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 }
 
 export async function getTeacherAvailabilities(): Promise<
@@ -40,12 +47,18 @@ export async function getTeacherAvailabilities(): Promise<
   | { success: false; error: string }
 > {
   try {
-    const response = await getTeacherProfileDetail();
-    const rawItems = findTeacherAvailabilities(response.data) ?? [];
+    const result = await getTeacherProfileDetail();
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+
+    const rawItems = result.data.availabilities ?? [];
     const data = rawItems.flatMap((item) => {
       if (!item || typeof item !== "object" || Array.isArray(item)) return [];
       const record = item as Record<string, unknown>;
-      const dayOfWeek = Number(record.dayOfWeek ?? record.day_of_week);
+      const dayOfWeek = Number(
+        firstValue(record, ["dayOfWeek", "day_of_week", "day"])
+      );
       if (!Number.isInteger(dayOfWeek) || dayOfWeek < 0 || dayOfWeek > 6)
         return [];
 
@@ -53,8 +66,32 @@ export async function getTeacherAvailabilities(): Promise<
         {
           id: record.id as number | string | undefined,
           dayOfWeek,
-          startTime: String(record.startTime ?? record.start_time ?? ""),
-          endTime: String(record.endTime ?? record.end_time ?? ""),
+          startTime: toHourMinute(
+            firstValue(record, [
+              "startTime",
+              "start_time",
+              "fromTime",
+              "from_time",
+              "timeFrom",
+              "time_from",
+              "slotStart",
+              "slot_start",
+              "from",
+            ])
+          ),
+          endTime: toHourMinute(
+            firstValue(record, [
+              "endTime",
+              "end_time",
+              "toTime",
+              "to_time",
+              "timeTo",
+              "time_to",
+              "slotEnd",
+              "slot_end",
+              "to",
+            ])
+          ),
           isAvailable:
             (record.isAvailable ?? record.is_available) !== false &&
             (record.isAvailable ?? record.is_available) !== 0,

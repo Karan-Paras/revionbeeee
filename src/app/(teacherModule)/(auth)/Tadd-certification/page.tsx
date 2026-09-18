@@ -4,7 +4,7 @@ import { addTeacherCertification as submitTeacherCertification } from "@/feature
 import { AddTeacherCertificationSchema } from "@/features/teacher/schemas";
 import { useCertificationStore } from "@/features/teacher/stores/use-certification-store";
 import { paths } from "@/routes";
-import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
+import { ArrowLeft, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, useTransition } from "react";
@@ -125,29 +125,15 @@ function TeacherAddCertification() {
 
           <label className="block text-xs font-medium text-[#222]">
             Issuing Authority
-            <span className="relative block">
-              <select
-                name="issuingAuthority"
-                defaultValue=""
-                onChange={(event) =>
-                  validateField("issuingAuthority", event.target.value)
-                }
-                className={`${inputClassName} appearance-none pr-10 text-[#999]`}
-              >
-                <option value="" disabled>
-                  Enter Authority
-                </option>
-                <option value="University">University</option>
-                <option value="Professional Organization">
-                  Professional Organization
-                </option>
-                <option value="Training Institute">Training Institute</option>
-              </select>
-              <ChevronDown
-                size={16}
-                className="pointer-events-none absolute top-[calc(50%+3px)] right-3 -translate-y-1/2 text-[#999]"
-              />
-            </span>
+            <input
+              name="issuingAuthority"
+              type="text"
+              onChange={(event) =>
+                validateField("issuingAuthority", event.target.value)
+              }
+              placeholder="Enter issuing authority (e.g., Microsoft)"
+              className={inputClassName}
+            />
             {fieldErrors.issuingAuthority?.[0] && (
               <span className="mt-1 block text-[11px] text-red-600">
                 {fieldErrors.issuingAuthority[0]}

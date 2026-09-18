@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 interface ErrorBlockProps {
   errors?: string[];
+  className?: string;
 }
 
-export function ErrorBlock({ errors }: ErrorBlockProps) {
+export function ErrorBlock({ errors, className }: ErrorBlockProps) {
   const [visible, setVisible] = useState<boolean>(!!errors?.length);
 
   useEffect(() => {
@@ -18,8 +21,8 @@ export function ErrorBlock({ errors }: ErrorBlockProps) {
   if (!visible || !errors || errors.length === 0) return null;
 
   return (
-    <div className="mt-4 rounded border border-red-400 bg-red-200 p-2">
+    <p role="alert" className={cn("mt-2 text-sm text-red-600", className)}>
       {errors.join(", ")}
-    </div>
+    </p>
   );
 }

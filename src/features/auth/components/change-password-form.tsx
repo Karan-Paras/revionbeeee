@@ -5,9 +5,16 @@ import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { changePassword } from "@/features/auth/actions/change-password";
+import { newPassword } from "@/features/auth/schemas";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { startTransition, useActionState, useEffect, useRef } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "sonner";
 
 export function ChangePasswordForm() {
@@ -17,11 +24,18 @@ export function ChangePasswordForm() {
     errors: {},
   });
 
+  const [currentPasswordError, setCurrentPasswordError] = useState<string>();
+  const [newPasswordError, setNewPasswordError] = useState<string>();
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>();
+
   const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();
+      setCurrentPasswordError(undefined);
+      setNewPasswordError(undefined);
+      setConfirmPasswordError(undefined);
       toast.success("Password changed successfully!");
     }
   }, [formState]);
@@ -58,8 +72,18 @@ export function ChangePasswordForm() {
           name="current-password"
           type="password"
           disabled={isPending}
-          errors={formState.errors.currentPassword}
+          errors={
+            currentPasswordError
+              ? [currentPasswordError]
+              : formState.errors.currentPassword
+          }
           autoComplete="current-password"
+          onChange={(event) => {
+            const val = event.currentTarget.value;
+            setCurrentPasswordError(
+              val.length === 0 ? "Password is required" : undefined
+            );
+          }}
         />
       </div>
       <div className="itm mb-3">
@@ -72,8 +96,24 @@ export function ChangePasswordForm() {
           name="new-password"
           type="password"
           disabled={isPending}
-          errors={formState.errors.newPassword}
+          errors={
+            newPasswordError
+              ? [newPasswordError]
+              : formState.errors.newPassword?.slice(0, 1)
+          }
           autoComplete="new-password"
+          onChange={(event) => {
+            const val = event.currentTarget.value;
+            if (val.length === 0) {
+              setNewPasswordError(undefined);
+              setConfirmPasswordError(undefined);
+              return;
+            }
+            const result = newPassword.safeParse(val);
+            setNewPasswordError(
+              result.success ? undefined : result.error.issues[0]?.message
+            );
+          }}
         />
       </div>
       <div className="itm mb-3">
@@ -86,8 +126,27 @@ export function ChangePasswordForm() {
           name="confirm-password"
           type="password"
           disabled={isPending}
-          errors={formState.errors.confirmPassword}
+          errors={
+            confirmPasswordError
+              ? [confirmPasswordError]
+              : formState.errors.confirmPassword
+          }
           autoComplete="new-password"
+          onChange={(event) => {
+            const passwordInput = (
+              event.currentTarget.form?.elements.namedItem(
+                "new-password"
+              ) as HTMLInputElement | null
+            )?.value;
+            const val = event.currentTarget.value;
+            setConfirmPasswordError(
+              val.length === 0
+                ? undefined
+                : val !== passwordInput
+                  ? "Passwords don't match"
+                  : undefined
+            );
+          }}
         />
       </div>
       <div className="itm mb-3">

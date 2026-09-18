@@ -144,6 +144,14 @@ export default function UpdateTeacherAvailabilityPage() {
   }
 
   function save() {
+    const hasAvailableSlot = days.some(
+      (day) =>
+        availability[day].enabled &&
+        availability[day].slots.some((slot) => slot.startTime && slot.endTime)
+    );
+    if (!hasAvailableSlot)
+      return toast.error("Please add at least one available time slot.");
+
     const hasIncompleteEnabledDay = days.some(
       (day) =>
         availability[day].enabled &&

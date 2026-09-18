@@ -22,9 +22,43 @@ import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { PhoneInput } from "react-international-phone";
 
+const createProfileDraftKey = "revision-bee:create-profile-draft";
+
+type CreateProfileDraft = {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+};
+
+function readCreateProfileDraft(): CreateProfileDraft {
+  if (typeof window === "undefined") return {};
+
+  try {
+    const value = window.sessionStorage.getItem(createProfileDraftKey);
+    return value ? (JSON.parse(value) as CreateProfileDraft) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeCreateProfileDraft(draft: CreateProfileDraft) {
+  if (typeof window === "undefined") return;
+
+  window.sessionStorage.setItem(createProfileDraftKey, JSON.stringify(draft));
+}
+
+function clearCreateProfileDraft() {
+  if (typeof window === "undefined") return;
+
+  window.sessionStorage.removeItem(createProfileDraftKey);
+}
+
 export function CreateProfileForm() {
   const [profilePicture, setProfilePicture] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [draft, setDraft] = useState<CreateProfileDraft>(
+    readCreateProfileDraft
+  );
+  const [phoneNumber, setPhoneNumber] = useState(draft.phoneNumber ?? "");
   const [phoneNumberError, setPhoneNumberError] = useState<string>();
   const [firstNameError, setFirstNameError] = useState<string>();
   const [lastNameError, setLastNameError] = useState<string>();
@@ -38,7 +72,12 @@ export function CreateProfileForm() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    writeCreateProfileDraft(draft);
+  }, [draft]);
+
+  useEffect(() => {
     if (formState.success) {
+      clearCreateProfileDraft();
       queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
@@ -155,13 +194,16 @@ export function CreateProfileForm() {
                 name="first-name"
                 iconClassName="user_bg"
                 placeholder="Enter your First Name"
+                value={draft.firstName ?? ""}
                 disabled={isPending}
                 errors={
                   firstNameError ? [firstNameError] : formState.errors.firstName
                 }
                 autoComplete="given-name"
                 onChange={(event) => {
-                  const result = firstNameSchema.safeParse(event.target.value);
+                  const value = event.target.value;
+                  setDraft((current) => ({ ...current, firstName: value }));
+                  const result = firstNameSchema.safeParse(value);
                   setFirstNameError(
                     result.success ? undefined : result.error.issues[0]?.message
                   );
@@ -177,13 +219,16 @@ export function CreateProfileForm() {
                 name="last-name"
                 iconClassName="user_bg"
                 placeholder="Enter your Last Name"
+                value={draft.lastName ?? ""}
                 disabled={isPending}
                 errors={
                   lastNameError ? [lastNameError] : formState.errors.lastName
                 }
                 autoComplete="family-name"
                 onChange={(event) => {
-                  const result = lastNameSchema.safeParse(event.target.value);
+                  const value = event.target.value;
+                  setDraft((current) => ({ ...current, lastName: value }));
+                  const result = lastNameSchema.safeParse(value);
                   setLastNameError(
                     result.success ? undefined : result.error.issues[0]?.message
                   );
@@ -217,6 +262,10 @@ export function CreateProfileForm() {
                     const value = hasSubscriberNumber ? phone : "";
 
                     setPhoneNumber(value);
+                    setDraft((current) => ({
+                      ...current,
+                      phoneNumber: value,
+                    }));
                     if (!hasSubscriberNumber) {
                       setPhoneNumberError(undefined);
                       return;

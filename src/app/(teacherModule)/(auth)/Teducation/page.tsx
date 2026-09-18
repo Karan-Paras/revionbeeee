@@ -5,13 +5,16 @@ import { addTeacherQualification as submitTeacherQualification } from "@/feature
 import { AddTeacherQualificationSchema } from "@/features/teacher/schemas";
 import { useQualificationStore } from "@/features/teacher/stores/use-qualification-store";
 import { paths } from "@/routes";
-import { ChevronDown, GraduationCap, Upload, X } from "lucide-react";
+import { GraduationCap, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
 const selectClassName =
-  "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 pr-10 text-sm text-[#999] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
+  "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#999] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
+
+const inputClassName =
+  "h-12 w-full rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#111] outline-none transition placeholder:text-[#999] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
 
 export default function TeacherEducation() {
   const router = useRouter();
@@ -38,6 +41,7 @@ export default function TeacherEducation() {
     type: string;
     url: string;
   }>();
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   function handleRemoveQualification(id: string) {
     removeQualification(id);
@@ -57,6 +61,7 @@ export default function TeacherEducation() {
   }
 
   function resetForm() {
+    formRef.current?.reset();
     setFieldErrors({});
     setSubmitError("");
     setDegreeDocument(undefined);
@@ -69,12 +74,26 @@ export default function TeacherEducation() {
     setSubmitError("");
     setFieldErrors({});
 
+    const validation = AddTeacherQualificationSchema.safeParse({
+      institutionName: formData.get("institutionName"),
+      degree: formData.get("degree"),
+      fieldOfStudy: formData.get("fieldOfStudy"),
+      graduationYear: formData.get("graduationYear"),
+      degreeDocument: formData.get("degreeDocument"),
+    });
+
+    if (!validation.success) {
+      setFieldErrors(validation.error.flatten().fieldErrors);
+      return;
+    }
+
     startTransition(async () => {
       const result = await submitTeacherQualification(formData);
 
       if (!result.success) {
-        setFieldErrors(result.fieldErrors ?? {});
-        setSubmitError(result.error ?? "");
+        setSubmitError(
+          result.error ?? "Unable to add qualification. Please try again."
+        );
         return;
       }
 
@@ -190,33 +209,37 @@ export default function TeacherEducation() {
                   </h2>
                 </div>
 
-                <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+                <form
+                  ref={formRef}
+                  className="space-y-4"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  autoComplete="off"
+                >
                   <div className="grid grid-cols-2 gap-4">
                     <label className="text-xs font-medium text-[#222]">
                       Institution Name
                       <span className="relative mt-2 block">
-                        <select
+                        <input
                           name="institutionName"
-                          defaultValue=""
+                          type="text"
+                          placeholder="Enter Institution Name"
+                          autoComplete="new-password"
+                          data-lpignore="true"
+                          onFocus={(e) =>
+                            e.currentTarget.setAttribute(
+                              "autocomplete",
+                              "new-password"
+                            )
+                          }
                           onChange={(e) =>
                             validateField("institutionName", e.target.value)
                           }
-                          className={selectClassName}
-                        >
-                          <option value="" disabled>
-                            Enter Institution Name
-                          </option>
-                          <option value="University">University</option>
-                          <option value="College">College</option>
-                          <option value="School">School</option>
-                        </select>
-                        <ChevronDown
-                          size={16}
-                          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
+                          className={inputClassName}
                         />
                       </span>
                       {fieldErrors.institutionName?.[0] && (
-                        <span className="mt-1 block text-[11px] text-red-600">
+                        <span className="mt-1 block text-[11px] text-red-500">
                           {fieldErrors.institutionName[0]}
                         </span>
                       )}
@@ -225,28 +248,26 @@ export default function TeacherEducation() {
                     <label className="text-xs font-medium text-[#222]">
                       Degree
                       <span className="relative mt-2 block">
-                        <select
+                        <input
                           name="degree"
-                          defaultValue=""
+                          type="text"
+                          placeholder="Enter Degree"
+                          autoComplete="new-password"
+                          data-lpignore="true"
+                          onFocus={(e) =>
+                            e.currentTarget.setAttribute(
+                              "autocomplete",
+                              "new-password"
+                            )
+                          }
                           onChange={(e) =>
                             validateField("degree", e.target.value)
                           }
-                          className={selectClassName}
-                        >
-                          <option value="" disabled>
-                            Choose Degree
-                          </option>
-                          <option value="Bachelor's">Bachelor&apos;s</option>
-                          <option value="Master's">Master&apos;s</option>
-                          <option value="Doctorate">Doctorate</option>
-                        </select>
-                        <ChevronDown
-                          size={16}
-                          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
+                          className={inputClassName}
                         />
                       </span>
                       {fieldErrors.degree?.[0] && (
-                        <span className="mt-1 block text-[11px] text-red-600">
+                        <span className="mt-1 block text-[11px] text-red-500">
                           {fieldErrors.degree[0]}
                         </span>
                       )}
@@ -257,28 +278,26 @@ export default function TeacherEducation() {
                     <label className="text-xs font-medium text-[#222]">
                       Field of Study
                       <span className="relative mt-2 block">
-                        <select
+                        <input
                           name="fieldOfStudy"
-                          defaultValue=""
+                          type="text"
+                          placeholder="Enter Field of Study"
+                          autoComplete="new-password"
+                          data-lpignore="true"
+                          onFocus={(e) =>
+                            e.currentTarget.setAttribute(
+                              "autocomplete",
+                              "new-password"
+                            )
+                          }
                           onChange={(e) =>
                             validateField("fieldOfStudy", e.target.value)
                           }
-                          className={selectClassName}
-                        >
-                          <option value="" disabled>
-                            Choose Field
-                          </option>
-                          <option value="Mathematics">Mathematics</option>
-                          <option value="Science">Science</option>
-                          <option value="English">English</option>
-                        </select>
-                        <ChevronDown
-                          size={16}
-                          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
+                          className={inputClassName}
                         />
                       </span>
                       {fieldErrors.fieldOfStudy?.[0] && (
-                        <span className="mt-1 block text-[11px] text-red-600">
+                        <span className="mt-1 block text-[11px] text-red-500">
                           {fieldErrors.fieldOfStudy[0]}
                         </span>
                       )}
@@ -290,6 +309,10 @@ export default function TeacherEducation() {
                         <select
                           name="graduationYear"
                           defaultValue=""
+                          autoComplete="off"
+                          onFocus={(e) =>
+                            e.currentTarget.setAttribute("autocomplete", "off")
+                          }
                           onChange={(e) =>
                             validateField("graduationYear", e.target.value)
                           }
@@ -298,22 +321,23 @@ export default function TeacherEducation() {
                           <option value="" disabled>
                             Choose Year
                           </option>
-                          {Array.from({ length: 30 }, (_, index) => {
-                            const year = new Date().getFullYear() - index;
-                            return (
-                              <option key={year} value={year}>
-                                {year}
-                              </option>
-                            );
-                          })}
+                          {Array.from(
+                            {
+                              length: new Date().getFullYear() - 1900 + 1,
+                            },
+                            (_, index) => {
+                              const year = new Date().getFullYear() - index;
+                              return (
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            }
+                          )}
                         </select>
-                        <ChevronDown
-                          size={16}
-                          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#999]"
-                        />
                       </span>
                       {fieldErrors.graduationYear?.[0] && (
-                        <span className="mt-1 block text-[11px] text-red-600">
+                        <span className="mt-1 block text-[11px] text-red-500">
                           {fieldErrors.graduationYear[0]}
                         </span>
                       )}
@@ -358,27 +382,15 @@ export default function TeacherEducation() {
                         const file = event.target.files?.[0];
                         if (!file) return;
                         validateField("degreeDocument", file);
-                        if (
-                          ![
-                            "application/pdf",
-                            "image/jpeg",
-                            "image/png",
-                          ].includes(file.type)
-                        ) {
+                        const result =
+                          AddTeacherQualificationSchema.shape.degreeDocument.safeParse(
+                            file
+                          );
+                        if (!result.success) {
                           event.target.value = "";
                           setDegreeDocument(undefined);
-                          setFieldErrors((errors) => ({
-                            ...errors,
-                            degreeDocument: [
-                              "Please upload a PDF, JPG, or PNG document",
-                            ],
-                          }));
                           return;
                         }
-                        setFieldErrors((errors) => ({
-                          ...errors,
-                          degreeDocument: undefined,
-                        }));
                         if (degreeDocument?.url) {
                           URL.revokeObjectURL(degreeDocument.url);
                         }
@@ -391,13 +403,13 @@ export default function TeacherEducation() {
                     />
                   </label>
                   {fieldErrors.degreeDocument?.[0] && (
-                    <p className="text-[11px] text-red-600">
+                    <span className="mt-1 block text-[11px] text-red-600">
                       {fieldErrors.degreeDocument[0]}
-                    </p>
+                    </span>
                   )}
 
                   {submitError && (
-                    <p role="alert" className="text-sm text-red-600">
+                    <p role="alert" className="text-sm text-red-500">
                       {submitError}
                     </p>
                   )}

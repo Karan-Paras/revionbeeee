@@ -50,6 +50,14 @@ function Form({ userData }: FormProps) {
   const router = useRouter();
 
   useEffect(() => {
+    setProfilePicture(userProfilePicture);
+  }, [userProfilePicture]);
+
+  useEffect(() => {
+    setGenderValue(gender);
+  }, [gender]);
+
+  useEffect(() => {
     if (formState.success) {
       queryClient.invalidateQueries({
         queryKey: ["profile"],
@@ -331,6 +339,6 @@ export function UpdateProfileForm() {
 
   if (data) {
     const user = data.data;
-    return <Form userData={user} />;
+    return <Form key={user.id} userData={user} />;
   }
 }

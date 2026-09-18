@@ -29,8 +29,8 @@ export default function ForgetPassword() {
           Forgot password?
         </h3>
         <p className="text-sm font-light text-[#6C6C6C]">
-          Don&apos;t worry! Please enter the email address linked with your
-          account.
+          Enter the email address associated with your account and we&apos;ll
+          send you a password reset link.
         </p>
       </div>
       <ForgotPasswordForm />

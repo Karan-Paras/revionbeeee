@@ -5,6 +5,7 @@ import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-onl
 import {
   getTeacherNotifications,
   markTeacherNotificationsRead,
+  type TeacherNotification,
 } from "@/features/teacher/api/get-notifications";
 import { getTeacherImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
@@ -68,6 +69,10 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
   });
 
   function handleMarkAllRead() {
+    queryClient.setQueriesData<TeacherNotification[]>(
+      { queryKey: ["teacher-notifications"] },
+      (current) => current?.map((n) => ({ ...n, unread: false }))
+    );
     markTeacherRead(undefined, {
       onError: () => {
         /* ignore mark-read API failure */

@@ -5,16 +5,13 @@ import { addTeacherCertification as submitTeacherCertification } from "@/feature
 import { AddTeacherCertificationSchema } from "@/features/teacher/schemas";
 import { useCertificationStore } from "@/features/teacher/stores/use-certification-store";
 import { paths } from "@/routes";
-import { Award, ChevronDown, Upload, X } from "lucide-react";
+import { Award, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 const inputClassName =
   "mt-1.5 h-12 w-full rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#333] outline-none transition placeholder:text-[#999] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
-
-const selectClassName =
-  "mt-1.5 h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 pr-10 text-sm text-[#999] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
 
 export default function TeacherCertifications() {
   const router = useRouter();
@@ -208,31 +205,15 @@ export default function TeacherCertifications() {
 
                   <label className="block text-xs font-medium text-[#222]">
                     Issuing Authority
-                    <span className="relative block">
-                      <select
-                        name="issuingAuthority"
-                        defaultValue=""
-                        onChange={(e) =>
-                          validateField("issuingAuthority", e.target.value)
-                        }
-                        className={selectClassName}
-                      >
-                        <option value="" disabled>
-                          Enter Authority
-                        </option>
-                        <option value="University">University</option>
-                        <option value="Professional Organization">
-                          Professional Organization
-                        </option>
-                        <option value="Training Institute">
-                          Training Institute
-                        </option>
-                      </select>
-                      <ChevronDown
-                        size={16}
-                        className="pointer-events-none absolute top-[calc(50%+3px)] right-3 -translate-y-1/2 text-[#999]"
-                      />
-                    </span>
+                    <input
+                      name="issuingAuthority"
+                      type="text"
+                      placeholder="Enter issuing authority"
+                      onChange={(e) =>
+                        validateField("issuingAuthority", e.target.value)
+                      }
+                      className={inputClassName}
+                    />
                     {fieldErrors.issuingAuthority?.[0] && (
                       <span className="mt-1 block text-[11px] text-red-600">
                         {fieldErrors.issuingAuthority[0]}
