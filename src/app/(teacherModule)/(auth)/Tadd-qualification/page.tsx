@@ -280,7 +280,7 @@ function TeacherAddQualification() {
               <>
                 <Upload size={22} strokeWidth={1.5} className="text-[#888]" />
                 <span className="mt-3 text-sm font-medium text-[#777]">
-                  {degreeDocument?.name ?? "Upload Degree Document"}
+                  {degreeDocument?.name ?? "Upload Degree Document (Optional)"}
                 </span>
                 <span className="mt-2 text-[10px] leading-4 text-[#aaa]">
                   Supported Documents: PDF, JPG, PNG

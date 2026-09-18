@@ -161,7 +161,7 @@ function TeacherAddCertification() {
           <label className="relative flex h-36 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-[#c9cdd4] bg-white text-center transition hover:border-[#53a2eb]">
             <Upload size={22} strokeWidth={1.5} className="text-[#888]" />
             <span className="mt-3 text-sm font-medium text-[#777]">
-              {certificate?.name ?? "Upload Certificate"}
+              {certificate?.name ?? "Upload Certificate (Optional)"}
             </span>
             <span className="mt-2 text-[10px] leading-4 text-[#aaa]">
               Supported Documents: PDF, JPG, PNG

@@ -19,7 +19,9 @@ export async function addTeacherCertification(
   formData.append("certificationName", data.certificationName);
   formData.append("issuingAuthority", data.issuingAuthority);
   formData.append("issueDate", data.issueDate);
-  formData.append("certificationFile", data.certificationFile);
+  if (data.certificationFile) {
+    formData.append("certificationFile", data.certificationFile);
+  }
 
   const apiUrl = `${apiBaseUrl.replace(/\/+$/, "")}/teacher/certification/add`;
   return fetchServer<unknown>(apiUrl, "POST", formData);

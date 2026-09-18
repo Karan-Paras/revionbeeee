@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 
 const selectClassName =
-  "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#999] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
+  "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#111] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
 
 const inputClassName =
   "h-12 w-full rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#111] outline-none transition placeholder:text-[#999] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
@@ -366,7 +366,8 @@ export default function TeacherEducation() {
                           className="text-[#888]"
                         />
                         <span className="mt-2 text-sm font-medium text-[#777]">
-                          {degreeDocument?.name ?? "Upload Degree Document"}
+                          {degreeDocument?.name ??
+                            "Upload Degree Document (Optional)"}
                         </span>
                         <span className="mt-1 text-[10px] leading-4 text-[#aaa]">
                           PDF, JPG, PNG

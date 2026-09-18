@@ -315,7 +315,7 @@ export default function TeacherAvailabilityPage() {
 
             <div className="mt-5 space-y-3">
               {submitError && (
-                <p role="alert" className="text-center text-sm text-red-600">
+                <p role="alert" className="text-sm text-red-600">
                   {submitError}
                 </p>
               )}

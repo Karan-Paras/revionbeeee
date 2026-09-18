@@ -40,12 +40,14 @@ export function SupportForm() {
   const [liveErrors, setLiveErrors] = useState<FieldErrors>({});
 
   const formRef = useRef<HTMLFormElement | null>(null);
+  const hasSubmitted = useRef(false);
 
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();
       setValues(INITIAL_VALUES);
       setLiveErrors({});
+      hasSubmitted.current = false;
       toast.success("Support request submitted successfully!");
     }
   }, [formState]);
@@ -72,6 +74,12 @@ export function SupportForm() {
     const nextValues = { ...values, [field]: value };
 
     setValues(nextValues);
+
+    if (!hasSubmitted.current && value.trim() === "") {
+      setLiveErrors((prev) => ({ ...prev, [field]: undefined }));
+      return;
+    }
+
     setLiveErrors((prev) => ({
       ...prev,
       [field]: getFieldErrors(nextValues)[field],
@@ -81,6 +89,8 @@ export function SupportForm() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    hasSubmitted.current = true;
+
     const validationErrors = getFieldErrors(values);
 
     if (Object.values(validationErrors).some((errors) => errors?.length)) {
@@ -88,7 +98,13 @@ export function SupportForm() {
       return;
     }
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData();
+    formData.set("first-name", values.firstName);
+    formData.set("last-name", values.lastName);
+    formData.set("email", values.email);
+    formData.set("phone-number", values.phoneNumber);
+    formData.set("message", values.message);
+
     startTransition(() => {
       action(formData);
     });
@@ -156,6 +172,7 @@ export function SupportForm() {
             <span className="support-phone-input block">
               <PhoneInput
                 defaultCountry="in"
+                forceDialCode
                 value={values.phoneNumber}
                 placeholder="Enter Mobile Number*"
                 disabled={isPending}
