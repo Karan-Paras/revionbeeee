@@ -6,8 +6,14 @@ export async function forgotPassword(
   data: z.infer<typeof ForgotPasswordSchema>
 ) {
   const apiUrl = "/forgot/password";
+  const siteUrl = (process.env.AUTH_URL || "https://revisionbee.com").replace(
+    /\/+$/,
+    ""
+  );
+
   return await fetchServer(apiUrl, "POST", {
     email: data.email,
+    logoUrl: `${siteUrl}/images/logo.svg`,
   });
 }
 

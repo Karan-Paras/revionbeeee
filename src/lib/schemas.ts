@@ -24,10 +24,22 @@ export const phoneNumber = z
 export const email = z
   .string()
   .trim()
-  .min(1, { message: "Email address is required" })
   .toLowerCase()
-  .email({
-    message: "Enter a valid email address (for example, name@example.com)",
+  .superRefine((val, ctx) => {
+    if (val.length < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Email address is required",
+      });
+      return;
+    }
+
+    if (!z.string().email().safeParse(val).success) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Enter a valid email address (for example, name@example.com)",
+      });
+    }
   });
 
 export const firstName = z.string().superRefine((val, ctx) => {

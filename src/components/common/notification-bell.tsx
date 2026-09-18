@@ -3,6 +3,7 @@
 import {
   getStudentUnreadCount,
   markAllStudentNotificationsRead,
+  type StudentNotification,
 } from "@/features/user/api/get-notifications";
 import { paths } from "@/routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -30,6 +31,11 @@ export function NotificationBell() {
 
   function handleBellClick() {
     if (unreadCount > 0) {
+      queryClient.setQueryData(["student-notifications-unread-count"], 0);
+      queryClient.setQueriesData<StudentNotification[]>(
+        { queryKey: ["student-notifications"] },
+        (current) => current?.map((n) => ({ ...n, unread: false }))
+      );
       markRead(undefined, {
         onSettled: () => {
           queryClient.invalidateQueries({

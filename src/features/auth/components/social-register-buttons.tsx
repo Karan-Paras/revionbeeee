@@ -42,7 +42,7 @@ export function SocialRegisterButtons({
                 ? `${actionLabel} with Google`
                 : "Google authentication is not configured"
             }
-            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white text-sm font-medium transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 ${compact ? "h-10" : "h-11"}`}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-white text-sm font-medium transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 h-11"
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
               <path

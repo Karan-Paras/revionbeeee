@@ -2,6 +2,7 @@
 
 import { ErrorBlock } from "@/components/errors/error-block";
 import { changePassword } from "@/features/auth/actions/change-password";
+import { newPassword } from "@/features/auth/schemas";
 import { ContactUsSchema } from "@/features/support/schemas";
 import { fetchClient } from "@/lib/fetch-client";
 import {
@@ -83,13 +84,64 @@ export default function TeacherSettingsPage() {
   const [passwordFormState, passwordAction, isChangingPassword] =
     useActionState(changePassword, { errors: {} });
   const passwordFormRef = useRef<HTMLFormElement | null>(null);
+  const [passwordFieldErrors, setPasswordFieldErrors] = useState<{
+    current?: string;
+    new?: string;
+    confirm?: string;
+  }>({});
 
   useEffect(() => {
     if (passwordFormState.success) {
       passwordFormRef.current?.reset();
+      setPasswordFieldErrors({});
       toast.success("Password changed successfully!");
     }
   }, [passwordFormState.success]);
+
+  function validatePasswordFieldLive(
+    key: "current" | "new" | "confirm",
+    input: HTMLInputElement
+  ) {
+    const value = input.value;
+
+    if (key === "current") {
+      setPasswordFieldErrors((errors) => ({
+        ...errors,
+        current: value.length === 0 ? "Password is required" : undefined,
+      }));
+      return;
+    }
+
+    if (key === "new") {
+      if (value.length === 0) {
+        setPasswordFieldErrors((errors) => ({
+          ...errors,
+          new: undefined,
+          confirm: undefined,
+        }));
+        return;
+      }
+      const result = newPassword.safeParse(value);
+      setPasswordFieldErrors((errors) => ({
+        ...errors,
+        new: result.success ? undefined : result.error.issues[0]?.message,
+      }));
+      return;
+    }
+
+    const newPasswordValue = input.form?.elements.namedItem(
+      "new-password"
+    ) as HTMLInputElement | null;
+    setPasswordFieldErrors((errors) => ({
+      ...errors,
+      confirm:
+        value.length === 0
+          ? "Confirm password is required"
+          : value !== newPasswordValue?.value
+            ? "Passwords don't match"
+            : undefined,
+    }));
+  }
 
   function changeSection(section: SettingsSection) {
     const destination =
@@ -115,7 +167,32 @@ export default function TeacherSettingsPage() {
 
   function submitPasswordForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const currentPassword = formData.get("current-password")?.toString() ?? "";
+    const nextPassword = formData.get("new-password")?.toString() ?? "";
+    const confirmPassword = formData.get("confirm-password")?.toString() ?? "";
+    const nextPasswordValidation = newPassword.safeParse(nextPassword);
+    const errors = {
+      current: currentPassword ? undefined : "Password is required",
+      new: nextPassword
+        ? nextPasswordValidation.success
+          ? undefined
+          : nextPasswordValidation.error.issues[0]?.message
+        : "Password is required",
+      confirm: confirmPassword
+        ? confirmPassword === nextPassword
+          ? undefined
+          : "Passwords don't match"
+        : "Confirm password is required",
+    };
+
+    setPasswordFieldErrors(errors);
+
+    if (errors.current || errors.new || errors.confirm) {
+      return;
+    }
+
     startTransition(() => passwordAction(formData));
   }
 
@@ -248,6 +325,12 @@ export default function TeacherSettingsPage() {
                             }
                             disabled={isChangingPassword}
                             className={`${inputClassName} pr-12 pl-11`}
+                            onChange={(event) =>
+                              validatePasswordFieldLive(
+                                field.key,
+                                event.currentTarget
+                              )
+                            }
                           />
                           <button
                             type="button"
@@ -271,9 +354,11 @@ export default function TeacherSettingsPage() {
                             )}
                           </button>
                         </span>
-                        {passwordFormState.errors[field.errorKey]?.[0] && (
+                        {(passwordFieldErrors[field.key] ??
+                          passwordFormState.errors[field.errorKey]?.[0]) && (
                           <span className="mt-1 block text-[10px] text-red-500">
-                            {passwordFormState.errors[field.errorKey]?.[0]}
+                            {passwordFieldErrors[field.key] ??
+                              passwordFormState.errors[field.errorKey]?.[0]}
                           </span>
                         )}
                       </label>
@@ -517,105 +602,100 @@ export default function TeacherSettingsPage() {
                 </section>
               </article>
             ) : activeSection === "About Us" ? (
-              <article className="mt-5 border-t border-[#edf0f2] pt-5 text-xs leading-[1.55] text-[#222] sm:text-sm">
+              <article className="mt-5 border-t border-[#edf0f2] pt-5 text-[11px] leading-[1.7] text-[#555] sm:text-xs">
                 <section>
-                  <h3 className="text-base font-bold text-[#111] sm:text-lg">
-                    🐝 About Us - RevisionBee
+                  <h3 className="text-sm font-semibold text-[#222]">
+                    About Us - Revision Bee
                   </h3>
-                  <p className="mt-1">
-                    At RevisionBee, we believe every student deserves access to
+                  <p className="mt-3">
+                    At Revision Bee, we believe every student deserves access to
                     high-quality math resources. Our mission is to make IB Math
                     preparation engaging, effective, and accessible for learners
                     around the world.
                   </p>
-                  <p>Built by experienced educators, RevisionBee offers:</p>
+                  <p className="mt-3">
+                    Built by experienced educators, Revision Bee offers:
+                  </p>
                   <ul className="mt-2 list-disc space-y-1 pl-5">
                     <li>
-                      🧠 A vast question bank filled with IB-style problems
-                      tailored to your syllabus
+                      A broad question bank with IB-style problems tailored to
+                      your syllabus
                     </li>
                     <li>
-                      🧪 Interactive quizzes that adapt to your progress and
-                      skill level
+                      Interactive quizzes that adapt to your progress and skill
+                      level
                     </li>
                     <li>
-                      📈 Real-time progress tracking to monitor your growth and
-                      identify areas for improvement
+                      Progress tracking to monitor growth and identify areas for
+                      improvement
                     </li>
                     <li>
-                      🎥 Topic explanation videos and strategy breakdowns
-                      created by our team to help you master even the trickiest
-                      concepts step-by-step
+                      Topic explanations and strategy breakdowns to support
+                      step-by-step learning
                     </li>
                   </ul>
                 </section>
 
                 <section className="mt-5">
-                  <h3 className="font-bold text-[#111]">
-                    🐝 Track Your Progress
+                  <h3 className="text-sm font-semibold text-[#222]">
+                    Track Your Progress
                   </h3>
-                  <p className="mt-1">
-                    As you complete quizzes and challenges, RevisionBee keeps
+                  <p className="mt-3">
+                    As you complete quizzes and challenges, Revision Bee keeps
                     track of your scores, completed topics, and improvement over
                     time.
                   </p>
                 </section>
 
                 <section className="mt-5">
-                  <h3 className="font-bold text-[#111]">
-                    🐝 Three Difficulty Levels
+                  <h3 className="text-sm font-semibold text-[#222]">
+                    Three Difficulty Levels
                   </h3>
-                  <p className="mt-1">
-                    Every learner in our hive works at their own pace — that’s
-                    why RevisionBee offers questions across three clear
-                    difficulty levels, each marked with a friendly bee-themed
-                    badge:
+                  <p className="mt-3">
+                    Every learner works at their own pace, so Revision Bee
+                    offers questions across three clear difficulty levels:
                   </p>
-                  <ul className="mt-2 space-y-1 pl-5">
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
                     <li>
-                      <span aria-hidden="true">🟢 🐝 </span>
-                      <strong className="text-[#111]">BuzzEasy (Easy)</strong> —
-                      Great for quick warm-ups, building confidence, and
-                      reinforcing core skills.
+                      <strong className="font-semibold text-[#222]">
+                        BuzzEasy:
+                      </strong>{" "}
+                      quick warm-ups that build confidence and reinforce core
+                      skills.
                     </li>
                     <li>
-                      <span aria-hidden="true">🟡 🐝 </span>
-                      <strong className="text-[#111]">
-                        HoneyChallenge (Intermediate)
+                      <strong className="font-semibold text-[#222]">
+                        HoneyChallenge:
                       </strong>{" "}
-                      — A good challenge with multi-step problems, combining
-                      ideas, and questions designed to deepen your
+                      multi-step problems that combine ideas and deepen
                       understanding.
                     </li>
                     <li>
-                      <span aria-hidden="true">🔴 🐝 </span>
-                      <strong className="text-[#111]">
-                        HiveMaster (Advanced)
+                      <strong className="font-semibold text-[#222]">
+                        HiveMaster:
                       </strong>{" "}
-                      — Thought-provoking and demanding questions for those
-                      ready to test themselves with complex reasoning and
-                      problem-solving.
+                      advanced questions for complex reasoning and
+                      problem-solving practice.
                     </li>
                   </ul>
                 </section>
 
                 <section className="mt-5">
-                  <h3 className="font-bold text-[#111]">
-                    🎥 Coming Soon: Video Tutorials
+                  <h3 className="text-sm font-semibold text-[#222]">
+                    Coming Soon: Video Tutorials
                   </h3>
-                  <p className="mt-1">
-                    We know some topics need a little extra explanation — so
-                    we’re creating exclusive RevisionBee video tutorials for
-                    select topics. These videos will walk you through key
-                    strategies, worked examples, and revision tips to give you
-                    that extra boost before your exams.
+                  <p className="mt-3">
+                    Some topics need extra explanation, so we are creating
+                    Revision Bee video tutorials for selected topics. These
+                    videos will walk students through key strategies, worked
+                    examples, and revision tips before exams.
                   </p>
-                  <p className="mt-1">
-                    Join our buzzing community today and take your IB Math
-                    revision to the next level. 🐝✨
+                  <p className="mt-3">
+                    Join Revision Bee and take your IB Math revision to the next
+                    level.
                   </p>
-                  <p className="font-bold text-[#111]">
-                    RevisionBee — Smart Math. Sweet Success.
+                  <p className="mt-3 font-semibold text-[#222]">
+                    Revision Bee - Smart Math. Sweet Success.
                   </p>
                 </section>
               </article>

@@ -49,7 +49,10 @@ export const newPassword = requiredPassword.superRefine((value, ctx) => {
   }
 });
 
-const confirmPassword = z.string().trim();
+const confirmPassword = z
+  .string()
+  .trim()
+  .min(1, { message: "Confirm password is required" });
 
 export const RegisterSchema = z
   .object({

@@ -383,6 +383,7 @@ export function CreateTeacherProfileForm() {
               onChange={(event) =>
                 validateField("hourlyRate", event.target.value)
               }
+              onWheel={(event) => event.currentTarget.blur()}
               className={`${inputClassName} inp_spc pl-16`}
             />
           </span>

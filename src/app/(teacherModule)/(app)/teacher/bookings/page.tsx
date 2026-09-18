@@ -1,5 +1,6 @@
 "use client";
 
+import { cancelLesson } from "@/features/lessons/api/cancel-lesson";
 import {
   getBookings,
   type BookingStatus,
@@ -78,6 +79,10 @@ export default function TeacherBookingsPage() {
     TeacherBooking["id"] | null
   >(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [cancellingLessonID, setCancellingLessonID] = useState<
+    TeacherBooking["id"] | null
+  >(null);
+  const [cancellationReason, setCancellationReason] = useState("");
   const [nowUtc, setNowUtc] = useState(() => Date.now());
 
   useEffect(() => {
@@ -124,6 +129,20 @@ export default function TeacherBookingsPage() {
         setRejectingLessonID(null);
         setRejectionReason("");
       }
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: cancelLesson,
+    onSuccess: async (_, variables) => {
+      updateStatus(variables.lessonID, "Rejected");
+      await queryClient.invalidateQueries({
+        queryKey: ["teacher-bookings"],
+      });
+      toast.success("Lesson cancelled successfully.");
+      setCancellingLessonID(null);
+      setCancellationReason("");
     },
     onError: (error) => toast.error(error.message),
   });
@@ -375,13 +394,18 @@ export default function TeacherBookingsPage() {
                             : "Start"}
                         </button>
                         <button
-                          disabled={!canManageSession}
+                          disabled={
+                            !canManageSession || cancelMutation.isPending
+                          }
                           title={
                             canManageSession
                               ? "Cancel session"
                               : unavailableActionTitle
                           }
-                          onClick={() => updateStatus(booking.id, "Rejected")}
+                          onClick={() => {
+                            setCancellingLessonID(booking.lessonID);
+                            setCancellationReason("");
+                          }}
                           className="rounded-full bg-[#ff3543] px-3 py-1.5 text-[11px] font-medium text-white hover:bg-[#ed2937] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-[#ff3543]"
                         >
                           Cancel
@@ -482,6 +506,65 @@ export default function TeacherBookingsPage() {
                 className="h-10 rounded-lg bg-[#ff3d4d] px-4 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {respondMutation.isPending ? "Rejecting..." : "Reject Lesson"}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {cancellingLessonID !== null && (
+        <div className="fixed inset-0 z-[100000] grid place-items-center bg-black/50 p-4">
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cancel-lesson-title"
+            className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl"
+          >
+            <div className="flex items-center justify-between">
+              <h2 id="cancel-lesson-title" className="text-base font-bold">
+                Cancel Lesson
+              </h2>
+              <button
+                type="button"
+                aria-label="Close cancel dialog"
+                onClick={() => setCancellingLessonID(null)}
+                className="grid h-8 w-8 place-items-center rounded-full hover:bg-[#f1f3f5]"
+              >
+                <X size={17} />
+              </button>
+            </div>
+            <label className="mt-4 block text-xs font-medium text-[#444]">
+              Cancellation reason
+              <textarea
+                value={cancellationReason}
+                onChange={(event) => setCancellationReason(event.target.value)}
+                placeholder="Enter a reason for cancelling this lesson"
+                rows={4}
+                className="mt-2 w-full resize-none rounded-lg border border-[#d7dde3] p-3 text-sm outline-none focus:border-[#53a2eb]"
+              />
+            </label>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setCancellingLessonID(null)}
+                className="h-10 rounded-lg border border-[#d7dde3] px-4 text-xs font-medium"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                disabled={
+                  !cancellationReason.trim() || cancelMutation.isPending
+                }
+                onClick={() =>
+                  cancelMutation.mutate({
+                    lessonID: cancellingLessonID,
+                    reason: cancellationReason,
+                  })
+                }
+                className="h-10 rounded-lg bg-[#ff3543] px-4 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {cancelMutation.isPending ? "Cancelling..." : "Cancel Lesson"}
               </button>
             </div>
           </section>

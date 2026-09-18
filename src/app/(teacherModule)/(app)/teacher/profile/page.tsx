@@ -796,6 +796,7 @@ export default function TeacherProfilePage() {
                       onChange={(event) =>
                         validateProfileField("hourlyRate", event.target.value)
                       }
+                      onWheel={(event) => event.currentTarget.blur()}
                       className={`${inputClassName} inp_spc pl-[70px]`}
                     />
                   </span>

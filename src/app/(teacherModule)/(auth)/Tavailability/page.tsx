@@ -124,6 +124,16 @@ export default function TeacherAvailabilityPage() {
   function handleSave() {
     setSubmitError("");
 
+    const hasAvailableSlot = days.some(
+      (day) =>
+        availability[day].enabled &&
+        availability[day].slots.some((slot) => slot.startTime && slot.endTime)
+    );
+    if (!hasAvailableSlot) {
+      setSubmitError("Please add at least one available time slot.");
+      return;
+    }
+
     // First check: every enabled day has complete, valid slots
     const hasIncomplete = days.some(
       (day) =>

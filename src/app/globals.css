@@ -69,6 +69,42 @@
   font-size: 16px;
 }
 
+.support-phone-input .react-international-phone-input-container {
+  width: 100%;
+  border-bottom: 1px solid #dedfdd;
+}
+
+.support-phone-input .react-international-phone-country-selector-button,
+.support-phone-input .react-international-phone-input {
+  height: 52px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: #22281e;
+  font-size: 15px;
+}
+
+.support-phone-input .react-international-phone-country-selector-button {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.support-phone-input .react-international-phone-input {
+  width: 100%;
+  outline: 0;
+}
+
+.support-phone-input .react-international-phone-input::placeholder {
+  color: #22281e;
+}
+
+.support-phone-input .react-international-phone-country-selector-dropdown {
+  z-index: 50;
+  max-height: 260px;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 14%);
+}
+
 body {
   @apply overflow-x-hidden scroll-smooth text-[#0b0b0b];
 }

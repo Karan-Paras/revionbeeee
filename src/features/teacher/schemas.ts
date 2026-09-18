@@ -83,28 +83,28 @@ export const AddTeacherQualificationSchema = z.object({
     .max(150, "Institution name must be at most 150 characters"),
   degree: z
     .string({
-      required_error: "Please select a degree",
-      invalid_type_error: "Please select a degree",
+      required_error: "Please enter a degree",
+      invalid_type_error: "Please enter a degree",
     })
     .trim()
-    .min(1, "Please select a degree")
+    .min(1, "Please enter a degree")
     .min(2, "Degree must be at least 2 characters")
     .max(100, "Degree must be at most 100 characters"),
   fieldOfStudy: z
     .string({
-      required_error: "Please select a field of study",
-      invalid_type_error: "Please select a field of study",
+      required_error: "Please enter a field of study",
+      invalid_type_error: "Please enter a field of study",
     })
     .trim()
-    .min(1, "Please select a field of study")
+    .min(1, "Please enter a field of study")
     .min(2, "Field of study must be at least 2 characters")
     .max(100, "Field of study must be at most 100 characters"),
   graduationYear: z
     .string({
-      required_error: "Please select a graduation year",
-      invalid_type_error: "Please select a graduation year",
+      required_error: "Please enter a graduation year",
+      invalid_type_error: "Please enter a graduation year",
     })
-    .min(1, "Please select a graduation year")
+    .min(1, "Please enter a graduation year")
     .regex(/^\d{4}$/, "Enter a valid graduation year")
     .refine((year) => {
       const numericYear = Number(year);
@@ -143,11 +143,11 @@ export const AddTeacherCertificationSchema = z.object({
     .max(150, "Certification name must be at most 150 characters"),
   issuingAuthority: z
     .string({
-      required_error: "Please select an issuing authority",
-      invalid_type_error: "Please select an issuing authority",
+      required_error: "Please enter an issuing authority",
+      invalid_type_error: "Please enter an issuing authority",
     })
     .trim()
-    .min(1, "Please select an issuing authority")
+    .min(1, "Please enter an issuing authority")
     .min(2, "Issuing authority must be at least 2 characters")
     .max(150, "Issuing authority must be at most 150 characters"),
   issueDate: z
@@ -220,6 +220,13 @@ export const AddTeacherAvailabilitySchema = z.object({
     )
     .min(1, "Availability is required")
     .superRefine((slots, ctx) => {
+      if (!slots.some((slot) => slot.isAvailable === 1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please add at least one available time slot",
+        });
+      }
+
       slots.forEach((slot, index) => {
         if (slot.isAvailable !== 1) return;
         const startMinutes = toMinutes(slot.startTime, slot.startMeridiem);

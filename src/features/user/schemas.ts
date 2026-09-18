@@ -2,7 +2,7 @@ import { firstName, lastName } from "@/lib/schemas";
 import { isValidPhoneNumber } from "libphonenumber-js/max";
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const phoneNumber = z
   .string()

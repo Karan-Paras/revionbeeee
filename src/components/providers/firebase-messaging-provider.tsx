@@ -1,6 +1,7 @@
 "use client";
 
 import { FIREBASE_MESSAGING_READY_EVENT } from "@/lib/firebase-messaging-events";
+import { useQueryClient } from "@tanstack/react-query";
 import type { MessagePayload, Unsubscribe } from "firebase/messaging";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -30,9 +31,23 @@ function showForegroundMessage(payload: MessagePayload) {
 
 export function FirebaseMessagingProvider() {
   const unsubscribeRef = useRef<Unsubscribe | undefined>(undefined);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     let isMounted = true;
+
+    function refreshNotificationBadges() {
+      queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
+      queryClient.invalidateQueries({
+        queryKey: ["student-notifications-unread-count"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["student-notifications"] });
+    }
+
+    function handleForegroundMessage(payload: MessagePayload) {
+      showForegroundMessage(payload);
+      refreshNotificationBadges();
+    }
 
     async function startListening() {
       if (!canListenForMessages() || unsubscribeRef.current) return;
@@ -44,7 +59,7 @@ export function FirebaseMessagingProvider() {
         }
 
         unsubscribeRef.current = await listenForForegroundMessages(
-          showForegroundMessage
+          handleForegroundMessage
         );
       } catch (error) {
         console.error("Unable to initialize Firebase messaging", error);

@@ -8,6 +8,11 @@ import type { Topic } from "@/features/subjects/types";
 import { paths } from "@/routes";
 import type { ApiSuccessResponse } from "@/types/api";
 import type { ID } from "@/types/globals";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -17,7 +22,17 @@ interface SelectSubjectsProps {
   initialData?: ApiSuccessResponse<Array<Topic>>;
 }
 
-export function SelectSubjects({
+const fallbackQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Keep the same default as the app-wide provider to avoid
+      // refetching immediately after a fallback provide.
+      staleTime: 60 * 1000,
+    },
+  },
+});
+
+function SelectSubjectsContent({
   maxLength,
   href = paths.subjectDetails,
   initialData,
@@ -98,4 +113,26 @@ export function SelectSubjects({
   }
 
   return <p>No topics found.</p>;
+}
+
+export function SelectSubjects(props: SelectSubjectsProps) {
+  let hasQueryClient = false;
+  try {
+    useQueryClient();
+    hasQueryClient = true;
+  } catch {
+    // No QueryClientProvider above this component. Provide a local one so
+    // the query never throws "No QueryClient set" during server rendering
+    // or in trees mounted outside the app-wide provider.
+  }
+
+  if (hasQueryClient) {
+    return <SelectSubjectsContent {...props} />;
+  }
+
+  return (
+    <QueryClientProvider client={fallbackQueryClient}>
+      <SelectSubjectsContent {...props} />
+    </QueryClientProvider>
+  );
 }
