@@ -42,7 +42,9 @@ export const SupportSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Email is required" })
-    .max(254, { message: "Email must be at most 254 characters" }),
+    .max(254, { message: "Email must be at most 254 characters" })
+    .email({ message: "Please enter a valid email address" })
+    .toLowerCase(),
   phoneNumber,
   message: z
     .string()
