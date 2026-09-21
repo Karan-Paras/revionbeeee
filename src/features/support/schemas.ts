@@ -41,10 +41,29 @@ export const SupportSchema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, { message: "Email is required" })
-    .max(254, { message: "Email must be at most 254 characters" })
-    .email({ message: "Please enter a valid email address" })
-    .toLowerCase(),
+    .toLowerCase()
+    .superRefine((value, ctx) => {
+      if (value.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Email is required",
+        });
+        return;
+      }
+      if (value.length > 254) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Email must be at most 254 characters",
+        });
+        return;
+      }
+      if (!z.string().email().safeParse(value).success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please enter a valid email address",
+        });
+      }
+    }),
   phoneNumber,
   message: z
     .string()

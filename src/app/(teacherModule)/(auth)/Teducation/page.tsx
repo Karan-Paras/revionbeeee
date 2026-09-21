@@ -366,8 +366,7 @@ export default function TeacherEducation() {
                           className="text-[#888]"
                         />
                         <span className="mt-2 text-sm font-medium text-[#777]">
-                          {degreeDocument?.name ??
-                            "Upload Degree Document (Optional)"}
+                          {degreeDocument?.name ?? "Upload Degree Document "}
                         </span>
                         <span className="mt-1 text-[10px] leading-4 text-[#aaa]">
                           PDF, JPG, PNG

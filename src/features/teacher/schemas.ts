@@ -31,11 +31,22 @@ export const CreateTeacherProfileSchema = z.object({
   mobileNumber: z
     .string()
     .trim()
-
-    .refine(
-      (value) => value.startsWith("+") && isValidPhoneNumber(value),
-      "Enter a valid mobile number for the selected country"
-    ),
+    .min(1, "This field is required")
+    .superRefine((value, ctx) => {
+      if (value.length === 0 || /^\+\d{1,4}$/.test(value)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "This field is required",
+        });
+        return;
+      }
+      if (!value.startsWith("+") || !isValidPhoneNumber(value)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Enter a valid mobile number for the selected country",
+        });
+      }
+    }),
   countryCode: z
     .string()
     .trim()
