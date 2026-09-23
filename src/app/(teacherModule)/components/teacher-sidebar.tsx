@@ -37,15 +37,24 @@ const navigation = [
 type TeacherSidebarProps = {
   isOpen?: boolean;
   onClose?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 };
 
 export function TeacherSidebar({
   isOpen = false,
   onClose,
+  isCollapsed: controlledCollapsed,
+  onToggleCollapse: controlledToggleCollapse,
 }: TeacherSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+  const isCollapsed = controlledCollapsed ?? internalCollapsed;
+  const handleToggleCollapse =
+    controlledToggleCollapse ?? (() => setInternalCollapsed((prev) => !prev));
 
   async function handleLogout() {
     if (isLoggingOut) return;
@@ -63,8 +72,13 @@ export function TeacherSidebar({
     router.refresh();
   }
 
-  const sidebarContent = (
-    <nav className="flex h-[calc(100%-86px)] flex-col px-5 py-6">
+  const renderSidebarNav = (collapsed: boolean) => (
+    <nav
+      className={cn(
+        "flex h-[calc(100%-86px)] flex-col py-6 transition-all",
+        collapsed ? "px-2" : "px-5"
+      )}
+    >
       <ul className="space-y-2">
         {navigation.map(({ label, href, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(`${href}/`);
@@ -73,14 +87,18 @@ export function TeacherSidebar({
               <Link
                 href={href}
                 onClick={onClose}
+                title={collapsed ? label : undefined}
                 className={cn(
-                  "flex h-12 items-center gap-3 rounded-lg px-3.5 text-sm font-medium text-[#30343a] transition hover:bg-[#edf6ff] hover:text-[#3994e7]",
+                  "flex h-12 items-center rounded-lg text-sm font-medium text-[#30343a] transition hover:bg-[#edf6ff] hover:text-[#3994e7]",
+                  collapsed
+                    ? "mx-auto w-12 justify-center px-0"
+                    : "gap-3 px-3.5",
                   isActive &&
                     "bg-[#53a2eb] text-white hover:bg-[#53a2eb] hover:text-white"
                 )}
               >
-                <Icon size={20} strokeWidth={1.8} />
-                {label}
+                <Icon size={20} strokeWidth={1.8} className="shrink-0" />
+                {!collapsed && <span className="truncate">{label}</span>}
               </Link>
             </li>
           );
@@ -92,40 +110,79 @@ export function TeacherSidebar({
           type="button"
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="flex h-12 w-full items-center gap-3 rounded-lg bg-[#fff0f0] px-3.5 text-sm font-medium text-[#ff3c45] transition hover:bg-[#ffe4e4] disabled:cursor-not-allowed disabled:opacity-60"
+          title={
+            collapsed
+              ? isLoggingOut
+                ? "Logging Out..."
+                : "Log Out"
+              : undefined
+          }
+          className={cn(
+            "flex h-12 items-center rounded-lg bg-[#fff0f0] text-sm font-medium text-[#ff3c45] transition hover:bg-[#ffe4e4] disabled:cursor-not-allowed disabled:opacity-60",
+            collapsed
+              ? "mx-auto w-12 justify-center px-0"
+              : "w-full gap-3 px-3.5"
+          )}
         >
-          <LogOut size={20} strokeWidth={1.8} />
-          {isLoggingOut ? "Logging Out..." : "Log Out"}
+          <LogOut size={20} strokeWidth={1.8} className="shrink-0" />
+          {!collapsed && (
+            <span className="truncate">
+              {isLoggingOut ? "Logging Out..." : "Log Out"}
+            </span>
+          )}
         </button>
       </div>
 
-      <div className="mt-auto rounded-xl bg-[#f6faff] p-3 text-xs text-[#678]">
-        <BookOpenCheck size={19} className="mb-2 text-[#53a2eb]" />
-        Manage lessons and help students succeed.
-      </div>
+      {!collapsed ? (
+        <div className="mt-auto rounded-xl bg-[#f6faff] p-3 text-xs text-[#678]">
+          <BookOpenCheck size={19} className="mb-2 text-[#53a2eb]" />
+          Manage lessons and help students succeed.
+        </div>
+      ) : (
+        <div
+          title="Manage lessons and help students succeed."
+          className="mt-auto flex h-10 w-10 mx-auto items-center justify-center rounded-xl bg-[#f6faff] text-[#53a2eb]"
+        >
+          <BookOpenCheck size={19} />
+        </div>
+      )}
     </nav>
   );
 
   return (
     <>
-      {/* Desktop sidebar — always visible on lg+ */}
-      <aside className="hidden h-dvh w-[230px] shrink-0 border-r border-[#e5e8ec] bg-white lg:block">
-        <div className="flex h-[86px] items-center justify-between border-b border-[#edf0f3] px-5">
-          <Link
-            href={paths.teacherDashboard()}
-            aria-label="Revision Bee dashboard"
-          >
-            <RevisionBee width={44} height={54} />
-          </Link>
+      {/* Desktop sidebar — always visible on lg+, collapsible */}
+      <aside
+        className={cn(
+          "hidden h-dvh shrink-0 border-r border-[#e5e8ec] bg-white transition-[width] duration-300 ease-in-out lg:block",
+          isCollapsed ? "w-[76px]" : "w-[230px]"
+        )}
+      >
+        <div
+          className={cn(
+            "flex h-[86px] items-center border-b border-[#edf0f3] transition-all",
+            isCollapsed ? "justify-center px-2" : "justify-between px-5"
+          )}
+        >
+          {!isCollapsed && (
+            <Link
+              href={paths.teacherDashboard()}
+              aria-label="Revision Bee dashboard"
+            >
+              <RevisionBee width={44} height={54} />
+            </Link>
+          )}
           <button
             type="button"
-            aria-label="Collapse sidebar"
-            className="text-[#333]"
+            onClick={handleToggleCollapse}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-[#333] transition hover:bg-[#edf6ff] hover:text-[#3994e7]"
           >
             <Menu size={21} />
           </button>
         </div>
-        {sidebarContent}
+        {renderSidebarNav(isCollapsed)}
       </aside>
 
       {/* Mobile overlay sidebar */}
@@ -151,12 +208,12 @@ export function TeacherSidebar({
                 type="button"
                 aria-label="Close navigation"
                 onClick={onClose}
-                className="text-[#333]"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-[#333] transition hover:bg-[#f2f4f7]"
               >
                 <X size={21} />
               </button>
             </div>
-            {sidebarContent}
+            {renderSidebarNav(false)}
           </aside>
         </>
       )}
