@@ -113,19 +113,30 @@ export default function TeacherSettingsPage() {
     }
 
     if (key === "new") {
-      if (value.length === 0) {
-        setPasswordFieldErrors((errors) => ({
-          ...errors,
-          new: undefined,
-          confirm: undefined,
-        }));
-        return;
-      }
-      const result = newPassword.safeParse(value);
       setPasswordFieldErrors((errors) => ({
         ...errors,
-        new: result.success ? undefined : result.error.issues[0]?.message,
+        new: value.length === 0 ? "Password is required" : undefined,
       }));
+
+      if (value.length > 0) {
+        const result = newPassword.safeParse(value);
+        setPasswordFieldErrors((errors) => ({
+          ...errors,
+          new: result.success ? undefined : result.error.issues[0]?.message,
+        }));
+      }
+
+      // Re-validate confirm password since the new password has changed
+      const confirmInput = input.form?.elements.namedItem(
+        "confirm-password"
+      ) as HTMLInputElement | null;
+      if (confirmInput && confirmInput.value.length > 0) {
+        setPasswordFieldErrors((errors) => ({
+          ...errors,
+          confirm:
+            confirmInput.value === value ? undefined : "Passwords don't match",
+        }));
+      }
       return;
     }
 
@@ -140,6 +151,50 @@ export default function TeacherSettingsPage() {
           : value !== newPasswordValue?.value
             ? "Passwords don't match"
             : undefined,
+    }));
+  }
+
+  function validateContactField(
+    key: "email" | "subject" | "message",
+    value: string
+  ) {
+    if (value.trim().length === 0) {
+      setContactErrors((errors) => ({
+        ...errors,
+        [key]: ["This field is required"],
+      }));
+      return;
+    }
+
+    const schema =
+      key === "email"
+        ? ContactUsSchema.shape.email
+        : key === "subject"
+          ? ContactUsSchema.shape.subject
+          : ContactUsSchema.shape.message;
+
+    const result = schema.safeParse(value);
+    setContactErrors((errors) => ({
+      ...errors,
+      [key]: result.success
+        ? undefined
+        : result.error.issues.map((issue) => issue.message),
+    }));
+  }
+
+  function validateContactFile(file: File | undefined) {
+    if (!file) {
+      setAttachmentName("");
+      setContactErrors((errors) => ({ ...errors, attachment: undefined }));
+      return;
+    }
+    setAttachmentName(file.name);
+    const result = ContactUsSchema.shape.attachment.safeParse(file);
+    setContactErrors((errors) => ({
+      ...errors,
+      attachment: result.success
+        ? undefined
+        : result.error.issues.map((issue) => issue.message),
     }));
   }
 
@@ -398,6 +453,12 @@ export default function TeacherSettingsPage() {
                         placeholder="john@example.com"
                         disabled={isSendingMessage}
                         className={`${inputClassName} pl-11`}
+                        onChange={(event) =>
+                          validateContactField(
+                            "email",
+                            event.currentTarget.value
+                          )
+                        }
                       />
                     </span>
                     {contactErrors.email?.[0] && (
@@ -421,6 +482,12 @@ export default function TeacherSettingsPage() {
                         placeholder="Enter subject"
                         disabled={isSendingMessage}
                         className={`${inputClassName} pl-11`}
+                        onChange={(event) =>
+                          validateContactField(
+                            "subject",
+                            event.currentTarget.value
+                          )
+                        }
                       />
                     </span>
                     {contactErrors.subject?.[0] && (
@@ -444,6 +511,12 @@ export default function TeacherSettingsPage() {
                         placeholder="Write your message"
                         disabled={isSendingMessage}
                         className="min-h-[105px] w-full resize-y rounded-lg border border-[#dce1e5] bg-[#fbfcfd] px-4 py-3 pl-11 text-xs text-[#222] outline-none transition placeholder:text-[#a1a5aa] focus:border-[#53a2eb] focus:bg-white focus:ring-4 focus:ring-[#53a2eb]/10"
+                        onChange={(event) =>
+                          validateContactField(
+                            "message",
+                            event.currentTarget.value
+                          )
+                        }
                       />
                     </span>
                     {contactErrors.message?.[0] && (
@@ -474,7 +547,7 @@ export default function TeacherSettingsPage() {
                         disabled={isSendingMessage}
                         className="sr-only"
                         onChange={(event) =>
-                          setAttachmentName(event.target.files?.[0]?.name ?? "")
+                          validateContactFile(event.target.files?.[0])
                         }
                       />
                     </span>
