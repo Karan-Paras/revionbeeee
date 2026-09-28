@@ -70,12 +70,11 @@ export function TeacherList() {
   } = useQuery({
     queryKey: ["verified-teachers"],
     queryFn: getVerifiedTeachers,
-    refetchInterval: 10_000,
-    refetchIntervalInBackground: true,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: "always",
-    refetchOnReconnect: "always",
-    retry: 3,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
+    retry: 1,
   });
   const visibleTeachers = useMemo(
     () =>
@@ -532,22 +531,24 @@ function InstantLesson({
       </section>
 
       <FormSection title="Set your time limit">
-        <label className="flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
-          <Clock3 size={17} className="mr-3" />
+        <label className="flex h-12 w-full items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
+          <Clock3 size={17} className="mr-3 shrink-0" />
           <select
             aria-label="Choose lesson duration"
             value={selectedDuration}
             onChange={(event) => setSelectedDuration(event.target.value)}
-            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
+            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${
+              selectedDuration
+                ? "font-medium  text-[#283544]"
+                : "text-[#9a9a9a]"
+            }`}
           >
-            <option value="" disabled>
-              Choose your time range
-            </option>
+            <option value="0">Choose your time range</option>
             <option value="20">20 minutes</option>
             <option value="40">40 minutes</option>
             <option value="60">60 minutes</option>
           </select>
-          <ChevronDown size={16} />
+          <ChevronDown size={16} className="shrink-0" />
         </label>
       </FormSection>
 
@@ -555,7 +556,7 @@ function InstantLesson({
         <div className="flex h-12 items-center rounded-lg border border-[#53a2eb] bg-[#f1f8ff] px-3 text-xs">
           <CircleDollarSign size={19} className="mr-3 text-[#53a2eb]" />
           <strong>
-            {payableAmount === null ? "—" : `$${payableAmount.toFixed(2)}`}
+            {payableAmount === null ? "0" : `$${payableAmount.toFixed(2)}`}
           </strong>
         </div>
       </FormSection>

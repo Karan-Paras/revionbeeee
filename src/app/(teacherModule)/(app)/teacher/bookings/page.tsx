@@ -11,6 +11,12 @@ import {
   type RespondToLessonParams,
 } from "@/features/lessons/api/respond-to-lesson";
 import { startLessonSession } from "@/features/lessons/api/start-session";
+import { activeLessonSessionReadyEvent } from "@/features/lessons/components/active-lesson-session-guard";
+import {
+  isLessonLiveLocally,
+  markLessonEnded,
+  markLessonLive,
+} from "@/features/lessons/session-live-state";
 import { isSessionWindowOpen } from "@/lib/session-time";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
@@ -136,6 +142,7 @@ export default function TeacherBookingsPage() {
   const cancelMutation = useMutation({
     mutationFn: cancelLesson,
     onSuccess: async (_, variables) => {
+      markLessonEnded(variables.lessonID);
       updateStatus(variables.lessonID, "Rejected");
       await queryClient.invalidateQueries({
         queryKey: ["teacher-bookings"],
@@ -150,6 +157,7 @@ export default function TeacherBookingsPage() {
   const startSessionMutation = useMutation({
     mutationFn: startLessonSession,
     onSuccess: (credentials) => {
+      markLessonLive(credentials.lessonID);
       sessionStorage.setItem(
         "revision-bee:active-lesson-session",
         JSON.stringify({
@@ -158,6 +166,7 @@ export default function TeacherBookingsPage() {
           sessionRole: "teacher",
         })
       );
+      window.dispatchEvent(new Event(activeLessonSessionReadyEvent));
       router.push("/teacher/session");
     },
     onError: (error) => toast.error(error.message),
@@ -258,6 +267,8 @@ export default function TeacherBookingsPage() {
             {visibleBookings.map((booking) => {
               const isPaid = Boolean(booking.paidAt);
               const canManageSession = isPaid && isSessionActiveNow(booking);
+              const isLive =
+                booking.isLive || isLessonLiveLocally(booking.lessonID);
               const unavailableActionTitle = isPaid
                 ? "Available during the session time"
                 : "Payment is required before starting the session";
@@ -314,11 +325,15 @@ export default function TeacherBookingsPage() {
                       Status
                     </span>
                     <span
-                      className={`text-xs font-medium ${statusColor[booking.status]}`}
+                      className={`text-xs font-medium ${
+                        isLive ? "text-[#ff3543]" : statusColor[booking.status]
+                      }`}
                     >
-                      {booking.status === "Accepted"
-                        ? "Approved"
-                        : booking.status}
+                      {isLive
+                        ? "Live"
+                        : booking.status === "Accepted"
+                          ? "Approved"
+                          : booking.status}
                     </span>
                   </div>
                   <div>

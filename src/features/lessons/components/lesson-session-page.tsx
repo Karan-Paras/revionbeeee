@@ -4,6 +4,10 @@ import { endLessonSession } from "@/features/lessons/api/end-session";
 import { joinLessonSession } from "@/features/lessons/api/join-session";
 import type { LessonSessionCredentials } from "@/features/lessons/api/session-credentials";
 import { startLessonSession } from "@/features/lessons/api/start-session";
+import {
+  markLessonEnded,
+  markLessonLive,
+} from "@/features/lessons/session-live-state";
 import type {
   IAgoraRTCClient,
   ICameraVideoTrack,
@@ -52,6 +56,7 @@ type StoredSession = LessonSessionCredentials & {
   connectedAt?: number;
   endedAt?: number | null;
   lastActivity?: CallActivity;
+  sessionRole?: "student" | "teacher";
 };
 
 const sessionStorageKey = "revision-bee:active-lesson-session";
@@ -86,6 +91,10 @@ function readSession(): StoredSession | null {
   } catch {
     return null;
   }
+}
+
+function getStoredSessionRole(): "student" | "teacher" | null {
+  return readSession()?.sessionRole ?? null;
 }
 
 function isUidConflict(error: unknown) {
@@ -131,7 +140,13 @@ function persistCallActivity(
 export function LessonSessionPage() {
   const pathname = usePathname();
   const router = useRouter();
-  const isStudentSession = pathname === "/session";
+  const [sessionRole, setSessionRole] = useState<"student" | "teacher" | null>(
+    () => getStoredSessionRole()
+  );
+  const isStudentSession =
+    sessionRole === "student" || (!sessionRole && pathname === "/session");
+  const isSessionRoute =
+    pathname === "/session" || pathname === "/teacher/session";
   const returnPath = isStudentSession ? "/my-lessons" : "/teacher/bookings";
   const remoteParticipant = isStudentSession ? "teacher" : "student";
   const localParticipant = isStudentSession ? "Student" : "Teacher";
@@ -193,6 +208,16 @@ export function LessonSessionPage() {
     whiteboardOpenerRef.current = whiteboardOpener;
   }, [whiteboardOpener]);
 
+  useEffect(() => {
+    if (isSessionRoute) {
+      setIsMinimized(false);
+      setDockedSide(null);
+      return;
+    }
+
+    setIsMinimized((current) => (current || dockedSide ? current : true));
+  }, [dockedSide, isSessionRoute]);
+
   // While the whiteboard is open, keep broadcasting its open/lock state. A
   // single stream message can be lost while the other participant is still
   // connecting, so repeating it guarantees the lock settles on both sides.
@@ -235,6 +260,7 @@ export function LessonSessionPage() {
         return;
       }
 
+      setSessionRole(session.sessionRole ?? null);
       setCallStartedAt(session.connectedAt ?? null);
       setCallEndedAt(session.endedAt ?? null);
       setParticipantNotice(
@@ -243,6 +269,7 @@ export function LessonSessionPage() {
           : (session.lastActivity ?? null)
       );
       setActiveLessonID(session.lessonID);
+      markLessonLive(session.lessonID);
       setRemoteParticipants([]);
       setRemoteUsers([]);
 
@@ -839,6 +866,7 @@ export function LessonSessionPage() {
       at: new Date(sessionEndedAt).getTime(),
     };
     if (storedSession) {
+      markLessonEnded(storedSession.lessonID);
       persistCallActivity(storedSession.lessonID, endedActivity);
     }
     const reportSessionEnd = storedSession

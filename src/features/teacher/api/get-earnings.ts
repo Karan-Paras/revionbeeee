@@ -52,6 +52,62 @@ function asRecord(value: unknown) {
   return isRecord(value) ? value : {};
 }
 
+const summaryContainerKeys = [
+  "summary",
+  "stats",
+  "statistics",
+  "earningsSummary",
+  "earnings_summary",
+  "payoutSummary",
+  "payout_summary",
+  "totals",
+  "overview",
+];
+
+const summaryValueKeys = [
+  "availablePayout",
+  "available_payout",
+  "availableBalance",
+  "available_balance",
+  "pendingClearing",
+  "pending_clearing",
+  "pendingPayout",
+  "pending_payout",
+  "totalEarning",
+  "total_earning",
+  "totalEarnings",
+  "total_earnings",
+];
+
+function hasSummaryValues(record: ApiRecord) {
+  return summaryValueKeys.some(
+    (key) => typeof record[key] === "number" || typeof record[key] === "string"
+  );
+}
+
+function findSummary(value: unknown, depth = 0): ApiRecord | null {
+  if (depth > 5) return null;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findSummary(item, depth + 1);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (!isRecord(value)) return null;
+
+  for (const key of summaryContainerKeys) {
+    if (isRecord(value[key])) return value[key];
+  }
+  if (hasSummaryValues(value)) return value;
+
+  for (const nested of Object.values(value)) {
+    const found = findSummary(nested, depth + 1);
+    if (found) return found;
+  }
+  return null;
+}
+
 function findPayments(value: unknown): ApiRecord[] {
   if (Array.isArray(value)) return value.filter(isRecord);
   if (!isRecord(value)) return [];
@@ -137,9 +193,10 @@ function normalizeStatus(record: ApiRecord): PaymentStatus {
 
 export async function getTeacherEarnings(): Promise<TeacherEarningsData> {
   const response = await fetchClient<unknown>(teacherEarningsUrl, "GET");
+  const root = asRecord(response);
   const data = asRecord(response.data);
-  const summary = asRecord(data.summary ?? data.stats ?? data.statistics);
-  const source = { ...data, ...summary };
+  const summary = findSummary(data) ?? findSummary(root) ?? {};
+  const source = { ...root, ...data, ...summary };
 
   const stats = {
     availablePayout: numeric(
@@ -165,57 +222,60 @@ export async function getTeacherEarnings(): Promise<TeacherEarningsData> {
     ),
   };
 
-  const payments = findPayments(response.data).map((raw) => {
-    const student = asRecord(raw.student);
-    const client = asRecord(raw.client);
-    const user = asRecord(raw.user);
-    const person = { ...raw, ...student, ...client, ...user };
-    const firstName = text(person, "firstName", "first_name");
-    const lastName = text(person, "lastName", "last_name");
-    const image = text(
-      person,
-      "profilePhoto",
-      "profileImage",
-      "profile_image",
-      "profilePicture",
-      "profile_picture",
-      "image"
-    );
+  const rawPayments = findPayments(data);
+  const payments = (rawPayments.length ? rawPayments : findPayments(root)).map(
+    (raw) => {
+      const student = asRecord(raw.student);
+      const client = asRecord(raw.client);
+      const user = asRecord(raw.user);
+      const person = { ...raw, ...student, ...client, ...user };
+      const firstName = text(person, "firstName", "first_name");
+      const lastName = text(person, "lastName", "last_name");
+      const image = text(
+        person,
+        "profilePhoto",
+        "profileImage",
+        "profile_image",
+        "profilePicture",
+        "profile_picture",
+        "image"
+      );
 
-    return {
-      id: text(raw, "id", "paymentId", "payment_id", "transactionId") || "0",
-      date: formatDate(
-        text(raw, "date", "paidAt", "paid_at", "createdAt", "created_at")
-      ),
-      client:
-        text(
-          person,
-          "name",
-          "fullName",
-          "full_name",
-          "studentName",
-          "clientName"
-        ) ||
-        [firstName, lastName].filter(Boolean).join(" ") ||
-        "Student",
-      email: text(person, "email", "emailAddress", "email_address") || "—",
-      image: image ? getUserImageUrl(image) : "",
-      topic:
-        text(
-          raw,
-          "topic",
-          "subject",
-          "subjectName",
-          "subject_name",
-          "lessonTopic"
-        ) || "Lesson",
-      sessionTime: formatSessionTime(raw),
-      amount: formatCurrency(
-        numeric(raw, "amount", "commission", "earnings", "payableAmount")
-      ),
-      status: normalizeStatus(raw),
-    };
-  });
+      return {
+        id: text(raw, "id", "paymentId", "payment_id", "transactionId") || "0",
+        date: formatDate(
+          text(raw, "date", "paidAt", "paid_at", "createdAt", "created_at")
+        ),
+        client:
+          text(
+            person,
+            "name",
+            "fullName",
+            "full_name",
+            "studentName",
+            "clientName"
+          ) ||
+          [firstName, lastName].filter(Boolean).join(" ") ||
+          "Student",
+        email: text(person, "email", "emailAddress", "email_address") || "—",
+        image: image ? getUserImageUrl(image) : "",
+        topic:
+          text(
+            raw,
+            "topic",
+            "subject",
+            "subjectName",
+            "subject_name",
+            "lessonTopic"
+          ) || "Lesson",
+        sessionTime: formatSessionTime(raw),
+        amount: formatCurrency(
+          numeric(raw, "amount", "commission", "earnings", "payableAmount")
+        ),
+        status: normalizeStatus(raw),
+      };
+    }
+  );
 
   return { stats, payments };
 }

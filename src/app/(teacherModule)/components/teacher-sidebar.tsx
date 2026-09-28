@@ -89,16 +89,18 @@ export function TeacherSidebar({
                 onClick={onClose}
                 title={collapsed ? label : undefined}
                 className={cn(
-                  "flex h-12 items-center rounded-lg text-sm font-medium text-[#30343a] transition hover:bg-[#edf6ff] hover:text-[#3994e7]",
+                  "flex min-h-12 items-center rounded-lg text-sm font-medium text-[#30343a] transition hover:bg-[#edf6ff] hover:text-[#3994e7]",
                   collapsed
-                    ? "mx-auto w-12 justify-center px-0"
-                    : "gap-3 px-3.5",
+                    ? "mx-auto w-12 h-12 justify-center px-0"
+                    : "gap-3 px-3.5 py-2.5",
                   isActive &&
                     "bg-[#53a2eb] text-white hover:bg-[#53a2eb] hover:text-white"
                 )}
               >
                 <Icon size={20} strokeWidth={1.8} className="shrink-0" />
-                {!collapsed && <span className="truncate">{label}</span>}
+                {!collapsed && (
+                  <span className="min-w-0 flex-1 leading-tight">{label}</span>
+                )}
               </Link>
             </li>
           );

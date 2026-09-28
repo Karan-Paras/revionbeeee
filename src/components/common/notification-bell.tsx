@@ -16,8 +16,10 @@ export function NotificationBell() {
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["student-notifications-unread-count"],
     queryFn: () => getStudentUnreadCount().catch(() => 0),
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
 
   const { mutate: markRead, isPending: isMarkingRead } = useMutation({
@@ -50,7 +52,7 @@ export function NotificationBell() {
     <Link
       href={paths.studentNotifications()}
       aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
-      className="relative mr-2 rounded-full p-2 text-[#505050] transition hover:bg-[#f0f0f0] hover:text-[#53A2EB]"
+      className="relative mr-2 inline-grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#505050] transition hover:bg-[#f0f0f0] hover:text-[#53A2EB]"
       onClick={handleBellClick}
     >
       <Bell
@@ -59,7 +61,7 @@ export function NotificationBell() {
         className={isMarkingRead ? "opacity-50" : ""}
       />
       {unreadCount > 0 && (
-        <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border border-white bg-[#ff3d4d] px-1 text-[10px] font-bold text-white">
+        <span className="absolute top-1 right-1 flex h-[18px] min-w-[18px] translate-x-1/3 -translate-y-1/3 items-center justify-center rounded-full border border-white bg-[#ff3d4d] px-1 text-[10px] leading-none font-bold text-white">
           {unreadCount > 99 ? "99+" : unreadCount}
         </span>
       )}

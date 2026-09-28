@@ -6,7 +6,12 @@ const myBookingsUrl =
 
 type ApiRecord = Record<string, unknown>;
 
-export type MyBookingFilter = "upcoming" | "pending" | "accepted" | "cancelled";
+export type MyBookingFilter =
+  | "upcoming"
+  | "pending"
+  | "accepted"
+  | "cancelled"
+  | "completed";
 
 export type MyBooking = {
   id: string | number;
@@ -27,6 +32,7 @@ export type MyBooking = {
   status: string;
   joinNow: boolean;
   rejectionReason: string;
+  isLive: boolean;
 };
 
 type GetMyBookingsParams = {
@@ -215,6 +221,22 @@ export async function getMyBookings(
       booking.join_now ??
       session.joinNow ??
       session.join_now;
+    const liveValue =
+      booking.isLive ??
+      booking.is_live ??
+      booking.live ??
+      booking.isStarted ??
+      booking.is_started ??
+      booking.hasStarted ??
+      booking.has_started ??
+      booking.sessionStarted ??
+      booking.session_started ??
+      session.isLive ??
+      session.is_live ??
+      session.live ??
+      session.status ??
+      session.sessionStatus ??
+      session.session_status;
 
     const bookingID = text(
       booking,
@@ -302,6 +324,18 @@ export async function getMyBookings(
           "comment",
           "note"
         ) || findRejectionReason(booking),
+      isLive:
+        liveValue === true ||
+        liveValue === 1 ||
+        [
+          "live",
+          "started",
+          "ongoing",
+          "inprogress",
+          "in_progress",
+          "running",
+          "active",
+        ].includes(String(liveValue).trim().toLowerCase()),
     };
   });
 }

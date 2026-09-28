@@ -24,6 +24,7 @@ export type TeacherBooking = {
   status: BookingStatus;
   amount: string;
   paidAt?: string;
+  isLive: boolean;
 };
 
 function isRecord(value: unknown): value is ApiRecord {
@@ -274,6 +275,22 @@ export async function getBookings(
           "payment_state"
         ).toLowerCase()
       );
+    const liveValue =
+      booking.isLive ??
+      booking.is_live ??
+      booking.live ??
+      booking.isStarted ??
+      booking.is_started ??
+      booking.hasStarted ??
+      booking.has_started ??
+      booking.sessionStarted ??
+      booking.session_started ??
+      sessionData.isLive ??
+      sessionData.is_live ??
+      sessionData.live ??
+      sessionData.status ??
+      sessionData.sessionStatus ??
+      sessionData.session_status;
 
     const bookingID =
       text(booking, "id", "bookingID", "bookingId", "booking_id") || index;
@@ -341,6 +358,18 @@ export async function getBookings(
         : hasPaidStatus
           ? "Paid"
           : undefined,
+      isLive:
+        liveValue === true ||
+        liveValue === 1 ||
+        [
+          "live",
+          "started",
+          "ongoing",
+          "inprogress",
+          "in_progress",
+          "running",
+          "active",
+        ].includes(String(liveValue).trim().toLowerCase()),
     };
   });
 }

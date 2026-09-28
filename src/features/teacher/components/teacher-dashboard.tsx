@@ -1,6 +1,7 @@
 "use client";
 
 import { startLessonSession } from "@/features/lessons/api/start-session";
+import { activeLessonSessionReadyEvent } from "@/features/lessons/components/active-lesson-session-guard";
 import {
   connectTeacherStripe,
   getTeacherStripeOnboardingStatus,
@@ -79,16 +80,20 @@ export function TeacherDashboardContent() {
   const { data, isPending, error } = useQuery({
     queryKey: ["teacher-dashboard"],
     queryFn: getTeacherDashboard,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
 
   const stripeOnboardingStatus = useQuery({
     queryKey: ["teacher-stripe-onboarding-status"],
     queryFn: getTeacherStripeOnboardingStatus,
-    refetchInterval: 30_000,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const stripeConfigurationBroken =
@@ -128,6 +133,7 @@ export function TeacherDashboardContent() {
           sessionRole: "teacher",
         })
       );
+      window.dispatchEvent(new Event(activeLessonSessionReadyEvent));
       router.push("/teacher/session");
     },
     onError: (err) =>

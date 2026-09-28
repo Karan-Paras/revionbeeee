@@ -16,6 +16,7 @@ export type StudentNotification = {
   time: string;
   unread: boolean;
   type: "booking" | "payment" | "lesson" | "general";
+  lessonTab: "upcoming" | "pending" | "accepted" | "cancelled" | "completed";
 };
 
 function isRecord(value: unknown): value is ApiRecord {
@@ -86,6 +87,68 @@ function inferType(record: ApiRecord): StudentNotification["type"] {
   if (combined.includes("session") || combined.includes("join"))
     return "lesson";
   return "general";
+}
+
+function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
+  const combined = [
+    text(
+      record,
+      "status",
+      "bookingStatus",
+      "booking_status",
+      "lessonStatus",
+      "lesson_status",
+      "sessionStatus",
+      "session_status",
+      "paymentStatus",
+      "payment_status"
+    ),
+    text(record, "type", "notificationType", "notification_type", "category"),
+    text(record, "title", "heading", "subject"),
+    text(record, "message", "body", "description", "content"),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  if (
+    combined.includes("cancelled") ||
+    combined.includes("canceled") ||
+    combined.includes("rejected")
+  ) {
+    return "cancelled";
+  }
+
+  if (combined.includes("payment") || combined.includes("paid")) {
+    return "upcoming";
+  }
+
+  if (
+    combined.includes("approved") ||
+    combined.includes("accepted") ||
+    combined.includes("scheduled") ||
+    combined.includes("upcoming") ||
+    combined.includes("booked")
+  ) {
+    return "upcoming";
+  }
+
+  if (
+    combined.includes("completed") ||
+    combined.includes("complete") ||
+    combined.includes("finished")
+  ) {
+    return "completed";
+  }
+
+  if (
+    combined.includes("pending") ||
+    combined.includes("approval") ||
+    combined.includes("requested")
+  ) {
+    return "pending";
+  }
+
+  return "upcoming";
 }
 
 export async function getStudentUnreadCount(): Promise<number> {
@@ -202,6 +265,7 @@ export async function getStudentNotifications(): Promise<
       time: formatRelativeTime(rawTime) || rawTime || "",
       unread: isUnread,
       type: inferType(item),
+      lessonTab: inferLessonTab(item),
     };
   });
 }
