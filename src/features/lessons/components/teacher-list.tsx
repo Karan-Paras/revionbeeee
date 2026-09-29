@@ -16,8 +16,6 @@ import {
   CircleDollarSign,
   Clock3,
   Search,
-  SlidersHorizontal,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,6 +52,12 @@ function formatSelectedDate(date: string) {
     year: "numeric",
   }).format(new Date(year, month - 1, day));
 }
+
+const durationOptions = [
+  { value: "20", label: "20 minutes" },
+  { value: "40", label: "40 minutes" },
+  { value: "60", label: "60 minutes" },
+] as const;
 
 export function TeacherList() {
   const router = useRouter();
@@ -132,7 +136,6 @@ export function TeacherList() {
                 placeholder="Search..."
                 className="min-w-0 flex-1 bg-transparent px-2.5 text-sm outline-none"
               />
-              <SlidersHorizontal size={19} className="text-[#555]" />
             </label>
           </div>
         </div>
@@ -247,14 +250,6 @@ export function TeacherList() {
               >
                 <ArrowLeft size={18} aria-hidden="true" />
                 Back
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedTeacher(null)}
-                aria-label="Close teacher details"
-                className="grid h-8 w-8 place-items-center rounded-full bg-white shadow hover:bg-[#e9eef3]"
-              >
-                <X size={17} />
               </button>
             </div>
 
@@ -531,25 +526,10 @@ function InstantLesson({
       </section>
 
       <FormSection title="Set your time limit">
-        <label className="flex h-12 w-full items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
-          <Clock3 size={17} className="mr-3 shrink-0" />
-          <select
-            aria-label="Choose lesson duration"
-            value={selectedDuration}
-            onChange={(event) => setSelectedDuration(event.target.value)}
-            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${
-              selectedDuration
-                ? "font-medium  text-[#283544]"
-                : "text-[#9a9a9a]"
-            }`}
-          >
-            <option value="0">Choose your time range</option>
-            <option value="20">20 minutes</option>
-            <option value="40">40 minutes</option>
-            <option value="60">60 minutes</option>
-          </select>
-          <ChevronDown size={16} className="shrink-0" />
-        </label>
+        <DurationSelect
+          value={selectedDuration}
+          onChange={setSelectedDuration}
+        />
       </FormSection>
 
       <FormSection title="Payable Amount">
@@ -705,23 +685,10 @@ function ScheduleLesson({
       </FormSection>
 
       <FormSection title="Set your time limit">
-        <label className="flex h-12 items-center rounded-lg border border-[#d5dce4] px-3 text-[#9a9a9a]">
-          <Clock3 size={17} className="mr-3" />
-          <select
-            aria-label="Choose lesson duration"
-            value={selectedDuration}
-            onChange={(event) => setSelectedDuration(event.target.value)}
-            className={`h-full min-w-0 flex-1 appearance-none bg-transparent text-xs outline-none ${selectedDuration ? "font-medium text-[#283544]" : "text-[#9a9a9a]"}`}
-          >
-            <option value="" disabled>
-              Choose your time range
-            </option>
-            <option value="20">20 minutes</option>
-            <option value="40">40 minutes</option>
-            <option value="60">60 minutes</option>
-          </select>
-          <ChevronDown size={16} />
-        </label>
+        <DurationSelect
+          value={selectedDuration}
+          onChange={setSelectedDuration}
+        />
       </FormSection>
       <FormSection title="Choose Slot">
         {!selectedDate || !selectedDuration ? (
@@ -811,5 +778,97 @@ function FormSection({
       <h3 className="mb-3 text-xs font-bold">{title}</h3>
       {children}
     </section>
+  );
+}
+
+function DurationSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const selectedLabel =
+    durationOptions.find((option) => option.value === value)?.label ??
+    "Choose your time range";
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function closeOnOutsideClick(event: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, [isOpen]);
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((current) => !current)}
+        className={`flex h-12 w-full items-center rounded-lg border bg-white px-3 text-left text-xs transition ${
+          isOpen
+            ? "border-[#53a2eb] shadow-[0_0_0_3px_rgba(83,162,235,0.13)]"
+            : "border-[#d5dce4] hover:border-[#9fcdf6]"
+        }`}
+      >
+        <Clock3 size={17} className="mr-3 shrink-0 text-[#7d8a98]" />
+        <span
+          className={`min-w-0 flex-1 truncate ${
+            value ? "font-semibold text-[#283544]" : "text-[#9a9a9a]"
+          }`}
+        >
+          {selectedLabel}
+        </span>
+        <ChevronDown
+          size={16}
+          className={`shrink-0 text-[#7d8a98] transition ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          role="listbox"
+          className="absolute top-[calc(100%+6px)] right-0 left-0 z-20 overflow-hidden rounded-lg border border-[#d6e0ea] bg-white py-1 shadow-[0_14px_30px_rgba(38,59,82,0.16)]"
+        >
+          {durationOptions.map((option) => {
+            const isSelected = option.value === value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                onClick={() => {
+                  onChange(option.value);
+                  setIsOpen(false);
+                }}
+                className={`flex h-10 w-full items-center justify-between px-3 text-left text-xs transition ${
+                  isSelected
+                    ? "bg-[#edf7ff] font-semibold text-[#2f8fdd]"
+                    : "text-[#4c5865] hover:bg-[#f5f9fd]"
+                }`}
+              >
+                <span>{option.label}</span>
+                {isSelected && (
+                  <span className="h-2 w-2 rounded-full bg-[#53a2eb]" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }

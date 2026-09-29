@@ -21,7 +21,7 @@ import { isSessionWindowOpen } from "@/lib/session-time";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -52,13 +52,17 @@ function isSessionActiveNow(booking: TeacherBooking, nowMs = Date.now()) {
 export default function TeacherBookingsPage() {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const requestedTab = searchParams.get("tab");
   const routeTab: Tab =
-    pathname === "/teacher/bookings/pending"
-      ? "Pending"
-      : pathname === "/teacher/bookings/accepted"
-        ? "Accepted"
-        : "All";
+    requestedTab === "Completed"
+      ? "Completed"
+      : pathname === "/teacher/bookings/pending"
+        ? "Pending"
+        : pathname === "/teacher/bookings/accepted"
+          ? "Accepted"
+          : "All";
   const [activeTab, setActiveTab] = useState<Tab>(routeTab);
   const {
     data: fetchedBookings = [],
@@ -90,6 +94,10 @@ export default function TeacherBookingsPage() {
   >(null);
   const [cancellationReason, setCancellationReason] = useState("");
   const [nowUtc, setNowUtc] = useState(() => Date.now());
+
+  useEffect(() => {
+    setActiveTab(routeTab);
+  }, [routeTab]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -194,6 +202,7 @@ export default function TeacherBookingsPage() {
       All: "/teacher/bookings",
       Accepted: "/teacher/bookings/accepted",
       Pending: "/teacher/bookings/pending",
+      Completed: "/teacher/bookings?tab=Completed",
     };
     const destination = tabRoutes[tab];
 

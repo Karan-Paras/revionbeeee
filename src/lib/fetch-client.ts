@@ -1,14 +1,36 @@
 import type { ApiResponse, ApiSuccessResponse, Method } from "@/types/api";
 import { getSession } from "next-auth/react";
 
+type FetchClientOptions = {
+  auth?: boolean;
+  next?: RequestInit["next"];
+  headers?: RequestInit["headers"];
+  signal?: AbortSignal;
+};
+
+function isFetchClientOptions(
+  value: RequestInit["next"] | FetchClientOptions | undefined
+): value is FetchClientOptions {
+  return Boolean(
+    value &&
+      ("auth" in value ||
+        "next" in value ||
+        "headers" in value ||
+        "signal" in value)
+  );
+}
+
 export async function fetchClient<T>(
   url: string,
   method: Method,
   body?: object | FormData,
-  next?: RequestInit["next"],
+  next?: RequestInit["next"] | FetchClientOptions,
   headers?: RequestInit["headers"],
   signal?: AbortSignal
 ): Promise<ApiSuccessResponse<T>> {
+  const options: FetchClientOptions = isFetchClientOptions(next)
+    ? next
+    : { next, headers, signal };
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
   const isAbsoluteUrl = /^https?:\/\//i.test(url);
 
@@ -18,14 +40,15 @@ export async function fetchClient<T>(
 
   const api = isAbsoluteUrl ? url : `${apiBaseUrl}${url}`;
 
-  const session = await getSession();
+  const shouldAttachAuth = options.auth !== false;
+  const session = shouldAttachAuth ? await getSession() : null;
   const token = session?.user?.token;
 
   const isFormData = body instanceof FormData;
 
   try {
     const requestHeaders: Record<string, string> = {
-      ...(headers as Record<string, string>),
+      ...(options.headers as Record<string, string>),
     };
 
     if (token) {
@@ -45,8 +68,8 @@ export async function fetchClient<T>(
             : JSON.stringify(body)
           : undefined,
       headers: requestHeaders,
-      signal,
-      ...(next ? { next } : {}),
+      signal: options.signal,
+      ...(options.next ? { next: options.next } : {}),
     });
 
     const contentType = response.headers.get("content-type") ?? "";

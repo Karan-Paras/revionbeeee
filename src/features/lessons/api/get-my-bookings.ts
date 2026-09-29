@@ -41,6 +41,10 @@ type GetMyBookingsParams = {
   perPage: number;
 };
 
+type MyBookingsRequestBody = GetMyBookingsParams & {
+  status: MyBookingFilter;
+};
+
 function isRecord(value: unknown): value is ApiRecord {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -146,7 +150,15 @@ function formatTime(value: string) {
 export async function getMyBookings(
   params: GetMyBookingsParams
 ): Promise<MyBooking[]> {
-  const response = await fetchClient<unknown>(myBookingsUrl, "POST", params);
+  const requestBody: MyBookingsRequestBody = {
+    ...params,
+    status: params.filter,
+  };
+  const response = await fetchClient<unknown>(
+    myBookingsUrl,
+    "POST",
+    requestBody
+  );
 
   return findItems(response.data).map((booking, index) => {
     const namedTeacherContainer = Object.entries(booking).find(

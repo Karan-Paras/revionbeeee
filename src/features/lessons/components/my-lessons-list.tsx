@@ -24,7 +24,6 @@ import {
   Clock3,
   CreditCard,
   Search,
-  SlidersHorizontal,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -386,7 +385,6 @@ export function MyLessonsList() {
               placeholder="Search..."
               className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
             />
-            <SlidersHorizontal size={17} className="text-[#555]" />
           </label>
         </div>
 

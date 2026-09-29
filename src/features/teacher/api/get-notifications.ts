@@ -14,6 +14,7 @@ export type TeacherNotification = {
   time: string;
   unread: boolean;
   type: "booking" | "payment" | "lesson" | "general";
+  href: string;
 };
 
 function isRecord(value: unknown): value is ApiRecord {
@@ -86,6 +87,66 @@ function inferType(record: ApiRecord): TeacherNotification["type"] {
   return "general";
 }
 
+function inferHref(record: ApiRecord): string {
+  const combined = [
+    text(
+      record,
+      "status",
+      "bookingStatus",
+      "booking_status",
+      "lessonStatus",
+      "lesson_status",
+      "sessionStatus",
+      "session_status",
+      "paymentStatus",
+      "payment_status"
+    ),
+    text(record, "type", "notificationType", "notification_type", "category"),
+    text(record, "title", "heading", "subject"),
+    text(record, "message", "body", "description", "content"),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  if (
+    combined.includes("payout") ||
+    combined.includes("earning") ||
+    combined.includes("released to your account")
+  ) {
+    return "/teacher/earnings";
+  }
+
+  if (
+    combined.includes("ended") ||
+    combined.includes("completed") ||
+    combined.includes("finished") ||
+    combined.includes("automatically closed")
+  ) {
+    return "/teacher/bookings?tab=Completed";
+  }
+
+  if (
+    combined.includes("starting soon") ||
+    combined.includes("starting now") ||
+    combined.includes("time has arrived") ||
+    combined.includes("please join") ||
+    combined.includes("payment")
+  ) {
+    return "/teacher/bookings/accepted";
+  }
+
+  if (
+    combined.includes("new lesson request") ||
+    combined.includes("requested") ||
+    combined.includes("pending") ||
+    combined.includes("approval")
+  ) {
+    return "/teacher/bookings/pending";
+  }
+
+  return "/teacher/bookings";
+}
+
 export async function getTeacherNotifications(): Promise<
   TeacherNotification[]
 > {
@@ -120,6 +181,7 @@ export async function getTeacherNotifications(): Promise<
       time: formatRelativeTime(rawTime) || rawTime || "",
       unread: isUnread,
       type: inferType(item),
+      href: inferHref(item),
     };
   });
 }

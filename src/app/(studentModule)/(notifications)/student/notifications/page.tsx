@@ -207,20 +207,22 @@ export default function StudentNotificationsPage() {
                         <h3 className="text-sm font-semibold text-[#222]">
                           {notification.title}
                         </h3>
-                        <time className="shrink-0 text-[10px] text-[#999] sm:text-xs">
-                          {notification.time}
-                        </time>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <time className="text-[10px] text-[#999] sm:text-xs">
+                            {notification.time}
+                          </time>
+                          {isUnread && (
+                            <span
+                              aria-label="Unread"
+                              className="h-2 w-2 rounded-full bg-[#429bea]"
+                            />
+                          )}
+                        </div>
                       </div>
                       <p className="mt-1 text-xs leading-5 text-[#747b83] sm:text-sm">
                         {notification.message}
                       </p>
                     </div>
-                    {isUnread && (
-                      <span
-                        aria-label="Unread"
-                        className="absolute top-1/2 right-2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#429bea] sm:right-4"
-                      />
-                    )}
                   </Link>
                 );
               })}
