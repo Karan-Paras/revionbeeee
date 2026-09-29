@@ -78,7 +78,7 @@ export function FirebaseMessagingProvider() {
       unsubscribeRef.current?.();
       unsubscribeRef.current = undefined;
     };
-  }, []);
+  }, [queryClient]);
 
   return null;
 }

@@ -43,7 +43,7 @@ export default function TeacherEarningsPage() {
     refetchOnWindowFocus: "always",
   });
 
-  const payments = data?.payments ?? [];
+  const payments = useMemo(() => data?.payments ?? [], [data?.payments]);
   const stats = data?.stats;
 
   const visiblePayments = useMemo(() => {

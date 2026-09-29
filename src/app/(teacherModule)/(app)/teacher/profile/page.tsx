@@ -282,7 +282,7 @@ export default function TeacherProfilePage() {
             : "Unable to load teacher profile."
         );
       });
-  }, [session?.user?.token]);
+  }, [session?.user?.email, session?.user?.token]);
 
   useEffect(() => {
     let isActive = true;

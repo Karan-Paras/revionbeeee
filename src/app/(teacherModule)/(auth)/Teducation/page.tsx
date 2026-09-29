@@ -348,10 +348,12 @@ export default function TeacherEducation() {
                     {degreeDocument?.type.startsWith("image/") ? (
                       <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-2">
                         <div className="relative h-16 w-full overflow-hidden rounded-md bg-[#f8fafc]">
-                          <img
+                          <Image
                             src={degreeDocument.url}
                             alt="Degree document preview"
-                            className="h-full w-full object-contain"
+                            fill
+                            unoptimized
+                            className="object-contain"
                           />
                         </div>
                         <span className="max-w-full truncate text-xs font-medium text-[#666]">
