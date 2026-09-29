@@ -21,7 +21,7 @@ import { isSessionWindowOpen } from "@/lib/session-time";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -49,20 +49,19 @@ function isSessionActiveNow(booking: TeacherBooking, nowMs = Date.now()) {
   });
 }
 
+function tabFromRoute(pathname: string, search = ""): Tab {
+  const requestedTab = new URLSearchParams(search).get("tab");
+  if (requestedTab === "Completed") return "Completed";
+  if (pathname === "/teacher/bookings/pending") return "Pending";
+  if (pathname === "/teacher/bookings/accepted") return "Accepted";
+  return "All";
+}
+
 export default function TeacherBookingsPage() {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const requestedTab = searchParams.get("tab");
-  const routeTab: Tab =
-    requestedTab === "Completed"
-      ? "Completed"
-      : pathname === "/teacher/bookings/pending"
-        ? "Pending"
-        : pathname === "/teacher/bookings/accepted"
-          ? "Accepted"
-          : "All";
+  const routeTab = tabFromRoute(pathname);
   const [activeTab, setActiveTab] = useState<Tab>(routeTab);
   const {
     data: fetchedBookings = [],
@@ -96,8 +95,8 @@ export default function TeacherBookingsPage() {
   const [nowUtc, setNowUtc] = useState(() => Date.now());
 
   useEffect(() => {
-    setActiveTab(routeTab);
-  }, [routeTab]);
+    setActiveTab(tabFromRoute(pathname, window.location.search));
+  }, [pathname]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -275,7 +274,8 @@ export default function TeacherBookingsPage() {
           <div className="divide-y divide-[#e9ecef]">
             {visibleBookings.map((booking) => {
               const isPaid = Boolean(booking.paidAt);
-              const canManageSession = isPaid && isSessionActiveNow(booking);
+              const canManageSession =
+                isPaid && isSessionActiveNow(booking, nowUtc);
               const isLive =
                 booking.isLive || isLessonLiveLocally(booking.lessonID);
               const unavailableActionTitle = isPaid

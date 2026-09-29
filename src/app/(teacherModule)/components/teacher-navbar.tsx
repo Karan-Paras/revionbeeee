@@ -160,7 +160,7 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
           error instanceof Error ? error.message : "Unable to load profile."
         );
       });
-  }, [session?.user?.token]);
+  }, [session?.user?.email, session?.user?.token]);
 
   useEffect(() => {
     const handleProfileUpdate = (event: Event) => {

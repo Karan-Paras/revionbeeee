@@ -12,15 +12,13 @@ import { useDismissPhoneCountryDropdown } from "./use-dismiss-phone-country-drop
 function Harness() {
   useDismissPhoneCountryDropdown();
   const [mobileNumber, setMobileNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
   return (
     <PhoneInput
       defaultCountry="in"
       value={mobileNumber}
       forceDialCode
-      onChange={(phone, { country }) => {
+      onChange={(phone) => {
         setMobileNumber(phone);
-        setCountryCode(`+${country.dialCode.replace(/\D/g, "")}`);
       }}
     />
   );
