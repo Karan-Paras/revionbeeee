@@ -3,6 +3,10 @@
 import { Modals } from "@/app/(studentModule)/(app)/modals";
 import { Footer } from "@/components/common/footer";
 import { Header } from "@/components/common/header";
+import {
+  RoutePrefetcher,
+  studentPrefetchRoutes,
+} from "@/components/providers/route-prefetcher";
 import { SubscriptionAlerts } from "@/features/subscriptions/components/subscription-alerts";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useRedirectIfProfileIncomplete } from "@/features/user/hooks/use-redirect-if-profile-incomplete";
@@ -30,6 +34,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <SubscriptionAlerts />
       </Suspense>
       <Header variant="dashboard" />
+      <RoutePrefetcher routes={studentPrefetchRoutes} />
       {children}
       <Footer variant="compact" />
     </>

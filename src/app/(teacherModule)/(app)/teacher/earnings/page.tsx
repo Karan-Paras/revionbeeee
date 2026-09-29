@@ -39,8 +39,9 @@ export default function TeacherEarningsPage() {
   const { data, isPending, error } = useQuery({
     queryKey: ["teacher-earnings"],
     queryFn: getTeacherEarnings,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: "always",
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const payments = useMemo(() => data?.payments ?? [], [data?.payments]);
