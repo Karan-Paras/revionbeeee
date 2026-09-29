@@ -113,29 +113,19 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
   if (
     combined.includes("cancelled") ||
     combined.includes("canceled") ||
-    combined.includes("rejected")
+    combined.includes("rejected") ||
+    combined.includes("expired")
   ) {
     return "cancelled";
   }
 
-  if (combined.includes("payment") || combined.includes("paid")) {
-    return "upcoming";
-  }
-
   if (
-    combined.includes("approved") ||
-    combined.includes("accepted") ||
-    combined.includes("scheduled") ||
-    combined.includes("upcoming") ||
-    combined.includes("booked")
-  ) {
-    return "upcoming";
-  }
-
-  if (
+    combined.includes("session ended") ||
+    combined.includes("has ended") ||
     combined.includes("completed") ||
     combined.includes("complete") ||
-    combined.includes("finished")
+    combined.includes("finished") ||
+    combined.includes("closed")
   ) {
     return "completed";
   }
@@ -148,17 +138,26 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
     return "pending";
   }
 
+  if (
+    combined.includes("payment") ||
+    combined.includes("paid") ||
+    combined.includes("approved") ||
+    combined.includes("accepted") ||
+    combined.includes("scheduled") ||
+    combined.includes("upcoming") ||
+    combined.includes("booked") ||
+    combined.includes("session started") ||
+    combined.includes("started the session") ||
+    combined.includes("join now")
+  ) {
+    return "upcoming";
+  }
+
   return "upcoming";
 }
 
 export async function getStudentUnreadCount(): Promise<number> {
   const response = await fetchClient<unknown>(unreadCountUrl, "GET");
-
-  // DEBUG — remove after confirming the correct key
-  console.log(
-    "[unread-count] raw response:",
-    JSON.stringify(response, null, 2)
-  );
 
   // Helper: extract a non-negative integer from any value
   function extractCount(v: unknown): number | null {

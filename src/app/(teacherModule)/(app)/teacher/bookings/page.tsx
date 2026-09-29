@@ -278,9 +278,12 @@ export default function TeacherBookingsPage() {
                 isPaid && isSessionActiveNow(booking, nowUtc);
               const isLive =
                 booking.isLive || isLessonLiveLocally(booking.lessonID);
+              const isActionLocked = isLive;
               const unavailableActionTitle = isPaid
                 ? "Available during the session time"
                 : "Payment is required before starting the session";
+              const lockedActionTitle =
+                "This session is live. Actions are disabled until the call ends.";
 
               return (
                 <article
@@ -376,21 +379,23 @@ export default function TeacherBookingsPage() {
                     {booking.status === "Pending" && (
                       <>
                         <button
-                          disabled={respondMutation.isPending}
+                          disabled={isActionLocked || respondMutation.isPending}
+                          title={isActionLocked ? lockedActionTitle : "Accept"}
                           onClick={() =>
                             respondToBooking(booking.lessonID, "accept")
                           }
-                          className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-wait disabled:opacity-50"
+                          className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3] disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           Accept
                         </button>
                         <button
-                          disabled={respondMutation.isPending}
+                          disabled={isActionLocked || respondMutation.isPending}
+                          title={isActionLocked ? lockedActionTitle : "Reject"}
                           onClick={() => {
                             setRejectingLessonID(booking.lessonID);
                             setRejectionReason("");
                           }}
-                          className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-wait disabled:opacity-50"
+                          className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7] disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           Reject
                         </button>
@@ -400,12 +405,16 @@ export default function TeacherBookingsPage() {
                       <>
                         <button
                           disabled={
-                            !canManageSession || startSessionMutation.isPending
+                            isActionLocked ||
+                            !canManageSession ||
+                            startSessionMutation.isPending
                           }
                           title={
-                            canManageSession
-                              ? "Start session"
-                              : unavailableActionTitle
+                            isActionLocked
+                              ? lockedActionTitle
+                              : canManageSession
+                                ? "Start session"
+                                : unavailableActionTitle
                           }
                           onClick={() =>
                             startSessionMutation.mutate(booking.lessonID)
@@ -419,12 +428,16 @@ export default function TeacherBookingsPage() {
                         </button>
                         <button
                           disabled={
-                            !canManageSession || cancelMutation.isPending
+                            isActionLocked ||
+                            !canManageSession ||
+                            cancelMutation.isPending
                           }
                           title={
-                            canManageSession
-                              ? "Cancel session"
-                              : unavailableActionTitle
+                            isActionLocked
+                              ? lockedActionTitle
+                              : canManageSession
+                                ? "Cancel session"
+                                : unavailableActionTitle
                           }
                           onClick={() => {
                             setCancellingLessonID(booking.lessonID);

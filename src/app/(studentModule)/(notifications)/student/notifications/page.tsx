@@ -71,15 +71,19 @@ export default function StudentNotificationsPage() {
   } = useQuery({
     queryKey: ["student-notifications"],
     queryFn: getStudentNotifications,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["student-notifications-unread-count"],
     queryFn: getStudentUnreadCount,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
 
   const [currentPage, setCurrentPage] = useState(1);

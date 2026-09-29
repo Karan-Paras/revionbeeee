@@ -1,13 +1,18 @@
-import { useSession } from "next-auth/react";
+import {
+  getCachedFetchClientSessionToken,
+  subscribeFetchClientSessionToken,
+} from "@/lib/fetch-client";
+import { useSyncExternalStore } from "react";
 
 export const useToken = () => {
-  const { data, status } = useSession();
-
-  const token = data?.user?.token;
-  const isLoading = status === "loading";
+  const token = useSyncExternalStore(
+    subscribeFetchClientSessionToken,
+    () => getCachedFetchClientSessionToken(),
+    () => undefined
+  );
 
   return {
     token,
-    isLoading,
+    isLoading: false,
   };
 };

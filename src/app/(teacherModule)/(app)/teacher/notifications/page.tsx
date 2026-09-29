@@ -60,8 +60,10 @@ export default function TeacherNotificationsPage() {
   } = useQuery({
     queryKey: ["teacher-notifications"],
     queryFn: getTeacherNotifications,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
 
   const [currentPage, setCurrentPage] = useState(1);

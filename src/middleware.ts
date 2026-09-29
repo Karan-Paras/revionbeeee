@@ -1,6 +1,3 @@
-import authConfig from "@/auth.config";
-import NextAuth from "next-auth";
-
 import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
@@ -8,12 +5,16 @@ import {
   paths,
   publicRoutes,
 } from "@/routes";
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
+export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+  });
+  const isLoggedIn = !!token;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
@@ -23,7 +24,7 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(pathSegment);
 
   if (isApiAuthRoute) {
-    return;
+    return NextResponse.next();
   }
 
   const isTeacherOnboardingRoute = [
@@ -40,33 +41,33 @@ export default auth((req) => {
   const isTeacherAtSignupStep =
     nextUrl.pathname === paths.teacherSignup() &&
     isLoggedIn &&
-    req.auth?.user?.userType === "teacher" &&
-    Number(req.auth.user.teacherProfileStatus) === 1;
+    token?.userType === "teacher" &&
+    Number(token.teacherProfileStatus) === 1;
 
   if (isTeacherAtSignupStep) {
-    return;
+    return NextResponse.next();
   }
 
   if (isTeacherOnboardingRoute) {
     if (!isLoggedIn) {
-      return Response.redirect(new URL(paths.login(), nextUrl));
+      return NextResponse.redirect(new URL(paths.login(), nextUrl));
     }
-    return;
+    return NextResponse.next();
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    return;
+    return NextResponse.next();
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL(paths.login(), nextUrl));
+    return NextResponse.redirect(new URL(paths.login(), nextUrl));
   }
 
-  return;
-});
+  return NextResponse.next();
+}
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
