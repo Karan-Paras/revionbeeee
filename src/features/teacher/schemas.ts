@@ -95,7 +95,7 @@ export const CreateTeacherProfileSchema = z.object({
       "Profile image must be JPEG, PNG, WebP, or GIF"
     ),
 });
-// i have change something here
+
 export const AddTeacherQualificationSchema = z.object({
   institutionName: z
     .string({
