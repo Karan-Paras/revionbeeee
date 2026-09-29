@@ -84,8 +84,10 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const { data: notifications = [] } = useQuery({
     queryKey: ["teacher-notifications"],
     queryFn: getTeacherNotifications,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
   const unreadCount = notifications.filter((n) => n.unread).length;
 

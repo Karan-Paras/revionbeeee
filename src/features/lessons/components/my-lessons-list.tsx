@@ -11,6 +11,10 @@ import {
   activeLessonSessionReadyEvent,
   activeLessonSessionStorageKey,
 } from "@/features/lessons/components/active-lesson-session-guard";
+import {
+  isLessonLiveLocally,
+  markLessonLive,
+} from "@/features/lessons/session-live-state";
 import { isSessionWindowOpen } from "@/lib/session-time";
 import { paths } from "@/routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -20,11 +24,11 @@ import {
   Clock3,
   CreditCard,
   Search,
-  SlidersHorizontal,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -33,13 +37,16 @@ const tabs: Array<{ label: string; value: MyBookingFilter }> = [
   { label: "Pending Approval", value: "pending" },
   { label: "Approved", value: "accepted" },
   { label: "Cancelled", value: "cancelled" },
+  { label: "Completed", value: "completed" },
 ];
 
 const notificationTabs = ["accepted", "cancelled"] as const;
 type NotificationTab = (typeof notificationTabs)[number];
+const tabValues = tabs.map((tab) => tab.value);
 
 const upcomingLessonsCacheKey = "revision-bee:student-upcoming-lessons";
 const upcomingLessonCacheLifetime = 6 * 60 * 60 * 1000;
+const paidLessonRedirectKey = "revision-bee:paid-lesson-redirects";
 
 type CachedUpcomingLessons = { savedAt: number; lessons: MyBooking[] };
 
@@ -71,6 +78,27 @@ function saveCachedUpcomingLessons(lessons: MyBooking[]) {
   } catch {}
 }
 
+function readPaidLessonRedirects() {
+  try {
+    const value: unknown = JSON.parse(
+      localStorage.getItem(paidLessonRedirectKey) ?? "[]"
+    );
+    return new Set(Array.isArray(value) ? value.map(String) : []);
+  } catch {
+    return new Set<string>();
+  }
+}
+
+function savePaidLessonRedirects(lessonIDs: Set<string>) {
+  try {
+    if (!lessonIDs.size) {
+      localStorage.removeItem(paidLessonRedirectKey);
+      return;
+    }
+    localStorage.setItem(paidLessonRedirectKey, JSON.stringify([...lessonIDs]));
+  } catch {}
+}
+
 function seenBookingsKey(tab: NotificationTab) {
   return `revision-bee:seen-my-bookings:${tab}`;
 }
@@ -91,7 +119,12 @@ function readSeenBookings(tab: NotificationTab) {
 }
 
 export function MyLessonsList() {
-  const [activeTab, setActiveTab] = useState<MyBookingFilter>("pending");
+  const searchParams = useSearchParams();
+  const requestedTab = searchParams.get("tab");
+  const initialTab = tabValues.includes(requestedTab as MyBookingFilter)
+    ? (requestedTab as MyBookingFilter)
+    : "upcoming";
+  const [activeTab, setActiveTab] = useState<MyBookingFilter>(initialTab);
   const [query, setQuery] = useState("");
   const [nowMs, setNowMs] = useState(() => Date.now());
   const [cachedUpcomingLessons, setCachedUpcomingLessons] = useState<
@@ -108,17 +141,19 @@ export function MyLessonsList() {
     queryKey: ["my-booking-notifications", "accepted"],
     queryFn: () =>
       getMyBookings({ filter: "accepted", search: "", perPage: 100 }),
-    refetchInterval: 10_000,
-    refetchIntervalInBackground: true,
-    refetchOnWindowFocus: "always",
+    staleTime: 60 * 1000,
+    refetchInterval: activeTab === "accepted" ? false : 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
   const cancelledNotifications = useQuery({
     queryKey: ["my-booking-notifications", "cancelled"],
     queryFn: () =>
       getMyBookings({ filter: "cancelled", search: "", perPage: 100 }),
-    refetchInterval: 10_000,
-    refetchIntervalInBackground: true,
-    refetchOnWindowFocus: "always",
+    staleTime: 60 * 1000,
+    refetchInterval: activeTab === "cancelled" ? false : 60_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
   const notificationBookings: Record<NotificationTab, MyBooking[]> = {
     accepted: approvedNotifications.data ?? [],
@@ -127,7 +162,14 @@ export function MyLessonsList() {
 
   useEffect(() => {
     setCachedUpcomingLessons(readCachedUpcomingLessons());
+    if (readPaidLessonRedirects().size) setActiveTab("upcoming");
   }, []);
+
+  useEffect(() => {
+    if (tabValues.includes(requestedTab as MyBookingFilter)) {
+      setActiveTab(requestedTab as MyBookingFilter);
+    }
+  }, [requestedTab]);
 
   // Tick every second so Join button activates exactly on time
   useEffect(() => {
@@ -173,6 +215,7 @@ export function MyLessonsList() {
   const joinSession = useMutation({
     mutationFn: joinLessonSession,
     onSuccess: (credentials) => {
+      markLessonLive(credentials.lessonID);
       const storedSession = JSON.stringify({
         ...credentials,
         expiresAt: Date.now() + credentials.expiresIn * 1000,
@@ -221,11 +264,12 @@ export function MyLessonsList() {
     queryKey: ["my-bookings", activeTab, query.trim()],
     queryFn: () =>
       getMyBookings({ filter: activeTab, search: query.trim(), perPage: 8 }),
-    refetchInterval: 10_000,
-    refetchIntervalInBackground: true,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: "always",
-    refetchOnReconnect: "always",
+    staleTime: activeTab === "upcoming" ? 30 * 1000 : 2 * 60 * 1000,
+    refetchInterval: activeTab === "upcoming" ? 30_000 : false,
+    refetchIntervalInBackground: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   });
 
   useEffect(() => {
@@ -241,6 +285,34 @@ export function MyLessonsList() {
       return next;
     });
   }, [activeTab, fetchedLessons, query]);
+
+  useEffect(() => {
+    const paidLessonIDs = readPaidLessonRedirects();
+    if (!paidLessonIDs.size || !approvedNotifications.data?.length) return;
+
+    const paidLessons = approvedNotifications.data.filter((lesson) =>
+      paidLessonIDs.has(String(lesson.paymentLessonID))
+    );
+    if (!paidLessons.length) return;
+
+    setActiveTab("upcoming");
+    setCachedUpcomingLessons((current) => {
+      const merged = new Map(
+        current.map((lesson) => [String(lesson.paymentLessonID), lesson])
+      );
+      paidLessons.forEach((lesson) =>
+        merged.set(String(lesson.paymentLessonID), lesson)
+      );
+      const next = Array.from(merged.values());
+      saveCachedUpcomingLessons(next);
+      return next;
+    });
+
+    paidLessons.forEach((lesson) =>
+      paidLessonIDs.delete(String(lesson.paymentLessonID))
+    );
+    savePaidLessonRedirects(paidLessonIDs);
+  }, [approvedNotifications.data]);
 
   const cancelledIds = new Set(
     (cancelledNotifications.data ?? []).map((l) => String(l.paymentLessonID))
@@ -313,7 +385,6 @@ export function MyLessonsList() {
               placeholder="Search..."
               className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
             />
-            <SlidersHorizontal size={17} className="text-[#555]" />
           </label>
         </div>
 
@@ -350,6 +421,8 @@ export function MyLessonsList() {
                   isInstant,
                   nowMs,
                 });
+              const isLive =
+                lesson.isLive || isLessonLiveLocally(lesson.paymentLessonID);
 
               return (
                 <article
@@ -380,14 +453,22 @@ export function MyLessonsList() {
                         {lesson.isOnline ? "Online" : "Offline"}
                       </p>
                     </div>
+                    {isLive && (
+                      <span className="flex shrink-0 items-center gap-1 rounded border border-[#ffb8be] bg-[#fff0f1] px-2 py-1 text-[9px] font-semibold text-[#ff3543]">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#ff3543]" />
+                        Live
+                      </span>
+                    )}
                     {activeTab !== "upcoming" && (
                       <span
                         className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-[9px] font-medium ${
                           activeTab === "cancelled"
                             ? "border-[#ffccd0] bg-[#fff0f1] text-[#ff4c59]"
-                            : activeTab === "accepted"
-                              ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]"
-                              : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"
+                            : activeTab === "completed"
+                              ? "border-[#b8d7ff] bg-[#eef6ff] text-[#348edc]"
+                              : activeTab === "accepted"
+                                ? "border-[#a7e8bd] bg-[#eefbf2] text-[#25b95a]"
+                                : "border-[#ffd46f] bg-[#fff8df] text-[#f4ad00]"
                         }`}
                       >
                         {activeTab === "cancelled" ? (
@@ -397,6 +478,10 @@ export function MyLessonsList() {
                         ) : activeTab === "accepted" ? (
                           <>
                             <CheckCircle2 size={11} /> Approved
+                          </>
+                        ) : activeTab === "completed" ? (
+                          <>
+                            <CheckCircle2 size={11} /> Completed
                           </>
                         ) : (
                           <>

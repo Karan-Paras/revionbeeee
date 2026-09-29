@@ -24,6 +24,10 @@ import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 8;
 
+function notificationHref(notification: StudentNotification) {
+  return `${paths.myLessons()}?tab=${notification.lessonTab}`;
+}
+
 function notificationIcon(type: StudentNotification["type"]) {
   switch (type) {
     case "payment":
@@ -185,8 +189,10 @@ export default function StudentNotificationsPage() {
                 const isUnread =
                   notification.unread && !readIds.has(notification.id);
                 return (
-                  <article
+                  <Link
                     key={notification.id}
+                    href={notificationHref(notification)}
+                    onClick={() => void markRead(notification.id)}
                     className={`relative flex gap-4 px-5 py-5 transition hover:bg-[#f9fbfd] ${
                       isUnread ? "bg-[#f7fbff]" : "bg-white"
                     }`}
@@ -201,21 +207,23 @@ export default function StudentNotificationsPage() {
                         <h3 className="text-sm font-semibold text-[#222]">
                           {notification.title}
                         </h3>
-                        <time className="shrink-0 text-[10px] text-[#999] sm:text-xs">
-                          {notification.time}
-                        </time>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <time className="text-[10px] text-[#999] sm:text-xs">
+                            {notification.time}
+                          </time>
+                          {isUnread && (
+                            <span
+                              aria-label="Unread"
+                              className="h-2 w-2 rounded-full bg-[#429bea]"
+                            />
+                          )}
+                        </div>
                       </div>
                       <p className="mt-1 text-xs leading-5 text-[#747b83] sm:text-sm">
                         {notification.message}
                       </p>
                     </div>
-                    {isUnread && (
-                      <span
-                        aria-label="Unread"
-                        className="absolute top-1/2 right-2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#429bea] sm:right-4"
-                      />
-                    )}
-                  </article>
+                  </Link>
                 );
               })}
             </div>

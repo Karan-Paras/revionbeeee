@@ -1,8 +1,8 @@
 "use client";
 
-import { paths } from "@/routes";
+import { LessonSessionPage } from "@/features/lessons/components/lesson-session-page";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export const activeLessonSessionStorageKey =
   "revision-bee:active-lesson-session";
@@ -48,28 +48,22 @@ function hasValidActiveSession(role: "student" | "teacher") {
 
 export function ActiveLessonSessionGuard() {
   const { data: session, status } = useSession();
-  const isRedirectingRef = useRef(false);
+  const [hasActiveSession, setHasActiveSession] = useState(false);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status !== "authenticated") {
+      setHasActiveSession(false);
+      return;
+    }
 
     const role = session.user.userType;
-    if (role !== "student" && role !== "teacher") return;
-
-    const target = role === "teacher" ? "/teacher/session" : paths.session();
+    if (role !== "student" && role !== "teacher") {
+      setHasActiveSession(false);
+      return;
+    }
 
     const recoverActiveSession = () => {
-      if (window.location.pathname === target) {
-        isRedirectingRef.current = false;
-        return;
-      }
-
-      if (isRedirectingRef.current || !hasValidActiveSession(role)) {
-        return;
-      }
-
-      isRedirectingRef.current = true;
-      window.location.replace(target);
+      setHasActiveSession(hasValidActiveSession(role));
     };
 
     recoverActiveSession();
@@ -92,5 +86,5 @@ export function ActiveLessonSessionGuard() {
     };
   }, [session?.user.userType, status]);
 
-  return null;
+  return hasActiveSession ? <LessonSessionPage /> : null;
 }

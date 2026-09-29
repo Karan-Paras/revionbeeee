@@ -2,8 +2,28 @@
 
 import { paths } from "@/routes";
 
-export function ContinueButton() {
+const paidLessonRedirectKey = "revision-bee:paid-lesson-redirects";
+
+function rememberPaidLesson(lessonID?: string) {
+  if (!lessonID) return;
+
+  try {
+    const value: unknown = JSON.parse(
+      localStorage.getItem(paidLessonRedirectKey) ?? "[]"
+    );
+    const ids = Array.isArray(value) ? value.map(String) : [];
+    localStorage.setItem(
+      paidLessonRedirectKey,
+      JSON.stringify(Array.from(new Set([...ids, String(lessonID)])))
+    );
+  } catch {
+    localStorage.setItem(paidLessonRedirectKey, JSON.stringify([lessonID]));
+  }
+}
+
+export function ContinueButton({ lessonID }: { lessonID?: string }) {
   const handleContinue = () => {
+    rememberPaidLesson(lessonID);
     window.location.assign(paths.myLessons());
   };
 

@@ -57,6 +57,62 @@ function asRecord(value: unknown) {
   return isRecord(value) ? value : {};
 }
 
+const summaryContainerKeys = [
+  "summary",
+  "stats",
+  "statistics",
+  "earningsSummary",
+  "earnings_summary",
+  "payoutSummary",
+  "payout_summary",
+  "totals",
+  "overview",
+];
+
+const summaryValueKeys = [
+  "todaysSessions",
+  "todayLessonsCount",
+  "today_lessons_count",
+  "todayLessons",
+  "totalHoursTaught",
+  "totalTaughtHours",
+  "total_taught_hours",
+  "totalEarning",
+  "total_earning",
+  "totalEarnings",
+  "total_earnings",
+  "earnings",
+];
+
+function hasSummaryValues(record: ApiRecord) {
+  return summaryValueKeys.some(
+    (key) => typeof record[key] === "number" || typeof record[key] === "string"
+  );
+}
+
+function findSummary(value: unknown, depth = 0): ApiRecord | null {
+  if (depth > 5) return null;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findSummary(item, depth + 1);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (!isRecord(value)) return null;
+
+  for (const key of summaryContainerKeys) {
+    if (isRecord(value[key])) return value[key];
+  }
+  if (hasSummaryValues(value)) return value;
+
+  for (const nested of Object.values(value)) {
+    const found = findSummary(nested, depth + 1);
+    if (found) return found;
+  }
+  return null;
+}
+
 function array(record: ApiRecord, ...keys: string[]) {
   for (const key of keys) {
     const value = record[key];
@@ -146,9 +202,10 @@ function normalizeLesson(item: ApiRecord, index: number): DashboardLesson {
 
 export async function getTeacherDashboard(): Promise<TeacherDashboardData> {
   const response = await fetchClient<unknown>(teacherDashboardUrl, "GET");
+  const root = asRecord(response);
   const data = asRecord(response.data);
-  const stats = asRecord(data.stats ?? data.statistics ?? data.summary);
-  const source = { ...data, ...stats };
+  const stats = findSummary(data) ?? findSummary(root) ?? {};
+  const source = { ...root, ...data, ...stats };
   const scheduledLessons = array(
     data,
     "todaysLessons", // actual API key

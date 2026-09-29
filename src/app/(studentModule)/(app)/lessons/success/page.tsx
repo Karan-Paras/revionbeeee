@@ -46,7 +46,9 @@ export default async function LessonSuccessPage({
             ? "Your lesson payment has been completed successfully."
             : "Your lesson request has been submitted successfully."}
         </p>
-        <ContinueButton />
+        <ContinueButton
+          lessonID={Array.isArray(lessonID) ? lessonID[0] : lessonID}
+        />
       </section>
     </main>
   );
