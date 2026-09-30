@@ -1,5 +1,5 @@
-import { TeacherDashboardContent } from "@/features/teacher/components/teacher-dashboard";
 import type { Metadata } from "next";
+import { TeacherDashboardLoader } from "./teacher-dashboard-loader";
 
 export const metadata: Metadata = {
   title: "Teacher Dashboard - Revision Bee",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function TeacherDashboard() {
-  return <TeacherDashboardContent />;
+  return <TeacherDashboardLoader />;
 }

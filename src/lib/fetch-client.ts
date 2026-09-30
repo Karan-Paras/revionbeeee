@@ -8,6 +8,73 @@ type FetchClientOptions = {
   signal?: AbortSignal;
 };
 
+const sessionTokenCacheMs = 30 * 1000;
+const sessionTokenStorageKey = "revision-bee:session-token";
+const sessionTokenUpdatedEvent = "revision-bee:session-token-updated";
+let cachedSessionToken: { token: string; expiresAt: number } | null = null;
+let sessionTokenPromise: Promise<string | undefined> | null = null;
+
+function readStoredSessionToken() {
+  if (typeof window === "undefined") return undefined;
+
+  try {
+    return window.sessionStorage.getItem(sessionTokenStorageKey) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeStoredSessionToken(token?: string | null) {
+  if (typeof window === "undefined") return;
+
+  try {
+    if (token) {
+      window.sessionStorage.setItem(sessionTokenStorageKey, token);
+    } else {
+      window.sessionStorage.removeItem(sessionTokenStorageKey);
+    }
+    window.dispatchEvent(new Event(sessionTokenUpdatedEvent));
+  } catch {
+    /* ignore storage access errors */
+  }
+}
+
+export function syncFetchClientSessionToken(token?: string | null) {
+  cachedSessionToken = token
+    ? { token, expiresAt: Date.now() + sessionTokenCacheMs }
+    : null;
+  writeStoredSessionToken(token);
+}
+
+export function getCachedFetchClientSessionToken() {
+  if (cachedSessionToken && cachedSessionToken.expiresAt > Date.now()) {
+    return cachedSessionToken.token;
+  }
+
+  const storedToken = readStoredSessionToken();
+  if (storedToken) {
+    cachedSessionToken = {
+      token: storedToken,
+      expiresAt: Date.now() + sessionTokenCacheMs,
+    };
+    return storedToken;
+  }
+
+  return undefined;
+}
+
+export function subscribeFetchClientSessionToken(listener: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  window.addEventListener(sessionTokenUpdatedEvent, listener);
+  window.addEventListener("storage", listener);
+
+  return () => {
+    window.removeEventListener(sessionTokenUpdatedEvent, listener);
+    window.removeEventListener("storage", listener);
+  };
+}
+
 function isFetchClientOptions(
   value: RequestInit["next"] | FetchClientOptions | undefined
 ): value is FetchClientOptions {
@@ -18,6 +85,23 @@ function isFetchClientOptions(
         "headers" in value ||
         "signal" in value)
   );
+}
+
+async function getSessionToken() {
+  const cachedToken = getCachedFetchClientSessionToken();
+  if (cachedToken) return cachedToken;
+
+  sessionTokenPromise ??= getSession()
+    .then((session) => {
+      const token = session?.user?.token;
+      syncFetchClientSessionToken(token);
+      return token;
+    })
+    .finally(() => {
+      sessionTokenPromise = null;
+    });
+
+  return sessionTokenPromise;
 }
 
 export async function fetchClient<T>(
@@ -41,8 +125,7 @@ export async function fetchClient<T>(
   const api = isAbsoluteUrl ? url : `${apiBaseUrl}${url}`;
 
   const shouldAttachAuth = options.auth !== false;
-  const session = shouldAttachAuth ? await getSession() : null;
-  const token = session?.user?.token;
+  const token = shouldAttachAuth ? await getSessionToken() : undefined;
 
   const isFormData = body instanceof FormData;
 

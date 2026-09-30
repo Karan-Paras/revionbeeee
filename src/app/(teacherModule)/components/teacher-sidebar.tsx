@@ -2,8 +2,13 @@
 
 import { RevisionBee } from "@/assets/icons";
 import { logout } from "@/features/auth/actions/logout";
+import { getBookings } from "@/features/lessons/api/get-bookings";
+import { getTeacherDashboard } from "@/features/teacher/api/get-dashboard";
+import { getTeacherEarnings } from "@/features/teacher/api/get-earnings";
+import { getTeacherStudents } from "@/features/teacher/api/get-students";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   BookOpenCheck,
   CalendarDays,
@@ -47,6 +52,7 @@ export function TeacherSidebar({
   isCollapsed: controlledCollapsed,
   onToggleCollapse: controlledToggleCollapse,
 }: TeacherSidebarProps) {
+  const queryClient = useQueryClient();
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -72,6 +78,53 @@ export function TeacherSidebar({
     router.refresh();
   }
 
+  function prefetchRouteData(href: string) {
+    if (href === paths.teacherDashboard()) {
+      void queryClient.prefetchQuery({
+        queryKey: ["teacher-dashboard"],
+        queryFn: getTeacherDashboard,
+        staleTime: 60 * 1000,
+      });
+      return;
+    }
+
+    if (href === "/teacher/students") {
+      void queryClient.prefetchQuery({
+        queryKey: ["teacher-students", "all", ""],
+        queryFn: () =>
+          getTeacherStudents({
+            filter: "all",
+            search: "",
+            perPage: 8,
+          }),
+        staleTime: 5 * 60 * 1000,
+      });
+      return;
+    }
+
+    if (href === "/teacher/bookings") {
+      void queryClient.prefetchQuery({
+        queryKey: ["teacher-bookings", "All"],
+        queryFn: () =>
+          getBookings({
+            filter: "all",
+            search: "",
+            perPage: 8,
+          }),
+        staleTime: 30 * 1000,
+      });
+      return;
+    }
+
+    if (href === "/teacher/earnings") {
+      void queryClient.prefetchQuery({
+        queryKey: ["teacher-earnings"],
+        queryFn: getTeacherEarnings,
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  }
+
   const renderSidebarNav = (collapsed: boolean) => (
     <nav
       className={cn(
@@ -86,7 +139,12 @@ export function TeacherSidebar({
             <li key={label}>
               <Link
                 href={href}
-                onClick={onClose}
+                onMouseEnter={() => prefetchRouteData(href)}
+                onFocus={() => prefetchRouteData(href)}
+                onClick={() => {
+                  prefetchRouteData(href);
+                  onClose?.();
+                }}
                 title={collapsed ? label : undefined}
                 className={cn(
                   "flex min-h-12 items-center rounded-lg text-sm font-medium text-[#30343a] transition hover:bg-[#edf6ff] hover:text-[#3994e7]",

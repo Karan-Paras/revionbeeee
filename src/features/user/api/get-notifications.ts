@@ -148,9 +148,12 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
   }
 
   if (
+    combined.includes("session ended") ||
+    combined.includes("has ended") ||
     combined.includes("completed") ||
     combined.includes("complete") ||
-    combined.includes("finished")
+    combined.includes("finished") ||
+    combined.includes("closed")
   ) {
     return "completed";
   }
@@ -161,6 +164,21 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
     combined.includes("requested")
   ) {
     return "pending";
+  }
+
+  if (
+    combined.includes("payment") ||
+    combined.includes("paid") ||
+    combined.includes("approved") ||
+    combined.includes("accepted") ||
+    combined.includes("scheduled") ||
+    combined.includes("upcoming") ||
+    combined.includes("booked") ||
+    combined.includes("session started") ||
+    combined.includes("started the session") ||
+    combined.includes("join now")
+  ) {
+    return "upcoming";
   }
 
   return "upcoming";

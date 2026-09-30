@@ -1,7 +1,7 @@
 "use client";
 
-import { LessonSessionPage } from "@/features/lessons/components/lesson-session-page";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 export const activeLessonSessionStorageKey =
@@ -18,6 +18,14 @@ type StoredActiveSession = {
   expiresAt?: unknown;
   sessionRole?: unknown;
 };
+
+const LessonSessionPage = dynamic(
+  () =>
+    import("@/features/lessons/components/lesson-session-page").then(
+      (module) => module.LessonSessionPage
+    ),
+  { ssr: false }
+);
 
 function hasValidActiveSession(role: "student" | "teacher") {
   try {
@@ -73,7 +81,7 @@ export function ActiveLessonSessionGuard() {
     );
     window.addEventListener("focus", recoverActiveSession);
     window.addEventListener("pageshow", recoverActiveSession);
-    const interval = window.setInterval(recoverActiveSession, 2_000);
+    const interval = window.setInterval(recoverActiveSession, 15_000);
 
     return () => {
       window.removeEventListener(

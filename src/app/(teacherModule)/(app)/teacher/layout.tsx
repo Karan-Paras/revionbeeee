@@ -1,10 +1,37 @@
 "use client";
 
-import { TeacherNavbar } from "@/app/(teacherModule)/components/teacher-navbar";
-import { TeacherSidebar } from "@/app/(teacherModule)/components/teacher-sidebar";
+import {
+  RoutePrefetcher,
+  teacherPrefetchRoutes,
+} from "@/components/providers/route-prefetcher";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 const SIDEBAR_COLLAPSED_KEY = "revision-bee:teacher-sidebar-collapsed";
+const TeacherNavbar = dynamic(
+  () =>
+    import("@/app/(teacherModule)/components/teacher-navbar").then(
+      (module) => module.TeacherNavbar
+    ),
+  {
+    loading: () => (
+      <header className="h-[86px] shrink-0 border-b border-[#edf0f3] bg-white" />
+    ),
+    ssr: false,
+  }
+);
+const TeacherSidebar = dynamic(
+  () =>
+    import("@/app/(teacherModule)/components/teacher-sidebar").then(
+      (module) => module.TeacherSidebar
+    ),
+  {
+    loading: () => (
+      <aside className="hidden h-dvh w-[230px] shrink-0 border-r border-[#e5e8ec] bg-white lg:block" />
+    ),
+    ssr: false,
+  }
+);
 
 export default function TeacherAppLayout({
   children,
@@ -45,6 +72,7 @@ export default function TeacherAppLayout({
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <TeacherNavbar onMenuClick={() => setIsSidebarOpen(true)} />
+        <RoutePrefetcher routes={teacherPrefetchRoutes} />
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>
