@@ -41,8 +41,7 @@ export function FirebaseMessagingProvider() {
         ["student-notifications-unread-count"],
         (current = 0) => current + 1
       );
-      queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
-      queryClient.invalidateQueries({ queryKey: ["student-notifications"] });
+      queryClient.invalidateQueries();
     }
 
     function handleForegroundMessage(payload: MessagePayload) {
