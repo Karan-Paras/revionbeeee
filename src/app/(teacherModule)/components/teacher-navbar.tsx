@@ -21,6 +21,8 @@ function resolveProfileImage(image: string) {
   return getTeacherImageUrl(image);
 }
 
+const NOTIFICATION_REFETCH_INTERVAL = 10_000;
+
 type CachedTeacherProfile = {
   name?: string;
   image?: string;
@@ -80,14 +82,15 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
     });
   }
 
-  // Poll notifications every 30s for live unread badge
   const { data: notifications = [] } = useQuery({
     queryKey: ["teacher-notifications"],
     queryFn: getTeacherNotifications,
-    staleTime: 60 * 1000,
-    refetchInterval: 60_000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
   const unreadCount = notifications.filter((n) => n.unread).length;
 
