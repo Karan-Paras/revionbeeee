@@ -42,13 +42,7 @@ export function NotificationBell() {
         { queryKey: ["student-notifications"] },
         (current) => current?.map((n) => ({ ...n, unread: false }))
       );
-      markRead(undefined, {
-        onSettled: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["student-notifications-unread-count"],
-          });
-        },
-      });
+      markRead();
     }
   }
 

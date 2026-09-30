@@ -113,18 +113,33 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
   if (
     combined.includes("cancelled") ||
     combined.includes("canceled") ||
-    combined.includes("rejected")
+    combined.includes("rejected") ||
+    combined.includes("expired")
   ) {
     return "cancelled";
   }
 
-  if (combined.includes("payment") || combined.includes("paid")) {
+  if (
+    combined.includes("payment successful") ||
+    combined.includes("payment success") ||
+    combined.includes("payment done") ||
+    combined.includes("paid") ||
+    combined.includes("session started") ||
+    combined.includes("join now") ||
+    combined.includes("class started")
+  ) {
     return "upcoming";
   }
 
   if (
     combined.includes("approved") ||
     combined.includes("accepted") ||
+    combined.includes("confirmed")
+  ) {
+    return "accepted";
+  }
+
+  if (
     combined.includes("scheduled") ||
     combined.includes("upcoming") ||
     combined.includes("booked")

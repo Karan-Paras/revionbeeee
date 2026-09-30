@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 8;
+const NOTIFICATION_REFETCH_INTERVAL = 10_000;
 
 function notificationIcon(type: TeacherNotification["type"]) {
   switch (type) {
@@ -46,12 +47,16 @@ export default function TeacherNotificationsPage() {
   });
 
   useEffect(() => {
+    queryClient.setQueriesData<TeacherNotification[]>(
+      { queryKey: ["teacher-notifications"] },
+      (current) => current?.map((n) => ({ ...n, unread: false }))
+    );
     markAllRead(undefined, {
       onError: () => {
         /* ignore mark-read API failure */
       },
     });
-  }, [markAllRead]);
+  }, [markAllRead, queryClient]);
 
   const {
     data: notifications = [],
@@ -60,8 +65,12 @@ export default function TeacherNotificationsPage() {
   } = useQuery({
     queryKey: ["teacher-notifications"],
     queryFn: getTeacherNotifications,
-    refetchInterval: 30_000,
-    refetchOnWindowFocus: true,
+    staleTime: 0,
+    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
 
   const [currentPage, setCurrentPage] = useState(1);

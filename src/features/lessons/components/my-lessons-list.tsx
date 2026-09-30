@@ -1,5 +1,6 @@
 "use client";
 
+import { Modal } from "@/components/common/modal";
 import {
   getMyBookings,
   type MyBooking,
@@ -15,6 +16,7 @@ import {
   isLessonLiveLocally,
   markLessonLive,
 } from "@/features/lessons/session-live-state";
+import { fetchClient } from "@/lib/fetch-client";
 import { isSessionWindowOpen } from "@/lib/session-time";
 import { paths } from "@/routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -23,12 +25,14 @@ import {
   CheckCircle2,
   Clock3,
   CreditCard,
+  Flag,
   Search,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -39,6 +43,18 @@ const tabs: Array<{ label: string; value: MyBookingFilter }> = [
   { label: "Cancelled", value: "cancelled" },
   { label: "Completed", value: "completed" },
 ];
+
+const reportCategories = [
+  { label: "Teacher no show", value: "teacher_no_show" },
+  { label: "Inappropriate behavior", value: "inappropriate_behavior" },
+  { label: "Technical issue", value: "technical_issue" },
+  { label: "Poor lesson quality", value: "poor_lesson_quality" },
+  { label: "Billing issue", value: "billing_issue" },
+  { label: "Other", value: "other" },
+];
+
+const reportLessonUrl =
+  "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/lesson/report";
 
 const notificationTabs = ["accepted", "cancelled"] as const;
 type NotificationTab = (typeof notificationTabs)[number];
@@ -118,6 +134,23 @@ function readSeenBookings(tab: NotificationTab) {
   }
 }
 
+async function reportLesson({
+  lessonID,
+  category,
+  description,
+}: {
+  lessonID: string | number;
+  category: string;
+  description: string;
+}) {
+  const formData = new FormData();
+  formData.append("lessonID", String(lessonID));
+  formData.append("category", category);
+  formData.append("description", description);
+
+  return fetchClient<unknown>(reportLessonUrl, "POST", formData);
+}
+
 export function MyLessonsList() {
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get("tab");
@@ -130,6 +163,14 @@ export function MyLessonsList() {
   const [cachedUpcomingLessons, setCachedUpcomingLessons] = useState<
     MyBooking[]
   >([]);
+  const [reportLessonTarget, setReportLessonTarget] =
+    useState<MyBooking | null>(null);
+  const [reportCategory, setReportCategory] = useState(
+    reportCategories[0].value
+  );
+  const [reportDescription, setReportDescription] = useState("");
+  const [reportDescriptionError, setReportDescriptionError] = useState("");
+  const [reportSubmitted, setReportSubmitted] = useState(false);
   const [hasNewBookings, setHasNewBookings] = useState<
     Record<NotificationTab, boolean>
   >({
@@ -211,6 +252,69 @@ export function MyLessonsList() {
     },
     onError: (error) => toast.error(error.message),
   });
+
+  const report = useMutation({
+    mutationFn: reportLesson,
+    onSuccess: () => {
+      toast.success("Report submitted successfully.");
+      setReportLessonTarget(null);
+      setReportCategory(reportCategories[0].value);
+      setReportDescription("");
+      setReportDescriptionError("");
+      setReportSubmitted(false);
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  function openReportModal(lesson: MyBooking) {
+    setReportLessonTarget(lesson);
+    setReportCategory(reportCategories[0].value);
+    setReportDescription("");
+    setReportDescriptionError("");
+    setReportSubmitted(false);
+  }
+
+  function closeReportModal() {
+    if (report.isPending) return;
+    setReportLessonTarget(null);
+    setReportCategory(reportCategories[0].value);
+    setReportDescription("");
+    setReportDescriptionError("");
+    setReportSubmitted(false);
+  }
+
+  function validateReportDescription(value: string) {
+    if (!value.trim()) return "Please describe the issue.";
+    if (value.trim().length < 10)
+      return "Description must be at least 10 characters.";
+    return "";
+  }
+
+  function handleReportDescriptionChange(value: string) {
+    setReportDescription(value);
+    if (reportSubmitted) {
+      setReportDescriptionError(validateReportDescription(value));
+    }
+  }
+
+  function submitReport(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!reportLessonTarget) return;
+
+    setReportSubmitted(true);
+    const description = reportDescription.trim();
+    const descriptionError = validateReportDescription(description);
+    setReportDescriptionError(descriptionError);
+    if (descriptionError) {
+      return;
+    }
+
+    report.mutate({
+      lessonID: reportLessonTarget.paymentLessonID,
+      category: reportCategory,
+      description,
+    });
+  }
 
   const joinSession = useMutation({
     mutationFn: joinLessonSession,
@@ -561,6 +665,17 @@ export function MyLessonsList() {
                         : `Make Payment · ${lesson.amount}`}
                     </button>
                   )}
+
+                  {activeTab !== "pending" && (
+                    <button
+                      type="button"
+                      onClick={() => openReportModal(lesson)}
+                      className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#ffccd0] bg-[#fff7f8] text-xs font-semibold text-[#d93645] transition hover:border-[#ff9ca5] hover:bg-[#fff0f1]"
+                    >
+                      <Flag size={15} />
+                      Report
+                    </button>
+                  )}
                 </article>
               );
             })}
@@ -575,6 +690,92 @@ export function MyLessonsList() {
           />
         )}
       </div>
+
+      {reportLessonTarget && (
+        <Modal
+          title="Report Lesson"
+          onClose={closeReportModal}
+          className="max-w-[520px] rounded-2xl"
+        >
+          <form onSubmit={submitReport} className="space-y-4 p-5">
+            <div className="rounded-lg bg-[#f5f8fb] p-3 text-xs text-[#5f6b76]">
+              <p className="font-semibold text-[#202734]">
+                {reportLessonTarget.teacherName}
+              </p>
+              <p className="mt-1">
+                {reportLessonTarget.subject} | {reportLessonTarget.sessionDate}{" "}
+                | {reportLessonTarget.sessionTime}
+              </p>
+            </div>
+
+            <label className="block text-xs font-semibold text-[#202734]">
+              Category
+              <select
+                value={reportCategory}
+                onChange={(event) => setReportCategory(event.target.value)}
+                disabled={report.isPending}
+                className="mt-2 h-11 w-full rounded-lg border border-[#d7e0e8] bg-white px-3 text-xs font-medium text-[#202734] outline-none transition focus:border-[#53a2eb]"
+              >
+                {reportCategories.map((category) => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block text-xs font-semibold text-[#202734]">
+              Description
+              <textarea
+                value={reportDescription}
+                onChange={(event) =>
+                  handleReportDescriptionChange(event.target.value)
+                }
+                disabled={report.isPending}
+                rows={5}
+                placeholder="Describe what happened in this session."
+                aria-invalid={Boolean(reportDescriptionError)}
+                aria-describedby={
+                  reportDescriptionError
+                    ? "report-description-error"
+                    : undefined
+                }
+                className={`mt-2 w-full resize-none rounded-lg border bg-white px-3 py-3 text-xs leading-5 text-[#202734] outline-none transition placeholder:text-[#9aa4ad] ${
+                  reportDescriptionError
+                    ? "border-[#d93645] focus:border-[#d93645]"
+                    : "border-[#d7e0e8] focus:border-[#53a2eb]"
+                }`}
+              />
+              {reportDescriptionError && (
+                <p
+                  id="report-description-error"
+                  className="mt-1.5 text-[11px] font-medium text-[#d93645]"
+                >
+                  {reportDescriptionError}
+                </p>
+              )}
+            </label>
+
+            <div className="flex justify-end gap-3 pt-1">
+              <button
+                type="button"
+                onClick={closeReportModal}
+                disabled={report.isPending}
+                className="h-10 rounded-lg border border-[#d7e0e8] px-4 text-xs font-semibold text-[#66717b] transition hover:bg-[#f5f8fb] disabled:cursor-wait disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={report.isPending}
+                className="h-10 rounded-lg bg-[#d93645] px-5 text-xs font-semibold text-white transition hover:bg-[#c22f3d] disabled:cursor-wait disabled:opacity-60"
+              >
+                {report.isPending ? "Submitting..." : "Submit Report"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </section>
   );
 }

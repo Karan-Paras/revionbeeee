@@ -37,11 +37,14 @@ export function FirebaseMessagingProvider() {
     let isMounted = true;
 
     function refreshNotificationBadges() {
+      queryClient.setQueryData<number>(
+        ["student-notifications-unread-count"],
+        (current = 0) => current + 1
+      );
       queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
-      queryClient.invalidateQueries({
-        queryKey: ["student-notifications-unread-count"],
-      });
       queryClient.invalidateQueries({ queryKey: ["student-notifications"] });
+      queryClient.refetchQueries({ queryKey: ["teacher-notifications"] });
+      queryClient.refetchQueries({ queryKey: ["student-notifications"] });
     }
 
     function handleForegroundMessage(payload: MessagePayload) {
