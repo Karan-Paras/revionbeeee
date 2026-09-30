@@ -120,6 +120,34 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
   }
 
   if (
+    combined.includes("payment successful") ||
+    combined.includes("payment success") ||
+    combined.includes("payment done") ||
+    combined.includes("paid") ||
+    combined.includes("session started") ||
+    combined.includes("join now") ||
+    combined.includes("class started")
+  ) {
+    return "upcoming";
+  }
+
+  if (
+    combined.includes("approved") ||
+    combined.includes("accepted") ||
+    combined.includes("confirmed")
+  ) {
+    return "accepted";
+  }
+
+  if (
+    combined.includes("scheduled") ||
+    combined.includes("upcoming") ||
+    combined.includes("booked")
+  ) {
+    return "upcoming";
+  }
+
+  if (
     combined.includes("session ended") ||
     combined.includes("has ended") ||
     combined.includes("completed") ||
@@ -159,7 +187,6 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
 export async function getStudentUnreadCount(): Promise<number> {
   const response = await fetchClient<unknown>(unreadCountUrl, "GET");
 
-  // Helper: extract a non-negative integer from any value
   function extractCount(v: unknown): number | null {
     if (typeof v === "number" && Number.isFinite(v) && v >= 0)
       return Math.floor(v);

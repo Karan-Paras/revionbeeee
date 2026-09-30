@@ -1,5 +1,5 @@
 import { purchaseSubscription } from "@/features/subscriptions/api/purchase-subscription";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
@@ -18,6 +18,7 @@ const app = new Hono()
     ),
     async (c) => {
       const { customerId, callback = "/" } = c.req.valid("json");
+      const stripe = getStripe();
 
       const session = await stripe.billingPortal.sessions.create({
         customer: customerId,
@@ -49,6 +50,7 @@ const app = new Hono()
       }
 
       const { plan, callback = "/" } = c.req.valid("json");
+      const stripe = getStripe();
 
       const price =
         plan === "monthly"
@@ -93,6 +95,7 @@ const app = new Hono()
     ),
     async (c) => {
       const { sessionId } = c.req.valid("json");
+      const stripe = getStripe();
 
       const session = await stripe.checkout.sessions.retrieve(sessionId);
 

@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const PAGE_SIZE = 8;
+const NOTIFICATION_REFETCH_INTERVAL = 10_000;
 
 function notificationHref(notification: StudentNotification) {
   return `${paths.myLessons()}?tab=${notification.lessonTab}`;
@@ -57,12 +58,17 @@ export default function StudentNotificationsPage() {
   });
 
   useEffect(() => {
+    queryClient.setQueryData(["student-notifications-unread-count"], 0);
+    queryClient.setQueriesData<StudentNotification[]>(
+      { queryKey: ["student-notifications"] },
+      (current) => current?.map((n) => ({ ...n, unread: false }))
+    );
     markAllRead(undefined, {
       onError: () => {
         /* ignore mark-read API failure */
       },
     });
-  }, [markAllRead]);
+  }, [markAllRead, queryClient]);
 
   const {
     data: notifications = [],
@@ -71,19 +77,23 @@ export default function StudentNotificationsPage() {
   } = useQuery({
     queryKey: ["student-notifications"],
     queryFn: getStudentNotifications,
-    staleTime: 60 * 1000,
-    refetchInterval: 60_000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["student-notifications-unread-count"],
     queryFn: getStudentUnreadCount,
-    staleTime: 60 * 1000,
-    refetchInterval: 60_000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
 
   const [currentPage, setCurrentPage] = useState(1);

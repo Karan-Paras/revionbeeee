@@ -26,7 +26,7 @@ export function getTeacherImageUrl(image: string): string {
   if (/^https?:\/\//i.test(normalizedImage)) return normalizedImage;
   if (normalizedImage.startsWith("/images/")) return normalizedImage;
   if (!MEDIA_URL) {
-    return "/images/teacher-personal-info.svg";
+    return `${MEDIA_URL}/teacherProfilePicture/${normalizedImage}`;
   }
 
   const mediaBaseUrl = MEDIA_URL.replace(/\/+$/, "");

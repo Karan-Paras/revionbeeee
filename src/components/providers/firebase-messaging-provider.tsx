@@ -144,51 +144,15 @@ export function FirebaseMessagingProvider() {
   useEffect(() => {
     let isMounted = true;
 
-    function refreshNotificationBadges(payload: MessagePayload) {
-      const { title, message } = notificationText(payload);
-      const id = `foreground-${Date.now()}`;
-      const type = notificationType(title, message);
-
+    function refreshNotificationBadges() {
       queryClient.setQueryData<number>(
         ["student-notifications-unread-count"],
         (current = 0) => current + 1
       );
-      queryClient.setQueryData<StudentNotification[]>(
-        ["student-notifications"],
-        (current = []) => [
-          {
-            id,
-            title,
-            message,
-            time: "Just now",
-            unread: true,
-            type,
-            lessonTab: lessonTab(title, message),
-          },
-          ...current,
-        ]
-      );
-      queryClient.setQueryData<TeacherNotification[]>(
-        ["teacher-notifications"],
-        (current = []) => [
-          {
-            id,
-            title,
-            message,
-            time: "Just now",
-            unread: true,
-            type,
-            href: teacherHref(title, message),
-          },
-          ...current,
-        ]
-      );
-
       queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
-      queryClient.invalidateQueries({
-        queryKey: ["student-notifications-unread-count"],
-      });
       queryClient.invalidateQueries({ queryKey: ["student-notifications"] });
+      queryClient.refetchQueries({ queryKey: ["teacher-notifications"] });
+      queryClient.refetchQueries({ queryKey: ["student-notifications"] });
     }
 
     function handleForegroundMessage(payload: MessagePayload) {
