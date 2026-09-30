@@ -136,7 +136,7 @@ export const AddTeacherQualificationSchema = z.object({
       return numericYear >= 1900 && numericYear <= new Date().getFullYear();
     }, "Graduation year cannot be in the future"),
   degreeDocument: z
-    .instanceof(File, { message: "Degree document is required" })
+    .instanceof(File)
     .refine((file) => file.size > 0, "Degree document is required")
     .refine(
       (file) => file.size <= 10 * 1024 * 1024,
@@ -146,7 +146,9 @@ export const AddTeacherQualificationSchema = z.object({
       (file) =>
         ["application/pdf", "image/jpeg", "image/png"].includes(file.type),
       "Degree document must be PDF, JPG, or PNG"
-    ),
+    )
+    .nullable()
+    .optional(),
 });
 
 const MAX_CERTIFICATE_SIZE = 10 * 1024 * 1024;
