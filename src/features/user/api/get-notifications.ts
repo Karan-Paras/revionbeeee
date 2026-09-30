@@ -154,13 +154,6 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
 export async function getStudentUnreadCount(): Promise<number> {
   const response = await fetchClient<unknown>(unreadCountUrl, "GET");
 
-  // DEBUG — remove after confirming the correct key
-  console.log(
-    "[unread-count] raw response:",
-    JSON.stringify(response, null, 2)
-  );
-
-  // Helper: extract a non-negative integer from any value
   function extractCount(v: unknown): number | null {
     if (typeof v === "number" && Number.isFinite(v) && v >= 0)
       return Math.floor(v);

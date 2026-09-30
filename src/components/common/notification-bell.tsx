@@ -10,16 +10,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 
+const NOTIFICATION_REFETCH_INTERVAL = 15_000;
+
 export function NotificationBell() {
   const queryClient = useQueryClient();
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["student-notifications-unread-count"],
     queryFn: () => getStudentUnreadCount().catch(() => 0),
-    staleTime: 60 * 1000,
-    refetchInterval: 60_000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
 
   const { mutate: markRead, isPending: isMarkingRead } = useMutation({
