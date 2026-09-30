@@ -125,6 +125,7 @@ export default function StudentNotificationsPage() {
     }
   }
 
+  //minor change is implemented
   function goToPage(page: number) {
     setCurrentPage(Math.min(Math.max(1, page), totalPages));
   }
