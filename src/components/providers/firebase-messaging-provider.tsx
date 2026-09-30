@@ -151,8 +151,6 @@ export function FirebaseMessagingProvider() {
       );
       queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
       queryClient.invalidateQueries({ queryKey: ["student-notifications"] });
-      queryClient.refetchQueries({ queryKey: ["teacher-notifications"] });
-      queryClient.refetchQueries({ queryKey: ["student-notifications"] });
     }
 
     function handleForegroundMessage(payload: MessagePayload) {
