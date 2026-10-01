@@ -154,12 +154,8 @@ export function FirebaseMessagingProvider() {
 
     function handleForegroundMessage(payload: MessagePayload) {
       showForegroundMessage(payload);
-      refreshNotificationBadges(payload);
-    }
-
-    function handleServiceWorkerMessage(event: MessageEvent) {
-      if (event.data?.type !== backgroundMessageType) return;
-      refreshNotificationBadges(event.data.payload as MessagePayload);
+      // i have remove payload from this function
+      refreshNotificationBadges();
     }
 
     async function startListening() {
