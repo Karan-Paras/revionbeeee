@@ -46,6 +46,7 @@ export function FirebaseMessagingProvider() {
 
     function handleForegroundMessage(payload: MessagePayload) {
       showForegroundMessage(payload);
+      // i have remove payload from this function
       refreshNotificationBadges();
     }
 
