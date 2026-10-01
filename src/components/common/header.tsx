@@ -6,7 +6,6 @@ import Link from "next/link";
 
 import { NotificationBell } from "@/components/common/notification-bell";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
-import { MobileSidebar } from "@/components/sidebars/mobile-sidebar";
 import { NavLink } from "@/components/ui/nav-link";
 
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
@@ -17,6 +16,15 @@ import { Logo } from "@/assets/images";
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { getPostLoginPath } from "@/features/auth/utils";
 import { paths } from "@/routes";
+import dynamic from "next/dynamic";
+
+const MobileSidebar = dynamic(
+  () =>
+    import("@/components/sidebars/mobile-sidebar").then(
+      (module) => module.MobileSidebar
+    ),
+  { ssr: false }
+);
 
 interface HeaderProps {
   variant?: "home" | "dashboard";

@@ -18,7 +18,22 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+function broadcastNotification(payload) {
+  self.clients
+    .matchAll({ type: "window", includeUncontrolled: true })
+    .then((windows) => {
+      windows.forEach((client) => {
+        client.postMessage({
+          type: "revision-bee:firebase-background-message",
+          payload,
+        });
+      });
+    });
+}
+
 messaging.onBackgroundMessage((payload) => {
+  broadcastNotification(payload);
+
   // Notification payloads are displayed automatically by Firebase.
   // Handle only data-only messages here to prevent duplicates.
   if (payload.notification) return;
