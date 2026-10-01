@@ -14,6 +14,7 @@ export function BreadcrumbBanner({
   breadcrumbs,
 }: BreadcrumbBannerProps) {
   return (
+    //hello
     <section className="act_bg relative min-h-96 bg-cover bg-no-repeat">
       <div className="container mx-auto">
         <div className="relative grid min-h-96 grid-cols-2 items-end text-center">
