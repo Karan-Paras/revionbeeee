@@ -21,6 +21,7 @@ import {
   WalletCards,
   X,
 } from "lucide-react";
+import { signOut as signOutClient } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -74,6 +75,7 @@ export function TeacherSidebar({
       return;
     }
 
+    await signOutClient({ redirect: false });
     router.replace(paths.home());
     router.refresh();
   }
