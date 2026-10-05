@@ -241,11 +241,10 @@ export default function TeacherBookingsPage() {
         </div>
 
         <section className="mt-8 overflow-hidden rounded-[22px] bg-white px-4 py-2 shadow-[0_1px_2px_rgba(20,30,40,0.02)] sm:px-6">
-          <div className="hidden grid-cols-[1.2fr_.9fr_.8fr_1fr_.85fr_.6fr_.7fr_1fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
+          <div className="hidden grid-cols-[1.2fr_.9fr_.8fr_.85fr_.6fr_.7fr_1fr] gap-4 border-b border-[#e9ecef] py-4 text-xs font-medium text-[#999] lg:grid">
             <span>Client Details</span>
             <span>Session</span>
             <span>Session Type</span>
-            <span>Topic</span>
             <span>Status</span>
             <span>Amount</span>
             <span className="text-center">Payment</span>
@@ -288,7 +287,7 @@ export default function TeacherBookingsPage() {
               return (
                 <article
                   key={booking.id}
-                  className="grid gap-4 py-4 lg:grid-cols-[1.2fr_.9fr_.8fr_1fr_.85fr_.6fr_.7fr_1fr] lg:items-center lg:gap-4"
+                  className="grid gap-4 py-4 lg:grid-cols-[1.2fr_.9fr_.8fr_.85fr_.6fr_.7fr_1fr] lg:items-center lg:gap-4"
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <Image
@@ -322,14 +321,6 @@ export default function TeacherBookingsPage() {
                     </span>
                     <p className="text-xs text-[#303338]">
                       {booking.bookingType}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="mb-1 block text-[10px] text-[#999] lg:hidden">
-                      Topic
-                    </span>
-                    <p className="text-xs leading-5 text-[#303338]">
-                      {booking.topic}
                     </p>
                   </div>
                   <div>

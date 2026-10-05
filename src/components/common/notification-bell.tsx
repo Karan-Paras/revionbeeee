@@ -1,57 +1,20 @@
 "use client";
 
-import {
-  getStudentUnreadCount,
-  markAllStudentNotificationsRead,
-  type StudentNotification,
-} from "@/features/user/api/get-notifications";
+import { useNotificationUnreadCount } from "@/hooks/use-notification-unread-count";
 import { paths } from "@/routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 
-const NOTIFICATION_REFETCH_INTERVAL = 15_000;
-
 export function NotificationBell() {
-  const queryClient = useQueryClient();
-
-  const { data: unreadCount = 0 } = useQuery({
-    queryKey: ["student-notifications-unread-count"],
-    queryFn: () => getStudentUnreadCount().catch(() => 0),
-    staleTime: 0,
-    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
-    refetchIntervalInBackground: true,
-    refetchOnMount: "always",
-    refetchOnReconnect: "always",
-    refetchOnWindowFocus: "always",
-  });
-
-  const { mutate: markRead, isPending: isMarkingRead } = useMutation({
-    mutationFn: markAllStudentNotificationsRead,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["student-notifications-unread-count"],
-      });
-    },
-  });
-
-  function handleBellClick() {
-    if (unreadCount > 0) {
-      queryClient.setQueryData(["student-notifications-unread-count"], 0);
-      queryClient.setQueriesData<StudentNotification[]>(
-        { queryKey: ["student-notifications"] },
-        (current) => current?.map((n) => ({ ...n, unread: false }))
-      );
-      markRead();
-    }
-  }
+  const { unreadCount, isMarkingRead, markAllRead } =
+    useNotificationUnreadCount("student");
 
   return (
     <Link
       href={paths.studentNotifications()}
       aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
       className="relative mr-2 inline-grid h-10 w-10 shrink-0 place-items-center rounded-full text-[#505050] transition hover:bg-[#f0f0f0] hover:text-[#53A2EB]"
-      onClick={handleBellClick}
+      onClick={markAllRead}
     >
       <Bell
         size={20}

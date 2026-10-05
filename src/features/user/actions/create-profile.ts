@@ -69,7 +69,8 @@ export const createProfile = async (
   await unstable_update({
     user: {
       name: `${user.firstName} ${user.lastName}`,
-      image: user.profilePicture,
+      image: user.profilePicture ?? user.profile_image_url,
+      profileStatus: user.profileStatus ?? user.profile_status ?? 2,
     },
   });
 

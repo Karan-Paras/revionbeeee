@@ -10,6 +10,9 @@ type LoginFormState = {
     _form?: string[];
   };
   success?: boolean;
+  userType?: "student" | "teacher";
+  profileStatus?: number;
+  teacherProfileStatus?: number;
 };
 
 export const login = async (
@@ -58,5 +61,12 @@ export const login = async (
     return { errors: { _form: ["Something went wrong!"] } };
   }
 
-  return { errors: {}, success: true };
+  return {
+    errors: {},
+    success: true,
+    userType: json.data.userType,
+    profileStatus: json.data.profileStatus ?? json.data.profile_status,
+    teacherProfileStatus:
+      json.data.teacherProfileStatus ?? json.data.teacher_profile_status,
+  };
 };

@@ -14,7 +14,11 @@ export default async function SocialLoginComplete() {
 
   if (intent === "login") {
     redirect(
-      getPostLoginPath(session.user.userType, session.user.teacherProfileStatus)
+      getPostLoginPath(
+        session.user.userType,
+        session.user.teacherProfileStatus,
+        session.user.profileStatus
+      )
     );
   }
 

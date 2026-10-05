@@ -64,6 +64,11 @@ export const {
           id: String(response.data.id),
           token: response.token,
           userType: response.data.userType ?? userType,
+          profileStatus:
+            response.data.profileStatus ?? response.data.profile_status,
+          teacherProfileStatus:
+            response.data.teacherProfileStatus ??
+            response.data.teacher_profile_status,
         });
         return true;
       } catch (error) {
@@ -77,8 +82,10 @@ export const {
     },
     jwt({ token, user, trigger, session }) {
       if (user) {
+        token.id = user.id;
         token.token = user.token;
         token.userType = user.userType;
+        token.profileStatus = user.profileStatus;
         token.teacherProfileStatus = user.teacherProfileStatus;
       }
       if (trigger === "update" && session) {
@@ -87,6 +94,9 @@ export const {
         if (session.user.userType) {
           token.userType = session.user.userType;
         }
+        if (session.user.profileStatus !== undefined) {
+          token.profileStatus = session.user.profileStatus;
+        }
         if (session.user.teacherProfileStatus !== undefined) {
           token.teacherProfileStatus = session.user.teacherProfileStatus;
         }
@@ -94,11 +104,13 @@ export const {
       return token;
     },
     session({ session, token }) {
+      session.user.id = String(token.id ?? token.sub ?? "");
       session.user.token = token.token as string;
       session.user.userType = token.userType as
         | "student"
         | "teacher"
         | undefined;
+      session.user.profileStatus = token.profileStatus as number | undefined;
       session.user.teacherProfileStatus = token.teacherProfileStatus as
         | number
         | undefined;

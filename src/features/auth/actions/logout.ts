@@ -1,9 +1,9 @@
 "use server";
 
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { fetchServer } from "@/lib/fetch-server";
 
-const LOGOUT_BACKEND_TIMEOUT_MS = 5000;
+const LOGOUT_BACKEND_TIMEOUT_MS = 1500;
 
 export type LogoutResult =
   | { success: true; userType: "teacher" | "user" }
@@ -38,24 +38,18 @@ export async function logout(): Promise<LogoutResult> {
     } catch (error) {
       // The backend logout is best-effort. It only invalidates the remote
       // token/device session, so never let it block the local logout.
-      console.error("Backend logout failed", error);
+      const message = error instanceof Error ? error.message : "";
+      if (
+        message !== "This operation was aborted" &&
+        message !== "The operation was aborted."
+      ) {
+        console.warn("Backend logout skipped:", message || error);
+      }
     } finally {
       clearTimeout(timeout);
     }
   } catch {
     // Abort or any unexpected error must not block the local sign-out.
-  }
-
-  try {
-    await signOut({ redirect: false });
-  } catch (error) {
-    return {
-      success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Unable to log out. Please try again.",
-    };
   }
 
   return { success: true, userType: isTeacher ? "teacher" : "user" };

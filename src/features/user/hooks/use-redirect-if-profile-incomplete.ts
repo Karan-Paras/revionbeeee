@@ -1,4 +1,3 @@
-import { isUserProfileComplete } from "@/features/user/utils";
 import { paths } from "@/routes";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,8 +11,7 @@ export function useRedirectIfProfileIncomplete() {
     if (status !== "loading") {
       const user = session?.user;
       if (user) {
-        const isProfileComplete = isUserProfileComplete(user);
-        if (!isProfileComplete) {
+        if (Number(user.profileStatus) === 1) {
           router.replace(paths.createProfile());
         }
       }

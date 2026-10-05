@@ -8,7 +8,6 @@ import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { createProfile } from "@/features/user/actions/create-profile";
 import { phoneNumber as phoneNumberSchema } from "@/features/user/schemas";
-import { isUserProfileComplete } from "@/features/user/utils";
 import {
   firstName as firstNameSchema,
   lastName as lastNameSchema,
@@ -90,10 +89,8 @@ export function CreateProfileForm() {
           return router.replace(paths.login());
         }
 
-        const isProfileComplete = isUserProfileComplete(user);
-
-        if (isProfileComplete) {
-          router.replace(paths.dashboard());
+        if (Number(user.profileStatus) === 2) {
+          router.replace(paths.subscriptionPlans());
         }
       });
     }

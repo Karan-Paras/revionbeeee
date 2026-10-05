@@ -7,8 +7,15 @@ import {
   getVerifiedTeachers,
   type VerifiedTeacher,
 } from "@/features/lessons/api/get-verified-teachers";
+import { getSocket } from "@/lib/socket";
+import {
+  findTeacherStatusPayload,
+  getTeacherStatusId,
+  statusFromPayload,
+  type TeacherStatusPayload,
+} from "@/lib/teacher-status-socket";
 import { paths } from "@/routes";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   CalendarDays,
@@ -61,6 +68,7 @@ const durationOptions = [
 
 export function TeacherList() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
   const [selectedTeacher, setSelectedTeacher] =
     useState<VerifiedTeacher | null>(null);
@@ -99,6 +107,85 @@ export function TeacherList() {
       );
     });
   }, [teachers]);
+
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+    const teacherSocket = socket;
+
+    function updateTeacherStatus(teacherId: string, isOnline: boolean) {
+      queryClient.setQueryData<VerifiedTeacher[]>(
+        ["verified-teachers"],
+        (currentTeachers) =>
+          currentTeachers?.map((teacher) =>
+            String(teacher.id) === teacherId
+              ? { ...teacher, isOnline }
+              : teacher
+          )
+      );
+      setSelectedTeacher((currentTeacher) =>
+        currentTeacher && String(currentTeacher.id) === teacherId
+          ? { ...currentTeacher, isOnline }
+          : currentTeacher
+      );
+    }
+
+    function handleTeacherStatus(data: TeacherStatusPayload) {
+      console.log("Teacher status:", data);
+      const teacherId = getTeacherStatusId(data);
+      const nextStatus = statusFromPayload(data);
+      if (!teacherId || typeof nextStatus !== "boolean") return;
+
+      updateTeacherStatus(teacherId, nextStatus);
+    }
+
+    function handleTeacherList(data: unknown) {
+      console.log("Teacher list:", data);
+      queryClient.setQueryData<VerifiedTeacher[]>(
+        ["verified-teachers"],
+        (currentTeachers) =>
+          currentTeachers?.map((teacher) => {
+            const payload = findTeacherStatusPayload(data, String(teacher.id));
+            if (!payload) return teacher;
+
+            const nextStatus = statusFromPayload(payload);
+            return typeof nextStatus === "boolean"
+              ? { ...teacher, isOnline: nextStatus }
+              : teacher;
+          })
+      );
+    }
+
+    function handleConnect() {
+      console.log("Socket connected:", teacherSocket.id);
+    }
+
+    function handleDisconnect(reason: string) {
+      console.log("Socket disconnected:", reason);
+    }
+
+    function handleReconnect(attempt: number) {
+      console.log("Socket reconnected:", attempt);
+    }
+
+    teacherSocket.on("connect", handleConnect);
+    teacherSocket.on("disconnect", handleDisconnect);
+    teacherSocket.io.on("reconnect", handleReconnect);
+    teacherSocket.on("teacherStatus", handleTeacherStatus);
+    teacherSocket.on("teacherList", handleTeacherList);
+
+    if (!teacherSocket.connected) {
+      teacherSocket.connect();
+    }
+
+    return () => {
+      teacherSocket.off("connect", handleConnect);
+      teacherSocket.off("disconnect", handleDisconnect);
+      teacherSocket.io.off("reconnect", handleReconnect);
+      teacherSocket.off("teacherStatus", handleTeacherStatus);
+      teacherSocket.off("teacherList", handleTeacherList);
+    };
+  }, [queryClient]);
 
   useEffect(() => {
     if (!selectedTeacher) return;

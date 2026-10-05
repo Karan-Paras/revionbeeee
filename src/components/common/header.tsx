@@ -8,10 +8,8 @@ import { NotificationBell } from "@/components/common/notification-bell";
 import { ProfileDropdown } from "@/components/dropdowns/profile-dropdown";
 import { NavLink } from "@/components/ui/nav-link";
 
-import { useGetProfile } from "@/features/user/queries/use-get-profile";
-import { isUserProfileComplete } from "@/features/user/utils";
-
 import { Logo } from "@/assets/images";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { getPostLoginPath } from "@/features/auth/utils";
@@ -62,32 +60,27 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
     if (variant === "home") {
       if (session) {
         const { user } = session;
-        const isProfileComplete = isUserProfileComplete(user);
         const isTeacher = user.userType === "teacher";
+        const isStudentProfileComplete = Number(user.profileStatus) === 2;
         const isTeacherProfileComplete =
           isTeacher && Number(user.teacherProfileStatus) >= 7;
         const dashboardPath = getPostLoginPath(
           user.userType,
-          user.teacherProfileStatus
+          user.teacherProfileStatus,
+          user.profileStatus
         );
 
         return (
           <div className="flex gap-5">
             <Link
-              href={
-                isTeacher
-                  ? dashboardPath
-                  : isProfileComplete
-                    ? paths.dashboard()
-                    : paths.createProfile()
-              }
+              href={isTeacher ? dashboardPath : dashboardPath}
               className="flex cursor-pointer rounded-xl border-2 border-[#53A2EB] px-5 py-4 font-semibold text-[#53A2EB] duration-500 ease-in-out hover:bg-[#53A2EB] hover:text-white"
             >
               {isTeacher
                 ? isTeacherProfileComplete
                   ? "Go to Dashboard"
                   : "Continue Profile"
-                : isProfileComplete
+                : isStudentProfileComplete
                   ? "Go to Dashboard"
                   : "Complete Profile"}
             </Link>
@@ -126,11 +119,11 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
   };
 
   return (
-    <header className="hed_bg relative z-[999] p-10">
-      <div className="container mx-auto">
+    <header className="hed_bg relative z-[999] px-4 py-3 sm:px-6 lg:p-10">
+      <div className="container mx-auto h-full">
         <div className="grid grid-cols-4 items-center">
           <div className="col-span-1">
-            <div className="absolute left-[100px] flex size-32 items-center justify-center">
+            <div className="absolute top-1/2 left-5 flex size-20 -translate-y-1/2 items-center justify-center sm:left-8 sm:size-24 lg:left-[100px] lg:size-32">
               <Link
                 href={variant === "home" ? paths.home() : paths.dashboard()}
               >
