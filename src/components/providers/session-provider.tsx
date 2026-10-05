@@ -13,6 +13,7 @@ function SessionTokenSync() {
   }, [data?.user?.token, status]);
 
   return null;
+  //new change
 }
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
