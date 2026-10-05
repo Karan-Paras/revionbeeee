@@ -7,6 +7,7 @@ import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { paths } from "@/routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, X } from "lucide-react";
+import { signOut as signOutClient } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -31,6 +32,7 @@ export function LogoutModal() {
     }
 
     queryClient.clear();
+    await signOutClient({ redirect: false });
     onClose();
     router.replace(paths.home());
     router.refresh();

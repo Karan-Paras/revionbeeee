@@ -452,14 +452,19 @@ export default function TeacherBookingsPage() {
                     {booking.status === "Rejected" && (
                       <>
                         <button
-                          disabled
-                          className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
+                          onClick={() =>
+                            respondToBooking(booking.lessonID, "accept")
+                          }
+                          className="rounded-full border border-[#97e3b0] bg-[#e9fbed] px-3 py-1.5 text-[11px] font-medium text-[#29bd59] hover:bg-[#dcf7e3]"
                         >
                           Accept
                         </button>
                         <button
-                          disabled
-                          className="rounded-full bg-[#dedfe1] px-3 py-1.5 text-[11px] text-[#aaa]"
+                          onClick={() => {
+                            setRejectingLessonID(booking.lessonID);
+                            setRejectionReason("");
+                          }}
+                          className="rounded-full border border-[#ffadb3] bg-[#fff0f1] px-3 py-1.5 text-[11px] font-medium text-[#ff3d4d] hover:bg-[#ffe5e7]"
                         >
                           Reject
                         </button>

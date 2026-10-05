@@ -84,7 +84,7 @@ export default function StudentNotificationsPage() {
     refetchOnReconnect: "always",
     refetchOnWindowFocus: "always",
   });
-
+  //chacking the things
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["student-notifications-unread-count"],
     queryFn: getStudentUnreadCount,
