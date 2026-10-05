@@ -1,4 +1,6 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TeacherSidebar } from "./teacher-sidebar";
 
@@ -14,13 +16,25 @@ vi.mock("@/features/auth/actions/logout", () => ({
   logout: vi.fn().mockResolvedValue({ success: true }),
 }));
 
+function renderSidebar(ui: ReactElement) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
+  });
+
+  return render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+  );
+}
+
 describe("TeacherSidebar", () => {
   afterEach(() => {
     cleanup();
   });
 
   it("renders expanded desktop sidebar by default with logo and navigation labels", () => {
-    render(<TeacherSidebar />);
+    renderSidebar(<TeacherSidebar />);
 
     const collapseButton = screen.getByRole("button", {
       name: /collapse sidebar/i,
@@ -36,7 +50,7 @@ describe("TeacherSidebar", () => {
   });
 
   it("toggles to collapsed state when the three-line button is clicked in uncontrolled mode", () => {
-    render(<TeacherSidebar />);
+    renderSidebar(<TeacherSidebar />);
 
     const collapseButton = screen.getByRole("button", {
       name: /collapse sidebar/i,
@@ -56,7 +70,7 @@ describe("TeacherSidebar", () => {
 
   it("calls onToggleCollapse when controlled prop is passed", () => {
     const onToggleCollapse = vi.fn();
-    render(
+    renderSidebar(
       <TeacherSidebar isCollapsed={false} onToggleCollapse={onToggleCollapse} />
     );
 
@@ -69,7 +83,7 @@ describe("TeacherSidebar", () => {
   });
 
   it("renders compact mode with title tooltips when isCollapsed is true", () => {
-    render(<TeacherSidebar isCollapsed={true} />);
+    renderSidebar(<TeacherSidebar isCollapsed={true} />);
 
     const expandButton = screen.getByRole("button", {
       name: /expand sidebar/i,
