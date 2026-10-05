@@ -613,7 +613,6 @@ export function MyLessonsList() {
                   )}
 
                   <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-md bg-[#f1f6fa] text-[10px] text-[#748096]">
-                    <Detail label="Topic" value={lesson.subject} />
                     <Detail label="Type" value={lesson.bookingType} />
                     <Detail label="Date" value={lesson.sessionDate} />
                     <Detail label="Time" value={lesson.sessionTime} />
@@ -625,7 +624,11 @@ export function MyLessonsList() {
                           : "—"
                       }
                     />
-                    <Detail label="Amount" value={lesson.amount} />
+                    <Detail
+                      label="Amount"
+                      value={lesson.amount}
+                      className="col-span-2 border-r-0"
+                    />
                   </div>
 
                   {activeTab === "upcoming" && (
@@ -780,9 +783,19 @@ export function MyLessonsList() {
   );
 }
 
-function Detail({ label, value }: { label: string; value: string }) {
+function Detail({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
   return (
-    <div className="border-r border-b border-[#d7e0e8] px-3 py-2">
+    <div
+      className={`border-r border-b border-[#d7e0e8] px-3 py-2 ${className}`}
+    >
       <span className="block text-[#748096]">{label}</span>
       <strong className="mt-0.5 block truncate text-[#202734]">{value}</strong>
     </div>

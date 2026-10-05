@@ -18,7 +18,35 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+const ACTIVE_AUDIENCE_KEY = "revision-bee:active-notification-audience";
+
+function unreadCountKey(audience) {
+  return `revision-bee:${audience}-notification-unread-count`;
+}
+
+// Persists the unread badge straight to localStorage so the count survives a
+// refresh (and works even when every tab is closed, since the service worker
+// shares the page origin's storage).
+function persistUnreadCount() {
+  try {
+    const audience = localStorage.getItem(ACTIVE_AUDIENCE_KEY);
+    if (audience !== "student" && audience !== "teacher") return null;
+
+    const key = unreadCountKey(audience);
+    const current = Number(localStorage.getItem(key));
+    const nextCount =
+      (Number.isFinite(current) && current > 0 ? Math.floor(current) : 0) + 1;
+
+    localStorage.setItem(key, String(nextCount));
+    return { audience, unreadCount: nextCount };
+  } catch {
+    return null;
+  }
+}
+
 function broadcastNotification(payload) {
+  const persisted = persistUnreadCount();
+
   self.clients
     .matchAll({ type: "window", includeUncontrolled: true })
     .then((windows) => {
@@ -26,6 +54,8 @@ function broadcastNotification(payload) {
         client.postMessage({
           type: "revision-bee:firebase-background-message",
           payload,
+          audience: persisted ? persisted.audience : null,
+          unreadCount: persisted ? persisted.unreadCount : null,
         });
       });
     });

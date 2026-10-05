@@ -10,7 +10,6 @@ import { DeviceTokenField } from "@/features/auth/components/device-token-field"
 import { getPostLoginPath } from "@/features/auth/utils";
 import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
-import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
@@ -26,17 +25,21 @@ export function LoginForm() {
 
   useEffect(() => {
     if (formState?.success) {
-      getSession().then((data) => {
-        if (!data?.user) {
-          return router.replace(paths.login());
-        }
-
-        router.replace(
-          getPostLoginPath(data.user.userType, data.user.teacherProfileStatus)
-        );
-      });
+      router.replace(
+        getPostLoginPath(
+          formState.userType,
+          formState.teacherProfileStatus,
+          formState.profileStatus
+        )
+      );
     }
-  }, [formState?.success, router]);
+  }, [
+    formState?.profileStatus,
+    formState?.success,
+    formState?.teacherProfileStatus,
+    formState?.userType,
+    router,
+  ]);
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

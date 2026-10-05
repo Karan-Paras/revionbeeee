@@ -59,7 +59,7 @@ export function MobileSidebar({
 
       <button
         onClick={openSidebar}
-        className="absolute top-0 right-5 bottom-0 text-[#53A2EB] lg:hidden"
+        className="absolute top-1/2 right-5 -translate-y-1/2 text-[#53A2EB] lg:hidden"
       >
         <Menu className="stroke-[#505050]" size={28} />
       </button>
@@ -107,7 +107,8 @@ export function MobileSidebar({
                         <Link
                           href={getPostLoginPath(
                             session.user.userType,
-                            session.user.teacherProfileStatus
+                            session.user.teacherProfileStatus,
+                            session.user.profileStatus
                           )}
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
@@ -116,12 +117,19 @@ export function MobileSidebar({
                             ? "Continue Profile"
                             : "Go to Dashboard"}
                         </Link>
-                      ) : (
+                      ) : Number(session.user.profileStatus) === 1 ? (
                         <Link
                           href={paths.createProfile()}
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
                           Complete Profile
+                        </Link>
+                      ) : (
+                        <Link
+                          href={paths.subscriptionPlans()}
+                          className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
+                        >
+                          Go to Dashboard
                         </Link>
                       )}
                       <button

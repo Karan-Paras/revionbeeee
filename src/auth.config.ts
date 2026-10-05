@@ -23,12 +23,15 @@ export default {
         return {
           ...user,
           id: user.id.toString(),
-          image: user.profilePicture,
+          image: user.profilePicture ?? user.profile_image_url,
           name:
             user.fullName?.trim() ||
             (user.firstName && user.lastName
               ? `${user.firstName} ${user.lastName}`
               : ""),
+          profileStatus: user.profileStatus ?? user.profile_status,
+          teacherProfileStatus:
+            user.teacherProfileStatus ?? user.teacher_profile_status,
           token,
         };
       },

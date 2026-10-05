@@ -18,6 +18,7 @@ import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
+import { PhoneInput } from "react-international-phone";
 
 import type { User } from "@/features/user/types";
 
@@ -42,6 +43,7 @@ function Form({ userData }: FormProps) {
   });
 
   const [profilePicture, setProfilePicture] = useState(userProfilePicture);
+  const [mobileNumber, setMobileNumber] = useState(phoneNumber ?? "");
 
   const [genderValue, setGenderValue] = useState(gender);
 
@@ -56,6 +58,10 @@ function Form({ userData }: FormProps) {
   useEffect(() => {
     setGenderValue(gender);
   }, [gender]);
+
+  useEffect(() => {
+    setMobileNumber(phoneNumber ?? "");
+  }, [phoneNumber]);
 
   useEffect(() => {
     if (formState.success) {
@@ -277,23 +283,33 @@ function Form({ userData }: FormProps) {
               <FormLabel htmlFor="phone-number" variant="bold">
                 Mobile
               </FormLabel>
-              <Input
-                id="phone-number"
-                name="phone-number"
-                type="tel"
-                placeholder="Enter Mobile Number"
-                variant="bordered"
-                defaultValue={phoneNumber}
-                disabled={isPending}
-                errors={formState.errors.phoneNumber}
-                autoComplete="tel"
-                onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ""
-                  );
-                }}
-              />
+              <input type="hidden" name="phone-number" value={mobileNumber} />
+              <span className="teacher-phone-input teacher-phone-input-bordered block">
+                <PhoneInput
+                  defaultCountry="in"
+                  value={mobileNumber}
+                  placeholder="Enter Mobile Number"
+                  disabled={isPending}
+                  inputProps={{
+                    id: "phone-number",
+                    autoComplete: "tel",
+                    "aria-invalid": !!formState.errors.phoneNumber,
+                  }}
+                  onChange={(phone, { country, inputValue }) => {
+                    const dialCodeDigits = country.dialCode.replace(/\D/g, "");
+                    const compactInput = inputValue.replace(/[\s()-]/g, "");
+                    const dialPrefix = `+${dialCodeDigits}`;
+                    const subscriberInput = compactInput.startsWith(dialPrefix)
+                      ? compactInput.slice(dialPrefix.length)
+                      : compactInput;
+
+                    setMobileNumber(subscriberInput.length > 0 ? phone : "");
+                  }}
+                />
+              </span>
+              {!!formState.errors.phoneNumber && (
+                <InputError error={formState.errors.phoneNumber.join(", ")} />
+              )}
             </div>
           </div>
           <div className="lg:col-span-2 col-span-2">

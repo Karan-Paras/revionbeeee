@@ -3,12 +3,11 @@
 import type { StudentNotification } from "@/features/user/api/get-notifications";
 import {
   getStudentNotifications,
-  getStudentUnreadCount,
-  markAllStudentNotificationsRead,
   markStudentNotificationsRead,
 } from "@/features/user/api/get-notifications";
+import { useNotificationUnreadCount } from "@/hooks/use-notification-unread-count";
 import { paths } from "@/routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bell,
@@ -20,7 +19,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const PAGE_SIZE = 8;
 const NOTIFICATION_REFETCH_INTERVAL = 10_000;
@@ -43,32 +42,8 @@ function notificationIcon(type: StudentNotification["type"]) {
 }
 
 export default function StudentNotificationsPage() {
-  const queryClient = useQueryClient();
-
-  const { mutate: markAllRead } = useMutation({
-    mutationFn: markAllStudentNotificationsRead,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["student-notifications-unread-count"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["student-notifications"],
-      });
-    },
-  });
-
-  useEffect(() => {
-    queryClient.setQueryData(["student-notifications-unread-count"], 0);
-    queryClient.setQueriesData<StudentNotification[]>(
-      { queryKey: ["student-notifications"] },
-      (current) => current?.map((n) => ({ ...n, unread: false }))
-    );
-    markAllRead(undefined, {
-      onError: () => {
-        /* ignore mark-read API failure */
-      },
-    });
-  }, [markAllRead, queryClient]);
+  const { unreadCount, decrementUnreadCount } =
+    useNotificationUnreadCount("student");
 
   const {
     data: notifications = [],
@@ -107,15 +82,9 @@ export default function StudentNotificationsPage() {
   async function markRead(id: string | number) {
     if (readIds.has(id)) return;
     setReadIds((prev) => new Set(prev).add(id));
+    decrementUnreadCount();
     try {
       await markStudentNotificationsRead([id]);
-      queryClient.setQueriesData<number>(
-        { queryKey: ["student-notifications-unread-count"] },
-        (prev = 0) => Math.max(0, prev - 1)
-      );
-      queryClient.refetchQueries({
-        queryKey: ["student-notifications-unread-count"],
-      });
     } catch {
       setReadIds((prev) => {
         const next = new Set(prev);
@@ -125,7 +94,6 @@ export default function StudentNotificationsPage() {
     }
   }
 
-  //minor change is implemented
   function goToPage(page: number) {
     setCurrentPage(Math.min(Math.max(1, page), totalPages));
   }

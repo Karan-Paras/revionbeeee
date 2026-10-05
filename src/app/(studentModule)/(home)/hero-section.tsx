@@ -20,7 +20,11 @@ export function HeroSection() {
     }
 
     router.push(
-      getPostLoginPath(session.user.userType, session.user.teacherProfileStatus)
+      getPostLoginPath(
+        session.user.userType,
+        session.user.teacherProfileStatus,
+        session.user.profileStatus
+      )
     );
   }
 
@@ -51,7 +55,7 @@ export function HeroSection() {
   return (
     <section
       id={paths.home.hero().split("#")[1]}
-      className="relative min-h-screen overflow-hidden bg-top lg:px-20 2xl:px-0"
+      className="relative min-h-[calc(100svh-72px)] overflow-hidden bg-top px-4 sm:min-h-[calc(100svh-82px)] lg:min-h-screen lg:px-20 2xl:px-0"
     >
       <video
         className="absolute top-0 left-0 z-[-1] h-full w-full object-cover"
@@ -62,12 +66,12 @@ export function HeroSection() {
         src={Hero}
       />
       <div className="container mx-auto">
-        <div className="grid min-h-screen grid-cols-2 content-center">
-          <div className="relative col-span-2 mx-auto w-10/12 text-center lg:w-8/12 xl:w-7/12 2xl:w-6/12">
+        <div className="grid min-h-[calc(100svh-72px)] grid-cols-2 content-center py-16 sm:min-h-[calc(100svh-82px)] lg:min-h-screen lg:py-20">
+          <div className="relative col-span-2 mx-auto w-full max-w-[680px] text-center sm:w-10/12 lg:w-8/12 xl:w-7/12 2xl:w-6/12">
             <motion.h1
               initial={{ y: 50, opacity: 0, x: 1 }}
               animate={controls}
-              className="mb-5 text-5xl font-bold text-white"
+              className="mb-4 text-[40px] leading-[1.06] font-bold text-white sm:mb-5 sm:text-5xl lg:text-6xl"
             >
               Buzzing with Knowledge
             </motion.h1>
@@ -75,7 +79,7 @@ export function HeroSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               custom="paragraph"
               animate={controls}
-              className="mb-5 text-lg font-normal text-white"
+              className="mx-auto mb-5 max-w-[620px] text-base leading-7 font-normal text-white sm:text-lg"
             >
               Empowering curious minds through engaging quizzes, smart study
               tools, and interactive learning experiences daily
@@ -83,7 +87,7 @@ export function HeroSection() {
 
             <button
               onClick={handleGetStarted}
-              className="group mx-auto flex cursor-pointer items-center gap-2 rounded-2xl border border-[#FBBE1B] px-8 py-4 text-[#FBBE1B] hover:bg-[#FBBE1B] hover:text-black"
+              className="group mx-auto flex cursor-pointer items-center gap-2 rounded-2xl border border-[#FBBE1B] px-6 py-3.5 text-sm font-semibold text-[#FBBE1B] hover:bg-[#FBBE1B] hover:text-black sm:px-8 sm:py-4 sm:text-base"
             >
               Get Started
               <span>

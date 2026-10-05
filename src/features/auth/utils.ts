@@ -2,7 +2,8 @@ import { paths } from "@/routes";
 
 export function getPostLoginPath(
   userType: unknown,
-  teacherProfileStatus?: unknown
+  teacherProfileStatus?: unknown,
+  profileStatus?: unknown
 ) {
   const normalizedUserType = String(userType ?? "").toLowerCase();
 
@@ -27,7 +28,9 @@ export function getPostLoginPath(
   }
 
   if (normalizedUserType === "student") {
-    return paths.dashboard();
+    return Number(profileStatus) === 1
+      ? paths.createProfile()
+      : paths.subscriptionPlans();
   }
 
   return paths.login();

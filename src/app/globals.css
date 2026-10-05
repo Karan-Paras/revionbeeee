@@ -109,6 +109,20 @@ body {
   @apply overflow-x-hidden scroll-smooth text-[#0b0b0b];
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-caps-lock-indicator,
+input[type="password"]::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
 .emoji {
   font-family: "Noto Color Emoji", sans-serif;
 }
@@ -190,6 +204,12 @@ body {
   background-color: #000;
   display: grid;
   align-content: center;
+}
+
+@media (max-width: 1023px) {
+  .hed_bg {
+    height: 72px;
+  }
 }
 
 .hed_bg::before {

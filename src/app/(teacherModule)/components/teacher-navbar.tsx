@@ -2,26 +2,27 @@
 
 import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { updateTeacherOnlineStatus } from "@/features/teacher/actions/update-online-status";
-import {
-  getTeacherNotifications,
-  markTeacherNotificationsRead,
-  type TeacherNotification,
-} from "@/features/teacher/api/get-notifications";
+import { useNotificationUnreadCount } from "@/hooks/use-notification-unread-count";
 import { getTeacherImageUrl } from "@/lib/media-urls";
+import { getSocket } from "@/lib/socket";
+import {
+  findTeacherStatusPayload,
+  getTeacherStatusId,
+  statusFromPayload,
+  type TeacherStatusPayload,
+} from "@/lib/teacher-status-socket";
 import { paths } from "@/routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Menu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { Socket } from "socket.io-client";
 import { toast } from "sonner";
 
 function resolveProfileImage(image: string) {
   return getTeacherImageUrl(image);
 }
-
-const NOTIFICATION_REFETCH_INTERVAL = 10_000;
 
 type CachedTeacherProfile = {
   name?: string;
@@ -55,7 +56,6 @@ function cacheProfile(email: string, profile: CachedTeacherProfile) {
 }
 
 export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
-  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [teacherName, setTeacherName] = useState("Teacher");
   const [teacherEmail, setTeacherEmail] = useState("");
@@ -63,36 +63,8 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const [isOnline, setIsOnline] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
-  const { mutate: markTeacherRead } = useMutation({
-    mutationFn: markTeacherNotificationsRead,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["teacher-notifications"] });
-    },
-  });
-
-  function handleMarkAllRead() {
-    queryClient.setQueriesData<TeacherNotification[]>(
-      { queryKey: ["teacher-notifications"] },
-      (current) => current?.map((n) => ({ ...n, unread: false }))
-    );
-    markTeacherRead(undefined, {
-      onError: () => {
-        /* ignore mark-read API failure */
-      },
-    });
-  }
-
-  const { data: notifications = [] } = useQuery({
-    queryKey: ["teacher-notifications"],
-    queryFn: getTeacherNotifications,
-    staleTime: 0,
-    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
-    refetchIntervalInBackground: true,
-    refetchOnMount: "always",
-    refetchOnReconnect: "always",
-    refetchOnWindowFocus: "always",
-  });
-  const unreadCount = notifications.filter((n) => n.unread).length;
+  const { unreadCount, markAllRead: handleMarkAllRead } =
+    useNotificationUnreadCount("teacher");
 
   useEffect(() => {
     const sessionName = session?.user?.name?.trim();
@@ -229,6 +201,84 @@ export function TeacherNavbar({ onMenuClick }: { onMenuClick?: () => void }) {
     month: "long",
     year: "numeric",
   }).format(new Date());
+
+  useEffect(() => {
+    if (session?.user?.userType !== "teacher") return;
+
+    const currentTeacherId = session.user.id;
+    if (!currentTeacherId) return;
+
+    const socket = getSocket(session.user.token);
+    if (!socket) return;
+    const teacherSocket = socket;
+
+    function applySocketStatus(isTeacherOnline: boolean) {
+      setIsOnline(isTeacherOnline);
+      cacheProfile(session?.user?.email?.trim() ?? "", {
+        isOnline: isTeacherOnline,
+      });
+      setIsUpdatingStatus(false);
+    }
+
+    function handleTeacherStatus(data: TeacherStatusPayload) {
+      console.log("Teacher status:", data);
+      const teacherId = getTeacherStatusId(data);
+      if (teacherId === undefined || teacherId !== currentTeacherId) {
+        return;
+      }
+
+      const nextStatus = statusFromPayload(data);
+      if (typeof nextStatus === "boolean") {
+        applySocketStatus(nextStatus);
+      }
+    }
+
+    function handleTeacherList(data: unknown) {
+      console.log("Teacher list:", data);
+      const payload = findTeacherStatusPayload(data, currentTeacherId);
+      if (!payload) return;
+
+      const nextStatus = statusFromPayload(payload);
+      if (typeof nextStatus === "boolean") {
+        applySocketStatus(nextStatus);
+      }
+    }
+
+    function handleConnect() {
+      console.log("Socket connected:", teacherSocket.id);
+    }
+
+    function handleDisconnect(reason: Socket.DisconnectReason) {
+      console.log("Socket disconnected:", reason);
+    }
+
+    function handleReconnect(attempt: number) {
+      console.log("Socket reconnected:", attempt);
+    }
+
+    teacherSocket.on("connect", handleConnect);
+    teacherSocket.on("disconnect", handleDisconnect);
+    teacherSocket.io.on("reconnect", handleReconnect);
+    teacherSocket.on("teacherStatus", handleTeacherStatus);
+    teacherSocket.on("teacherList", handleTeacherList);
+
+    if (!teacherSocket.connected) {
+      teacherSocket.connect();
+    }
+
+    return () => {
+      teacherSocket.off("connect", handleConnect);
+      teacherSocket.off("disconnect", handleDisconnect);
+      teacherSocket.io.off("reconnect", handleReconnect);
+      teacherSocket.off("teacherStatus", handleTeacherStatus);
+      teacherSocket.off("teacherList", handleTeacherList);
+    };
+  }, [
+    session?.user?.email,
+    session?.user?.id,
+    session?.user?.token,
+    session?.user?.userType,
+  ]);
 
   return (
     <header className="flex h-[86px] shrink-0 items-center justify-between border-b border-[#edf0f3] bg-white px-5 sm:px-8">
