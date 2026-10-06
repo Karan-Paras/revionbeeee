@@ -59,18 +59,6 @@ export default function StudentNotificationsPage() {
     refetchOnReconnect: "always",
     refetchOnWindowFocus: "always",
   });
-  //chacking the things
-  const { data: unreadCount = 0 } = useQuery({
-    queryKey: ["student-notifications-unread-count"],
-    queryFn: getStudentUnreadCount,
-    staleTime: 0,
-    refetchInterval: NOTIFICATION_REFETCH_INTERVAL,
-    refetchIntervalInBackground: true,
-    refetchOnMount: "always",
-    refetchOnReconnect: "always",
-    refetchOnWindowFocus: "always",
-  });
-
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(notifications.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
