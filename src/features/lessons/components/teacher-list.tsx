@@ -65,6 +65,7 @@ const durationOptions = [
   { value: "40", label: "40 minutes" },
   { value: "60", label: "60 minutes" },
 ] as const;
+const TEACHER_STATUS_REFETCH_INTERVAL = 10_000;
 
 export function TeacherList() {
   const router = useRouter();
@@ -82,9 +83,11 @@ export function TeacherList() {
   } = useQuery({
     queryKey: ["verified-teachers"],
     queryFn: getVerifiedTeachers,
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchInterval: TEACHER_STATUS_REFETCH_INTERVAL,
+    refetchIntervalInBackground: true,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
     refetchOnReconnect: true,
     retry: 1,
   });

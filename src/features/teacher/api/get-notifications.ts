@@ -117,6 +117,14 @@ function inferHref(record: ApiRecord): string {
   }
 
   if (
+    combined.includes("payment") ||
+    combined.includes("paid") ||
+    combined.includes("confirmed")
+  ) {
+    return "/teacher/bookings/accepted";
+  }
+
+  if (
     combined.includes("ended") ||
     combined.includes("completed") ||
     combined.includes("finished") ||
@@ -129,8 +137,7 @@ function inferHref(record: ApiRecord): string {
     combined.includes("starting soon") ||
     combined.includes("starting now") ||
     combined.includes("time has arrived") ||
-    combined.includes("please join") ||
-    combined.includes("payment")
+    combined.includes("please join")
   ) {
     return "/teacher/bookings/accepted";
   }

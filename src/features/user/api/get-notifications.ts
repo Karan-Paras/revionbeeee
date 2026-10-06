@@ -114,7 +114,10 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
     combined.includes("cancelled") ||
     combined.includes("canceled") ||
     combined.includes("rejected") ||
-    combined.includes("expired")
+    combined.includes("expired") ||
+    combined.includes("missed") ||
+    combined.includes("never started") ||
+    combined.includes("no show")
   ) {
     return "cancelled";
   }
@@ -124,6 +127,9 @@ function inferLessonTab(record: ApiRecord): StudentNotification["lessonTab"] {
     combined.includes("payment success") ||
     combined.includes("payment done") ||
     combined.includes("paid") ||
+    combined.includes("starting soon") ||
+    combined.includes("starts in") ||
+    combined.includes("time has arrived") ||
     combined.includes("session started") ||
     combined.includes("join now") ||
     combined.includes("class started")

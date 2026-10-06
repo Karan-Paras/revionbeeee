@@ -63,6 +63,7 @@ const tabValues = tabs.map((tab) => tab.value);
 const upcomingLessonsCacheKey = "revision-bee:student-upcoming-lessons";
 const upcomingLessonCacheLifetime = 6 * 60 * 60 * 1000;
 const paidLessonRedirectKey = "revision-bee:paid-lesson-redirects";
+const LESSON_STATUS_REFETCH_INTERVAL = 10_000;
 
 type CachedUpcomingLessons = { savedAt: number; lessons: MyBooking[] };
 
@@ -368,11 +369,12 @@ export function MyLessonsList() {
     queryKey: ["my-bookings", activeTab, query.trim()],
     queryFn: () =>
       getMyBookings({ filter: activeTab, search: query.trim(), perPage: 8 }),
-    staleTime: activeTab === "upcoming" ? 30 * 1000 : 2 * 60 * 1000,
-    refetchInterval: activeTab === "upcoming" ? 30_000 : false,
+    staleTime: activeTab === "upcoming" ? 0 : 2 * 60 * 1000,
+    refetchInterval:
+      activeTab === "upcoming" ? LESSON_STATUS_REFETCH_INTERVAL : false,
     refetchIntervalInBackground: false,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    refetchOnMount: activeTab === "upcoming" ? "always" : false,
+    refetchOnWindowFocus: activeTab === "upcoming",
     refetchOnReconnect: true,
   });
 
