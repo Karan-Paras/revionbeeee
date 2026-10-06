@@ -12,6 +12,7 @@ interface SubscriptionProps {
   callback?: string;
   display?: boolean;
   showFreePlan?: boolean;
+  disableFreePlan?: boolean;
 }
 
 export function SubscriptionPlans({
@@ -21,6 +22,7 @@ export function SubscriptionPlans({
   callback,
   display,
   showFreePlan = true,
+  disableFreePlan = false,
 }: SubscriptionProps) {
   return PLANS.filter(
     (plan) => showFreePlan || plan.type !== SubscriptionType.FREE
@@ -33,6 +35,7 @@ export function SubscriptionPlans({
       activePlan={activePlan}
       callback={callback}
       display={display}
+      disabled={disableFreePlan && plan.type === SubscriptionType.FREE}
     />
   ));
 }

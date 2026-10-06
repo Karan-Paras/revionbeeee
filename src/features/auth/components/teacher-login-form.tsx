@@ -18,15 +18,33 @@ type TeacherLoginFormProps = {
   userType?: "student" | "teacher";
 };
 
+const rememberedLoginKeyPrefix = "revision-bee:remember-login";
+
 export function TeacherLoginForm({
   userType = "student",
 }: TeacherLoginFormProps) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState<string>();
   const [passwordError, setPasswordError] = useState<string>();
   const [formState, action, isPending] = useActionState(login, { errors: {} });
   const formErrors = formState?.errors ?? {};
+
+  useEffect(() => {
+    const rememberedEmail = window.localStorage.getItem(
+      `${rememberedLoginKeyPrefix}:${userType}`
+    );
+
+    if (rememberedEmail) {
+      setEmailValue(rememberedEmail);
+      setRememberMe(true);
+    } else {
+      setEmailValue("");
+      setRememberMe(false);
+    }
+  }, [userType]);
 
   useEffect(() => {
     if (!formState?.success) return;
@@ -78,6 +96,15 @@ export function TeacherLoginForm({
       return;
     }
 
+    if (rememberMe) {
+      window.localStorage.setItem(
+        `${rememberedLoginKeyPrefix}:${userType}`,
+        parsedEmail.data
+      );
+    } else {
+      window.localStorage.removeItem(`${rememberedLoginKeyPrefix}:${userType}`);
+    }
+
     startTransition(() => action(formData));
   }
 
@@ -107,9 +134,11 @@ export function TeacherLoginForm({
             disabled={isPending}
             autoComplete="email"
             placeholder="john@example.com"
+            value={emailValue}
             aria-invalid={!!emailError}
             aria-describedby={emailError ? "teacher-email-error" : undefined}
             onChange={(event) => {
+              setEmailValue(event.currentTarget.value);
               const result = emailSchema.safeParse(event.currentTarget.value);
               setEmailError(
                 result.success ? undefined : result.error.issues[0]?.message
@@ -190,6 +219,8 @@ export function TeacherLoginForm({
           <input
             type="checkbox"
             name="remember"
+            checked={rememberMe}
+            onChange={(event) => setRememberMe(event.currentTarget.checked)}
             className="h-4 w-4 rounded border-[#aeb3bb] accent-[#56a5e9]"
           />
           Remember me

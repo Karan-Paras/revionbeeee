@@ -31,7 +31,7 @@ export function SubscriptionModal() {
           <p>Unlock more features with premium access.</p>
         </div>
         <div className="mt-10 grid grid-cols-3 gap-5">
-          <SubscriptionPlans variant="compact" showFreePlan={false} />
+          <SubscriptionPlans variant="compact" disableFreePlan />
         </div>
       </div>
     </Modal>

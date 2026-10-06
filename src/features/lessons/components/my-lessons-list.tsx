@@ -459,6 +459,13 @@ export function MyLessonsList() {
   const isRejected = (status: string) =>
     ["rejected", "cancelled", "canceled"].includes(status.trim().toLowerCase());
 
+  const getCancelledStatusLabel = (status: string) => {
+    const normalizedStatus = status.trim().toLowerCase();
+    return ["cancelled", "canceled"].includes(normalizedStatus)
+      ? "Canceled"
+      : "Rejected";
+  };
+
   const allLessons =
     activeTab === "upcoming" && !query.trim()
       ? [...fetchedLessons, ...retainedUpcoming]
@@ -541,6 +548,9 @@ export function MyLessonsList() {
             {lessons.map((lesson) => {
               const isInstant =
                 lesson.bookingType.trim().toLowerCase() === "instant";
+              const cancelledStatusLabel = getCancelledStatusLabel(
+                lesson.status
+              );
               const canJoin =
                 !isRejected(lesson.status) &&
                 isSessionWindowOpen({
@@ -603,7 +613,7 @@ export function MyLessonsList() {
                       >
                         {activeTab === "cancelled" ? (
                           <>
-                            <X size={11} /> Rejected
+                            <X size={11} /> {cancelledStatusLabel}
                           </>
                         ) : activeTab === "accepted" ? (
                           <>
@@ -629,7 +639,10 @@ export function MyLessonsList() {
                   {activeTab === "cancelled" && (
                     <div className="mt-3 rounded-md border border-[#ffd1d5] bg-[#fff5f6] px-3 py-2">
                       <p className="text-[10px] font-semibold text-[#d93645]">
-                        Reason for rejection
+                        Reason for{" "}
+                        {cancelledStatusLabel === "Canceled"
+                          ? "cancellation"
+                          : "rejection"}
                       </p>
                       <p className="mt-1 text-[10px] leading-4 text-[#7c5559]">
                         {lesson.rejectionReason ||

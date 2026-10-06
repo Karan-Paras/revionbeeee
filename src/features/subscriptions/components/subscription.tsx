@@ -28,6 +28,7 @@ interface SubscriptionProps {
   activePlan?: SubscriptionType;
   callback?: string;
   display?: boolean;
+  disabled?: boolean;
 }
 
 export function Subscription({
@@ -37,6 +38,7 @@ export function Subscription({
   activePlan,
   callback,
   display,
+  disabled = false,
 }: SubscriptionProps) {
   const router = useRouter();
 
@@ -67,7 +69,7 @@ export function Subscription({
   };
 
   async function handleCheckout() {
-    if (display) {
+    if (display || disabled) {
       return;
     }
 
@@ -146,7 +148,7 @@ export function Subscription({
               <div className="btn mt-14">
                 <Button
                   onClick={handleCheckout}
-                  disabled={mutation.isPending}
+                  disabled={mutation.isPending || disabled}
                   variant="rounded"
                 >
                   Choose This Plan
@@ -165,7 +167,8 @@ export function Subscription({
         <div
           className={cn(
             "crd rounded-xl border border-[#DADADA] px-6 py-7 lg:min-h-[490px]",
-            isCurrent && "relative"
+            isCurrent && "relative",
+            disabled && "opacity-40"
           )}
         >
           {isCurrent && (
@@ -208,7 +211,7 @@ export function Subscription({
             className="mt-4"
             variant="rounded"
             onClick={handleCheckout}
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || disabled}
           >
             Upgrade Plan
           </Button>

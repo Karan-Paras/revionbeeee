@@ -19,11 +19,11 @@ export function SharedLoginPage({
   const signupHref = isTeacher ? paths.teacherSignup() : paths.studentSignup();
 
   return (
-    <main className="h-dvh w-full overflow-hidden bg-[#f4f4f4]">
-      <div className="grid h-full w-full lg:grid-cols-2">
-        <section className="flex h-full items-center justify-center overflow-hidden px-4 py-3 sm:px-10">
+    <main className="min-h-dvh w-full overflow-y-auto bg-[#f4f4f4] lg:h-dvh lg:overflow-hidden">
+      <div className="grid min-h-dvh w-full lg:h-full lg:min-h-0 lg:grid-cols-2">
+        <section className="flex min-h-dvh items-start justify-center px-4 py-6 sm:px-8 sm:py-8 lg:h-full lg:min-h-0 lg:items-center lg:overflow-y-auto lg:px-10 lg:py-6">
           <div className="w-full max-w-[475px]">
-            <div className="mb-4">
+            <div className="mb-5 sm:mb-6 lg:mb-4">
               <Link
                 href={paths.home()}
                 className="inline-flex items-center gap-1.5 text-sm text-[#555] hover:text-[#499ff0] transition-colors"
@@ -32,11 +32,11 @@ export function SharedLoginPage({
                 Back
               </Link>
             </div>
-            <div className="mb-3 flex justify-center">
+            <div className="mb-3 flex justify-center sm:mb-4 lg:mb-3">
               <RevisionBee width={54} height={65} />
             </div>
-            <div className="mb-5 text-center">
-              <h1 className="text-2xl font-bold tracking-tight text-black sm:text-[30px]">
+            <div className="mb-5 text-center sm:mb-6 lg:mb-5">
+              <h1 className="text-2xl font-bold tracking-tight text-black sm:text-[30px] sm:leading-tight">
                 Welcome to Revision Bee
               </h1>
               <p className="mt-2 text-xs text-[#777] sm:text-sm">
