@@ -1,6 +1,6 @@
 import { RevisionBee } from "@/assets/icons";
 import { paths } from "@/routes";
-import { ArrowLeft, GraduationCap, School } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 type RoleSelectionPageProps = {
@@ -14,19 +14,11 @@ export default function LoginCommonPage({
   const roles = [
     {
       title: "Student",
-      description: isSignup
-        ? "Create your student account and start learning"
-        : "Continue learning and track your progress",
       href: isSignup ? paths.studentSignup() : paths.studentLogin(),
-      icon: GraduationCap,
     },
     {
       title: "Teacher",
-      description: isSignup
-        ? "Create your teacher account and start teaching"
-        : "Manage your classes and support your students",
       href: isSignup ? paths.teacherSignup() : paths.teacherLogin(),
-      icon: School,
     },
   ] as const;
 
@@ -67,26 +59,14 @@ export default function LoginCommonPage({
           account.
         </p>
 
-        <div className="mt-9 grid gap-4 sm:grid-cols-2">
-          {roles.map(({ title, description, href, icon: Icon }, index) => (
+        <div className="mx-auto mt-9 grid max-w-md grid-cols-2 rounded-xl bg-[#f2f5f8] p-1.5">
+          {roles.map(({ title, href }) => (
             <Link
               key={title}
               href={href}
-              className="group flex min-h-44 flex-col items-center justify-center rounded-2xl border border-[#e5e7eb] bg-white px-5 py-6 transition duration-200 hover:-translate-y-1 hover:border-[#53a2eb] hover:shadow-[0_14px_32px_rgba(83,162,235,0.16)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#53a2eb]"
+              className="grid h-12 place-items-center rounded-lg bg-white text-sm font-semibold text-[#1b1613] shadow-sm transition hover:bg-[#53a2eb] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#53a2eb]"
             >
-              <span
-                className={`mb-4 grid h-14 w-14 place-items-center rounded-2xl transition-transform duration-200 group-hover:scale-105 ${
-                  index === 0
-                    ? "bg-[#53a2eb]/12 text-[#398edc]"
-                    : "bg-[#fbbe1b]/18 text-[#d79700]"
-                }`}
-              >
-                <Icon aria-hidden="true" size={30} strokeWidth={1.8} />
-              </span>
-              <span className="text-lg font-bold text-[#1b1613]">{title}</span>
-              <span className="mt-1.5 text-sm leading-5 text-[#6b7280]">
-                {description}
-              </span>
+              {title}
             </Link>
           ))}
         </div>

@@ -8,13 +8,18 @@ import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/actions/login";
 import { DeviceTokenField } from "@/features/auth/components/device-token-field";
 import { getPostLoginPath } from "@/features/auth/utils";
+import { hasSelectedFreeTrial } from "@/features/subscriptions/utils";
 import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
 
-export function LoginForm() {
+type LoginFormProps = {
+  userType?: "student" | "teacher";
+};
+
+export function LoginForm({ userType = "student" }: LoginFormProps) {
   const router = useRouter();
   const [emailError, setEmailError] = useState<string>();
 
@@ -29,12 +34,18 @@ export function LoginForm() {
         getPostLoginPath(
           formState.userType,
           formState.teacherProfileStatus,
-          formState.profileStatus
+          formState.profileStatus,
+          formState.isSubscribed,
+          formState.createdAt,
+          hasSelectedFreeTrial(formState.userId)
         )
       );
     }
   }, [
     formState?.profileStatus,
+    formState?.createdAt,
+    formState?.isSubscribed,
+    formState?.userId,
     formState?.success,
     formState?.teacherProfileStatus,
     formState?.userType,
@@ -61,6 +72,7 @@ export function LoginForm() {
     <div className="spc_frm mt-9">
       <form onSubmit={handleFormSubmit}>
         <DeviceTokenField />
+        <input type="hidden" name="userType" value={userType} />
         <div className="itm relative mb-3.5">
           <FormLabel htmlFor="email">Email address</FormLabel>
           <Input

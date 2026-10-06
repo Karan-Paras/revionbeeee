@@ -2,13 +2,15 @@
 
 import { BackLink } from "@/components/common/back-link";
 import { addTeacherQualification as submitTeacherQualification } from "@/features/teacher/actions/add-qualification";
+import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { AddTeacherQualificationSchema } from "@/features/teacher/schemas";
 import { useQualificationStore } from "@/features/teacher/stores/use-qualification-store";
+import { getTeacherCertificationUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import { GraduationCap, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 const selectClassName =
   "h-12 w-full appearance-none rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#111] outline-none transition focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
@@ -19,6 +21,9 @@ const inputClassName =
 export default function TeacherEducation() {
   const router = useRouter();
   const qualifications = useQualificationStore((state) => state.qualifications);
+  const setQualifications = useQualificationStore(
+    (state) => state.setQualifications
+  );
   const removeQualification = useQualificationStore(
     (state) => state.removeQualification
   );
@@ -27,6 +32,7 @@ export default function TeacherEducation() {
   );
 
   const [showForm, setShowForm] = useState(true);
+  const [isLoadingQualifications, setIsLoadingQualifications] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
@@ -42,6 +48,69 @@ export default function TeacherEducation() {
     url: string;
   }>();
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadSavedQualifications() {
+      setIsLoadingQualifications(true);
+      setSubmitError("");
+      const result = await getTeacherProfileDetail();
+      if (!isCurrent) return;
+
+      if (!result.success) {
+        setSubmitError(result.error);
+        setIsLoadingQualifications(false);
+        return;
+      }
+
+      setQualifications(
+        (result.data.qualifications ?? []).map((item, index) => {
+          const record = item as Record<string, unknown>;
+          const documentValue = String(
+            record.degreeDocument ??
+              record.degree_document ??
+              record.document ??
+              record.documentUrl ??
+              record.document_url ??
+              ""
+          );
+          const documentName =
+            documentValue.split(/[\\/]/).pop() || "Degree document";
+
+          return {
+            id: String(record.id ?? `qualification-${index}`),
+            institution: String(
+              item.institutionName ?? item.institution_name ?? ""
+            ),
+            degree: String(item.degree ?? ""),
+            fieldOfStudy: String(
+              item.fieldOfStudy ?? item.field_of_study ?? ""
+            ),
+            graduationYear: String(
+              item.graduationYear ?? item.graduation_year ?? ""
+            ),
+            documentName: documentValue ? documentName : undefined,
+            documentType: documentValue.match(/\.(png|jpe?g|webp|gif)$/i)
+              ? "image/*"
+              : documentValue
+                ? "application/pdf"
+                : undefined,
+            documentUrl: documentValue
+              ? getTeacherCertificationUrl(documentValue)
+              : undefined,
+          };
+        })
+      );
+      setIsLoadingQualifications(false);
+    }
+
+    void loadSavedQualifications();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [setQualifications]);
 
   function handleRemoveQualification(id: string) {
     removeQualification(id);
@@ -139,65 +208,78 @@ export default function TeacherEducation() {
             </div>
 
             {/* Qualifications list */}
-            {qualifications.length > 0 && (
-              <div className="mt-6 max-h-[min(280px,32vh)] space-y-3 overflow-x-hidden overflow-y-auto pr-2">
-                {qualifications.map((qualification) => (
-                  <article
-                    key={qualification.id}
-                    className="relative flex min-w-0 gap-3 rounded-xl bg-white p-3 pr-9 shadow-sm"
-                  >
-                    <div className="relative grid h-20 w-24 shrink-0 place-items-center overflow-hidden rounded-lg border border-[#f0d6d6] bg-[#fff8f8] text-center">
-                      {qualification.documentUrl &&
-                      qualification.documentType?.startsWith("image/") ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={qualification.documentUrl}
-                          alt={qualification.documentName ?? "Degree document"}
-                          className="h-full w-full object-contain p-1"
-                        />
-                      ) : (
-                        <div className="min-w-0 px-1">
-                          <GraduationCap
-                            size={25}
-                            className="mx-auto text-[#233f75]"
-                          />
-                          <span className="mt-1 block truncate text-[8px] tracking-wide text-[#b15a5a]">
-                            {qualification.documentName ?? "CERTIFICATE"}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <dl className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_minmax(0,auto)] gap-x-3 gap-y-1 text-[10px]">
-                      <dt className="text-[#666]">Institution Name</dt>
-                      <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
-                        {qualification.institution}
-                      </dd>
-                      <dt className="text-[#666]">Degree</dt>
-                      <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
-                        {qualification.degree}
-                      </dd>
-                      <dt className="text-[#666]">Field of Study</dt>
-                      <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
-                        {qualification.fieldOfStudy}
-                      </dd>
-                      <dt className="text-[#666]">Graduation Year</dt>
-                      <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
-                        {qualification.graduationYear}
-                      </dd>
-                    </dl>
-                    <button
-                      type="button"
-                      aria-label="Remove qualification"
-                      onClick={() =>
-                        handleRemoveQualification(qualification.id)
-                      }
-                      className="absolute top-2 right-2 grid h-5 w-5 place-items-center rounded-full bg-[#ff3547] text-white"
-                    >
-                      <X size={12} strokeWidth={3} />
-                    </button>
-                  </article>
+            {isLoadingQualifications ? (
+              <div className="mt-6 space-y-3">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-24 animate-pulse rounded-xl bg-white"
+                  />
                 ))}
               </div>
+            ) : (
+              qualifications.length > 0 && (
+                <div className="mt-6 max-h-[min(280px,32vh)] space-y-3 overflow-x-hidden overflow-y-auto pr-2">
+                  {qualifications.map((qualification) => (
+                    <article
+                      key={qualification.id}
+                      className="relative flex min-w-0 gap-3 rounded-xl bg-white p-3 pr-9 shadow-sm"
+                    >
+                      <div className="relative grid h-20 w-24 shrink-0 place-items-center overflow-hidden rounded-lg border border-[#f0d6d6] bg-[#fff8f8] text-center">
+                        {qualification.documentUrl &&
+                        qualification.documentType?.startsWith("image/") ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={qualification.documentUrl}
+                            alt={
+                              qualification.documentName ?? "Degree document"
+                            }
+                            className="h-full w-full object-contain p-1"
+                          />
+                        ) : (
+                          <div className="min-w-0 px-1">
+                            <GraduationCap
+                              size={25}
+                              className="mx-auto text-[#233f75]"
+                            />
+                            <span className="mt-1 block truncate text-[8px] tracking-wide text-[#b15a5a]">
+                              {qualification.documentName ?? "CERTIFICATE"}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <dl className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_minmax(0,auto)] gap-x-3 gap-y-1 text-[10px]">
+                        <dt className="text-[#666]">Institution Name</dt>
+                        <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
+                          {qualification.institution}
+                        </dd>
+                        <dt className="text-[#666]">Degree</dt>
+                        <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
+                          {qualification.degree}
+                        </dd>
+                        <dt className="text-[#666]">Field of Study</dt>
+                        <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
+                          {qualification.fieldOfStudy}
+                        </dd>
+                        <dt className="text-[#666]">Graduation Year</dt>
+                        <dd className="max-w-32 truncate text-right font-semibold text-[#111]">
+                          {qualification.graduationYear}
+                        </dd>
+                      </dl>
+                      <button
+                        type="button"
+                        aria-label="Remove qualification"
+                        onClick={() =>
+                          handleRemoveQualification(qualification.id)
+                        }
+                        className="absolute top-2 right-2 grid h-5 w-5 place-items-center rounded-full bg-[#ff3547] text-white"
+                      >
+                        <X size={12} strokeWidth={3} />
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              )
             )}
 
             {/* Inline add-qualification form */}
@@ -430,7 +512,9 @@ export default function TeacherEducation() {
             <div className="mt-6 space-y-3">
               <button
                 type="button"
-                disabled={qualifications.length === 0}
+                disabled={
+                  isLoadingQualifications || qualifications.length === 0
+                }
                 onClick={() => router.push(paths.teacherCertifications())}
                 className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-medium text-white transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:bg-[#d2d2d2] disabled:text-[#777]"
               >

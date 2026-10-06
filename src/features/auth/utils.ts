@@ -1,9 +1,16 @@
+import {
+  isFreeTrialActive,
+  isUserSubscribed,
+} from "@/features/subscriptions/utils";
 import { paths } from "@/routes";
 
 export function getPostLoginPath(
   userType: unknown,
   teacherProfileStatus?: unknown,
-  profileStatus?: unknown
+  profileStatus?: unknown,
+  isSubscribed?: unknown,
+  createdAt?: string | null,
+  hasSelectedFreeTrial = false
 ) {
   const normalizedUserType = String(userType ?? "").toLowerCase();
 
@@ -28,9 +35,18 @@ export function getPostLoginPath(
   }
 
   if (normalizedUserType === "student") {
-    return Number(profileStatus) === 1
-      ? paths.createProfile()
-      : paths.subscriptionPlans();
+    if (Number(profileStatus) === 1) {
+      return paths.createProfile();
+    }
+
+    if (
+      isUserSubscribed(isSubscribed) ||
+      (hasSelectedFreeTrial && isFreeTrialActive(createdAt))
+    ) {
+      return paths.dashboard();
+    }
+
+    return paths.subscriptionPlans();
   }
 
   return paths.login();

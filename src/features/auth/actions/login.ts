@@ -10,9 +10,12 @@ type LoginFormState = {
     _form?: string[];
   };
   success?: boolean;
+  userId?: string | number;
   userType?: "student" | "teacher";
   profileStatus?: number;
   teacherProfileStatus?: number;
+  isSubscribed?: unknown;
+  createdAt?: string | null;
 };
 
 export const login = async (
@@ -22,6 +25,7 @@ export const login = async (
   const validatedFields = LoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    userType: formData.get("userType"),
   });
 
   if (!validatedFields.success) {
@@ -64,9 +68,12 @@ export const login = async (
   return {
     errors: {},
     success: true,
+    userId: json.data.id,
     userType: json.data.userType,
     profileStatus: json.data.profileStatus ?? json.data.profile_status,
     teacherProfileStatus:
       json.data.teacherProfileStatus ?? json.data.teacher_profile_status,
+    isSubscribed: json.data.isSubscribed,
+    createdAt: json.data.created_at,
   };
 };

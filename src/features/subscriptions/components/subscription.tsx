@@ -8,10 +8,15 @@ import {
   type SubscriptionVariants,
   SubscriptionType,
 } from "@/features/subscriptions/types";
+import {
+  getFreeTrialExpiryDate,
+  isFreeTrialActive,
+  markFreeTrialSelected,
+} from "@/features/subscriptions/utils";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { cn } from "@/lib/utils";
 import { paths } from "@/routes";
-import { addDays, differenceInCalendarDays, isFuture } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 import { getSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
@@ -51,18 +56,10 @@ export function Subscription({
         return "3 days free trial";
       }
       if (isPending) return <Skeleton width={100} />;
-      const createdAt = profile?.data.created_at;
+      if (!isFreeTrialActive(profile?.data.created_at)) return "Expired";
 
-      if (!createdAt) return "Expired";
-
-      const createdDate = new Date(createdAt);
-      // the free plan lasts for 3 days from the creation date
-      const expiryDate = addDays(createdDate, 3);
-
-      const now = new Date();
-      if (!isFuture(expiryDate)) return "Expired";
-
-      const remainingDays = differenceInCalendarDays(expiryDate, now);
+      const expiryDate = getFreeTrialExpiryDate(profile?.data.created_at);
+      const remainingDays = differenceInCalendarDays(expiryDate!, new Date());
       return `${remainingDays} day${remainingDays > 1 ? "s" : ""} left`;
     }
 
@@ -96,6 +93,7 @@ export function Subscription({
         });
         break;
       case SubscriptionType.FREE:
+        markFreeTrialSelected(profile?.data.id);
         router.push(href);
         break;
       default:

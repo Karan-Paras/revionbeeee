@@ -15,6 +15,9 @@ export function SharedLoginPage({
   socialError,
   userType = "student",
 }: SharedLoginPageProps) {
+  const isTeacher = userType === "teacher";
+  const signupHref = isTeacher ? paths.teacherSignup() : paths.studentSignup();
+
   return (
     <main className="h-dvh w-full overflow-hidden bg-[#f4f4f4]">
       <div className="grid h-full w-full lg:grid-cols-2">
@@ -40,7 +43,31 @@ export function SharedLoginPage({
                 Sign in to continue to your account.
               </p>
             </div>
-            <TeacherLoginForm />
+            <div className="mb-5 grid grid-cols-2 rounded-xl bg-white p-1 shadow-sm">
+              <Link
+                href={paths.studentLogin()}
+                aria-current={!isTeacher ? "page" : undefined}
+                className={`grid h-11 place-items-center rounded-lg text-sm font-semibold transition ${
+                  !isTeacher
+                    ? "bg-[#53a2eb] text-white shadow-[0_8px_20px_rgba(83,162,235,0.18)]"
+                    : "text-[#667085] hover:bg-[#f2f7fc] hover:text-[#398edc]"
+                }`}
+              >
+                Student
+              </Link>
+              <Link
+                href={paths.teacherLogin()}
+                aria-current={isTeacher ? "page" : undefined}
+                className={`grid h-11 place-items-center rounded-lg text-sm font-semibold transition ${
+                  isTeacher
+                    ? "bg-[#53a2eb] text-white shadow-[0_8px_20px_rgba(83,162,235,0.18)]"
+                    : "text-[#667085] hover:bg-[#f2f7fc] hover:text-[#398edc]"
+                }`}
+              >
+                Teacher
+              </Link>
+            </div>
+            <TeacherLoginForm userType={userType} />
             <SocialRegisterButtons
               mode="login"
               userType={userType}
@@ -49,7 +76,7 @@ export function SharedLoginPage({
             <p className="mt-5 text-center text-sm text-[#555]">
               Not registered yet?{" "}
               <Link
-                href={paths.signup()}
+                href={signupHref}
                 className="font-semibold text-[#499ff0] underline underline-offset-2"
               >
                 Sign Up

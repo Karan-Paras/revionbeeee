@@ -69,6 +69,7 @@ export const RegisterSchema = z
 export const LoginSchema = z.object({
   email,
   password: newPassword,
+  userType: z.enum(["student", "teacher"]),
 });
 
 export const ForgotPasswordSchema = z.object({

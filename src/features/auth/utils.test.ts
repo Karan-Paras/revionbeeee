@@ -19,7 +19,30 @@ describe("getPostLoginPath", () => {
     expect(getPostLoginPath("student", undefined, 1)).toBe("/create-profile");
   });
 
-  it("routes students with profile status 2 to subscription plans", () => {
+  it("routes students with active free trial to dashboard", () => {
+    expect(
+      getPostLoginPath(
+        "student",
+        undefined,
+        2,
+        0,
+        new Date().toISOString(),
+        true
+      )
+    ).toBe("/dashboard");
+  });
+
+  it("routes students without selected free trial to subscription plans", () => {
+    expect(
+      getPostLoginPath("student", undefined, 2, 0, new Date().toISOString())
+    ).toBe("/subscription-plans");
+  });
+
+  it("routes subscribed students to dashboard", () => {
+    expect(getPostLoginPath("student", undefined, 2, 1)).toBe("/dashboard");
+  });
+
+  it("routes students with expired free trial to subscription plans", () => {
     expect(getPostLoginPath("student", undefined, 2)).toBe(
       "/subscription-plans"
     );

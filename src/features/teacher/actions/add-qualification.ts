@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_update } from "@/auth";
+import { getTeacherProfileStatusFromResponse } from "@/features/teacher/actions/profile-status";
 import { addTeacherQualification as addTeacherQualificationApi } from "@/features/teacher/api/add-qualification";
 import { AddTeacherQualificationSchema } from "@/features/teacher/schemas";
 
@@ -44,7 +46,24 @@ export async function addTeacherQualification(
   }
 
   try {
-    await addTeacherQualificationApi(validatedFields.data);
+    const response = await addTeacherQualificationApi(validatedFields.data);
+    const teacherProfileStatus = getTeacherProfileStatusFromResponse(
+      response.data
+    );
+    try {
+      if (teacherProfileStatus !== undefined) {
+        await unstable_update({
+          user: {
+            teacherProfileStatus,
+          },
+        });
+      }
+    } catch (sessionError) {
+      console.error(
+        "Teacher qualification was saved, but session refresh failed:",
+        sessionError
+      );
+    }
     return {
       success: true,
       qualification: {

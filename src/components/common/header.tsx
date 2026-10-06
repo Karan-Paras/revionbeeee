@@ -13,6 +13,7 @@ import { useGetProfile } from "@/features/user/queries/use-get-profile";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { getPostLoginPath } from "@/features/auth/utils";
+import { hasSelectedFreeTrial } from "@/features/subscriptions/utils";
 import { paths } from "@/routes";
 import dynamic from "next/dynamic";
 
@@ -67,7 +68,10 @@ export function Header({ variant = "dashboard" }: HeaderProps) {
         const dashboardPath = getPostLoginPath(
           user.userType,
           user.teacherProfileStatus,
-          user.profileStatus
+          user.profileStatus,
+          user.isSubscribed,
+          user.created_at,
+          hasSelectedFreeTrial(user.id)
         );
 
         return (

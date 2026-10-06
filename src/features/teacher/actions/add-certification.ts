@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_update } from "@/auth";
+import { getTeacherProfileStatusFromResponse } from "@/features/teacher/actions/profile-status";
 import { addTeacherCertification as addTeacherCertificationApi } from "@/features/teacher/api/add-certification";
 import { AddTeacherCertificationSchema } from "@/features/teacher/schemas";
 
@@ -29,7 +31,24 @@ export async function addTeacherCertification(
   }
 
   try {
-    await addTeacherCertificationApi(validatedFields.data);
+    const response = await addTeacherCertificationApi(validatedFields.data);
+    const teacherProfileStatus = getTeacherProfileStatusFromResponse(
+      response.data
+    );
+    try {
+      if (teacherProfileStatus !== undefined) {
+        await unstable_update({
+          user: {
+            teacherProfileStatus,
+          },
+        });
+      }
+    } catch (sessionError) {
+      console.error(
+        "Teacher certification was saved, but session refresh failed:",
+        sessionError
+      );
+    }
     return { success: true };
   } catch (error: unknown) {
     return {

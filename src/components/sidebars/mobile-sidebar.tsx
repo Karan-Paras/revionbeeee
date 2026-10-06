@@ -16,6 +16,7 @@ import { Menu, X } from "lucide-react";
 
 import { useLogoutModal } from "@/features/auth/stores/use-logout-modal";
 import { getPostLoginPath } from "@/features/auth/utils";
+import { hasSelectedFreeTrial } from "@/features/subscriptions/utils";
 import { paths } from "@/routes";
 
 interface MobileSidebarProps {
@@ -108,7 +109,10 @@ export function MobileSidebar({
                           href={getPostLoginPath(
                             session.user.userType,
                             session.user.teacherProfileStatus,
-                            session.user.profileStatus
+                            session.user.profileStatus,
+                            session.user.isSubscribed,
+                            session.user.created_at,
+                            hasSelectedFreeTrial(session.user.id)
                           )}
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
@@ -126,7 +130,14 @@ export function MobileSidebar({
                         </Link>
                       ) : (
                         <Link
-                          href={paths.subscriptionPlans()}
+                          href={getPostLoginPath(
+                            session.user.userType,
+                            session.user.teacherProfileStatus,
+                            session.user.profileStatus,
+                            session.user.isSubscribed,
+                            session.user.created_at,
+                            hasSelectedFreeTrial(session.user.id)
+                          )}
                           className="mt-4 mb-3 block w-full rounded-xl border-2 border-[#53A2EB] px-4 py-2 text-center font-semibold text-[#53A2EB] transition hover:bg-[#53A2EB] hover:text-white lg:mb-0"
                         >
                           Go to Dashboard

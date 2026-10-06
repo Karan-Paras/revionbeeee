@@ -45,6 +45,21 @@ export default async function TeacherSignup({
                 Create an account by filling in the information below
               </p>
             </div>
+            <div className="mb-4 grid grid-cols-2 rounded-xl bg-white p-1 shadow-sm">
+              <Link
+                href={paths.studentSignup()}
+                className="grid h-11 place-items-center rounded-lg text-sm font-semibold text-[#667085] transition hover:bg-[#f2f7fc] hover:text-[#398edc]"
+              >
+                Student
+              </Link>
+              <Link
+                href={paths.teacherSignup()}
+                aria-current="page"
+                className="grid h-11 place-items-center rounded-lg bg-[#53a2eb] text-sm font-semibold text-white shadow-[0_8px_20px_rgba(83,162,235,0.18)] transition"
+              >
+                Teacher
+              </Link>
+            </div>
             <RegisterForm
               compact
               signInHref={paths.teacherLogin()}

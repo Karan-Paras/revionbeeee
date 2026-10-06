@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_update } from "@/auth";
+import { getTeacherProfileStatusFromResponse } from "@/features/teacher/actions/profile-status";
 import type { TeacherProfileDetail } from "@/features/teacher/api/get-profile-detail";
 import { getTeacherProfileDetail as getTeacherProfileDetailApi } from "@/features/teacher/api/get-profile-detail";
 
@@ -233,6 +235,22 @@ export async function getTeacherProfileDetail(
       availabilities:
         (availabilities as TeacherProfileDetail["availabilities"]) ?? [],
     };
+    const teacherProfileStatus = getTeacherProfileStatusFromResponse(result);
+
+    if (teacherProfileStatus !== undefined) {
+      try {
+        await unstable_update({
+          user: {
+            teacherProfileStatus,
+          },
+        });
+      } catch (sessionError) {
+        console.error(
+          "Teacher profile detail loaded, but session refresh failed:",
+          sessionError
+        );
+      }
+    }
 
     return { success: true, data: normalizedData };
   } catch (error: unknown) {

@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_update } from "@/auth";
+import { getTeacherProfileStatusFromResponse } from "@/features/teacher/actions/profile-status";
 import { addTeacherAvailability as addTeacherAvailabilityApi } from "@/features/teacher/api/add-availability";
 import { AddTeacherAvailabilitySchema } from "@/features/teacher/schemas";
 import { revalidatePath } from "next/cache";
@@ -21,7 +23,24 @@ export async function addTeacherAvailability(
   }
 
   try {
-    await addTeacherAvailabilityApi(validatedFields.data);
+    const response = await addTeacherAvailabilityApi(validatedFields.data);
+    const teacherProfileStatus = getTeacherProfileStatusFromResponse(
+      response.data
+    );
+    try {
+      if (teacherProfileStatus !== undefined) {
+        await unstable_update({
+          user: {
+            teacherProfileStatus,
+          },
+        });
+      }
+    } catch (sessionError) {
+      console.error(
+        "Teacher availability was saved, but session refresh failed:",
+        sessionError
+      );
+    }
     revalidatePath("/teacher/profile/availability");
     revalidatePath("/teacher/profile/availability/update");
     return { success: true };

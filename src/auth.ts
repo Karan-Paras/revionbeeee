@@ -69,6 +69,8 @@ export const {
           teacherProfileStatus:
             response.data.teacherProfileStatus ??
             response.data.teacher_profile_status,
+          isSubscribed: response.data.isSubscribed,
+          created_at: response.data.created_at,
         });
         return true;
       } catch (error) {
@@ -87,6 +89,8 @@ export const {
         token.userType = user.userType;
         token.profileStatus = user.profileStatus;
         token.teacherProfileStatus = user.teacherProfileStatus;
+        token.isSubscribed = user.isSubscribed;
+        token.created_at = user.created_at;
       }
       if (trigger === "update" && session) {
         token.name = session.user.name;
@@ -99,6 +103,12 @@ export const {
         }
         if (session.user.teacherProfileStatus !== undefined) {
           token.teacherProfileStatus = session.user.teacherProfileStatus;
+        }
+        if (session.user.isSubscribed !== undefined) {
+          token.isSubscribed = session.user.isSubscribed;
+        }
+        if (session.user.created_at !== undefined) {
+          token.created_at = session.user.created_at;
         }
       }
       return token;
@@ -114,6 +124,8 @@ export const {
       session.user.teacherProfileStatus = token.teacherProfileStatus as
         | number
         | undefined;
+      session.user.isSubscribed = token.isSubscribed;
+      session.user.created_at = token.created_at as string | null | undefined;
       return session;
     },
   },

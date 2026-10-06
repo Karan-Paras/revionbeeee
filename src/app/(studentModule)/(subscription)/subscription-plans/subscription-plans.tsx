@@ -1,6 +1,11 @@
 "use client";
 
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
+import {
+  hasActiveSelectedFreeTrial,
+  isFreeTrialActive,
+  isUserSubscribed,
+} from "@/features/subscriptions/utils";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { paths } from "@/routes";
 import { useRouter } from "next/navigation";
@@ -9,17 +14,25 @@ import { useEffect } from "react";
 export function SubscriptionPlans() {
   const router = useRouter();
 
-  const { data } = useGetProfile();
+  const { data, isLoading, isPending } = useGetProfile();
+
+  const isProfileLoading = isLoading || isPending;
+  const isSubscribed = isUserSubscribed(data?.data.isSubscribed);
+  const hasFreeTrialAccess = hasActiveSelectedFreeTrial(
+    data?.data.id,
+    data?.data.created_at
+  );
+  const showFreePlan = isFreeTrialActive(data?.data.created_at);
 
   useEffect(() => {
-    if (data) {
-      const { isSubscribed } = data.data;
-
-      if (isSubscribed) {
-        router.replace(paths.dashboard());
-      }
+    if (data && (isSubscribed || hasFreeTrialAccess)) {
+      router.replace(paths.dashboard());
     }
-  }, [data, router]);
+  }, [data, hasFreeTrialAccess, isSubscribed, router]);
+
+  if (isProfileLoading || isSubscribed || hasFreeTrialAccess) {
+    return null;
+  }
 
   return (
     <section className="mths_bg bg-cover bg-no-repeat p-5 md:min-h-screen 2xl:h-screen">
@@ -38,6 +51,7 @@ export function SubscriptionPlans() {
           <SubscriptionPlansComponent
             href={paths.dashboard()}
             callback={paths.dashboard()}
+            showFreePlan={showFreePlan}
           />
         </div>
       </div>

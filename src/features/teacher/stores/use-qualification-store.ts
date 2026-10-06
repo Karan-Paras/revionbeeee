@@ -13,12 +13,14 @@ export type TeacherQualification = {
 
 type QualificationStore = {
   qualifications: TeacherQualification[];
+  setQualifications: (qualifications: TeacherQualification[]) => void;
   addQualification: (qualification: TeacherQualification) => void;
   removeQualification: (id: string) => void;
 };
 
 export const useQualificationStore = create<QualificationStore>((set) => ({
   qualifications: [],
+  setQualifications: (qualifications) => set({ qualifications }),
   addQualification: (qualification) =>
     set((state) => ({
       qualifications: [...state.qualifications, qualification],

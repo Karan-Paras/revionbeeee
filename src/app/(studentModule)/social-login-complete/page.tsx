@@ -17,7 +17,10 @@ export default async function SocialLoginComplete() {
       getPostLoginPath(
         session.user.userType,
         session.user.teacherProfileStatus,
-        session.user.profileStatus
+        session.user.profileStatus,
+        session.user.isSubscribed,
+        session.user.created_at,
+        false
       )
     );
   }

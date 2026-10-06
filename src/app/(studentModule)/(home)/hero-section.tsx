@@ -3,6 +3,7 @@
 import { MoveUpRight } from "@/assets/icons";
 import { Hero } from "@/assets/videos";
 import { getPostLoginPath } from "@/features/auth/utils";
+import { hasSelectedFreeTrial } from "@/features/subscriptions/utils";
 import { paths } from "@/routes";
 import { motion, useAnimationControls } from "framer-motion";
 import { useSession } from "next-auth/react";
@@ -23,7 +24,10 @@ export function HeroSection() {
       getPostLoginPath(
         session.user.userType,
         session.user.teacherProfileStatus,
-        session.user.profileStatus
+        session.user.profileStatus,
+        session.user.isSubscribed,
+        session.user.created_at,
+        hasSelectedFreeTrial(session.user.id)
       )
     );
   }

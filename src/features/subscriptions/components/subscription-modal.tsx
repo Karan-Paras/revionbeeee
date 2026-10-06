@@ -2,7 +2,6 @@ import { Modal } from "@/components/common/modal";
 import { SubscriptionPlans } from "@/features/subscriptions/components/subscription-plans";
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
-import { SubscriptionType } from "@/features/subscriptions/types";
 
 export function SubscriptionModal() {
   const { onClose } = useSubscriptionModal();
@@ -32,10 +31,7 @@ export function SubscriptionModal() {
           <p>Unlock more features with premium access.</p>
         </div>
         <div className="mt-10 grid grid-cols-3 gap-5">
-          <SubscriptionPlans
-            activePlan={SubscriptionType.FREE}
-            variant="compact"
-          />
+          <SubscriptionPlans variant="compact" showFreePlan={false} />
         </div>
       </div>
     </Modal>

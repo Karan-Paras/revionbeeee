@@ -1,7 +1,12 @@
 "use server";
 
 import { unstable_update } from "@/auth";
-import { createTeacherProfile as createTeacherProfileApi } from "@/features/teacher/api/create-profile";
+import { getTeacherProfileStatusFromResponse } from "@/features/teacher/actions/profile-status";
+import {
+  createTeacherProfile as createTeacherProfileApi,
+  updateTeacherProfile as updateTeacherProfileApi,
+  type UpdateTeacherProfileInput,
+} from "@/features/teacher/api/create-profile";
 import { getInternationalPhoneNumber } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 
@@ -25,7 +30,16 @@ export async function createTeacherProfile(
   _formState: CreateTeacherProfileFormState,
   formData: FormData
 ): Promise<CreateTeacherProfileFormState> {
-  const validatedFields = CreateTeacherProfileSchema.safeParse({
+  const profileImage = formData.get("profileImage");
+  const hasNewProfileImage =
+    profileImage instanceof File &&
+    profileImage.size > 0 &&
+    profileImage.type !== "application/octet-stream";
+  const hasExistingProfileImage = Boolean(
+    formData.get("existingProfileImage")?.toString().trim()
+  );
+  const hasSavedProfile = formData.get("hasSavedProfile") === "1";
+  const baseProfileFields = {
     fullName: formData.get("fullName"),
     professionalTitle: formData.get("professionalTitle"),
     bio: formData.get("bio"),
@@ -37,16 +51,33 @@ export async function createTeacherProfile(
     country: formData.get("country"),
     city: formData.get("city"),
     hourlyRate: formData.get("hourlyRate"),
-    profileImage: formData.get("profileImage"),
-  });
+  };
+
+  const validatedFields =
+    hasNewProfileImage || !hasExistingProfileImage
+      ? CreateTeacherProfileSchema.safeParse({
+          ...baseProfileFields,
+          profileImage,
+        })
+      : CreateTeacherProfileSchema.omit({ profileImage: true }).safeParse(
+          baseProfileFields
+        );
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
   try {
-    const response = await createTeacherProfileApi(validatedFields.data);
+    const profileData = validatedFields.data as UpdateTeacherProfileInput;
+    const response = hasSavedProfile
+      ? await updateTeacherProfileApi(profileData)
+      : await createTeacherProfileApi(
+          validatedFields.data as Parameters<typeof createTeacherProfileApi>[0]
+        );
     const user = response.data;
+    const teacherProfileStatus = getTeacherProfileStatusFromResponse(
+      response.data
+    );
 
     try {
       await unstable_update({
@@ -56,7 +87,9 @@ export async function createTeacherProfile(
               ? `${user.firstName} ${user.lastName}`
               : validatedFields.data.fullName,
           image: user?.profilePicture,
-          teacherProfileStatus: user?.teacherProfileStatus ?? 3,
+          ...(teacherProfileStatus !== undefined
+            ? { teacherProfileStatus }
+            : {}),
         },
       });
     } catch (sessionError) {

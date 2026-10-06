@@ -6,6 +6,8 @@ declare module "next-auth" {
     userType?: "student" | "teacher";
     profileStatus?: number;
     teacherProfileStatus?: number;
+    isSubscribed?: unknown;
+    created_at?: string | null;
   }
 
   interface Session {
@@ -20,5 +22,7 @@ declare module "next-auth/jwt" {
     userType?: "student" | "teacher";
     profileStatus?: number;
     teacherProfileStatus?: number;
+    isSubscribed?: unknown;
+    created_at?: string | null;
   }
 }

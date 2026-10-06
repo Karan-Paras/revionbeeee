@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form-label";
 import { Input } from "@/components/ui/input";
 import { createProfile } from "@/features/user/actions/create-profile";
+import { useGetProfile } from "@/features/user/queries/use-get-profile";
 import { phoneNumber as phoneNumberSchema } from "@/features/user/schemas";
+import { getUserImageUrl } from "@/lib/media-urls";
 import {
   firstName as firstNameSchema,
   lastName as lastNameSchema,
@@ -33,7 +35,9 @@ function readCreateProfileDraft(): CreateProfileDraft {
   if (typeof window === "undefined") return {};
 
   try {
-    const value = window.sessionStorage.getItem(createProfileDraftKey);
+    const value =
+      window.localStorage.getItem(createProfileDraftKey) ??
+      window.sessionStorage.getItem(createProfileDraftKey);
     return value ? (JSON.parse(value) as CreateProfileDraft) : {};
   } catch {
     return {};
@@ -43,12 +47,14 @@ function readCreateProfileDraft(): CreateProfileDraft {
 function writeCreateProfileDraft(draft: CreateProfileDraft) {
   if (typeof window === "undefined") return;
 
+  window.localStorage.setItem(createProfileDraftKey, JSON.stringify(draft));
   window.sessionStorage.setItem(createProfileDraftKey, JSON.stringify(draft));
 }
 
 function clearCreateProfileDraft() {
   if (typeof window === "undefined") return;
 
+  window.localStorage.removeItem(createProfileDraftKey);
   window.sessionStorage.removeItem(createProfileDraftKey);
 }
 
@@ -61,6 +67,7 @@ export function CreateProfileForm() {
   const [phoneNumberError, setPhoneNumberError] = useState<string>();
   const [firstNameError, setFirstNameError] = useState<string>();
   const [lastNameError, setLastNameError] = useState<string>();
+  const { data: profile } = useGetProfile();
 
   const [formState, action, isPending] = useActionState(createProfile, {
     errors: {},
@@ -70,9 +77,38 @@ export function CreateProfileForm() {
 
   const queryClient = useQueryClient();
 
+  function updateDraft(next: CreateProfileDraft) {
+    setDraft(next);
+    writeCreateProfileDraft(next);
+  }
+
   useEffect(() => {
     writeCreateProfileDraft(draft);
   }, [draft]);
+
+  useEffect(() => {
+    const user = profile?.data;
+    if (!user) return;
+
+    const savedDraft = {
+      firstName: draft.firstName ?? user.firstName ?? "",
+      lastName: draft.lastName ?? user.lastName ?? "",
+      phoneNumber: draft.phoneNumber ?? user.phoneNumber ?? "",
+    };
+
+    if (
+      savedDraft.firstName !== draft.firstName ||
+      savedDraft.lastName !== draft.lastName ||
+      savedDraft.phoneNumber !== draft.phoneNumber
+    ) {
+      updateDraft(savedDraft);
+    }
+
+    const savedImage = user.profilePicture ?? user.profile_image_url ?? "";
+    if (savedImage && !profilePicture) {
+      setProfilePicture(savedImage);
+    }
+  }, [draft, profile, profilePicture]);
 
   useEffect(() => {
     if (formState.success) {
@@ -149,7 +185,11 @@ export function CreateProfileForm() {
                 {profilePicture && (
                   <Image
                     className="h-full w-full rounded-full object-cover"
-                    src={profilePicture}
+                    src={
+                      profilePicture.startsWith("blob:")
+                        ? profilePicture
+                        : getUserImageUrl(profilePicture)
+                    }
                     alt="profilePicture"
                     width={100}
                     height={100}
@@ -199,7 +239,7 @@ export function CreateProfileForm() {
                 autoComplete="given-name"
                 onChange={(event) => {
                   const value = event.target.value;
-                  setDraft((current) => ({ ...current, firstName: value }));
+                  updateDraft({ ...draft, firstName: value });
                   const result = firstNameSchema.safeParse(value);
                   setFirstNameError(
                     result.success ? undefined : result.error.issues[0]?.message
@@ -224,7 +264,7 @@ export function CreateProfileForm() {
                 autoComplete="family-name"
                 onChange={(event) => {
                   const value = event.target.value;
-                  setDraft((current) => ({ ...current, lastName: value }));
+                  updateDraft({ ...draft, lastName: value });
                   const result = lastNameSchema.safeParse(value);
                   setLastNameError(
                     result.success ? undefined : result.error.issues[0]?.message
@@ -259,10 +299,7 @@ export function CreateProfileForm() {
                     const value = hasSubscriberNumber ? phone : "";
 
                     setPhoneNumber(value);
-                    setDraft((current) => ({
-                      ...current,
-                      phoneNumber: value,
-                    }));
+                    updateDraft({ ...draft, phoneNumber: value });
                     if (!hasSubscriberNumber) {
                       setPhoneNumberError(undefined);
                       return;

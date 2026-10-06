@@ -3,12 +3,13 @@
 import { BackLink } from "@/components/common/back-link";
 import { TimeSelect } from "@/components/ui/time-select";
 import { addTeacherAvailability } from "@/features/teacher/actions/add-availability";
+import { getTeacherAvailabilities } from "@/features/teacher/actions/get-availabilities";
 import { AddTeacherAvailabilitySchema } from "@/features/teacher/schemas";
 import { paths } from "@/routes";
 import { Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 type TimeSlot = {
   id: string;
@@ -33,16 +34,58 @@ const days = [
   "Saturday",
 ];
 
-const initialAvailability: Record<string, DayAvailability> = Object.fromEntries(
-  days.map((day) => [day, { enabled: false, slots: [] }])
-);
+const createEmptyAvailability = (): Record<string, DayAvailability> =>
+  Object.fromEntries(days.map((day) => [day, { enabled: false, slots: [] }]));
 
 export default function TeacherAvailabilityPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isLoadingAvailability, setIsLoadingAvailability] = useState(true);
   const [submitError, setSubmitError] = useState("");
-  const [availability, setAvailability] =
-    useState<Record<string, DayAvailability>>(initialAvailability);
+  const [availability, setAvailability] = useState<
+    Record<string, DayAvailability>
+  >(createEmptyAvailability);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadAvailability() {
+      setIsLoadingAvailability(true);
+      setSubmitError("");
+      const result = await getTeacherAvailabilities();
+      if (!isCurrent) return;
+
+      if (!result.success) {
+        setSubmitError(result.error);
+        setIsLoadingAvailability(false);
+        return;
+      }
+
+      const next = createEmptyAvailability();
+      result.data.forEach((item, index) => {
+        const day = days[item.dayOfWeek];
+        if (!day || !item.isAvailable) return;
+        next[day].enabled = true;
+        next[day].slots.push({
+          id: String(item.id ?? `slot-${index}`),
+          startTime: item.startTime.slice(0, 5),
+          endTime: item.endTime.slice(0, 5),
+          error: slotError(
+            item.startTime.slice(0, 5),
+            item.endTime.slice(0, 5)
+          ),
+        });
+      });
+      setAvailability(next);
+      setIsLoadingAvailability(false);
+    }
+
+    void loadAvailability();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   /** Convert 24-hour "HH:MM" to 12-hour time + meridiem for the API. */
   function toTwelveHourTime(time: string) {
@@ -238,79 +281,90 @@ export default function TeacherAvailabilityPage() {
             </div>
 
             <div className="mt-6 min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
-              {days.map((day) => {
-                const dayAvailability = availability[day];
-                return (
-                  <div key={day}>
-                    <div className="flex h-6 items-center justify-between text-xs">
-                      <label className="flex cursor-pointer items-center gap-2 font-medium text-[#222]">
-                        <input
-                          type="checkbox"
-                          checked={dayAvailability.enabled}
-                          onChange={() => toggleDay(day)}
-                          className="h-4 w-4 accent-[#53a2eb]"
-                        />
-                        {day}
-                      </label>
+              {isLoadingAvailability ? (
+                <div className="space-y-4" aria-busy="true">
+                  {days.map((day) => (
+                    <div
+                      key={day}
+                      className="h-16 animate-pulse rounded-lg bg-white"
+                    />
+                  ))}
+                </div>
+              ) : (
+                days.map((day) => {
+                  const dayAvailability = availability[day];
+                  return (
+                    <div key={day}>
+                      <div className="flex h-6 items-center justify-between text-xs">
+                        <label className="flex cursor-pointer items-center gap-2 font-medium text-[#222]">
+                          <input
+                            type="checkbox"
+                            checked={dayAvailability.enabled}
+                            onChange={() => toggleDay(day)}
+                            className="h-4 w-4 accent-[#53a2eb]"
+                          />
+                          {day}
+                        </label>
 
-                      {dayAvailability.enabled ? (
-                        <button
-                          type="button"
-                          onClick={() => addSlot(day)}
-                          className="inline-flex items-center gap-1 font-medium text-[#53a2eb]"
-                        >
-                          <Plus size={15} />
-                          Add more
-                        </button>
-                      ) : (
-                        <span className="text-[#ff3547]">Unavailable</span>
+                        {dayAvailability.enabled ? (
+                          <button
+                            type="button"
+                            onClick={() => addSlot(day)}
+                            className="inline-flex items-center gap-1 font-medium text-[#53a2eb]"
+                          >
+                            <Plus size={15} />
+                            Add more
+                          </button>
+                        ) : (
+                          <span className="text-[#ff3547]">Unavailable</span>
+                        )}
+                      </div>
+
+                      {dayAvailability.enabled && (
+                        <div className="mt-2 space-y-1">
+                          {dayAvailability.slots.map((slot) => (
+                            <div key={slot.id}>
+                              <div className="grid grid-cols-[1fr_1fr_28px] gap-3">
+                                <TimeSelect
+                                  value={slot.startTime}
+                                  ariaLabel={`${day} start time`}
+                                  onChange={(v) =>
+                                    updateSlot(day, slot.id, "startTime", v)
+                                  }
+                                />
+                                <TimeSelect
+                                  value={slot.endTime}
+                                  ariaLabel={`${day} end time`}
+                                  error={!!slot.error}
+                                  onChange={(v) =>
+                                    updateSlot(day, slot.id, "endTime", v)
+                                  }
+                                />
+                                <button
+                                  type="button"
+                                  aria-label={`Remove ${day} time slot`}
+                                  onClick={() => removeSlot(day, slot.id)}
+                                  className="grid h-11 place-items-center text-[#555] hover:text-[#ff3547]"
+                                >
+                                  <X size={17} />
+                                </button>
+                              </div>
+                              {slot.error && (
+                                <p
+                                  role="alert"
+                                  className="mt-0.5 pl-1 text-xs text-red-500"
+                                >
+                                  {slot.error}
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
-
-                    {dayAvailability.enabled && (
-                      <div className="mt-2 space-y-1">
-                        {dayAvailability.slots.map((slot) => (
-                          <div key={slot.id}>
-                            <div className="grid grid-cols-[1fr_1fr_28px] gap-3">
-                              <TimeSelect
-                                value={slot.startTime}
-                                ariaLabel={`${day} start time`}
-                                onChange={(v) =>
-                                  updateSlot(day, slot.id, "startTime", v)
-                                }
-                              />
-                              <TimeSelect
-                                value={slot.endTime}
-                                ariaLabel={`${day} end time`}
-                                error={!!slot.error}
-                                onChange={(v) =>
-                                  updateSlot(day, slot.id, "endTime", v)
-                                }
-                              />
-                              <button
-                                type="button"
-                                aria-label={`Remove ${day} time slot`}
-                                onClick={() => removeSlot(day, slot.id)}
-                                className="grid h-11 place-items-center text-[#555] hover:text-[#ff3547]"
-                              >
-                                <X size={17} />
-                              </button>
-                            </div>
-                            {slot.error && (
-                              <p
-                                role="alert"
-                                className="mt-0.5 pl-1 text-xs text-red-500"
-                              >
-                                {slot.error}
-                              </p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             <div className="mt-5 space-y-3">
@@ -323,7 +377,7 @@ export default function TeacherAvailabilityPage() {
               <button
                 type="button"
                 onClick={handleSave}
-                disabled={isPending}
+                disabled={isPending || isLoadingAvailability}
                 className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-semibold text-white transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isPending ? "Saving..." : "Save & Next"}

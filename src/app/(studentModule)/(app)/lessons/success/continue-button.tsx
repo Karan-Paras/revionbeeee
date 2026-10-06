@@ -24,7 +24,9 @@ function rememberPaidLesson(lessonID?: string) {
 export function ContinueButton({ lessonID }: { lessonID?: string }) {
   const handleContinue = () => {
     rememberPaidLesson(lessonID);
-    window.location.assign(paths.myLessons());
+    window.location.assign(
+      lessonID ? paths.myLessons() : `${paths.myLessons()}?tab=pending`
+    );
   };
 
   return (

@@ -2,13 +2,15 @@
 
 import { BackLink } from "@/components/common/back-link";
 import { addTeacherCertification as submitTeacherCertification } from "@/features/teacher/actions/add-certification";
+import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import { AddTeacherCertificationSchema } from "@/features/teacher/schemas";
 import { useCertificationStore } from "@/features/teacher/stores/use-certification-store";
+import { getTeacherCertificationUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import { Award, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 const inputClassName =
   "mt-1.5 h-12 w-full rounded-lg border border-[#d7dce4] bg-white px-4 text-sm text-[#333] outline-none transition placeholder:text-[#999] focus:border-[#53a2eb] focus:ring-4 focus:ring-[#53a2eb]/10";
@@ -16,6 +18,9 @@ const inputClassName =
 export default function TeacherCertifications() {
   const router = useRouter();
   const certifications = useCertificationStore((state) => state.certifications);
+  const setCertifications = useCertificationStore(
+    (state) => state.setCertifications
+  );
   const removeCertification = useCertificationStore(
     (state) => state.removeCertification
   );
@@ -24,6 +29,7 @@ export default function TeacherCertifications() {
   );
 
   const [showForm, setShowForm] = useState(true);
+  const [isLoadingCertifications, setIsLoadingCertifications] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [submitError, setSubmitError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<
@@ -34,6 +40,74 @@ export default function TeacherCertifications() {
     type: string;
     url: string;
   }>();
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    async function loadSavedCertifications() {
+      setIsLoadingCertifications(true);
+      setSubmitError("");
+      const result = await getTeacherProfileDetail();
+      if (!isCurrent) return;
+
+      if (!result.success) {
+        setSubmitError(result.error);
+        setIsLoadingCertifications(false);
+        return;
+      }
+
+      setCertifications(
+        (result.data.certifications ?? []).map((item, index) => {
+          const record = item as Record<string, unknown>;
+          const fileValue = String(
+            item.certificationFile ??
+              item.certification_file ??
+              record.certificateFile ??
+              record.certificate_file ??
+              record.file ??
+              record.fileUrl ??
+              record.file_url ??
+              record.image ??
+              ""
+          );
+          const fileName = fileValue.split(/[\\/]/).pop() || "Certificate";
+
+          return {
+            id: String(item.id ?? `certification-${index}`),
+            certificationName: String(
+              item.certificationName ??
+                item.certification_name ??
+                item.name ??
+                ""
+            ),
+            issuingAuthority: String(
+              item.issuingAuthority ??
+                item.issuing_authority ??
+                item.authority ??
+                ""
+            ),
+            issueDate: String(item.issueDate ?? item.issue_date ?? ""),
+            certificateName: fileValue ? fileName : undefined,
+            certificateType: fileValue.match(/\.(png|jpe?g|webp|gif)$/i)
+              ? "image/*"
+              : fileValue
+                ? "application/pdf"
+                : undefined,
+            certificateUrl: fileValue
+              ? getTeacherCertificationUrl(fileValue)
+              : undefined,
+          };
+        })
+      );
+      setIsLoadingCertifications(false);
+    }
+
+    void loadSavedCertifications();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [setCertifications]);
 
   function handleRemove(id: string) {
     removeCertification(id);
@@ -120,59 +194,70 @@ export default function TeacherCertifications() {
             </div>
 
             {/* Certifications list */}
-            {certifications.length > 0 && (
-              <div className="mt-6 max-h-[min(260px,30vh)] space-y-3 overflow-x-hidden overflow-y-auto pr-2">
-                {certifications.map((certification) => (
-                  <article
-                    key={certification.id}
-                    className="relative flex min-w-0 gap-3 rounded-xl bg-white p-3 pr-9 shadow-sm"
-                  >
-                    <div className="relative grid h-20 w-24 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f5f5f5]">
-                      {certification.certificateUrl &&
-                      certification.certificateType?.startsWith("image/") ? (
-                        <Image
-                          src={certification.certificateUrl}
-                          alt={certification.certificateName ?? "Certificate"}
-                          fill
-                          unoptimized
-                          sizes="96px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <Award size={28} className="text-[#53a2eb]" />
-                      )}
-                    </div>
-                    <dl className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_minmax(0,auto)] gap-x-3 gap-y-1 text-[10px]">
-                      <dt className="text-[#666]">Certification Name</dt>
-                      <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
-                        {certification.certificationName}
-                      </dd>
-                      <dt className="text-[#666]">Issuing Authority</dt>
-                      <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
-                        {certification.issuingAuthority}
-                      </dd>
-                      <dt className="text-[#666]">Issue Date</dt>
-                      <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
-                        {new Date(
-                          `${certification.issueDate}T00:00:00`
-                        ).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </dd>
-                    </dl>
-                    <button
-                      type="button"
-                      aria-label="Remove certification"
-                      onClick={() => handleRemove(certification.id)}
-                      className="absolute top-2 right-2 grid h-5 w-5 place-items-center rounded-full bg-[#ff3547] text-white"
-                    >
-                      <X size={12} strokeWidth={3} />
-                    </button>
-                  </article>
+            {isLoadingCertifications ? (
+              <div className="mt-6 space-y-3">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-24 animate-pulse rounded-xl bg-white"
+                  />
                 ))}
               </div>
+            ) : (
+              certifications.length > 0 && (
+                <div className="mt-6 max-h-[min(260px,30vh)] space-y-3 overflow-x-hidden overflow-y-auto pr-2">
+                  {certifications.map((certification) => (
+                    <article
+                      key={certification.id}
+                      className="relative flex min-w-0 gap-3 rounded-xl bg-white p-3 pr-9 shadow-sm"
+                    >
+                      <div className="relative grid h-20 w-24 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f5f5f5]">
+                        {certification.certificateUrl &&
+                        certification.certificateType?.startsWith("image/") ? (
+                          <Image
+                            src={certification.certificateUrl}
+                            alt={certification.certificateName ?? "Certificate"}
+                            fill
+                            unoptimized
+                            sizes="96px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <Award size={28} className="text-[#53a2eb]" />
+                        )}
+                      </div>
+                      <dl className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_minmax(0,auto)] gap-x-3 gap-y-1 text-[10px]">
+                        <dt className="text-[#666]">Certification Name</dt>
+                        <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
+                          {certification.certificationName}
+                        </dd>
+                        <dt className="text-[#666]">Issuing Authority</dt>
+                        <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
+                          {certification.issuingAuthority}
+                        </dd>
+                        <dt className="text-[#666]">Issue Date</dt>
+                        <dd className="max-w-36 truncate text-right font-semibold text-[#111]">
+                          {new Date(
+                            `${certification.issueDate}T00:00:00`
+                          ).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </dd>
+                      </dl>
+                      <button
+                        type="button"
+                        aria-label="Remove certification"
+                        onClick={() => handleRemove(certification.id)}
+                        className="absolute top-2 right-2 grid h-5 w-5 place-items-center rounded-full bg-[#ff3547] text-white"
+                      >
+                        <X size={12} strokeWidth={3} />
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              )
             )}
 
             {/* Inline add-certification form */}
@@ -321,7 +406,8 @@ export default function TeacherCertifications() {
               <button
                 type="button"
                 onClick={() => router.push(paths.teacherAvailability())}
-                className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-medium text-white transition hover:bg-[#4395df]"
+                disabled={isLoadingCertifications}
+                className="h-12 w-full rounded-lg bg-[#53a2eb] text-sm font-medium text-white transition hover:bg-[#4395df] disabled:cursor-not-allowed disabled:bg-[#d2d2d2] disabled:text-[#777]"
               >
                 Save &amp; Next
               </button>

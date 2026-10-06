@@ -11,6 +11,7 @@ interface SubscriptionProps {
   activePlan?: SubscriptionType;
   callback?: string;
   display?: boolean;
+  showFreePlan?: boolean;
 }
 
 export function SubscriptionPlans({
@@ -19,8 +20,11 @@ export function SubscriptionPlans({
   activePlan,
   callback,
   display,
+  showFreePlan = true,
 }: SubscriptionProps) {
-  return PLANS.map((plan) => (
+  return PLANS.filter(
+    (plan) => showFreePlan || plan.type !== SubscriptionType.FREE
+  ).map((plan) => (
     <Subscription
       key={plan.title}
       plan={plan}

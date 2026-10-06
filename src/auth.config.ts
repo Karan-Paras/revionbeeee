@@ -32,6 +32,8 @@ export default {
           profileStatus: user.profileStatus ?? user.profile_status,
           teacherProfileStatus:
             user.teacherProfileStatus ?? user.teacher_profile_status,
+          isSubscribed: user.isSubscribed,
+          created_at: user.created_at,
           token,
         };
       },

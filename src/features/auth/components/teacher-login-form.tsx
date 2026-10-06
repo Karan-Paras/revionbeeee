@@ -5,6 +5,7 @@ import { login } from "@/features/auth/actions/login";
 import { DeviceTokenField } from "@/features/auth/components/device-token-field";
 import { newPassword } from "@/features/auth/schemas";
 import { getPostLoginPath } from "@/features/auth/utils";
+import { hasSelectedFreeTrial } from "@/features/subscriptions/utils";
 import { email as emailSchema } from "@/lib/schemas";
 import { paths } from "@/routes";
 import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
@@ -13,7 +14,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useState } from "react";
 
-export function TeacherLoginForm() {
+type TeacherLoginFormProps = {
+  userType?: "student" | "teacher";
+};
+
+export function TeacherLoginForm({
+  userType = "student",
+}: TeacherLoginFormProps) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState<string>();
@@ -31,10 +38,26 @@ export function TeacherLoginForm() {
       }
 
       router.replace(
-        getPostLoginPath(data.user.userType, data.user.teacherProfileStatus)
+        getPostLoginPath(
+          formState.userType ?? data.user.userType,
+          formState.teacherProfileStatus ?? data.user.teacherProfileStatus,
+          formState.profileStatus ?? data.user.profileStatus,
+          formState.isSubscribed,
+          formState.createdAt,
+          hasSelectedFreeTrial(formState.userId ?? data.user.id)
+        )
       );
     });
-  }, [formState?.success, router]);
+  }, [
+    formState?.createdAt,
+    formState?.isSubscribed,
+    formState?.profileStatus,
+    formState?.success,
+    formState?.teacherProfileStatus,
+    formState?.userId,
+    formState?.userType,
+    router,
+  ]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,6 +84,7 @@ export function TeacherLoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-3.5">
       <DeviceTokenField />
+      <input type="hidden" name="userType" value={userType} />
       <div>
         <label
           htmlFor="teacher-email"

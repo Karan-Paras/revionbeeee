@@ -5,15 +5,18 @@ import {
   createTeacherProfile,
   type CreateTeacherProfileFormState,
 } from "@/features/teacher/actions/create-profile";
+import { getTeacherProfileDetail } from "@/features/teacher/actions/get-profile-detail";
 import {
   getInternationalPhoneNumber,
   getNationalPhoneNumber,
 } from "@/features/teacher/phone-number";
 import { CreateTeacherProfileSchema } from "@/features/teacher/schemas";
 import { useDismissPhoneCountryDropdown } from "@/hooks/use-dismiss-phone-country-dropdown";
+import { getTeacherImageUrl } from "@/lib/media-urls";
 import { paths } from "@/routes";
 import { City, Country } from "country-state-city";
 import { Camera, ChevronDown, CircleUserRound, DollarSign } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -45,11 +48,24 @@ function FieldError({ errors }: { errors?: string[] }) {
 export function CreateTeacherProfileForm() {
   useDismissPhoneCountryDropdown();
   const router = useRouter();
+  const { data: session } = useSession();
   const phoneInputRef = useRef<PhoneInputRefType>(null);
   const [imagePreview, setImagePreview] = useState<string>();
+  const [existingProfileImage, setExistingProfileImage] = useState("");
   const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
   const [mobileNumber, setMobileNumber] = useState("");
   const [phoneCountryCode, setPhoneCountryCode] = useState("+91");
+  const [savedProfile, setSavedProfile] = useState({
+    fullName: "",
+    professionalTitle: "",
+    bio: "",
+    country: "India",
+    city: "",
+    hourlyRate: "",
+  });
+  const [hasSavedProfile, setHasSavedProfile] = useState(false);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [profileLoadError, setProfileLoadError] = useState<string>();
   const [liveErrors, setLiveErrors] = useState<
     Partial<Record<ProfileField, string[] | undefined>>
   >({});
@@ -81,6 +97,71 @@ export function CreateTeacherProfileForm() {
   }
 
   useEffect(() => {
+    let isCurrent = true;
+
+    async function loadSavedProfile() {
+      setIsLoadingProfile(true);
+      setProfileLoadError(undefined);
+
+      const result = await getTeacherProfileDetail(session?.user?.token);
+      if (!isCurrent) return;
+
+      if (!result.success) {
+        setProfileLoadError(result.error);
+        setIsLoadingProfile(false);
+        return;
+      }
+
+      const detail = result.data;
+      const countryName = detail.country?.trim() || "India";
+      const country =
+        countries.find((item) => item.name === countryName) ??
+        countries.find((item) => item.isoCode === "IN");
+      const countryCode = country?.isoCode ?? "IN";
+      const callingCode = detail.countryCode?.trim() || "+91";
+      const internationalPhone = detail.mobileNumber
+        ? getInternationalPhoneNumber(detail.mobileNumber, callingCode)
+        : "";
+      const profileImage = detail.profileImage || detail.profilePicture || "";
+      const nextSavedProfile = {
+        fullName: detail.fullName?.trim() || "",
+        professionalTitle: detail.professionalTitle?.trim() || "",
+        bio: detail.bio?.trim() || "",
+        country: country?.name ?? countryName,
+        city: detail.city?.trim() || "",
+        hourlyRate: detail.hourlyRate ? String(detail.hourlyRate) : "",
+      };
+
+      setSavedProfile(nextSavedProfile);
+      setHasSavedProfile(
+        Boolean(
+          nextSavedProfile.fullName ||
+            nextSavedProfile.professionalTitle ||
+            nextSavedProfile.bio ||
+            nextSavedProfile.city ||
+            nextSavedProfile.hourlyRate ||
+            profileImage
+        )
+      );
+      setSelectedCountryCode(countryCode);
+      setMobileNumber(internationalPhone);
+      setPhoneCountryCode(callingCode);
+      setExistingProfileImage(profileImage);
+      setImagePreview(
+        profileImage ? getTeacherImageUrl(profileImage) : undefined
+      );
+      setIsLoadingProfile(false);
+    }
+
+    void loadSavedProfile();
+
+    return () => {
+      isCurrent = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.token]);
+
+  useEffect(() => {
     if (formState?.success) {
       router.replace(paths.teacherEducation());
     }
@@ -104,6 +185,11 @@ export function CreateTeacherProfileForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const profileImage = formData.get("profileImage");
+    const hasNewProfileImage =
+      profileImage instanceof File &&
+      profileImage.size > 0 &&
+      profileImage.type !== "application/octet-stream";
     const validation = CreateTeacherProfileSchema.safeParse({
       fullName: formData.get("fullName"),
       professionalTitle: formData.get("professionalTitle"),
@@ -116,7 +202,12 @@ export function CreateTeacherProfileForm() {
       country: formData.get("country"),
       city: formData.get("city"),
       hourlyRate: formData.get("hourlyRate"),
-      profileImage: formData.get("profileImage"),
+      profileImage:
+        hasNewProfileImage || !existingProfileImage
+          ? profileImage
+          : new File(["existing"], "existing-profile-image.jpg", {
+              type: "image/jpeg",
+            }),
     });
 
     if (!validation.success) {
@@ -138,6 +229,32 @@ export function CreateTeacherProfileForm() {
     });
   }
 
+  if (isLoadingProfile) {
+    return (
+      <div className="space-y-4" aria-busy="true">
+        <div className="mb-5 flex gap-1.5" aria-label="Step 1 of 6">
+          <span className="h-1.5 w-12 rounded-full bg-[#fbbe1b]" />
+          {Array.from({ length: 5 }).map((_, index) => (
+            <span
+              key={index}
+              className="h-1.5 w-12 rounded-full bg-[#d1d1d1]"
+            />
+          ))}
+        </div>
+        <div className="mx-auto h-20 w-20 animate-pulse rounded-full bg-white" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-16 animate-pulse rounded-lg bg-white" />
+          <div className="h-16 animate-pulse rounded-lg bg-white" />
+        </div>
+        <div className="h-20 animate-pulse rounded-lg bg-white" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-16 animate-pulse rounded-lg bg-white" />
+          <div className="h-16 animate-pulse rounded-lg bg-white" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="mb-5 flex gap-1.5" aria-label="Step 1 of 6">
@@ -156,6 +273,16 @@ export function CreateTeacherProfileForm() {
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
+        <input
+          type="hidden"
+          name="existingProfileImage"
+          value={existingProfileImage}
+        />
+        <input
+          type="hidden"
+          name="hasSavedProfile"
+          value={hasSavedProfile ? "1" : "0"}
+        />
         <div className="mb-4 text-center">
           <label
             className={`relative mx-auto grid h-20 w-20 cursor-pointer place-items-center overflow-visible rounded-full border border-dashed bg-white transition ${profileImageErrors?.length ? "border-2 border-red-500" : "border-[#333]"}`}
@@ -179,7 +306,7 @@ export function CreateTeacherProfileForm() {
               <Camera size={14} />
             </span>
             <input
-              required
+              required={!existingProfileImage}
               type="file"
               name="profileImage"
               accept="image/*"
@@ -204,6 +331,7 @@ export function CreateTeacherProfileForm() {
               required
               name="fullName"
               placeholder="Enter Name"
+              defaultValue={savedProfile.fullName}
               disabled={isPending}
               onChange={(event) =>
                 validateField("fullName", event.target.value)
@@ -218,6 +346,7 @@ export function CreateTeacherProfileForm() {
               required
               name="professionalTitle"
               placeholder="Enter Title"
+              defaultValue={savedProfile.professionalTitle}
               disabled={isPending}
               onChange={(event) =>
                 validateField("professionalTitle", event.target.value)
@@ -234,6 +363,7 @@ export function CreateTeacherProfileForm() {
             required
             name="bio"
             placeholder="Write about yourself"
+            defaultValue={savedProfile.bio}
             disabled={isPending}
             onChange={(event) => validateField("bio", event.target.value)}
             rows={2}
@@ -259,6 +389,11 @@ export function CreateTeacherProfileForm() {
                     event.currentTarget.selectedOptions[0]?.dataset.isoCode ??
                     "";
                   setSelectedCountryCode(countryCode);
+                  setSavedProfile((current) => ({
+                    ...current,
+                    country: event.target.value,
+                    city: "",
+                  }));
                   validateField("country", event.target.value);
                   setLiveErrors((current) => ({
                     ...current,
@@ -296,7 +431,7 @@ export function CreateTeacherProfileForm() {
                 key={selectedCountryCode}
                 required
                 name="city"
-                defaultValue=""
+                defaultValue={savedProfile.city}
                 disabled={isPending || !selectedCountryCode}
                 onChange={(event) => validateField("city", event.target.value)}
                 className={`${inputClassName} appearance-none pr-10`}
@@ -378,6 +513,7 @@ export function CreateTeacherProfileForm() {
               step="0.01"
               inputMode="decimal"
               placeholder="Enter amount (max 500)"
+              defaultValue={savedProfile.hourlyRate}
               required
               disabled={isPending}
               onChange={(event) =>
@@ -390,7 +526,9 @@ export function CreateTeacherProfileForm() {
           <FieldError errors={fieldErrors("hourlyRate")} />
         </label>
 
-        <ErrorBlock errors={errors._form} />
+        <ErrorBlock
+          errors={profileLoadError ? [profileLoadError] : errors._form}
+        />
         <button
           type="submit"
           disabled={isPending}
