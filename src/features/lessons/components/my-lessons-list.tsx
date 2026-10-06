@@ -19,7 +19,7 @@ import {
 import { fetchClient } from "@/lib/fetch-client";
 import { isSessionWindowOpen } from "@/lib/session-time";
 import { paths } from "@/routes";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -153,6 +153,7 @@ async function reportLesson({
 }
 
 export function MyLessonsList() {
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get("tab");
   const initialTab = tabValues.includes(requestedTab as MyBookingFilter)
@@ -236,6 +237,17 @@ export function MyLessonsList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [approvedNotifications.data, cancelledNotifications.data]);
 
+  useEffect(() => {
+    if (activeTab !== "accepted" && activeTab !== "cancelled") return;
+    const bookings = notificationBookings[activeTab];
+    localStorage.setItem(
+      seenBookingsKey(activeTab),
+      JSON.stringify(bookingIds(bookings))
+    );
+    setHasNewBookings((current) => ({ ...current, [activeTab]: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, approvedNotifications.data, cancelledNotifications.data]);
+
   function changeTab(tab: MyBookingFilter) {
     setActiveTab(tab);
     if (tab !== "accepted" && tab !== "cancelled") return;
@@ -258,6 +270,18 @@ export function MyLessonsList() {
     mutationFn: reportLesson,
     onSuccess: () => {
       toast.success("Report submitted successfully.");
+      const reportedLessonID = reportLessonTarget?.paymentLessonID;
+      if (reportedLessonID !== undefined) {
+        queryClient.setQueriesData<MyBooking[] | undefined>(
+          { queryKey: ["my-bookings"] },
+          (current) =>
+            current?.map((lesson) =>
+              String(lesson.paymentLessonID) === String(reportedLessonID)
+                ? { ...lesson, canReport: false }
+                : lesson
+            )
+        );
+      }
       setReportLessonTarget(null);
       setReportCategory(reportCategories[0].value);
       setReportDescription("");
@@ -674,11 +698,16 @@ export function MyLessonsList() {
                   {activeTab !== "pending" && (
                     <button
                       type="button"
+                      disabled={!lesson.canReport}
                       onClick={() => openReportModal(lesson)}
-                      className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#ffccd0] bg-[#fff7f8] text-xs font-semibold text-[#d93645] transition hover:border-[#ff9ca5] hover:bg-[#fff0f1]"
+                      className={`mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-lg border text-xs font-semibold transition ${
+                        lesson.canReport
+                          ? "border-[#ffccd0] bg-[#fff7f8] text-[#d93645] hover:border-[#ff9ca5] hover:bg-[#fff0f1]"
+                          : "cursor-not-allowed border-[#e3e6e8] bg-[#f4f5f6] text-[#9aa1a8]"
+                      }`}
                     >
                       <Flag size={15} />
-                      Report
+                      {lesson.canReport ? "Report" : "Reported"}
                     </button>
                   )}
                 </article>

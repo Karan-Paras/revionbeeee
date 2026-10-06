@@ -43,8 +43,8 @@ export const UpdateProfileSchema = z.object({
     .trim()
     .transform((val) => (val === "" ? undefined : val))
     .optional()
-    .refine((val) => val === undefined || val.length <= 20, {
-      message: "City must be at most 20 characters",
+    .refine((val) => val === undefined || val.length <= 100, {
+      message: "City must be at most 100 characters",
     }),
   state: z
     .string()

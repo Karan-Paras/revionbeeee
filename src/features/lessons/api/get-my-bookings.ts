@@ -33,6 +33,7 @@ export type MyBooking = {
   joinNow: boolean;
   rejectionReason: string;
   isLive: boolean;
+  canReport: boolean;
 };
 
 type GetMyBookingsParams = {
@@ -258,6 +259,8 @@ export async function getMyBookings(
       "booking_id"
     );
     const lessonID = text(booking, "lessonID", "lessonId", "lesson_id");
+    const reportValue =
+      booking.report ?? booking.canReport ?? booking.can_report;
 
     return {
       id: bookingID || lessonID || index,
@@ -348,6 +351,12 @@ export async function getMyBookings(
           "running",
           "active",
         ].includes(String(liveValue).trim().toLowerCase()),
+      canReport:
+        reportValue === undefined ||
+        reportValue === true ||
+        reportValue === 1 ||
+        String(reportValue).trim().toLowerCase() === "true" ||
+        String(reportValue).trim().toLowerCase() === "1",
     };
   });
 }
