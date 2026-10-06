@@ -124,6 +124,23 @@ function normalizeStatus(value: string): BookingStatus {
   return "Pending";
 }
 
+function bookingStatusText(booking: ApiRecord) {
+  return text(
+    booking,
+    "bookingStatus",
+    "booking_status",
+    "requestStatus",
+    "request_status",
+    "approvalStatus",
+    "approval_status",
+    "lessonBookingStatus",
+    "lesson_booking_status",
+    "teacherResponseStatus",
+    "teacher_response_status",
+    "status"
+  );
+}
+
 function capitalizeName(name: string) {
   return name.replace(/(^|[\s'-])\p{L}/gu, (letter) => letter.toUpperCase());
 }
@@ -346,9 +363,7 @@ export async function getBookings(
           "lessonType",
           "type"
         ) || "Lesson",
-      status: normalizeStatus(
-        text(booking, "status", "bookingStatus", "booking_status")
-      ),
+      status: normalizeStatus(bookingStatusText(booking)),
       amount:
         rawAmount && Number.isFinite(numericAmount)
           ? `$${numericAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })}`

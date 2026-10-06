@@ -20,6 +20,33 @@ type TeacherLoginFormProps = {
 
 const rememberedLoginKeyPrefix = "revision-bee:remember-login";
 
+function rememberedLoginKey(userType: "student" | "teacher") {
+  return `${rememberedLoginKeyPrefix}:${userType}`;
+}
+
+function readRememberedEmail(userType: "student" | "teacher") {
+  try {
+    return window.localStorage.getItem(rememberedLoginKey(userType)) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function saveRememberedEmail(userType: "student" | "teacher", email: string) {
+  try {
+    const trimmedEmail = email.trim();
+    if (trimmedEmail) {
+      window.localStorage.setItem(rememberedLoginKey(userType), trimmedEmail);
+    }
+  } catch {}
+}
+
+function clearRememberedEmail(userType: "student" | "teacher") {
+  try {
+    window.localStorage.removeItem(rememberedLoginKey(userType));
+  } catch {}
+}
+
 export function TeacherLoginForm({
   userType = "student",
 }: TeacherLoginFormProps) {
@@ -33,9 +60,7 @@ export function TeacherLoginForm({
   const formErrors = formState?.errors ?? {};
 
   useEffect(() => {
-    const rememberedEmail = window.localStorage.getItem(
-      `${rememberedLoginKeyPrefix}:${userType}`
-    );
+    const rememberedEmail = readRememberedEmail(userType);
 
     if (rememberedEmail) {
       setEmailValue(rememberedEmail);
@@ -45,6 +70,12 @@ export function TeacherLoginForm({
       setRememberMe(false);
     }
   }, [userType]);
+
+  useEffect(() => {
+    if (rememberMe) {
+      saveRememberedEmail(userType, emailValue);
+    }
+  }, [emailValue, rememberMe, userType]);
 
   useEffect(() => {
     if (!formState?.success) return;
@@ -97,12 +128,9 @@ export function TeacherLoginForm({
     }
 
     if (rememberMe) {
-      window.localStorage.setItem(
-        `${rememberedLoginKeyPrefix}:${userType}`,
-        parsedEmail.data
-      );
+      saveRememberedEmail(userType, parsedEmail.data);
     } else {
-      window.localStorage.removeItem(`${rememberedLoginKeyPrefix}:${userType}`);
+      clearRememberedEmail(userType);
     }
 
     startTransition(() => action(formData));
@@ -220,7 +248,15 @@ export function TeacherLoginForm({
             type="checkbox"
             name="remember"
             checked={rememberMe}
-            onChange={(event) => setRememberMe(event.currentTarget.checked)}
+            onChange={(event) => {
+              const isChecked = event.currentTarget.checked;
+              setRememberMe(isChecked);
+              if (isChecked) {
+                saveRememberedEmail(userType, emailValue);
+              } else {
+                clearRememberedEmail(userType);
+              }
+            }}
             className="h-4 w-4 rounded border-[#aeb3bb] accent-[#56a5e9]"
           />
           Remember me

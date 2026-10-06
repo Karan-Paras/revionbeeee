@@ -2,7 +2,6 @@
 
 import { SubscriptionPlans as SubscriptionPlansComponent } from "@/features/subscriptions/components/subscription-plans";
 import {
-  hasActiveSelectedFreeTrial,
   isFreeTrialActive,
   isUserSubscribed,
 } from "@/features/subscriptions/utils";
@@ -18,10 +17,7 @@ export function SubscriptionPlans() {
 
   const isProfileLoading = isLoading || isPending;
   const isSubscribed = isUserSubscribed(data?.data.isSubscribed);
-  const hasFreeTrialAccess = hasActiveSelectedFreeTrial(
-    data?.data.id,
-    data?.data.created_at
-  );
+  const hasFreeTrialAccess = isFreeTrialActive(data?.data.created_at);
   const showFreePlan = isFreeTrialActive(data?.data.created_at);
 
   useEffect(() => {

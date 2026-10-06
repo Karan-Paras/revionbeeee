@@ -113,12 +113,17 @@ export default function TeacherBookingsPage() {
     [fetchedBookings, localStatuses]
   );
 
+  const displayableBookings = useMemo(
+    () => bookings.filter((booking) => booking.status !== "Rejected"),
+    [bookings]
+  );
+
   const visibleBookings = useMemo(
     () =>
-      bookings.filter(
+      displayableBookings.filter(
         (booking) => activeTab === "All" || booking.status === activeTab
       ),
-    [activeTab, bookings]
+    [activeTab, displayableBookings]
   );
 
   function updateStatus(id: TeacherBooking["id"], status: BookingStatus) {
@@ -485,7 +490,8 @@ export default function TeacherBookingsPage() {
 
           {!isPending && !error && (
             <footer className="border-t border-[#e9ecef] py-5 text-[10px] text-[#777] sm:text-xs">
-              Viewing {visibleBookings.length} out of {bookings.length}
+              Viewing {visibleBookings.length} out of{" "}
+              {displayableBookings.length}
             </footer>
           )}
         </section>

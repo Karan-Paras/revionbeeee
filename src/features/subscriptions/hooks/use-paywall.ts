@@ -1,6 +1,6 @@
 import { useSubscriptionModal } from "@/features/subscriptions/stores/use-subscription-modal";
 import {
-  hasActiveSelectedFreeTrial,
+  isFreeTrialActive,
   isUserSubscribed,
 } from "@/features/subscriptions/utils";
 import { useGetProfile } from "@/features/user/queries/use-get-profile";
@@ -11,10 +11,7 @@ export const usePaywall = () => {
   const { onOpen } = useSubscriptionModal();
 
   const isSubscribed = isUserSubscribed(profile?.data.isSubscribed);
-  const hasFreeTrial = hasActiveSelectedFreeTrial(
-    profile?.data.id,
-    profile?.data.created_at
-  );
+  const hasFreeTrial = isFreeTrialActive(profile?.data.created_at);
   const shouldBlock = Boolean(profile && !isSubscribed && !hasFreeTrial);
 
   return {

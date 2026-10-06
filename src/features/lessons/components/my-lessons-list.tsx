@@ -56,44 +56,10 @@ const reportCategories = [
 const reportLessonUrl =
   "https://ankitadev.parastechnologies.in/admin.revisionbee.com/api/v1/lesson/report";
 
-const notificationTabs = ["accepted", "cancelled"] as const;
-type NotificationTab = (typeof notificationTabs)[number];
 const tabValues = tabs.map((tab) => tab.value);
 
-const upcomingLessonsCacheKey = "revision-bee:student-upcoming-lessons";
-const upcomingLessonCacheLifetime = 6 * 60 * 60 * 1000;
 const paidLessonRedirectKey = "revision-bee:paid-lesson-redirects";
 const LESSON_STATUS_REFETCH_INTERVAL = 10_000;
-
-type CachedUpcomingLessons = { savedAt: number; lessons: MyBooking[] };
-
-function readCachedUpcomingLessons() {
-  try {
-    const value = JSON.parse(
-      localStorage.getItem(upcomingLessonsCacheKey) ?? "null"
-    ) as CachedUpcomingLessons | null;
-    if (
-      !value ||
-      !Array.isArray(value.lessons) ||
-      Date.now() - value.savedAt > upcomingLessonCacheLifetime
-    ) {
-      localStorage.removeItem(upcomingLessonsCacheKey);
-      return [];
-    }
-    return value.lessons;
-  } catch {
-    return [];
-  }
-}
-
-function saveCachedUpcomingLessons(lessons: MyBooking[]) {
-  try {
-    localStorage.setItem(
-      upcomingLessonsCacheKey,
-      JSON.stringify({ savedAt: Date.now(), lessons })
-    );
-  } catch {}
-}
 
 function readPaidLessonRedirects() {
   try {
@@ -114,25 +80,6 @@ function savePaidLessonRedirects(lessonIDs: Set<string>) {
     }
     localStorage.setItem(paidLessonRedirectKey, JSON.stringify([...lessonIDs]));
   } catch {}
-}
-
-function seenBookingsKey(tab: NotificationTab) {
-  return `revision-bee:seen-my-bookings:${tab}`;
-}
-
-function bookingIds(bookings: { id: string | number }[]) {
-  return bookings.map((b) => String(b.id));
-}
-
-function readSeenBookings(tab: NotificationTab) {
-  try {
-    const value: unknown = JSON.parse(
-      localStorage.getItem(seenBookingsKey(tab)) ?? "[]"
-    );
-    return new Set(Array.isArray(value) ? value.map(String) : []);
-  } catch {
-    return new Set<string>();
-  }
 }
 
 async function reportLesson({
@@ -162,9 +109,6 @@ export function MyLessonsList() {
   const [activeTab, setActiveTab] = useState<MyBookingFilter>(initialTab);
   const [query, setQuery] = useState("");
   const [nowMs, setNowMs] = useState(() => Date.now());
-  const [cachedUpcomingLessons, setCachedUpcomingLessons] = useState<
-    MyBooking[]
-  >([]);
   const [reportLessonTarget, setReportLessonTarget] =
     useState<MyBooking | null>(null);
   const [reportCategory, setReportCategory] = useState(
@@ -173,12 +117,6 @@ export function MyLessonsList() {
   const [reportDescription, setReportDescription] = useState("");
   const [reportDescriptionError, setReportDescriptionError] = useState("");
   const [reportSubmitted, setReportSubmitted] = useState(false);
-  const [hasNewBookings, setHasNewBookings] = useState<
-    Record<NotificationTab, boolean>
-  >({
-    accepted: false,
-    cancelled: false,
-  });
 
   const approvedNotifications = useQuery({
     queryKey: ["my-booking-notifications", "accepted"],
@@ -189,22 +127,7 @@ export function MyLessonsList() {
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
   });
-  const cancelledNotifications = useQuery({
-    queryKey: ["my-booking-notifications", "cancelled"],
-    queryFn: () =>
-      getMyBookings({ filter: "cancelled", search: "", perPage: 100 }),
-    staleTime: 60 * 1000,
-    refetchInterval: activeTab === "cancelled" ? false : 60_000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
-  });
-  const notificationBookings: Record<NotificationTab, MyBooking[]> = {
-    accepted: approvedNotifications.data ?? [],
-    cancelled: cancelledNotifications.data ?? [],
-  };
-
   useEffect(() => {
-    setCachedUpcomingLessons(readCachedUpcomingLessons());
     if (readPaidLessonRedirects().size) setActiveTab("upcoming");
   }, []);
 
@@ -220,42 +143,8 @@ export function MyLessonsList() {
     return () => window.clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    setHasNewBookings((current) => {
-      const next = { ...current };
-      notificationTabs.forEach((tab) => {
-        const bookings = notificationBookings[tab];
-        if (!bookings.length) {
-          next[tab] = false;
-          return;
-        }
-        const seenIds = readSeenBookings(tab);
-        next[tab] = bookings.some((b) => !seenIds.has(String(b.id)));
-      });
-      return next;
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [approvedNotifications.data, cancelledNotifications.data]);
-
-  useEffect(() => {
-    if (activeTab !== "accepted" && activeTab !== "cancelled") return;
-    const bookings = notificationBookings[activeTab];
-    localStorage.setItem(
-      seenBookingsKey(activeTab),
-      JSON.stringify(bookingIds(bookings))
-    );
-    setHasNewBookings((current) => ({ ...current, [activeTab]: false }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, approvedNotifications.data, cancelledNotifications.data]);
-
   function changeTab(tab: MyBookingFilter) {
     setActiveTab(tab);
-    if (tab !== "accepted" && tab !== "cancelled") return;
-    localStorage.setItem(
-      seenBookingsKey(tab),
-      JSON.stringify(bookingIds(notificationBookings[tab]))
-    );
-    setHasNewBookings((current) => ({ ...current, [tab]: false }));
   }
 
   const payment = useMutation({
@@ -363,13 +252,6 @@ export function MyLessonsList() {
         );
         return;
       }
-      setCachedUpcomingLessons((current) => {
-        const next = current.filter(
-          (l) => String(l.paymentLessonID) !== String(credentials.lessonID)
-        );
-        saveCachedUpcomingLessons(next);
-        return next;
-      });
       window.dispatchEvent(new Event(activeLessonSessionReadyEvent));
       const fallback = window.setTimeout(() => {
         if (window.location.pathname !== "/session")
@@ -403,20 +285,6 @@ export function MyLessonsList() {
   });
 
   useEffect(() => {
-    if (activeTab !== "upcoming" || query.trim() || !fetchedLessons.length)
-      return;
-    setCachedUpcomingLessons((current) => {
-      const merged = new Map(
-        current.map((l) => [String(l.paymentLessonID), l])
-      );
-      fetchedLessons.forEach((l) => merged.set(String(l.paymentLessonID), l));
-      const next = Array.from(merged.values());
-      saveCachedUpcomingLessons(next);
-      return next;
-    });
-  }, [activeTab, fetchedLessons, query]);
-
-  useEffect(() => {
     const paidLessonIDs = readPaidLessonRedirects();
     if (!paidLessonIDs.size || !approvedNotifications.data?.length) return;
 
@@ -426,17 +294,6 @@ export function MyLessonsList() {
     if (!paidLessons.length) return;
 
     setActiveTab("upcoming");
-    setCachedUpcomingLessons((current) => {
-      const merged = new Map(
-        current.map((lesson) => [String(lesson.paymentLessonID), lesson])
-      );
-      paidLessons.forEach((lesson) =>
-        merged.set(String(lesson.paymentLessonID), lesson)
-      );
-      const next = Array.from(merged.values());
-      saveCachedUpcomingLessons(next);
-      return next;
-    });
 
     paidLessons.forEach((lesson) =>
       paidLessonIDs.delete(String(lesson.paymentLessonID))
@@ -444,38 +301,16 @@ export function MyLessonsList() {
     savePaidLessonRedirects(paidLessonIDs);
   }, [approvedNotifications.data]);
 
-  const cancelledIds = new Set(
-    (cancelledNotifications.data ?? []).map((l) => String(l.paymentLessonID))
-  );
-  const fetchedIds = new Set(
-    fetchedLessons.map((l) => String(l.paymentLessonID))
-  );
-  const retainedUpcoming = cachedUpcomingLessons.filter(
-    (l) =>
-      !fetchedIds.has(String(l.paymentLessonID)) &&
-      !cancelledIds.has(String(l.paymentLessonID))
-  );
-
   const isRejected = (status: string) =>
     ["rejected", "cancelled", "canceled"].includes(status.trim().toLowerCase());
 
-  const getCancelledStatusLabel = (status: string) => {
-    const normalizedStatus = status.trim().toLowerCase();
-    return ["cancelled", "canceled"].includes(normalizedStatus)
-      ? "Canceled"
-      : "Rejected";
-  };
-
-  const allLessons =
-    activeTab === "upcoming" && !query.trim()
-      ? [...fetchedLessons, ...retainedUpcoming]
-      : fetchedLessons;
+  const getCancelledStatusLabel = () => "Cancelled";
 
   // On the upcoming tab, hide any lesson the teacher has rejected
   const lessons =
     activeTab === "upcoming"
-      ? allLessons.filter((l) => !isRejected(l.status))
-      : allLessons;
+      ? fetchedLessons.filter((l) => !isRejected(l.status))
+      : fetchedLessons;
 
   return (
     <section className="min-h-[500px] bg-white px-5 py-10 sm:px-8 lg:px-12">
@@ -503,13 +338,6 @@ export function MyLessonsList() {
                 }`}
               >
                 {tab.label}
-                {(tab.value === "accepted" || tab.value === "cancelled") &&
-                  hasNewBookings[tab.value] && (
-                    <span
-                      aria-label={`New ${tab.label.toLowerCase()} request`}
-                      className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-[#ff3547] ring-2 ring-white"
-                    />
-                  )}
               </button>
             ))}
           </div>
@@ -548,9 +376,7 @@ export function MyLessonsList() {
             {lessons.map((lesson) => {
               const isInstant =
                 lesson.bookingType.trim().toLowerCase() === "instant";
-              const cancelledStatusLabel = getCancelledStatusLabel(
-                lesson.status
-              );
+              const cancelledStatusLabel = getCancelledStatusLabel();
               const canJoin =
                 !isRejected(lesson.status) &&
                 isSessionWindowOpen({
@@ -639,10 +465,7 @@ export function MyLessonsList() {
                   {activeTab === "cancelled" && (
                     <div className="mt-3 rounded-md border border-[#ffd1d5] bg-[#fff5f6] px-3 py-2">
                       <p className="text-[10px] font-semibold text-[#d93645]">
-                        Reason for{" "}
-                        {cancelledStatusLabel === "Canceled"
-                          ? "cancellation"
-                          : "rejection"}
+                        Reason for cancellation
                       </p>
                       <p className="mt-1 text-[10px] leading-4 text-[#7c5559]">
                         {lesson.rejectionReason ||
