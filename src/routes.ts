@@ -118,6 +118,7 @@ export const paths = {
  */
 export const publicRoutes: string[] = [
   paths.home(),
+  paths.socialLoginComplete(),
   paths.privacyPolicy(),
   paths.termsAndConditions(),
   paths.faq(),
