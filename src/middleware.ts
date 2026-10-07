@@ -5,16 +5,14 @@ import {
   paths,
   publicRoutes,
 } from "@/routes";
-import { getToken } from "next-auth/jwt";
-import { NextRequest, NextResponse } from "next/server";
-//hello
-export async function middleware(req: NextRequest) {
+import { auth } from "./auth";
+import { NextResponse } from "next/server";
+
+export const middleware = auth((req) => {
   const { nextUrl } = req;
-  const token = await getToken({
-    req,
-    secret: process.env.AUTH_SECRET,
-  });
-  const isLoggedIn = !!token;
+  const session = req.auth;
+  const user = session?.user;
+  const isLoggedIn = !!user;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
@@ -41,8 +39,8 @@ export async function middleware(req: NextRequest) {
   const isTeacherAtSignupStep =
     nextUrl.pathname === paths.teacherSignup() &&
     isLoggedIn &&
-    token?.userType === "teacher" &&
-    Number(token.teacherProfileStatus) === 1;
+    user?.userType === "teacher" &&
+    Number(user.teacherProfileStatus) === 1;
 
   if (isTeacherAtSignupStep) {
     return NextResponse.next();
@@ -67,7 +65,7 @@ export async function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+});
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
